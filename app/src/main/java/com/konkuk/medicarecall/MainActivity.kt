@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                         label = "설정",
                         route = "settings",
                         selectedIcon = R.drawable.ic_settings_selected,
-                        unselectedIcon = R.drawable.ic_settings_unselected
+                        unselectedIcon = R.drawable.ic_settings_unselected,
                     )
                 )
 
@@ -85,7 +85,8 @@ class MainActivity : ComponentActivity() {
                                     alwaysShowLabel = true,
                                     label = {
                                         Text(
-                                            text = item.label
+                                            text = item.label,
+                                            style = MediCareCallTheme.typography.R_14
                                         )
                                     },
                                     onClick = {
@@ -104,9 +105,9 @@ class MainActivity : ComponentActivity() {
                                     },
                                     colors = NavigationBarItemDefaults.colors(
                                         indicatorColor = Color.Transparent,
-                                        selectedIconColor = Color(0xFF00B859), // 선택된 아이콘 색상
+                                        selectedIconColor = MediCareCallTheme.colors.main , // 선택된 아이콘 색상
                                         unselectedIconColor = Color.Black, // 선택되지 않은 아이콘 색상
-                                        selectedTextColor = Color(0xFF00B859), // 선택된 텍스트 색상
+                                        selectedTextColor = MediCareCallTheme.colors.main, // 선택된 텍스트 색상
                                         unselectedTextColor = Color.Black // 선택되지 않은 텍스트 색상
                                     )
                                 )
