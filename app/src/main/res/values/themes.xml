@@ -5,7 +5,6 @@
 
     <style name="Theme.MySplashScreen" parent="Theme.MediCareCall">
         <item name="android:windowBackground">@color/main</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@color/main</item>
     </style>
 
 </resources>
