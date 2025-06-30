@@ -48,7 +48,9 @@ fun SplashScreen(modifier: Modifier = Modifier) {
 
         delay(1500L)
 
+        // Main Activity로 이동
         val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
 
     }
