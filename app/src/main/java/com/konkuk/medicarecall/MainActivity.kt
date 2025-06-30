@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                                         strokeWidth = strokeWidth,
                                     )
                                 },
-                            containerColor = Color.White
+                            containerColor = MediCareCallTheme.colors.white
                         )
                         {
                             navBarItems.forEachIndexed { index, item ->
