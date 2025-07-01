@@ -39,7 +39,7 @@ fun VerificationCodeTextField(
             focusedBorderColor = MediCareCallTheme.colors.main,
             focusedPlaceholderColor = MediCareCallTheme.colors.gray3,
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true
         )
 }

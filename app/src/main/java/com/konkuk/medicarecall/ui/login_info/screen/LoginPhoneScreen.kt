@@ -39,8 +39,11 @@ fun LoginPhoneScreen(
             .padding(top = 16.dp)
     ) {
         TopBar({
-            loginViewModel.updateLoginUiState(LoginUiState.Start)
-            navController.popBackStack() })
+            loginViewModel.updateLoginUiState(LoginUiState.EnterPhoneNumber)
+            if (loginUiState.value == LoginUiState.EnterPhoneNumber)
+                loginViewModel.updateLoginUiState(LoginUiState.Start)
+                navController.popBackStack()
+        })
         Spacer(Modifier.height(20.dp))
         Text(
             if (loginUiState.value == LoginUiState.EnterPhoneNumber)
