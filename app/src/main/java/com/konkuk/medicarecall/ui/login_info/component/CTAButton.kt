@@ -37,7 +37,7 @@ enum class CTAButtonType {
 fun CTAButton(
     color: CTAButtonType,
     text: String,
-    callback: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -70,7 +70,7 @@ fun CTAButton(
             .background(color = buttonColor, shape = RoundedCornerShape(14.dp))
             .clickable(
                 interactionSource,
-                onClick = callback,
+                onClick = onClick,
                 indication = null,
             )
     ) {
