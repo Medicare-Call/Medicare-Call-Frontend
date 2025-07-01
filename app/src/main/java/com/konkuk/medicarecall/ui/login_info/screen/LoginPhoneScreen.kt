@@ -39,7 +39,7 @@ fun LoginPhoneScreen(
             .padding(top = 16.dp)
     ) {
         TopBar({
-            loginViewModel.rollbackLoginUiState()
+            loginViewModel.updateLoginUiState(LoginUiState.Start)
             navController.popBackStack() })
         Spacer(Modifier.height(20.dp))
         Text(
@@ -66,12 +66,12 @@ fun LoginPhoneScreen(
         if (loginUiState.value == LoginUiState.EnterPhoneNumber)
             CTAButton(color = CTAButtonType.GREEN, "인증번호 받기", {
                 // TODO: 서버에 인증번호 요청하기
-                loginViewModel.progressLoginUiState()
+                loginViewModel.updateLoginUiState(LoginUiState.EnterVerificationCode)
             })
         else
             CTAButton(color = CTAButtonType.GREEN, "확인", onClick = {
                 // TODO: 서버에 인증번호 보내서 확인하기
-                loginViewModel.progressLoginUiState()
+                loginViewModel.updateLoginUiState(LoginUiState.EnterMyInfo)
                 // TODO: navigation 이동
             })
 
