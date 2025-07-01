@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import com.konkuk.medicarecall.R
 
 @Composable
-fun TopBar(modifier: Modifier = Modifier) {
+fun TopBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier.fillMaxWidth()
     ) {
@@ -18,7 +18,7 @@ fun TopBar(modifier: Modifier = Modifier) {
             painter = painterResource(R.drawable.ic_back),
             contentDescription = null,
             modifier = Modifier.clickable(
-                onClick = {}
+                onClick = onClick
             )
         )
     }

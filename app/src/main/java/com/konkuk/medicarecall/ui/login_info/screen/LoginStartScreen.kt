@@ -12,13 +12,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun LoginStartScreen(modifier: Modifier = Modifier) {
+fun LoginStartScreen(navController: NavController, modifier: Modifier = Modifier) {
     Box(
         modifier
             .fillMaxSize()
@@ -37,7 +38,7 @@ fun LoginStartScreen(modifier: Modifier = Modifier) {
         CTAButton(
             color = CTAButtonType.WHITE,
             "시작하기",
-            {},
+            { navController.navigate("login_phone") },
             modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 20.dp)
@@ -45,10 +46,4 @@ fun LoginStartScreen(modifier: Modifier = Modifier) {
         )
 
     }
-}
-
-@Preview
-@Composable
-private fun LoginStartScreenPreview() {
-    LoginStartScreen()
 }

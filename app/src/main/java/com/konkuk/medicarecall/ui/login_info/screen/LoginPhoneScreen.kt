@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
 import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
@@ -25,7 +26,7 @@ import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun LoginPhoneScreen(modifier: Modifier = Modifier) {
+fun LoginPhoneScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxSize()
@@ -35,7 +36,7 @@ fun LoginPhoneScreen(modifier: Modifier = Modifier) {
     ) {
         var text by remember { mutableStateOf("Hello") }
 
-        TopBar()
+        TopBar({ navController.popBackStack() })
         Spacer(Modifier.height(20.dp))
         Text("휴대폰 번호를\n입력해주세요", style = MediCareCallTheme.typography.B_26)
         Spacer(Modifier.height(40.dp))
@@ -46,10 +47,4 @@ fun LoginPhoneScreen(modifier: Modifier = Modifier) {
         })
 
     }
-}
-
-@Preview
-@Composable
-private fun LoginPhoneScreenPreview() {
-    LoginPhoneScreen()
 }
