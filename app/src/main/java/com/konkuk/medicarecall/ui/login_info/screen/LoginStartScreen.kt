@@ -27,7 +27,9 @@ fun LoginStartScreen(modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.bg_login_start),
             "로그인 시작 배경 이미지",
-            modifier.fillMaxSize(),
+            modifier
+                .fillMaxSize()
+                .align(Alignment.Center),
             contentScale = ContentScale.FillBounds
 
         )
@@ -39,6 +41,7 @@ fun LoginStartScreen(modifier: Modifier = Modifier) {
             modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 20.dp)
+                .padding(horizontal = 20.dp)
         )
 
     }

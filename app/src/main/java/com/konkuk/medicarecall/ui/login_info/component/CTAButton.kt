@@ -67,7 +67,6 @@ fun CTAButton(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
-            .padding(horizontal = 20.dp)
             .background(color = buttonColor, shape = RoundedCornerShape(14.dp))
             .clickable(
                 interactionSource,
