@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
-    val isLoggedIn = true // 추후 서버나 로컬에서 정보 받아오기
+    val isLoggedIn = false // 추후 서버나 로컬에서 정보 받아오기
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Loading)
     val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
