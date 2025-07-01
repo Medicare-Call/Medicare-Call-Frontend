@@ -16,10 +16,11 @@ import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
+import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun LoginStartScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun LoginStartScreen(navController: NavController, loginViewModel: LoginViewModel, modifier: Modifier = Modifier) {
     Box(
         modifier
             .fillMaxSize()

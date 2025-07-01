@@ -46,10 +46,10 @@ fun NavGraph(
 
         navigation(startDestination = Route.LoginStart.route, route = "login") {
             composable(route = Route.LoginStart.route) {
-                LoginStartScreen(navController)
+                LoginStartScreen(navController, loginViewModel)
             }
             composable(route = Route.LoginPhone.route) {
-                LoginPhoneScreen(navController)
+                LoginPhoneScreen(navController, loginViewModel)
             }
         }
     }
