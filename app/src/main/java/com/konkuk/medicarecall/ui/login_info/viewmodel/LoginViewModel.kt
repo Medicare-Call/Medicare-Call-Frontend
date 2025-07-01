@@ -1,7 +1,5 @@
 package com.konkuk.medicarecall.ui.login_info.viewmodel
 
-import android.R.attr.password
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +10,7 @@ import com.konkuk.medicarecall.data.model.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -26,6 +25,34 @@ class LoginViewModel : ViewModel() {
     // 현재 가입 단계에 대한 정보
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Start)
     val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
+
+    fun progressLoginUiState() {
+        _loginUiState.update { currentState ->
+            when (currentState) {
+                LoginUiState.Start -> LoginUiState.EnterPhoneNumber
+                LoginUiState.EnterPhoneNumber -> LoginUiState.EnterVerificationCode
+                LoginUiState.EnterVerificationCode -> LoginUiState.EnterMyInfo
+                LoginUiState.EnterMyInfo -> LoginUiState.EnterSeniorInfo
+                LoginUiState.EnterSeniorInfo -> LoginUiState.Purchase
+                LoginUiState.Purchase -> LoginUiState.RegisterFinished
+                LoginUiState.RegisterFinished -> LoginUiState.RegisterFinished // TODO: 추후 수정 필요          }
+            }
+        }
+    }
+
+    fun rollbackLoginUiState() {
+        _loginUiState.update { currentState ->
+            when (currentState) {
+                LoginUiState.Start -> LoginUiState.Start
+                LoginUiState.EnterPhoneNumber -> LoginUiState.Start
+                LoginUiState.EnterVerificationCode -> LoginUiState.Start // 휴대폰 번호와 인증번호는 한 화면에서 처리하기 때문
+                LoginUiState.EnterMyInfo -> LoginUiState.EnterVerificationCode
+                LoginUiState.EnterSeniorInfo -> LoginUiState.EnterMyInfo
+                LoginUiState.Purchase -> LoginUiState.EnterSeniorInfo
+                LoginUiState.RegisterFinished -> LoginUiState.RegisterFinished // TODO: 추후 수정 필요          }
+            }
+        }
+    }
 
     var phoneNumber by mutableStateOf("")
         private set

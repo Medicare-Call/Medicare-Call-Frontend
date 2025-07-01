@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
@@ -20,7 +19,11 @@ import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun LoginStartScreen(navController: NavController, loginViewModel: LoginViewModel, modifier: Modifier = Modifier) {
+fun LoginStartScreen(
+    navController: NavController,
+    loginViewModel: LoginViewModel,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier
             .fillMaxSize()
@@ -39,7 +42,10 @@ fun LoginStartScreen(navController: NavController, loginViewModel: LoginViewMode
         CTAButton(
             color = CTAButtonType.WHITE,
             "시작하기",
-            { navController.navigate("login_phone") },
+            {
+                loginViewModel.progressLoginUiState()
+                navController.navigate("login_phone")
+            },
             modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 20.dp)
