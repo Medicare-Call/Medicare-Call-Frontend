@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun TopBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -19,7 +20,8 @@ fun TopBar(onClick: () -> Unit, modifier: Modifier = Modifier) {
             contentDescription = null,
             modifier = Modifier.clickable(
                 onClick = onClick
-            )
+            ),
+            tint = MediCareCallTheme.colors.black
         )
     }
 }

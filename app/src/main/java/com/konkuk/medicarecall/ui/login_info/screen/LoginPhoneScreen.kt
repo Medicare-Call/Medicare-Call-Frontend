@@ -47,7 +47,8 @@ fun LoginPhoneScreen(
                 "휴대폰 번호를\n입력해주세요"
             else
                 "인증번호를\n입력해주세요",
-            style = MediCareCallTheme.typography.B_26
+            style = MediCareCallTheme.typography.B_26,
+            color = MediCareCallTheme.colors.black
         )
         Spacer(Modifier.height(40.dp))
         if (loginUiState.value == LoginUiState.EnterPhoneNumber)
