@@ -13,8 +13,9 @@ class PhoneNumberVisualTransformation : VisualTransformation {
         // 3-4-4 형태로 포맷팅
         val formatted = buildString {
             digits.forEachIndexed { index, c ->
+                if (index == 3 || index == 7)
+                    append('-')
                 append(c)
-                if (index == 2 || index == 6) append('-')
             }
         }
 
