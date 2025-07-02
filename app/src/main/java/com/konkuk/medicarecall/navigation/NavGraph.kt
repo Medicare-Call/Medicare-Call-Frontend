@@ -10,6 +10,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navigation
 import com.konkuk.medicarecall.data.model.LoginState
 import com.konkuk.medicarecall.ui.home.screen.HomeScreen
+import com.konkuk.medicarecall.ui.login_info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginVerificationScreen
@@ -54,6 +55,9 @@ fun NavGraph(
             }
             composable(route = Route.LoginVerification.route) {
                 LoginVerificationScreen(navController, loginViewModel)
+            }
+            composable(route = Route.LoginMyInfo.route) {
+                LoginMyInfoScreen(navController, loginViewModel)
             }
         }
     }
