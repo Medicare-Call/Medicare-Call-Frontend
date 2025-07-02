@@ -11,25 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
 
 @Composable
-// 인증번호 입력받는 TextField입니다.
-// UI 기본적인 구조는 휴대폰 번호 입력 받는 TextField와 같지만, 6자리 제한이 있고, 키보드가 Number로 뜨는 게 차이점입니다.
-fun VerificationCodeTextField(
+fun DefaultTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    placeHolder: String,
+    keyboardType: KeyboardType,
     modifier: Modifier = Modifier
 ) {
 
     OutlinedTextField(
         value = value,
-        onValueChange = { input ->
-            val filtered = input.filter { it.isDigit() }.take(6)
-            onValueChange(filtered)
-        },
+        onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
-        placeholder = { Text("인증번호 입력", style = MediCareCallTheme.typography.M_16) },
+        placeholder = { Text(placeHolder, style = MediCareCallTheme.typography.M_16) },
         shape = RoundedCornerShape(14.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = MediCareCallTheme.colors.white,
@@ -41,7 +37,7 @@ fun VerificationCodeTextField(
             focusedBorderColor = MediCareCallTheme.colors.main,
             focusedPlaceholderColor = MediCareCallTheme.colors.gray3,
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         singleLine = true
-        )
+    )
 }

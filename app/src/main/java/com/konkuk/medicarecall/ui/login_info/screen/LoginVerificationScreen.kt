@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.login_info.screen
 
+import android.R.id.input
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,16 +11,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.data.model.LoginUiState
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
+import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login_info.component.PhoneNumberTextField
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.login_info.component.VerificationCodeTextField
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlin.text.isDigit
 
 @Composable
 fun LoginVerificationScreen(
@@ -46,16 +50,21 @@ fun LoginVerificationScreen(
             color = MediCareCallTheme.colors.black
         )
         Spacer(Modifier.height(40.dp))
-        VerificationCodeTextField(
+        DefaultTextField(
             loginViewModel.verificationCode,
-            { loginViewModel.onVerificationCodeChanged(it) },
+            { input ->
+                val filtered = input.filter { it.isDigit() }.take(6)
+                loginViewModel.onVerificationCodeChanged(filtered)
+            },
+            "인증번호 입력",
+            KeyboardType.Number
         )
 
         Spacer(Modifier.height(30.dp))
         CTAButton(color = CTAButtonType.GREEN, "확인", onClick = {
             // TODO: 서버에 인증번호 보내서 확인하기
             loginViewModel.updateLoginUiState(LoginUiState.EnterMyInfo)
-            // TODO: navigation 이동
+            navController.navigate("login_my_info")
         })
 
     }

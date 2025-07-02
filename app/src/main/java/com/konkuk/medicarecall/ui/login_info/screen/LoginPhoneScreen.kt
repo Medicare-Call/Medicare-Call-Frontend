@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.login_info.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +10,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.data.model.LoginUiState
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
-import com.konkuk.medicarecall.ui.login_info.component.PhoneNumberTextField
+import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
-import com.konkuk.medicarecall.ui.login_info.component.VerificationCodeTextField
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlin.text.isDigit
 
 @Composable
 fun LoginPhoneScreen(
@@ -49,9 +49,14 @@ fun LoginPhoneScreen(
             color = MediCareCallTheme.colors.black
         )
         Spacer(Modifier.height(40.dp))
-        PhoneNumberTextField(
+        DefaultTextField(
             loginViewModel.phoneNumber,
-            { loginViewModel.onPhoneNumberChanged(it) },
+            { input ->
+                val filtered = input.filter { it.isDigit() }.take(11)
+                loginViewModel.onPhoneNumberChanged(filtered)
+            },
+            "휴대폰 번호",
+            KeyboardType.Number
         )
 
         Spacer(Modifier.height(30.dp))
