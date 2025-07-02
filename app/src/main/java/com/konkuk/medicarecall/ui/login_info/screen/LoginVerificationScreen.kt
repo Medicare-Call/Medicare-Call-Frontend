@@ -41,7 +41,7 @@ fun LoginVerificationScreen(
         })
         Spacer(Modifier.height(20.dp))
         Text(
-            "휴대폰 번호를\n입력해주세요",
+            "인증번호를\n입력해주세요",
             style = MediCareCallTheme.typography.B_26,
             color = MediCareCallTheme.colors.black
         )
