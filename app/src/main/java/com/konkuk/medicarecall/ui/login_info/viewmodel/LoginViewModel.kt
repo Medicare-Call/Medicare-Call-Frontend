@@ -30,12 +30,19 @@ class LoginViewModel : ViewModel() {
         _loginUiState.update { newState }
     }
 
-
+    // 휴대폰 번호 입력 value
     var phoneNumber by mutableStateOf("")
         private set
 
-    // 인증번호
+    // 인증번호 입력 value
     var verificationCode by mutableStateOf("")
+        private set
+
+    var name by mutableStateOf("")
+        private set
+    var dateOfBirth by mutableStateOf("")
+        private set
+    var isMale by mutableStateOf(true)
         private set
 
     // 상태 변경 함수
@@ -45,6 +52,14 @@ class LoginViewModel : ViewModel() {
 
     fun onVerificationCodeChanged(new: String) {
         verificationCode = new
+    }
+
+    fun onNameChanged(new: String) {
+        name = new
+    }
+
+    fun onDOBChanged(new: String) {
+        dateOfBirth = new
     }
 
 
