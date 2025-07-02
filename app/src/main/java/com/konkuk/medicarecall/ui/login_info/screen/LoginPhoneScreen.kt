@@ -20,6 +20,7 @@ import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
 import kotlin.text.isDigit
 
 @Composable
@@ -56,7 +57,8 @@ fun LoginPhoneScreen(
                 loginViewModel.onPhoneNumberChanged(filtered)
             },
             "휴대폰 번호",
-            KeyboardType.Number
+            KeyboardType.Number,
+            PhoneNumberVisualTransformation()
         )
 
         Spacer(Modifier.height(30.dp))

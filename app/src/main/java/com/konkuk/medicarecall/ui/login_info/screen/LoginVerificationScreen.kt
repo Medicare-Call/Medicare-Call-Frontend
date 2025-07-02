@@ -18,9 +18,7 @@ import com.konkuk.medicarecall.data.model.LoginUiState
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
 import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
-import com.konkuk.medicarecall.ui.login_info.component.PhoneNumberTextField
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
-import com.konkuk.medicarecall.ui.login_info.component.VerificationCodeTextField
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlin.text.isDigit

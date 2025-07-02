@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
@@ -17,16 +18,17 @@ fun DefaultTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeHolder: String,
-    keyboardType: KeyboardType,
-    modifier: Modifier = Modifier
+    keyboardType: KeyboardType = KeyboardType.Text,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
 
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(placeHolder, style = MediCareCallTheme.typography.M_16) },
         shape = RoundedCornerShape(14.dp),
+        visualTransformation = visualTransformation,
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = MediCareCallTheme.colors.white,
             unfocusedPlaceholderColor = MediCareCallTheme.colors.gray3,
