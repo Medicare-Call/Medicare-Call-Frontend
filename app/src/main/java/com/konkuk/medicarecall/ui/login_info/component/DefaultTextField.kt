@@ -43,5 +43,6 @@ fun DefaultTextField(
         ),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         singleLine = true,
+        textStyle = MediCareCallTheme.typography.M_16
     )
 }
