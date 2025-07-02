@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.login_info.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,14 +22,12 @@ import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun LoginPhoneScreen(
+fun LoginVerificationScreen(
     navController: NavController,
     loginViewModel: LoginViewModel,
     modifier: Modifier = Modifier
 ) {
-
     val loginUiState = loginViewModel.loginUiState.collectAsState()
-
     Column(
         modifier
             .fillMaxSize()
@@ -39,7 +36,7 @@ fun LoginPhoneScreen(
             .padding(top = 16.dp)
     ) {
         TopBar({
-            loginViewModel.updateLoginUiState(LoginUiState.Start)
+            loginViewModel.updateLoginUiState(LoginUiState.EnterPhoneNumber)
             navController.popBackStack()
         })
         Spacer(Modifier.height(20.dp))
@@ -49,16 +46,16 @@ fun LoginPhoneScreen(
             color = MediCareCallTheme.colors.black
         )
         Spacer(Modifier.height(40.dp))
-        PhoneNumberTextField(
-            loginViewModel.phoneNumber,
-            { loginViewModel.onPhoneNumberChanged(it) },
+        VerificationCodeTextField(
+            loginViewModel.verificationCode,
+            { loginViewModel.onVerificationCodeChanged(it) },
         )
 
         Spacer(Modifier.height(30.dp))
-        CTAButton(color = CTAButtonType.GREEN, "인증번호 받기", {
-            // TODO: 서버에 인증번호 요청하기
-            loginViewModel.updateLoginUiState(LoginUiState.EnterVerificationCode)
-            navController.navigate("login_verification")
+        CTAButton(color = CTAButtonType.GREEN, "확인", onClick = {
+            // TODO: 서버에 인증번호 보내서 확인하기
+            loginViewModel.updateLoginUiState(LoginUiState.EnterMyInfo)
+            // TODO: navigation 이동
         })
 
     }

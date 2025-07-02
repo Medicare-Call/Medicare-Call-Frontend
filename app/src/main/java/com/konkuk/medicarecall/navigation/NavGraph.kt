@@ -12,6 +12,7 @@ import com.konkuk.medicarecall.data.model.LoginState
 import com.konkuk.medicarecall.ui.home.screen.HomeScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginStartScreen
+import com.konkuk.medicarecall.ui.login_info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.statistics.screen.StatisticsScreen
@@ -50,6 +51,9 @@ fun NavGraph(
             }
             composable(route = Route.LoginPhone.route) {
                 LoginPhoneScreen(navController, loginViewModel)
+            }
+            composable(route = Route.LoginVerification.route) {
+                LoginVerificationScreen(navController, loginViewModel)
             }
         }
     }
