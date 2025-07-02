@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
 
 @Composable
 fun DefaultTextField(
@@ -40,6 +42,6 @@ fun DefaultTextField(
             focusedPlaceholderColor = MediCareCallTheme.colors.gray3,
         ),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        singleLine = true
+        singleLine = true,
     )
 }

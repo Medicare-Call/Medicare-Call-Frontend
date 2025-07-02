@@ -18,6 +18,7 @@ import com.konkuk.medicarecall.data.model.LoginUiState
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
 import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
+import com.konkuk.medicarecall.ui.login_info.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -71,9 +72,9 @@ fun LoginMyInfoScreen(
                 style = MediCareCallTheme.typography.M_17
             )
             DefaultTextField(
-                loginViewModel.name,
+                loginViewModel.dateOfBirth,
                 {
-                    loginViewModel.onNameChanged(it)
+                    loginViewModel.onDOBChanged(it)
                 },
                 "YYYY / MM / DD",
                 keyboardType = KeyboardType.Number
@@ -86,14 +87,7 @@ fun LoginMyInfoScreen(
                 color = MediCareCallTheme.colors.gray7,
                 style = MediCareCallTheme.typography.M_17
             )
-            DefaultTextField(
-                loginViewModel.name,
-                {
-                    loginViewModel.onNameChanged(it)
-                },
-                "YYYY / MM / DD",
-                keyboardType = KeyboardType.Number
-            )
+            GenderToggleButton()
         }
         Spacer(Modifier.height(30.dp))
         CTAButton(CTAButtonType.GREEN, "다음", {})
