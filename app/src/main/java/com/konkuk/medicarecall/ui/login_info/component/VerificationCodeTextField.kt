@@ -14,6 +14,8 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
 
 @Composable
+// 인증번호 입력받는 TextField입니다.
+// UI 기본적인 구조는 휴대폰 번호 입력 받는 TextField와 같지만, 6자리 제한이 있고, 키보드가 Number로 뜨는 게 차이점입니다.
 fun VerificationCodeTextField(
     value: String,
     onValueChange: (String) -> Unit,
