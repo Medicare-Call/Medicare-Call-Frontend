@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.login_info.screen
 
 import android.R.attr.checked
+import android.R.id.input
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,8 @@ import com.konkuk.medicarecall.ui.login_info.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.util.DateOfBirthVisualTransformation
+import kotlin.text.isDigit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,13 +102,16 @@ fun LoginMyInfoScreen(
                 color = MediCareCallTheme.colors.gray7,
                 style = MediCareCallTheme.typography.M_17
             )
+            // 생년월일 입력 텍스트필드
             DefaultTextField(
                 loginViewModel.dateOfBirth,
-                {
-                    loginViewModel.onDOBChanged(it)
+                { input ->
+                    val filtered = input.filter { it.isDigit() }.take(8)
+                    loginViewModel.onDOBChanged(filtered)
                 },
                 "YYYY / MM / DD",
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.Number,
+                visualTransformation = DateOfBirthVisualTransformation()
             )
         }
         Spacer(Modifier.height(20.dp))
