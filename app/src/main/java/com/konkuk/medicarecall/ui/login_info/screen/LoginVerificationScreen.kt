@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.login_info.screen
 
-import android.R.id.input
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -59,7 +58,7 @@ fun LoginVerificationScreen(
         )
 
         Spacer(Modifier.height(30.dp))
-        CTAButton(color = CTAButtonType.GREEN, "확인", onClick = {
+        CTAButton(type = CTAButtonType.GREEN, "확인", onClick = {
             // TODO: 서버에 인증번호 보내서 확인하기
             loginViewModel.updateLoginUiState(LoginUiState.EnterMyInfo)
             navController.navigate("login_my_info")

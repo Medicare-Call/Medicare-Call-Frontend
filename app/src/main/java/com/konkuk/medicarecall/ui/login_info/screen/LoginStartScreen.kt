@@ -41,7 +41,7 @@ fun LoginStartScreen(
         )
 
         CTAButton(
-            color = CTAButtonType.WHITE,
+            type = CTAButtonType.WHITE,
             "시작하기",
             {
                 loginViewModel.updateLoginUiState(LoginUiState.EnterPhoneNumber)
