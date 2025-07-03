@@ -129,7 +129,9 @@ fun LoginMyInfoScreen(
         })
 
 
-        val sheetState = rememberModalBottomSheetState()
+        val sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        )
 
 
         if (showBottomSheet) {
@@ -139,46 +141,52 @@ fun LoginMyInfoScreen(
                 },
                 sheetState = sheetState,
                 containerColor = MediCareCallTheme.colors.bg,
-                dragHandle = null
+                dragHandle = null,
+                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
             ) {
                 // Sheet content
 
                 Column {
-                    Column {
-                        Text(
-                            "회원가입을 위해\n약관 동의가 필요합니다",
-                            color = MediCareCallTheme.colors.black,
-                            style = MediCareCallTheme.typography.B_20,
-                            modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp)
-                        )
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painterResource(R.drawable.ic_check_box),
-                                contentDescription = "체크박스"
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                "전체 동의하기",
-                                color = MediCareCallTheme.colors.black,
-                                style = MediCareCallTheme.typography.SB_16
-                            )
-
-                        }
-                    }
-                    HorizontalDivider(thickness = 1.4.dp, color = MediCareCallTheme.colors.gray2)
-                    Spacer(Modifier.height(12.dp))
-                    AgreementItem("서비스 이용약관", Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
-                    AgreementItem(
-                        "개인정보 수집 및 이용동의",
-                        Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                    Text(
+                        "회원가입을 위해\n약관 동의가 필요합니다",
+                        color = MediCareCallTheme.colors.black,
+                        style = MediCareCallTheme.typography.B_20,
+                        modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp)
                     )
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_check_box),
+                            contentDescription = "체크박스"
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "전체 동의하기",
+                            color = MediCareCallTheme.colors.black,
+                            style = MediCareCallTheme.typography.SB_16
+                        )
+
+                    }
                 }
-                // CTAButton(CTAButtonType.GREEN, "다음", {}, Modifier.padding(bottom = 30.dp))
+                HorizontalDivider(thickness = 1.4.dp, color = MediCareCallTheme.colors.gray2)
+                Spacer(Modifier.height(12.dp))
+                AgreementItem("서비스 이용약관", Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
+                AgreementItem(
+                    "개인정보 수집 및 이용동의",
+                    Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                )
+                CTAButton(
+                    CTAButtonType.GREEN,
+                    "다음",
+                    {},
+                    Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 30.dp, top = 20.dp)
+                )
             }
 
         }
