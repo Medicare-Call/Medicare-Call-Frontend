@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +34,7 @@ fun GenderToggleButton() {
     Row(
         Modifier
             .fillMaxWidth()
-            .height(54.dp)
+            .height(IntrinsicSize.Max)
             .border(
                 BorderStroke(1.2.dp, MediCareCallTheme.colors.gray2), // 전체 테두리
                 RoundedCornerShape(14.dp)
@@ -45,7 +46,7 @@ fun GenderToggleButton() {
     ) {
         Box(
             Modifier
-                .fillMaxHeight()
+                .padding(vertical = 16.dp)
                 .weight(1f),
 
             contentAlignment = Alignment.Center
@@ -61,7 +62,7 @@ fun GenderToggleButton() {
 
         Box(
             Modifier
-                .fillMaxHeight()
+                .padding(vertical = 16.dp)
                 .weight(1f),
             contentAlignment = Alignment.Center
         ) {
@@ -69,7 +70,8 @@ fun GenderToggleButton() {
                 "여성",
                 color = MediCareCallTheme.colors.black,
                 style = MediCareCallTheme.typography.M_16,
-            )
+
+                )
         }
     }
 }

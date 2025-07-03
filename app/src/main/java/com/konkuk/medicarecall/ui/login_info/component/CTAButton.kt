@@ -66,7 +66,6 @@ fun CTAButton(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp)
             .background(color = buttonColor, shape = RoundedCornerShape(14.dp))
             .clickable(
                 interactionSource,
@@ -78,7 +77,7 @@ fun CTAButton(
             text = text,
             color = textColor,
             style = MediCareCallTheme.typography.B_17,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.padding(vertical = 16.dp).align(Alignment.Center)
         )
     }
 }
