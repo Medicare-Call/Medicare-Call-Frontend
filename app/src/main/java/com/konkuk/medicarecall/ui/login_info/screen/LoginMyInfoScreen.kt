@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.model.LoginUiState
+import com.konkuk.medicarecall.ui.login_info.component.AgreementItem
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
 import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
 import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
@@ -136,15 +138,17 @@ fun LoginMyInfoScreen(
                 // Sheet content
 
                 Column {
-                    Column(Modifier.padding(vertical = 30.dp, horizontal = 20.dp)) {
+                    Column {
                         Text(
                             "회원가입을 위해\n약관 동의가 필요합니다",
                             color = MediCareCallTheme.colors.black,
-                            style = MediCareCallTheme.typography.B_20
+                            style = MediCareCallTheme.typography.B_20,
+                            modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp)
                         )
-                        Spacer(Modifier.height(30.dp))
                         Row(
-                            Modifier.fillMaxWidth(),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp, vertical = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -160,38 +164,18 @@ fun LoginMyInfoScreen(
 
                         }
                     }
-                    HorizontalDivider()
-                    Column(Modifier.padding(top = 12.dp, start = 20.dp, end = 20.dp)) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painterResource(R.drawable.ic_check_box),
-                                contentDescription = "체크박스"
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(
-                                "서비스 이용약관",
-                                color = MediCareCallTheme.colors.gray9,
-                                style = MediCareCallTheme.typography.M_16
-                            )
-                            Box(Modifier.clip(RoundedCornerShape(8.dp)).background(MediCareCallTheme.colors.negative.copy(alpha = 0.2f))) {
-                                Text(
-                                    "필수",
-                                    color = MediCareCallTheme.colors.negative,
-                                    style = MediCareCallTheme.typography.R_14,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                                )
-                            }
-                        }
-
-                    }
-
+                    HorizontalDivider(thickness = 1.4.dp, color = MediCareCallTheme.colors.gray2)
+                    Spacer(Modifier.height(12.dp))
+                    AgreementItem("서비스 이용약관", Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
+                    AgreementItem(
+                        "개인정보 수집 및 이용동의",
+                        Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                    )
                 }
-
+                // CTAButton(CTAButtonType.GREEN, "다음", {}, Modifier.padding(bottom = 30.dp))
             }
-        }
 
+        }
     }
+
 }
