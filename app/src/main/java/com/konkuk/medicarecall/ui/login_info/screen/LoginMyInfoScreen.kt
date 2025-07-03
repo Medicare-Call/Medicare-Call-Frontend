@@ -4,6 +4,7 @@ import android.R.attr.checked
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -158,6 +161,32 @@ fun LoginMyInfoScreen(
                         }
                     }
                     HorizontalDivider()
+                    Column(Modifier.padding(top = 12.dp, start = 20.dp, end = 20.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painterResource(R.drawable.ic_check_box),
+                                contentDescription = "체크박스"
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                "서비스 이용약관",
+                                color = MediCareCallTheme.colors.gray9,
+                                style = MediCareCallTheme.typography.M_16
+                            )
+                            Box(Modifier.clip(RoundedCornerShape(8.dp)).background(MediCareCallTheme.colors.negative.copy(alpha = 0.2f))) {
+                                Text(
+                                    "필수",
+                                    color = MediCareCallTheme.colors.negative,
+                                    style = MediCareCallTheme.typography.R_14,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+
+                    }
 
                 }
 
