@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.login_info.component
 
+import android.R.attr.thickness
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,30 +32,46 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun GenderToggleButton() {
+
+    var isMale by remember { mutableStateOf<Boolean?>(null) }
+
+
+
     Row(
         Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
-            .border(
-                BorderStroke(1.2.dp, MediCareCallTheme.colors.gray2), // 전체 테두리
-                RoundedCornerShape(14.dp)
-            )
+//            .border(
+//                BorderStroke(1.2.dp, MediCareCallTheme.colors.gray2), // 전체 테두리
+//                RoundedCornerShape(14.dp)
+//            )
             .clip(RoundedCornerShape(14.dp))
             .background(
                 MediCareCallTheme.colors.white
-            ),
+            )
     ) {
         Box(
             Modifier
-                .padding(vertical = 16.dp)
-                .weight(1f),
+                .weight(1f)
+                .background(color = if (isMale == true) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
+                .border(
+                    width = 1.2.dp,
+                    color = if (isMale == true) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                    shape = RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp)
+                )
+                .clickable(
+                    onClick = { isMale = true },
+
+                ),
 
             contentAlignment = Alignment.Center
         ) {
             Text(
                 "남성",
-                color = MediCareCallTheme.colors.black,
-                style = MediCareCallTheme.typography.M_16,
+                color = if (isMale == true) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
+                style = if (isMale == true) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
+                modifier = Modifier
+                    .padding(vertical = if (isMale == true) 15.5.dp else 16.dp)
             )
         }
 
@@ -62,16 +79,26 @@ fun GenderToggleButton() {
 
         Box(
             Modifier
-                .padding(vertical = 16.dp)
-                .weight(1f),
+                .weight(1f)
+                .background(color = if (isMale == false) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
+                .border(
+                    width = 1.2.dp,
+                    color = if (isMale == false) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                    shape = RoundedCornerShape(topEnd = 14.dp, bottomEnd = 14.dp)
+                )
+                .clickable(
+                    onClick = { isMale = false }
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 "여성",
-                color = MediCareCallTheme.colors.black,
-                style = MediCareCallTheme.typography.M_16,
+                color = if (isMale == false) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
+                style = if (isMale == false) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
+                modifier = Modifier
+                    .padding(vertical = if (isMale == false) 15.5.dp else 16.dp)
 
-                )
+            )
         }
     }
 }
