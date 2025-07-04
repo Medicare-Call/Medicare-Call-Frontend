@@ -32,11 +32,11 @@ class DateOfBirthVisualTransformation : VisualTransformation {
                 var transformedOffset = offset
 
                 // YYYY 뒤에 ' / '가 추가되는 경우
-                if (offset >= 4) { // 원본 4번째 문자(인덱스 3)를 지나서 커서가 4 이상일 때
+                if (offset >= 5) { // 원본 4번째 문자(인덱스 3)를 지나서 커서가 4 이상일 때
                     transformedOffset += 3 // ' / ' (3칸) 추가
                 }
                 // MM 뒤에 ' / '가 추가되는 경우
-                if (offset >= 6) { // 원본 6번째 문자(인덱스 5)를 지나서 커서가 6 이상일 때
+                if (offset >= 7) { // 원본 6번째 문자(인덱스 5)를 지나서 커서가 6 이상일 때
                     transformedOffset += 3 // ' / ' (3칸) 추가
                 }
 
