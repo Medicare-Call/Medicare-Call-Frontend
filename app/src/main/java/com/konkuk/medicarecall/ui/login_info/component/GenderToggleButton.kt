@@ -31,20 +31,15 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun GenderToggleButton() {
-
-    var isMale by remember { mutableStateOf<Boolean?>(null) }
-
-
+fun GenderToggleButton(
+    isMale: Boolean?,
+    onGenderChange: (Boolean?) -> Unit
+) {
 
     Row(
         Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
-//            .border(
-//                BorderStroke(1.2.dp, MediCareCallTheme.colors.gray2), // 전체 테두리
-//                RoundedCornerShape(14.dp)
-//            )
             .clip(RoundedCornerShape(14.dp))
             .background(
                 MediCareCallTheme.colors.white
@@ -60,9 +55,9 @@ fun GenderToggleButton() {
                     shape = RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp)
                 )
                 .clickable(
-                    onClick = { isMale = true },
+                    onClick = { onGenderChange(true) },
 
-                ),
+                    ),
 
             contentAlignment = Alignment.Center
         ) {
@@ -87,7 +82,7 @@ fun GenderToggleButton() {
                     shape = RoundedCornerShape(topEnd = 14.dp, bottomEnd = 14.dp)
                 )
                 .clickable(
-                    onClick = { isMale = false }
+                    onClick = { onGenderChange(false) }
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -101,10 +96,4 @@ fun GenderToggleButton() {
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun GenderToggleButtonPreview() {
-    GenderToggleButton()
 }

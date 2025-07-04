@@ -58,11 +58,15 @@ fun LoginVerificationScreen(
         )
 
         Spacer(Modifier.height(30.dp))
-        CTAButton(type = CTAButtonType.GREEN, "확인", onClick = {
-            // TODO: 서버에 인증번호 보내서 확인하기
-            loginViewModel.updateLoginUiState(LoginUiState.EnterMyInfo)
-            navController.navigate("login_my_info")
-        })
+        CTAButton(
+            type = if (loginViewModel.verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+            "확인",
+            onClick = {
+                // TODO: 서버에 인증번호 보내서 확인하기
+                navController.navigate("login_my_info")
+                loginViewModel.updateLoginUiState(LoginUiState.EnterMyInfo)
+                loginViewModel.onVerificationCodeChanged("")
+            })
 
     }
 }

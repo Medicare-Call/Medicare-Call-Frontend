@@ -62,11 +62,14 @@ fun LoginPhoneScreen(
         )
 
         Spacer(Modifier.height(30.dp))
-        CTAButton(type = CTAButtonType.GREEN, "인증번호 받기", {
-            // TODO: 서버에 인증번호 요청하기
-            loginViewModel.updateLoginUiState(LoginUiState.EnterVerificationCode)
-            navController.navigate("login_verification")
-        })
+        CTAButton(
+            type = if (loginViewModel.phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+            "인증번호 받기",
+            {
+                // TODO: 서버에 인증번호 요청하기
+                loginViewModel.updateLoginUiState(LoginUiState.EnterVerificationCode)
+                navController.navigate("login_verification")
+            })
 
     }
 }

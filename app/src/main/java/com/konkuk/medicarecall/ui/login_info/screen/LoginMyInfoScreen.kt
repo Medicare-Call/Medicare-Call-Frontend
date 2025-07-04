@@ -123,12 +123,21 @@ fun LoginMyInfoScreen(
                 color = MediCareCallTheme.colors.gray7,
                 style = MediCareCallTheme.typography.M_17
             )
-            GenderToggleButton()
+
+            GenderToggleButton(loginViewModel.isMale, { loginViewModel.onGenderChanged(it) })
         }
         Spacer(Modifier.height(30.dp))
-        CTAButton(CTAButtonType.GREEN, "다음", {
-            showBottomSheet = true
-        })
+        CTAButton(
+            if (loginViewModel.name.isNotEmpty()
+                && loginViewModel.dateOfBirth.length == 8
+                && loginViewModel.isMale != null
+            ) CTAButtonType.GREEN
+            else
+                CTAButtonType.DISABLED,
+            "다음",
+            {
+                showBottomSheet = true
+            })
 
 
         val sheetState = rememberModalBottomSheetState(
@@ -211,8 +220,9 @@ fun LoginMyInfoScreen(
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
                     )
                 }
+                // 모달 내부 CTA 버튼
                 CTAButton(
-                    CTAButtonType.GREEN,
+                    if(isCheckedAll) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                     "다음",
                     {},
                     Modifier

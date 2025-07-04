@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 enum class CTAButtonType {
-    WHITE, GREEN
+    WHITE, GREEN, DISABLED
 }
 
 
@@ -36,16 +36,19 @@ fun CTAButton(
     val backgroundColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.white
         CTAButtonType.GREEN -> MediCareCallTheme.colors.main
+        CTAButtonType.DISABLED -> MediCareCallTheme.colors.g200
     }
 
     val textColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.main
         CTAButtonType.GREEN -> MediCareCallTheme.colors.white
+        CTAButtonType.DISABLED -> MediCareCallTheme.colors.white
     }
 
     val clickedColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.gray1
         CTAButtonType.GREEN -> MediCareCallTheme.colors.g500
+        CTAButtonType.DISABLED -> MediCareCallTheme.colors.g200
     }
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -60,9 +63,11 @@ fun CTAButton(
             .fillMaxWidth()
             .background(color = buttonColor, shape = RoundedCornerShape(14.dp))
             .clickable(
+
                 interactionSource,
                 onClick = onClick,
                 indication = null,
+                enabled = if(type != CTAButtonType.DISABLED) true else false
             )
     ) {
         Text(

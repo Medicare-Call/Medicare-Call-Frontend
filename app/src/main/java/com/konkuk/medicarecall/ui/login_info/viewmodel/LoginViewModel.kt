@@ -42,7 +42,7 @@ class LoginViewModel : ViewModel() {
         private set
     var dateOfBirth by mutableStateOf("")
         private set
-    var isMale by mutableStateOf(true)
+    var isMale by mutableStateOf<Boolean?>(null)
         private set
 
     // 상태 변경 함수
@@ -60,6 +60,9 @@ class LoginViewModel : ViewModel() {
 
     fun onDOBChanged(new: String) {
         dateOfBirth = new
+    }
+    fun onGenderChanged(new: Boolean?) {
+        isMale = new
     }
 
 
