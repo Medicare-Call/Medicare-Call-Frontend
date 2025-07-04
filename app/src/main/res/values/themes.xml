@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.MediCareCall" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.MySplashScreen" parent="Theme.MediCareCall">
+        <item name="android:windowBackground">@color/main</item>
+    </style>
+
 </resources>
