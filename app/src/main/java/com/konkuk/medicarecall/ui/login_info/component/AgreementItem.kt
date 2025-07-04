@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.login_info.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun AgreementItem(text: String, modifier: Modifier = Modifier) {
+fun AgreementItem(text: String, isChecked: Boolean, onCheckedChange: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -31,7 +32,8 @@ fun AgreementItem(text: String, modifier: Modifier = Modifier) {
             Icon(
                 painterResource(R.drawable.ic_check_box),
                 contentDescription = "체크박스",
-                tint = MediCareCallTheme.colors.gray2
+                tint = if(isChecked) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                modifier = Modifier.clickable(onClick = onCheckedChange)
             )
             Text(
                 text,

@@ -1,9 +1,11 @@
 package com.konkuk.medicarecall.ui.login_info.screen
 
 import android.R.attr.checked
+import android.R.attr.value
 import android.R.id.input
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -146,6 +148,14 @@ fun LoginMyInfoScreen(
             ) {
                 // Sheet content
 
+                // 개별 약관 아이템 및 상태
+                val itemList = listOf(
+                    "서비스 이용약관" to Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                    "개인정보 수집 및 이용 동의" to Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                )
+                var checkedStates by remember { mutableStateOf(List(itemList.size) { false }) }
+                val isCheckedAll = checkedStates.all { it }
+
                 Column {
                     Text(
                         "회원가입을 위해\n약관 동의가 필요합니다",
@@ -159,10 +169,23 @@ fun LoginMyInfoScreen(
                             .padding(horizontal = 20.dp, vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        var AllAgreeCheckState by remember { mutableStateOf(false) }
+
                         Icon(
                             painterResource(R.drawable.ic_check_box),
                             contentDescription = "체크박스",
-                            tint = MediCareCallTheme.colors.gray2
+                            tint = if (AllAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                            modifier = Modifier.clickable(onClick = {
+                                AllAgreeCheckState = !AllAgreeCheckState
+                                checkedStates = checkedStates.map {
+                                    if (AllAgreeCheckState) {
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                }
+                            }
+                            )
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
@@ -175,11 +198,19 @@ fun LoginMyInfoScreen(
                 }
                 HorizontalDivider(thickness = 1.4.dp, color = MediCareCallTheme.colors.gray2)
                 Spacer(Modifier.height(12.dp))
-                AgreementItem("서비스 이용약관", Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
-                AgreementItem(
-                    "개인정보 수집 및 이용동의",
-                    Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
-                )
+
+                itemList.forEachIndexed { index, (title, modifier) ->
+                    AgreementItem(
+                        title,
+                        isChecked = checkedStates[index],
+                        onCheckedChange = {
+                            checkedStates = checkedStates.toMutableList().also {
+                                it[index] = !it[index]
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                    )
+                }
                 CTAButton(
                     CTAButtonType.GREEN,
                     "다음",
