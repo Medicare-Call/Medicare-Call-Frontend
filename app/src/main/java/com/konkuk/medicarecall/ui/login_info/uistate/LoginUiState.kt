@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.model
+package com.konkuk.medicarecall.ui.login_info.uistate
 
 sealed class LoginUiState {
     // 회원가입 단계

@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.model.LoginState
-import com.konkuk.medicarecall.data.model.LoginUiState
+import com.konkuk.medicarecall.ui.login_info.uistate.LoginState
+import com.konkuk.medicarecall.ui.login_info.uistate.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

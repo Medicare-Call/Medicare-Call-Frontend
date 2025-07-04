@@ -16,12 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-
-enum class CTAButtonType {
-    WHITE, GREEN, DISABLED
-}
-
 
 @Composable
 // CTAButtonType을 이용해 흰 버튼인지 초록 버튼인지 정해지고,

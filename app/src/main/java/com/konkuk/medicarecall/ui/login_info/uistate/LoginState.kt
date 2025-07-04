@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.model
+package com.konkuk.medicarecall.ui.login_info.uistate
 
 sealed class LoginState {
     // 로그인 상태 확인

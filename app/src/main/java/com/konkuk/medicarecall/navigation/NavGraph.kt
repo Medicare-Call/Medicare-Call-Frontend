@@ -6,9 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.navigation
-import com.konkuk.medicarecall.data.model.LoginState
+import com.konkuk.medicarecall.ui.login_info.uistate.LoginState
 import com.konkuk.medicarecall.ui.home.screen.HomeScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.login_info.screen.LoginPhoneScreen

@@ -30,14 +30,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.model.LoginUiState
+import com.konkuk.medicarecall.ui.login_info.uistate.LoginUiState
 import com.konkuk.medicarecall.ui.login_info.component.AgreementItem
 import com.konkuk.medicarecall.ui.login_info.component.CTAButton
-import com.konkuk.medicarecall.ui.login_info.component.CTAButtonType
 import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login_info.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.util.DateOfBirthVisualTransformation
 
