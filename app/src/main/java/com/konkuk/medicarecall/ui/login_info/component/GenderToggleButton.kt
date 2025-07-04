@@ -44,9 +44,10 @@ fun GenderToggleButton(
                     shape = RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp)
                 )
                 .clickable(
+                    interactionSource = null,
+                    indication = null,
                     onClick = { onGenderChange(true) },
-
-                    ),
+                ),
 
             contentAlignment = Alignment.Center
         ) {
@@ -58,9 +59,6 @@ fun GenderToggleButton(
                     .padding(vertical = if (isMale == true) 15.5.dp else 16.dp)
             )
         }
-
-        VerticalDivider(thickness = 1.2.dp, color = MediCareCallTheme.colors.gray2)
-
         Box(
             Modifier
                 .weight(1f)
@@ -71,6 +69,8 @@ fun GenderToggleButton(
                     shape = RoundedCornerShape(topEnd = 14.dp, bottomEnd = 14.dp)
                 )
                 .clickable(
+                    interactionSource = null,
+                    indication = null,
                     onClick = { onGenderChange(false) }
                 ),
             contentAlignment = Alignment.Center

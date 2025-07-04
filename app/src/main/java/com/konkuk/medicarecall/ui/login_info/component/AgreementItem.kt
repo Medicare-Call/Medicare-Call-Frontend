@@ -20,7 +20,12 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun AgreementItem(text: String, isChecked: Boolean, onCheckedChange: () -> Unit, modifier: Modifier = Modifier) {
+fun AgreementItem(
+    text: String,
+    isChecked: Boolean,
+    onCheckedChange: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -30,8 +35,12 @@ fun AgreementItem(text: String, isChecked: Boolean, onCheckedChange: () -> Unit,
             Icon(
                 painterResource(R.drawable.ic_check_box),
                 contentDescription = "체크박스",
-                tint = if(isChecked) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                modifier = Modifier.clickable(onClick = onCheckedChange)
+                tint = if (isChecked) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                modifier = Modifier.clickable(
+                    interactionSource = null,
+                    indication = null,
+                    onClick = onCheckedChange,
+                )
             )
             Text(
                 text,

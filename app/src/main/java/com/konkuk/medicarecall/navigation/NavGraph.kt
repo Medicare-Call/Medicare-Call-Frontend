@@ -1,5 +1,7 @@
 package com.konkuk.medicarecall.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -27,6 +29,8 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination, // 시작 화면
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
         modifier = modifier
     ) {
         // 메인 내비게이션

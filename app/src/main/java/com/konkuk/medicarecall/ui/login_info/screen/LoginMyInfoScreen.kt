@@ -169,7 +169,10 @@ fun LoginMyInfoScreen(
                             painterResource(R.drawable.ic_check_box),
                             contentDescription = "체크박스",
                             tint = if (allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                            modifier = Modifier.clickable(onClick = {
+                            modifier = Modifier.clickable(
+                                interactionSource = null,
+                                indication = null,
+                                onClick = {
                                 allAgreeCheckState = !allAgreeCheckState
                                 checkedStates = checkedStates.map {
                                     allAgreeCheckState
