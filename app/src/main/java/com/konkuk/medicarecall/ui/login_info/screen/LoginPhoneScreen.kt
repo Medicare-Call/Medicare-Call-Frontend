@@ -30,8 +30,6 @@ fun LoginPhoneScreen(
     modifier: Modifier = Modifier
 ) {
 
-    val loginUiState = loginViewModel.loginUiState.collectAsState()
-
     Column(
         modifier
             .fillMaxSize()

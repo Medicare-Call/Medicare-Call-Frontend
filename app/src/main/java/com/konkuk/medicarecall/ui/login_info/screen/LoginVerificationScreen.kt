@@ -28,7 +28,6 @@ fun LoginVerificationScreen(
     loginViewModel: LoginViewModel,
     modifier: Modifier = Modifier
 ) {
-    val loginUiState = loginViewModel.loginUiState.collectAsState()
     Column(
         modifier
             .fillMaxSize()

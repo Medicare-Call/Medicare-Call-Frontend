@@ -67,7 +67,7 @@ fun CTAButton(
                 interactionSource,
                 onClick = onClick,
                 indication = null,
-                enabled = if(type != CTAButtonType.DISABLED) true else false
+                enabled = type != CTAButtonType.DISABLED
             )
     ) {
         Text(
