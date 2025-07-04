@@ -161,7 +161,8 @@ fun LoginMyInfoScreen(
                     ) {
                         Icon(
                             painterResource(R.drawable.ic_check_box),
-                            contentDescription = "체크박스"
+                            contentDescription = "체크박스",
+                            tint = MediCareCallTheme.colors.gray2
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
