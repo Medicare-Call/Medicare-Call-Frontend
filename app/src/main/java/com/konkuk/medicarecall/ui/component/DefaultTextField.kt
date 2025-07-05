@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.login_info.component
+package com.konkuk.medicarecall.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape

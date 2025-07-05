@@ -32,8 +32,8 @@ import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.login_info.uistate.LoginUiState
 import com.konkuk.medicarecall.ui.login_info.component.AgreementItem
-import com.konkuk.medicarecall.ui.login_info.component.CTAButton
-import com.konkuk.medicarecall.ui.login_info.component.DefaultTextField
+import com.konkuk.medicarecall.ui.component.CTAButton
+import com.konkuk.medicarecall.ui.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login_info.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.login_info.component.TopBar
 import com.konkuk.medicarecall.ui.login_info.viewmodel.LoginViewModel

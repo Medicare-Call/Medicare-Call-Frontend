@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.login_info.component
+package com.konkuk.medicarecall.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
