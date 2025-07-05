@@ -1,6 +1,8 @@
 package com.konkuk.medicarecall.ui.component
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -17,10 +19,20 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun DefaultTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    category: String? = null,
     placeHolder: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
+
+    if (category != null) {
+        Text(
+            category,
+            color = MediCareCallTheme.colors.gray7,
+            style = MediCareCallTheme.typography.M_17
+        )
+        Spacer(Modifier.height(10.dp))
+    }
 
     OutlinedTextField(
         value = value,
