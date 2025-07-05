@@ -119,6 +119,11 @@ val defaultMediCareCallTypography = MediCareCallTypography(
         lineHeight = (17 * 1.6).sp,
         letterSpacing = 2.sp
     ),
+    M_17 = TextStyle(
+        fontFamily = mediCareCallFontRegular,
+        fontSize = 17.sp,
+        lineHeight = (17 * 1.6).sp,
+    ),
     R_17 = TextStyle(
         fontFamily = mediCareCallFontRegular,
         fontSize = 17.sp,
