@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.theme
 
+import android.R.attr.fontFamily
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -23,6 +24,7 @@ data class MediCareCallTypography(
     val B_26 : TextStyle,
     val SB_24 : TextStyle,
     val SB_22 : TextStyle,
+    val B_20 : TextStyle,
     val SB_20 : TextStyle,
     val M_20 : TextStyle,
 
@@ -30,12 +32,15 @@ data class MediCareCallTypography(
     val SB_18 : TextStyle,
     val R_18 : TextStyle,
     val B_17 : TextStyle,
+    val M_17 : TextStyle,
     val R_17 : TextStyle,
+    val SB_16 : TextStyle,
     val M_16 : TextStyle,
     val R_16 : TextStyle,
 
     // Caption
     val R_15 : TextStyle,
+    val SB_14 : TextStyle,
     val R_14 : TextStyle,
 )
 
@@ -71,6 +76,12 @@ val defaultMediCareCallTypography = MediCareCallTypography(
         lineHeight = (22 * 1.3).sp,
         letterSpacing = (-0.2).sp
     ),
+    B_20 = TextStyle(
+        fontFamily = mediCareCallFontBold,
+        fontSize = 20.sp,
+        lineHeight = (20 * 1.3).sp,
+        letterSpacing = (-0.2).sp
+    ),
     SB_20 = TextStyle(
         fontFamily = mediCareCallFontSemiBold,
         fontSize = 20.sp,
@@ -89,6 +100,7 @@ val defaultMediCareCallTypography = MediCareCallTypography(
         fontFamily = mediCareCallFontSemiBold,
         fontSize = 18.sp,
         lineHeight = (18 * 1.6).sp,
+        letterSpacing = 2.sp
     ),
     R_18 = TextStyle(
         fontFamily = mediCareCallFontRegular,
@@ -99,11 +111,23 @@ val defaultMediCareCallTypography = MediCareCallTypography(
         fontFamily = mediCareCallFontBold,
         fontSize = 17.sp,
         lineHeight = (17 * 1.6).sp,
+        letterSpacing = 2.sp
+    ),
+    M_17 = TextStyle(
+        fontFamily = mediCareCallFontMedium,
+        fontSize = 17.sp,
+        lineHeight = (17 * 1.6).sp,
+        letterSpacing = 2.sp
     ),
     R_17 = TextStyle(
         fontFamily = mediCareCallFontRegular,
         fontSize = 17.sp,
         lineHeight = (17 * 1.6).sp,
+    ),
+    SB_16 = TextStyle(
+        fontFamily = mediCareCallFontSemiBold,
+        fontSize = 16.sp,
+        lineHeight = (16 * 1.6).sp,
     ),
     M_16 = TextStyle(
         fontFamily = mediCareCallFontMedium,
@@ -121,6 +145,12 @@ val defaultMediCareCallTypography = MediCareCallTypography(
         fontFamily = mediCareCallFontRegular,
         fontSize = 15.sp,
         lineHeight = (15 * 1.5).sp,
+        letterSpacing = (0.1).sp
+    ),
+    SB_14 = TextStyle(
+        fontFamily = mediCareCallFontSemiBold,
+        fontSize = 14.sp,
+        lineHeight = (14 * 1.5).sp,
         letterSpacing = (0.1).sp
     ),
     R_14 = TextStyle(

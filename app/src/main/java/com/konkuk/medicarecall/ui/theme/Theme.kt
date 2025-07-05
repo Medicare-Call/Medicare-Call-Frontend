@@ -70,4 +70,8 @@ object MediCareCallTheme {
         @ReadOnlyComposable
         get() = LocalMedicareCallTypographyProvider.current
 
+    val shadow : MediCareCallShadows
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalMediCareCallShadowProvider.current
 }
