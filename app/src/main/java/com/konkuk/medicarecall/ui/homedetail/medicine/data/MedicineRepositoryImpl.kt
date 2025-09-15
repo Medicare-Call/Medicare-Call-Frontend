@@ -12,7 +12,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class MedicineRepositoryImpl @Inject constructor(
-    private val medicineApi: MedicineApi,
+    private val medicineService: MedicineService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository
 ) : MedicineRepository {
 
@@ -71,7 +71,7 @@ class MedicineRepositoryImpl @Inject constructor(
         val grayTemplate =
             runCatching { getConfiguredMedicineUiList(elderId) }.getOrDefault(emptyList())
 
-        return runCatching { medicineApi.getDailyMedication(elderId, date.toString()) }
+        return runCatching { medicineService.getDailyMedication(elderId, date.toString()) }
             .fold(
                 onSuccess = { res ->
                     if (res.isSuccessful) {

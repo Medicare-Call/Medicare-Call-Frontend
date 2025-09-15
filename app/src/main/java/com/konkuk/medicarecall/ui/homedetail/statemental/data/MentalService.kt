@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MentalApi {
+interface MentalService {
     @GET("elders/{elderId}/mental-analysis")
     suspend fun getDailyMental(
         @Path("elderId") elderId: Int,

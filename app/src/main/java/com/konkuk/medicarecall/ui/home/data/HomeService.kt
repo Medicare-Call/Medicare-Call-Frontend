@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface HomeApi {
+interface HomeService {
     @GET("elders/{elderId}/home")
     suspend fun getHomeSummary(
         @Path("elderId") elderId: Int

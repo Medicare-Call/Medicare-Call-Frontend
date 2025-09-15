@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MealApi {
+interface MealService {
     @GET("elders/{elderId}/meals")
     suspend fun getDailyMeal(
         @Path("elderId") elderId: Int,

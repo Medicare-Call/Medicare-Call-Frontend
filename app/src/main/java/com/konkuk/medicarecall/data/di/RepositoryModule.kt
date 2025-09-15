@@ -30,28 +30,28 @@ import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.meal.data.MealApi
-import com.konkuk.medicarecall.ui.home.data.HomeApi
+import com.konkuk.medicarecall.ui.home.data.HomeService
 import com.konkuk.medicarecall.ui.home.data.HomeRepository
 import com.konkuk.medicarecall.ui.home.data.HomeRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseApi
+import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseService
 import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseRepository
 import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseRepositoryImpl
+import com.konkuk.medicarecall.ui.homedetail.meal.data.MealService
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepository
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineApi
+import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineService
 import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineRepository
 import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepApi
+import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepService
 import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepRepository
 import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthApi
+import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthService
 import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthRepository
 import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalApi
+import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalService
 import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalRepository
 import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalRepositoryImpl
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsApi
+import com.konkuk.medicarecall.ui.statistics.data.StatisticsService
 import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepository
 import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepositoryImpl
 import dagger.Binds
@@ -140,17 +140,17 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMealRepository(mealApi: MealApi): MealRepository {
-        return MealRepositoryImpl(mealApi)
+    fun provideMealRepository(mealService: MealService): MealRepository {
+        return MealRepositoryImpl(mealService)
     }
 
     @Provides
     @Singleton
     fun provideMedicineRepository(
-        medicineApi: MedicineApi,
+        medicineService: MedicineService,
         eldersHealthInfoRepository: EldersHealthInfoRepository
     ): MedicineRepository {
-        return MedicineRepositoryImpl(medicineApi, eldersHealthInfoRepository)
+        return MedicineRepositoryImpl(medicineService, eldersHealthInfoRepository)
     }
 
     @Provides
@@ -170,41 +170,41 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideHomeRepository(homeApi: HomeApi): HomeRepository {
-        return HomeRepositoryImpl(homeApi)
+    fun provideHomeRepository(homeService: HomeService): HomeRepository {
+        return HomeRepositoryImpl(homeService)
     }
 
     @Provides
     @Singleton
-    fun provideGlucoseRepository(glucoseApi: GlucoseApi): GlucoseRepository {
-        return GlucoseRepositoryImpl(glucoseApi)
+    fun provideGlucoseRepository(glucoseService: GlucoseService): GlucoseRepository {
+        return GlucoseRepositoryImpl(glucoseService)
     }
 
     @Provides
     @Singleton
-    fun provideSleepRepository(sleepApi: SleepApi): SleepRepository {
-        return SleepRepositoryImpl(sleepApi)
+    fun provideSleepRepository(sleepService: SleepService): SleepRepository {
+        return SleepRepositoryImpl(sleepService)
     }
 
     @Provides
     @Singleton
-    fun provideHealthRepository(healthApi: HealthApi): HealthRepository {
-        return HealthRepositoryImpl(healthApi)
+    fun provideHealthRepository(healthService: HealthService): HealthRepository {
+        return HealthRepositoryImpl(healthService)
     }
 
     @Provides
     @Singleton
-    fun provideMentalRepository(mentalApi: MentalApi): MentalRepository {
-        return MentalRepositoryImpl(mentalApi)
+    fun provideMentalRepository(mentalService: MentalService): MentalRepository {
+        return MentalRepositoryImpl(mentalService)
     }
 
     @Provides
     @Singleton
     fun provideStatisticsRepository(
-        statisticsApi: StatisticsApi,
+        statisticsService: StatisticsService,
         eldersHealthInfoRepository: EldersHealthInfoRepository
     ): StatisticsRepository {
-        return StatisticsRepositoryImpl(statisticsApi, eldersHealthInfoRepository)
+        return StatisticsRepositoryImpl(statisticsService, eldersHealthInfoRepository)
     }
 
 }

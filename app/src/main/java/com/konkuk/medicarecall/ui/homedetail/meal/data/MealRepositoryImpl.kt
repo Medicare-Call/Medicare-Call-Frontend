@@ -5,11 +5,11 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class MealRepositoryImpl @Inject constructor(
-    private val mealApi: MealApi
+    private val mealService: MealService
 ) : MealRepository {
     override suspend fun getMealUiStateList(elderId: Int, date: LocalDate): List<MealUiState> {
 
-        val response = mealApi.getDailyMeal(elderId, date.toString())
+        val response = mealService.getDailyMeal(elderId, date.toString())
 
         return listOf(
             MealUiState(

@@ -10,12 +10,12 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
-    private val homeApi: HomeApi
+    private val homeService: HomeService
 ) : HomeRepository {
     override suspend fun requestImmediateCareCall(
         elderId: Int, careCallOption: String
     ): Result<Unit> = runCatching {
-        val response = homeApi.requestImmediateCareCall(
+        val response = homeService.requestImmediateCareCall(
             ImmediateCallRequestDto(
                 elderId, careCallOption
             )
@@ -49,7 +49,7 @@ class HomeRepositoryImpl @Inject constructor(
         return try {
             android.util.Log.d("HomeRepo", "[REQ] elderId=$elderId")
 
-            val res = homeApi.getHomeSummary(elderId)
+            val res = homeService.getHomeSummary(elderId)
 
             val meds = res.medicationStatus.medicationList.orEmpty()
             android.util.Log.d(

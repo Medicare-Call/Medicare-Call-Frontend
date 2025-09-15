@@ -5,7 +5,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class GlucoseRepositoryImpl @Inject constructor(
-    private val glucoseApi: GlucoseApi
+    private val glucoseService: GlucoseService
 ) : GlucoseRepository {
     override suspend fun getGlucoseGraph(
         elderId: Int,
@@ -13,7 +13,7 @@ class GlucoseRepositoryImpl @Inject constructor(
         type: String
     ): Result<GlucoseResponseDto> =
         runCatching {
-            val response = glucoseApi.getGlucoseGraph(elderId, counter, type)
+            val response = glucoseService.getGlucoseGraph(elderId, counter, type)
             if (response.isSuccessful) {
                 response.body() ?: throw IllegalStateException("Response body is null")
             } else {

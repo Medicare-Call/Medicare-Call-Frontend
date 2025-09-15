@@ -10,14 +10,14 @@ import com.konkuk.medicarecall.data.api.SettingService
 import com.konkuk.medicarecall.data.api.SubscribeService
 import com.konkuk.medicarecall.data.api.TokenRefreshService
 import com.konkuk.medicarecall.data.api.VerificationService
-import com.konkuk.medicarecall.ui.home.data.HomeApi
-import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseApi
-import com.konkuk.medicarecall.ui.homedetail.meal.data.MealApi
-import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineApi
-import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepApi
-import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthApi
-import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalApi
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsApi
+import com.konkuk.medicarecall.ui.home.data.HomeService
+import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseService
+import com.konkuk.medicarecall.ui.homedetail.meal.data.MealService
+import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineService
+import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepService
+import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthService
+import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalService
+import com.konkuk.medicarecall.ui.statistics.data.StatisticsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -91,49 +91,49 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideHomeApi(retrofit: Retrofit): HomeApi {
-        return retrofit.create(HomeApi::class.java)
+    fun provideHomeService(retrofit: Retrofit): HomeService {
+        return retrofit.create(HomeService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideGlucoseApi(retrofit: Retrofit): GlucoseApi {
-        return retrofit.create(GlucoseApi::class.java)
+    fun provideGlucoseService(retrofit: Retrofit): GlucoseService {
+        return retrofit.create(GlucoseService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideMealApi(retrofit: Retrofit): MealApi {
-        return retrofit.create(MealApi::class.java)
+    fun provideMealService(retrofit: Retrofit): MealService {
+        return retrofit.create(MealService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideMedicineApi(retrofit: Retrofit): MedicineApi {
-        return retrofit.create(MedicineApi::class.java)
+    fun provideMedicineService(retrofit: Retrofit): MedicineService {
+        return retrofit.create(MedicineService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideSleepApi(retrofit: Retrofit): SleepApi {
-        return retrofit.create(SleepApi::class.java)
+    fun provideSleepService(retrofit: Retrofit): SleepService {
+        return retrofit.create(SleepService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideHealthApi(retrofit: Retrofit): HealthApi {
-        return retrofit.create(HealthApi::class.java)
+    fun provideHealthService(retrofit: Retrofit): HealthService {
+        return retrofit.create(HealthService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideMentalApi(retrofit: Retrofit): MentalApi {
-        return retrofit.create(MentalApi::class.java)
+    fun provideMentalService(retrofit: Retrofit): MentalService {
+        return retrofit.create(MentalService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideStatisticsApi(retrofit: Retrofit): StatisticsApi {
-        return retrofit.create(StatisticsApi::class.java)
+    fun provideStatisticsService(retrofit: Retrofit): StatisticsService {
+        return retrofit.create(StatisticsService::class.java)
     }
 }

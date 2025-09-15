@@ -14,13 +14,13 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class StatisticsRepositoryImpl @Inject constructor(
-    private val statisticsApi: StatisticsApi,
+    private val statisticsService: StatisticsService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository
 ) : StatisticsRepository {
 
     override suspend fun getStatistics(elderId: Int, startDate: String): StatisticsResponseDto {
         return try {
-            val response = statisticsApi.getStatistics(elderId = elderId, startDate = startDate)
+            val response = statisticsService.getStatistics(elderId = elderId, startDate = startDate)
             response
 
         } catch (e: Exception) {
