@@ -51,6 +51,7 @@ import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthRepositoryIm
 import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalApi
 import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalRepository
 import com.konkuk.medicarecall.ui.homedetail.statemental.data.MentalRepositoryImpl
+import com.konkuk.medicarecall.ui.statistics.data.StatisticsApi
 import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepository
 import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepositoryImpl
 import dagger.Binds
@@ -197,15 +198,19 @@ object RepositoryModule {
         return MentalRepositoryImpl(mentalApi)
     }
 
+    @Provides
+    @Singleton
+    fun provideStatisticsRepository(
+        statisticsApi: StatisticsApi,
+        eldersHealthInfoRepository: EldersHealthInfoRepository
+    ): StatisticsRepository {
+        return StatisticsRepositoryImpl(statisticsApi, eldersHealthInfoRepository)
+    }
+
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryBindModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindStatisticsRepository(
-        statisticsRepositoryImpl: StatisticsRepositoryImpl
-    ): StatisticsRepository
 }
