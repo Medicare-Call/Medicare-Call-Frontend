@@ -17,6 +17,7 @@ import com.konkuk.medicarecall.data.repository.EldersInfoRepositoryImpl
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepositoryImpl
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
+import com.konkuk.medicarecall.data.repository.NaverPayRepositoryImpl
 import com.konkuk.medicarecall.data.repository.NoticeRepository
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
@@ -113,7 +114,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNaverPayRepository(naverPayService: NaverPayService): NaverPayRepository {
-        return NaverPayRepository(naverPayService)
+        return NaverPayRepositoryImpl(naverPayService)
     }
 
     @Provides
