@@ -7,10 +7,10 @@ import com.konkuk.medicarecall.ui.model.GenderType
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class MemberRegisterRepository @Inject constructor(
+class MemberRegisterRepositoryImpl @Inject constructor(
     private val memberRegisterService: MemberRegisterService
-) {
-    suspend fun registerMember(
+) : MemberRegisterRepositoryInterface {
+    override suspend fun registerMember(
         token: String,
         name: String,
         birthDate: String,
