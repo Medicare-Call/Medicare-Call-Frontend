@@ -31,6 +31,9 @@ import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepositoryImpl
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealApi
+import com.konkuk.medicarecall.ui.home.data.HomeApi
+import com.konkuk.medicarecall.ui.home.data.HomeRepository
+import com.konkuk.medicarecall.ui.home.data.HomeRepositoryImpl
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepository
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepositoryImpl
 import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineApi
@@ -150,6 +153,12 @@ object RepositoryModule {
     @Singleton
     fun provideElderIdRepository(): ElderIdRepository {
         return ElderIdRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideHomeRepository(homeApi: HomeApi): HomeRepository {
+        return HomeRepositoryImpl(homeApi)
     }
 
 }
