@@ -11,6 +11,9 @@ import com.konkuk.medicarecall.data.api.SettingService
 import com.konkuk.medicarecall.data.api.SubscribeService
 import com.konkuk.medicarecall.data.api.VerificationService
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
+import com.konkuk.medicarecall.data.repository.ElderRegisterRepositoryImpl
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepositoryImpl
@@ -130,6 +133,15 @@ object RepositoryModule {
         eldersHealthInfoRepository: EldersHealthInfoRepository
     ): MedicineRepository {
         return MedicineRepositoryImpl(medicineApi, eldersHealthInfoRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideElderRegisterRepository(
+        elderRegisterService: ElderRegisterService,
+        elderIdRepository: ElderIdRepository
+    ): ElderRegisterRepository {
+        return ElderRegisterRepositoryImpl(elderRegisterService, elderIdRepository)
     }
 
 }
