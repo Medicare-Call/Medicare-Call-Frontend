@@ -3,7 +3,7 @@ package com.konkuk.medicarecall.data.repository
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.ui.model.GenderType
 
-interface MemberRegisterRepositoryInterface {
+interface MemberRegisterRepository {
     suspend fun registerMember(
         token: String,
         name: String,

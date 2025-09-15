@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class MemberRegisterRepositoryImpl @Inject constructor(
     private val memberRegisterService: MemberRegisterService
-) : MemberRegisterRepositoryInterface {
+) : MemberRegisterRepository {
     override suspend fun registerMember(
         token: String,
         name: String,

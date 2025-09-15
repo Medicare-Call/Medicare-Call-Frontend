@@ -14,8 +14,8 @@ import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepositoryImpl
+import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepositoryImpl
-import com.konkuk.medicarecall.data.repository.MemberRegisterRepositoryInterface
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
 import com.konkuk.medicarecall.data.repository.NoticeRepository
 import com.konkuk.medicarecall.data.repository.SetCallRepository
@@ -63,7 +63,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMemberRegisterRepository(service: MemberRegisterService): MemberRegisterRepositoryInterface {
+    fun provideMemberRegisterRepository(service: MemberRegisterService): MemberRegisterRepository {
         return MemberRegisterRepositoryImpl(service)
     }
 
