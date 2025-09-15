@@ -34,6 +34,9 @@ import com.konkuk.medicarecall.ui.homedetail.meal.data.MealApi
 import com.konkuk.medicarecall.ui.home.data.HomeApi
 import com.konkuk.medicarecall.ui.home.data.HomeRepository
 import com.konkuk.medicarecall.ui.home.data.HomeRepositoryImpl
+import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseApi
+import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseRepository
+import com.konkuk.medicarecall.ui.homedetail.glucoselevel.data.GlucoseRepositoryImpl
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepository
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepositoryImpl
 import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineApi
@@ -159,6 +162,12 @@ object RepositoryModule {
     @Singleton
     fun provideHomeRepository(homeApi: HomeApi): HomeRepository {
         return HomeRepositoryImpl(homeApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGlucoseRepository(glucoseApi: GlucoseApi): GlucoseRepository {
+        return GlucoseRepositoryImpl(glucoseApi)
     }
 
 }
