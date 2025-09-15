@@ -127,11 +127,12 @@ object RepositoryModule {
     ): MedicineRepository {
         return MedicineRepositoryImpl(medicineApi, eldersHealthInfoRepository)
     }
+
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class StatisticsRepositoryBindModule {
+abstract class RepositoryBindModule {
 
     @Binds
     @Singleton

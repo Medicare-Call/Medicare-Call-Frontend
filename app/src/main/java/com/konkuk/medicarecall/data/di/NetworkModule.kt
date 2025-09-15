@@ -34,7 +34,7 @@ object NetworkModule {
     @Singleton
     fun provideAuthAuthenticator(
         dataStoreRepository: DataStoreRepository,
-        tokenRefreshService: dagger.Lazy<TokenRefreshService>
+        tokenRefreshService: dagger.Lazy<TokenRefreshService>,
     ): AuthAuthenticator {
         return AuthAuthenticator(dataStoreRepository, tokenRefreshService)
     }
@@ -51,7 +51,7 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         authInterceptor: Interceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(20, TimeUnit.SECONDS)
@@ -64,7 +64,12 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         Log.d("Retrofit", "Base URL: ${BuildConfig.BASE_URL}")
-        val json = Json { ignoreUnknownKeys = true }
+        val json = Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            isLenient = true
+        }
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
