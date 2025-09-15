@@ -11,6 +11,7 @@ import com.konkuk.medicarecall.data.api.SettingService
 import com.konkuk.medicarecall.data.api.SubscribeService
 import com.konkuk.medicarecall.data.api.VerificationService
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.DataStoreRepositoryImpl
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.ElderIdRepositoryImpl
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
@@ -52,7 +53,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideDataStoreRepository(@ApplicationContext context: Context): DataStoreRepository {
-        return DataStoreRepository(context)
+        return DataStoreRepositoryImpl(context)
     }
 
     @Provides
