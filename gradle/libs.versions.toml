@@ -11,6 +11,7 @@ composeBom = "2024.09.00"
 navigationRuntimeAndroid = "2.9.0"
 navigationCompose = "2.9.0"
 composeMaterial3 = "1.5.0-beta05"
+detekt = "1.23.8"
 
 hilt = "2.50"
 hiltNavigationCompose = "1.2.0"
@@ -43,6 +44,7 @@ androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 
 
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
@@ -64,3 +66,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

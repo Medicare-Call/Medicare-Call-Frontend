@@ -7,9 +7,15 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     kotlin("plugin.serialization") version "2.0.21"
+    alias(libs.plugins.detekt)
 
 }
 
+detekt {
+    buildUponDefaultConfig = true
+    toolVersion = libs.versions.detekt.get()
+    config.setFrom(files("$rootDir/detekt-config.yml"))
+}
 
 android {
     namespace = "com.konkuk.medicarecall"
@@ -102,6 +108,7 @@ dependencies {
 
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
+    detektPlugins(libs.detekt.formatting)
 
 
     // Hilt
