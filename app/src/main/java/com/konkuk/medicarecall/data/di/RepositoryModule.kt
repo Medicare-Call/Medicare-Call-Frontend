@@ -45,6 +45,9 @@ import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineRepositoryImp
 import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepApi
 import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepRepository
 import com.konkuk.medicarecall.ui.homedetail.sleep.data.SleepRepositoryImpl
+import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthApi
+import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthRepository
+import com.konkuk.medicarecall.ui.homedetail.statehealth.data.HealthRepositoryImpl
 import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepository
 import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepositoryImpl
 import dagger.Binds
@@ -177,6 +180,12 @@ object RepositoryModule {
     @Singleton
     fun provideSleepRepository(sleepApi: SleepApi): SleepRepository {
         return SleepRepositoryImpl(sleepApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHealthRepository(healthApi: HealthApi): HealthRepository {
+        return HealthRepositoryImpl(healthApi)
     }
 
 }
