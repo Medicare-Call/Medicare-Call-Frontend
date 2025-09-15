@@ -1,27 +1,8 @@
 package com.konkuk.medicarecall.data.repository
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
-@Singleton
-class ElderIdRepository @Inject constructor() {
-
-    private var elderIds: MutableList<Map<String, Int>> = mutableListOf()
-    fun addElderId(name: String, id: Int) {
-        this.elderIds.add(mapOf(name to id))
-    }
-
-    fun clearElderId() {
-        elderIds.clear()
-    }
-
-    fun getElderIds(): List<Map<String, Int>> {
-        return elderIds
-    }
-
-    fun replaceAll(items: List<Map<String, Int>>) {
-        elderIds.clear()
-        elderIds.addAll(items)
-    }
-
+interface ElderIdRepository {
+    fun addElderId(name: String, id: Int)
+    fun clearElderId()
+    fun getElderIds(): List<Map<String, Int>>
+    fun replaceAll(items: List<Map<String, Int>>)
 }
