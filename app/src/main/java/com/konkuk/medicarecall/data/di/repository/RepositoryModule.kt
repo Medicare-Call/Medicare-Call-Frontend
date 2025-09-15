@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.di
+package com.konkuk.medicarecall.data.di.repository
 
 import android.content.Context
 import com.konkuk.medicarecall.data.api.ElderRegisterService
@@ -21,15 +21,6 @@ import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
-import com.konkuk.medicarecall.ui.homedetail.meal.data.MealApi
-import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepository
-import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepositoryImpl
-import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineApi
-import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineRepository
-import com.konkuk.medicarecall.ui.homedetail.medicine.data.MedicineRepositoryImpl
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepository
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepositoryImpl
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -112,30 +103,4 @@ object RepositoryModule {
     fun provideNaverPayRepository(naverPayService: NaverPayService): NaverPayRepository {
         return NaverPayRepository(naverPayService)
     }
-
-    @Provides
-    @Singleton
-    fun provideMealRepository(mealApi: MealApi): MealRepository {
-        return MealRepositoryImpl(mealApi)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMedicineRepository(
-        medicineApi: MedicineApi,
-        eldersHealthInfoRepository: EldersHealthInfoRepository
-    ): MedicineRepository {
-        return MedicineRepositoryImpl(medicineApi, eldersHealthInfoRepository)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class StatisticsRepositoryBindModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindStatisticsRepository(
-        statisticsRepositoryImpl: StatisticsRepositoryImpl
-    ): StatisticsRepository
 }
