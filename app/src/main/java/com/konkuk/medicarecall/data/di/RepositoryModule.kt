@@ -23,6 +23,7 @@ import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
+import com.konkuk.medicarecall.data.repository.VerificationRepositoryImpl
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealApi
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepository
 import com.konkuk.medicarecall.ui.homedetail.meal.data.MealRepositoryImpl
@@ -58,7 +59,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideVerificationRepository(service: VerificationService): VerificationRepository {
-        return VerificationRepository(service)
+        return VerificationRepositoryImpl(service)
     }
 
     @Provides
