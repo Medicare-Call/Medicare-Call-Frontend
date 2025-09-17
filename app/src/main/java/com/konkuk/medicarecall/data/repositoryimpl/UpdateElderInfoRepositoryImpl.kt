@@ -1,12 +1,14 @@
-package com.konkuk.medicarecall.data.repository
+package com.konkuk.medicarecall.data.repositoryimpl
 
+import android.util.Log
 import com.konkuk.medicarecall.data.api.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
+import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class UpdateElderInfoRepositoryImpl @Inject constructor(
-    private val eldersInfoService: EldersInfoService
+    private val eldersInfoService: EldersInfoService,
 ) : UpdateElderInfoRepository {
     override suspend fun updateElderInfo(id: Int, request: ElderRegisterRequestDto): Result<Unit> =
         runCatching {
@@ -24,7 +26,7 @@ class UpdateElderInfoRepositoryImpl @Inject constructor(
             response.body() ?: throw IllegalStateException("Response body is null")
         } else {
             val body = response.errorBody()?.string().orEmpty()
-            android.util.Log.e("DeleteElder", "HTTP ${response.code()} body=$body")
+            Log.e("DeleteElder", "HTTP ${response.code()} body=$body")
             throw HttpException(response)
         }
     }

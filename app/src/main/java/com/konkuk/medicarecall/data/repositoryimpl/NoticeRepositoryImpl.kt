@@ -1,12 +1,13 @@
-package com.konkuk.medicarecall.data.repository
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
 import com.konkuk.medicarecall.data.api.NoticeService
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import com.konkuk.medicarecall.data.repository.NoticeRepository
 import javax.inject.Inject
 
 class NoticeRepositoryImpl @Inject constructor(
-    private val noticeService: NoticeService
+    private val noticeService: NoticeService,
 ) : NoticeRepository {
     override suspend fun getNotices(): Result<List<NoticesResponseDto>> {
         Log.d("NoticeRepository", "공지사항 불러오기 시작(getNotices() 호출됨)")

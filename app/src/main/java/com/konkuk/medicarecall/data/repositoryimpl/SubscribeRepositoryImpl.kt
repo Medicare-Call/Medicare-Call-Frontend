@@ -1,13 +1,14 @@
-package com.konkuk.medicarecall.data.repository
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
 import com.konkuk.medicarecall.data.api.SubscribeService
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class SubscribeRepositoryImpl @Inject constructor(
-    private val subscribeService: SubscribeService
+    private val subscribeService: SubscribeService,
 ) : SubscribeRepository {
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> {
         Log.d("SubscribeRepository", "구독 정보 불러오기 시작(getSubscriptions() 호출됨)")

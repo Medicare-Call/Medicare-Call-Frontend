@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.repository
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -15,7 +16,8 @@ val Context.tokenDataStore: DataStore<Preferences> by preferencesDataStore(name 
 // Token 값을 불러오려면 HiltViewModel 에서
 // DataStoreRepository를 받아
 // getToken() 함수를 호출하면 됩니다.
-class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) : DataStoreRepository {
+class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) :
+    DataStoreRepository {
 
     companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")

@@ -1,14 +1,16 @@
-package com.konkuk.medicarecall.data.repository
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
 import com.konkuk.medicarecall.data.api.SettingService
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
+import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.UserRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val settingService: SettingService,
-    private val tokenStore: DataStoreRepository
+    private val tokenStore: DataStoreRepository,
 ) : UserRepository {
     override suspend fun getMyInfo() = runCatching {
         val response = settingService.getMyInfo()

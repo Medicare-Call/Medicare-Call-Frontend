@@ -1,5 +1,6 @@
-package com.konkuk.medicarecall.data.repository
+package com.konkuk.medicarecall.data.repositoryimpl
 
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,5 +25,4 @@ class ElderIdRepositoryImpl @Inject constructor() : ElderIdRepository {
         elderIds.clear()
         elderIds.addAll(items)
     }
-
 }
