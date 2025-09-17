@@ -1,0 +1,41 @@
+package com.konkuk.medicarecall.data.util
+
+import androidx.datastore.core.Serializer
+import com.konkuk.medicarecall.data.model.Token
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.Base64
+
+/**
+ * https://www.youtube.com/watch?v=XMaQNN9YpKk
+ */
+object TokenSerializer : Serializer<Token> {
+    override val defaultValue: Token
+        get() = Token("", "")
+
+    override suspend fun readFrom(input: InputStream): Token {
+        val encryptedBytes = withContext(Dispatchers.IO) {
+            input.use { it.readBytes() }
+        }
+        val encryptedBytesDecoded = Base64.getDecoder().decode(encryptedBytes)
+        val decryptedBytes = TokenEncryptor.decrypt(encryptedBytesDecoded)
+        val decodedJsonString = decryptedBytes.decodeToString()
+        return Json.decodeFromString(decodedJsonString)
+    }
+
+
+    override suspend fun writeTo(t: Token, output: OutputStream) {
+        val json = Json.Default.encodeToString(t)
+        val bytes = json.toByteArray()
+        val encryptedBytes = TokenEncryptor.encrypt(bytes)
+        val encryptedBytesBase64 = Base64.getEncoder().encode(encryptedBytes)
+        withContext(Dispatchers.IO) {
+            output.use {
+                it.write(encryptedBytesBase64)
+            }
+        }
+    }
+}
