@@ -18,7 +18,6 @@ object TokenEncryptor {
     private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
 
-    private val cipher = Cipher.getInstance(TRANSFORMATION)
     private val keyStore = KeyStore.getInstance("AndroidKeyStore")
         .apply {
             load(null)
@@ -31,7 +30,7 @@ object TokenEncryptor {
 
     private fun createKey(): SecretKey {
         return KeyGenerator
-            .getInstance(ALGORITHM)
+            .getInstance(ALGORITHM, "AndroidKeyStore")
             .apply {
                 init(
                     KeyGenParameterSpec.Builder(
@@ -51,6 +50,7 @@ object TokenEncryptor {
 
 
     fun encrypt(bytes: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
         val iv = cipher.iv
         val encrypted = cipher.doFinal(bytes)
@@ -58,6 +58,7 @@ object TokenEncryptor {
     }
 
     fun decrypt(bytes: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         val iv = bytes.copyOfRange(0, cipher.blockSize)
         val data = bytes.copyOfRange(cipher.blockSize, bytes.size)
         cipher.init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))
