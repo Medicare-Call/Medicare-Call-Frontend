@@ -1,22 +1,18 @@
-package com.konkuk.medicarecall.ui.component
+package com.konkuk.medicarecall.ui.common.component
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -27,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,28 +37,29 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
-import kotlinx.coroutines.delay
 
-// 미사용, Legacy
 @Composable
-fun <T> SpecialNoteItem(
-    modifier: Modifier = Modifier,
+fun <T> DefaultDropdown(
     enumList: List<T>, // Enum.entries.map { it. displayName }.toList() 전달
-    noteList: List<String>,
-    onAddNote: (String) -> Unit,
-    onRemoveNote: (String) -> Unit,
     placeHolder: String,
     category: String? = null,
     scrollState: ScrollState,
+    onOptionSelect: (String) -> Unit = {},
+    value: String = "",
 ) {
 
-    Log.d("SpecialNoteItem", "noteList: $noteList")
+
     var showDropdown by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf("") }
+    var scrollNow by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(showDropdown) {
+
         if (showDropdown) {
-            delay(250L)
-            scrollState.animateScrollTo(scrollState.maxValue)
+            scrollNow = scrollState.value
+            scrollState.animateScrollTo(scrollState.value + 200)
+        } else {
+            scrollState.animateScrollTo(scrollNow)
         }
     }
 
@@ -71,33 +69,12 @@ fun <T> SpecialNoteItem(
             color = MediCareCallTheme.colors.gray7,
             style = MediCareCallTheme.typography.M_17
         )
-
+        Spacer(Modifier.height(10.dp))
     }
 
-    Spacer(modifier = Modifier.height(10.dp))
-
-    if (noteList.isNotEmpty()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-        ) {
-            noteList.forEach { note ->
-                ChipItem(
-                    text = note,
-                    onRemove = {
-                        onRemoveNote(note)
-                    }
-                )
-                Spacer(Modifier.width(10.dp))
-            }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(10.dp))
     Column {
         OutlinedTextField(
-            value = "",
+            value = value,
             onValueChange = { },
             enabled = false,
             modifier = Modifier
@@ -132,7 +109,7 @@ fun <T> SpecialNoteItem(
         )
 
 
-        AnimatedVisibility(visible = showDropdown) {
+        AnimatedVisibility(showDropdown) {
             val dropdownScrollState = rememberScrollState()
 
 
@@ -151,7 +128,7 @@ fun <T> SpecialNoteItem(
                         shape = RoundedCornerShape(14.dp),
                         color = MediCareCallTheme.colors.gray1
                     )
-                    .heightIn(max = 215.dp)
+                    .heightIn(max = 280.dp)
                     .verticalScroll(dropdownScrollState)
             ) {
                 Column(
@@ -162,7 +139,6 @@ fun <T> SpecialNoteItem(
 
 
                     enumList.forEach { item ->
-                        val itemStr = item.toString()
                         Box(
                             Modifier
                                 .fillMaxWidth()
@@ -171,24 +147,23 @@ fun <T> SpecialNoteItem(
                                     val y = size.height - strokeWidth / 2f
 
                                     drawLine(
-                                        color = Color(0xFFECECEC), // NavigationBar의 상단 테두리
+                                        color = Color(0xFFECECEC),
                                         start = Offset(0f, y),
                                         end = Offset(size.width, y),
                                         strokeWidth = strokeWidth,
                                     )
                                 }
                                 .clickable(onClick = {
+                                    selectedOption = item.toString()
+                                    onOptionSelect(selectedOption)
                                     showDropdown = false
-                                    if (!noteList.contains(itemStr)) {
-                                        onAddNote(itemStr)
-                                    }
                                 }),
                         ) {
                             Text(
                                 item.toString(),
                                 color = MediCareCallTheme.colors.gray8,
                                 style = MediCareCallTheme.typography.M_16,
-                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                                modifier = Modifier.padding(16.dp)
                             )
                         }
                     }
@@ -198,27 +173,3 @@ fun <T> SpecialNoteItem(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun SpecialNotePreview() {
-//    val scrollState = rememberScrollState()
-//    var noteList by remember { mutableStateOf(listOf<String>()) }
-//
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .verticalScroll(scrollState)
-//            .padding(16.dp)
-//    ) {
-//        SpecialNoteItem(
-//            enumList = SpecialNoteType.entries.map { it.displayName },
-//            noteList = noteList,
-//            onAddNote = { noteList = noteList + it },
-//            onRemoveNote = { noteList = noteList - it },
-//            placeHolder = "특이사항 선택하기",
-//            category = "특이사항",
-//            scrollState = scrollState
-//        )
-//    }
-//}

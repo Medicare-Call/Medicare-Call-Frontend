@@ -23,16 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.component.DefaultDropdown
-import com.konkuk.medicarecall.ui.component.DefaultTextField
-import com.konkuk.medicarecall.ui.component.GenderToggleButton
+import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
+import com.konkuk.medicarecall.ui.common.component.DefaultTextField
+import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.login.login_senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.model.ElderResidenceType
 import com.konkuk.medicarecall.ui.model.RelationshipType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
-import com.konkuk.medicarecall.ui.util.DateOfBirthVisualTransformation
-import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
 
 @Composable
 fun ElderInputForm(

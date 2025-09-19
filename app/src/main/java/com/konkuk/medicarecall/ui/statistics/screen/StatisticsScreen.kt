@@ -33,8 +33,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.component.NameBar
-import com.konkuk.medicarecall.ui.component.NameDropdown
+import com.konkuk.medicarecall.ui.common.component.NameBar
+import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.home.HomeViewModel
 import com.konkuk.medicarecall.ui.statistics.StatisticsUiState
 import com.konkuk.medicarecall.ui.statistics.StatisticsViewModel

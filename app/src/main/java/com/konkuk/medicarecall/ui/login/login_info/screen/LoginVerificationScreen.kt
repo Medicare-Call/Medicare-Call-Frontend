@@ -28,9 +28,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.navigation.Route
-import com.konkuk.medicarecall.ui.component.CTAButton
-import com.konkuk.medicarecall.ui.component.DefaultSnackBar
-import com.konkuk.medicarecall.ui.component.DefaultTextField
+import com.konkuk.medicarecall.ui.common.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
+import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login.login_info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.login.login_info.uistate.LoginEvent
 import com.konkuk.medicarecall.ui.login.login_info.viewmodel.LoginViewModel

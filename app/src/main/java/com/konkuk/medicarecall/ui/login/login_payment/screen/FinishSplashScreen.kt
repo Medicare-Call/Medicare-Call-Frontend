@@ -22,7 +22,7 @@ import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.Text
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.navigation.navigateToMainAfterLogin
-import com.konkuk.medicarecall.ui.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 

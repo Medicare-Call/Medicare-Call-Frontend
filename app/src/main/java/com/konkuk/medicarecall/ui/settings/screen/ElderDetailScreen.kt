@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.ui.component.CTAButton
-import com.konkuk.medicarecall.ui.component.DefaultDropdown
-import com.konkuk.medicarecall.ui.component.DefaultTextField
-import com.konkuk.medicarecall.ui.component.GenderToggleButton
+import com.konkuk.medicarecall.ui.common.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
+import com.konkuk.medicarecall.ui.common.component.DefaultTextField
+import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.model.ElderResidenceType
 import com.konkuk.medicarecall.ui.model.GenderType
@@ -40,9 +40,9 @@ import com.konkuk.medicarecall.ui.settings.component.DeleteConfirmDialog
 import com.konkuk.medicarecall.ui.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.settings.viewmodel.DetailElderInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.util.DateOfBirthVisualTransformation
-import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
-import com.konkuk.medicarecall.ui.util.isValidDate
+import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.isValidDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

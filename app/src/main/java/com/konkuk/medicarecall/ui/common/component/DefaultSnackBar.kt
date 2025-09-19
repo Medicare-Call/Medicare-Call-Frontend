@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.component
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

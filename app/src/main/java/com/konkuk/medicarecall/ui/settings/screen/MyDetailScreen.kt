@@ -26,16 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.ui.component.CTAButton
-import com.konkuk.medicarecall.ui.component.DefaultTextField
-import com.konkuk.medicarecall.ui.component.GenderToggleButton
+import com.konkuk.medicarecall.ui.common.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.DefaultTextField
+import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.model.GenderType
 import com.konkuk.medicarecall.ui.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.settings.viewmodel.DetailMyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.util.DateOfBirthVisualTransformation
-import com.konkuk.medicarecall.ui.util.isValidDate
+import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.isValidDate
 
 @Composable
 fun MyDetailScreen(

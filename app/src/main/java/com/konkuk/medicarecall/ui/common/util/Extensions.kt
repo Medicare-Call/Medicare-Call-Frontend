@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.util
+package com.konkuk.medicarecall.ui.common.util
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

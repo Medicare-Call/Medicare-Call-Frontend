@@ -25,10 +25,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.ui.component.CTAButton
-import com.konkuk.medicarecall.ui.component.IllnessInfoItem
-import com.konkuk.medicarecall.ui.component.MedInfoItem
-import com.konkuk.medicarecall.ui.component.SpecialNoteItem
+import com.konkuk.medicarecall.ui.common.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.IllnessInfoItem
+import com.konkuk.medicarecall.ui.common.component.MedInfoItem
+import com.konkuk.medicarecall.ui.common.component.SpecialNoteItem
 import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.model.HealthIssueType
 import com.konkuk.medicarecall.ui.model.MedicationTimeType

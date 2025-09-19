@@ -34,7 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.navigation.Route
-import com.konkuk.medicarecall.ui.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.login.login_info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.login.login_payment.component.PayResultItem
 import com.konkuk.medicarecall.ui.model.CTAButtonType

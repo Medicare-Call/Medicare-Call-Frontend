@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.navigation.Route
-import com.konkuk.medicarecall.ui.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.login.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.model.NavigationDestination

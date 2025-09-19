@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.navigation.Route
-import com.konkuk.medicarecall.ui.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.login.login_care_call.component.BenefitItem
 import com.konkuk.medicarecall.ui.login.login_care_call.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.login.login_care_call.component.TimeSettingItem

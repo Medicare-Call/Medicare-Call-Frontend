@@ -13,7 +13,7 @@ import com.konkuk.medicarecall.domain.usecase.CheckLoginStatusUseCase
 import com.konkuk.medicarecall.ui.login.login_info.uistate.LoginEvent
 import com.konkuk.medicarecall.ui.model.GenderType
 import com.konkuk.medicarecall.ui.model.NavigationDestination
-import com.konkuk.medicarecall.ui.util.formatAsDate
+import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

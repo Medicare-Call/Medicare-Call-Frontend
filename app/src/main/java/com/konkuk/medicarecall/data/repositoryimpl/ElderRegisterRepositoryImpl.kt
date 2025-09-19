@@ -14,7 +14,7 @@ import com.konkuk.medicarecall.ui.model.ElderResidenceType
 import com.konkuk.medicarecall.ui.model.GenderType
 import com.konkuk.medicarecall.ui.model.HealthIssueType
 import com.konkuk.medicarecall.ui.model.RelationshipType
-import com.konkuk.medicarecall.ui.util.formatAsDate
+import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton

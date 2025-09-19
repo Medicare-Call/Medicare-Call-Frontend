@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.util
+package com.konkuk.medicarecall.ui.common.util
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping

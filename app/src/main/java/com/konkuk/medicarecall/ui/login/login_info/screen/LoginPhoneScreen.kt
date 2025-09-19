@@ -25,14 +25,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.konkuk.medicarecall.ui.component.CTAButton
-import com.konkuk.medicarecall.ui.component.DefaultSnackBar
-import com.konkuk.medicarecall.ui.component.DefaultTextField
+import com.konkuk.medicarecall.ui.common.component.CTAButton
+import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
+import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.login.login_info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.login.login_info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.model.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.util.PhoneNumberVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
 import kotlinx.coroutines.launch
 
 @Composable
