@@ -5,7 +5,7 @@ import com.konkuk.medicarecall.BuildConfig
 import com.konkuk.medicarecall.data.api.TokenRefreshService
 import com.konkuk.medicarecall.data.network.AuthAuthenticator
 import com.konkuk.medicarecall.data.network.AuthInterceptor
-import com.konkuk.medicarecall.data.repositoryimpl.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

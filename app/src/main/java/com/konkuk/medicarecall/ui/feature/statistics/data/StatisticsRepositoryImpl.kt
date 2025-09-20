@@ -1,14 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.statistics.data
 
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
-import com.konkuk.medicarecall.ui.statistics.model.AverageSleepDto
-import com.konkuk.medicarecall.ui.statistics.model.BloodSugarDetailDto
-import com.konkuk.medicarecall.ui.statistics.model.BloodSugarDto
-import com.konkuk.medicarecall.ui.statistics.model.MealStatsDto
-import com.konkuk.medicarecall.ui.statistics.model.MedicationStatDto
-import com.konkuk.medicarecall.ui.statistics.model.PsychSummaryDto
-import com.konkuk.medicarecall.ui.statistics.model.StatisticsResponseDto
-import com.konkuk.medicarecall.ui.statistics.model.SummaryStatsDto
 import retrofit2.HttpException
 import java.time.LocalDate
 import javax.inject.Inject
