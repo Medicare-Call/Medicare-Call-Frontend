@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.statistics.component.WeeklyGlucoseStatusChip
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyGlucoseUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow

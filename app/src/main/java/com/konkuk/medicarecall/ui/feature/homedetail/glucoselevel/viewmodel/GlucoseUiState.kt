@@ -1,4 +1,7 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model
+package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel
+
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseTiming
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GraphDataPoint
 
 data class GlucoseUiState(
     val graphDataPoints: List<GraphDataPoint> = emptyList(),

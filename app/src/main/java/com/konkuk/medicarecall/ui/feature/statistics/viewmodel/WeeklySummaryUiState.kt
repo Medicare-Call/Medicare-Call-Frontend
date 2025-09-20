@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.statistics.model
+package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 
 /**
  * 주간 요약 통계 화면의 전체 상태를 담는 데이터 클래스

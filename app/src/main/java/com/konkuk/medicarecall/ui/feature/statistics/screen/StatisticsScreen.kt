@@ -36,11 +36,13 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyGlucoseUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyMealUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyMedicineUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyMentalUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklySummaryUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -50,7 +52,7 @@ fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     homeViewModel: HomeViewModel,
-    statisticsViewModel: com.konkuk.medicarecall.ui.feature.statistics.StatisticsViewModel = hiltViewModel()
+    statisticsViewModel: StatisticsViewModel = hiltViewModel()
 ) {
     // 화면 복귀 시 자동 새로고침
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -123,7 +125,7 @@ fun StatisticsScreen(
 @Composable
 fun StatisticsScreenLayout(
     modifier: Modifier = Modifier,
-    uiState: com.konkuk.medicarecall.ui.feature.statistics.StatisticsUiState,
+    uiState: StatisticsUiState,
     elderNameList: List<String>,
     navController: NavHostController,
     currentWeek: Pair<LocalDate, LocalDate>,
@@ -306,7 +308,7 @@ fun PreviewStatisticsScreen_Recorded() {
         )
     )
     val dummyUiState =
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.StatisticsUiState(summary = dummySummary)
+        StatisticsUiState(summary = dummySummary)
 
     MediCareCallTheme {
         StatisticsScreenLayout(
@@ -332,7 +334,7 @@ fun PreviewStatisticsScreen_Unrecorded() {
 
     MediCareCallTheme {
         StatisticsScreenLayout(
-            uiState = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.StatisticsUiState(
+            uiState = StatisticsUiState(
                 summary = WeeklySummaryUiState.EMPTY.copy(elderName = "김옥자")
             ), // Preview에 이름 추가
             elderNameList = listOf("김옥자", "박막례"),

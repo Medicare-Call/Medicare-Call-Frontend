@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.sleep.data
 
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.model.SleepUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

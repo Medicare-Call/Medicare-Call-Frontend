@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.medicine.model
+package com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel
 
 data class MedicineUiState(
     val medicineName: String,           // 약 이름

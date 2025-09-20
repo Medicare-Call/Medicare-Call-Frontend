@@ -1,9 +1,9 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.medicine.data
 
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.model.DoseStatus
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.model.DoseStatusItem
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.model.MedicineUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject

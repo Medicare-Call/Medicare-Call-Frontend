@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.statistics
+package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,14 +7,11 @@ import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.ui.feature.statistics.data.StatisticsRepository
 import com.konkuk.medicarecall.ui.feature.statistics.model.MedicationStatDto
 import com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepository
-import com.konkuk.medicarecall.ui.statistics.model.MedicationStatDto
-import com.konkuk.medicarecall.ui.statistics.model.StatisticsResponseDto
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyGlucoseUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyMealUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyMedicineUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklyMentalUiState
-import com.konkuk.medicarecall.ui.feature.statistics.model.WeeklySummaryUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -182,7 +179,7 @@ class StatisticsViewModel @Inject constructor(
 
                 val summaryState = if (e is HttpException && e.code() == 404) {
                     // 데이터가 없는 경우(404)는 오류 메시지 없이 빈 상태를 표시합니다.
-                    WeeklySummaryUiState.EMPTY
+                    WeeklySummaryUiState.Companion.EMPTY
                 } else {
                     null // 그 외의 오류는 error 메시지로 표시
                 }

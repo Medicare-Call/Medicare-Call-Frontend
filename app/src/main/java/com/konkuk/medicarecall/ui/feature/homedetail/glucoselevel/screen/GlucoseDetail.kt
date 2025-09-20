@@ -40,13 +40,13 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.GlucoseViewModel
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseTimingButton
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseTiming
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch

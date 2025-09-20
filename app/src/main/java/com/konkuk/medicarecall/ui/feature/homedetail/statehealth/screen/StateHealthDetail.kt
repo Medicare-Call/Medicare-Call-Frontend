@@ -32,9 +32,9 @@ import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.HealthViewModel
+import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.model.HealthUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 

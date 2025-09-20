@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.meal.model
+package com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel
 
 data class MealUiState(
     val mealTime: String, // 아침 점심 저녁

@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.model
+package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel
 
 data class HealthUiState(
     val symptoms: List<String>,   // 건강 징후 리스트 (예: ["손 떨림 증상", "거동 불편", "몸이 느려짐"])

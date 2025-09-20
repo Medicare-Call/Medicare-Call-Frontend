@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.meal.data
 
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.model.MealUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import java.time.LocalDate
 
 

@@ -1,10 +1,10 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.sleep
+package com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.data.SleepRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.model.SleepUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

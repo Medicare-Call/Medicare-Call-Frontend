@@ -1,10 +1,10 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.statehealth
+package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data.HealthRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.model.HealthUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

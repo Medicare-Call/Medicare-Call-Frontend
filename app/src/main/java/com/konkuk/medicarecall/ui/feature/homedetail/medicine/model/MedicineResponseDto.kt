@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.medicine.model
 
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import kotlinx.serialization.Serializable
 
 

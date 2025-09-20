@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel
+package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.data.GlucoseRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseTiming
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GraphDataPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

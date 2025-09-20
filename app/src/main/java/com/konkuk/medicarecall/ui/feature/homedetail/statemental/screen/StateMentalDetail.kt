@@ -30,9 +30,9 @@ import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.MentalViewModel
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.model.MentalUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)

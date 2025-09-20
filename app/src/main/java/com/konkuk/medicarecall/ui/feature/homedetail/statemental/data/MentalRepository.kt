@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statemental.data
 
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.model.MentalUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import java.time.LocalDate
 
 interface MentalRepository {

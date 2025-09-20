@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.sleep.model
+package com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel
 
 data class SleepUiState(
     val date: String,               // "2025-07-07"
