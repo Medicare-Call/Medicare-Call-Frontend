@@ -48,9 +48,9 @@ import com.konkuk.medicarecall.ui.feature.login.login_care_call.component.TimePi
 import com.konkuk.medicarecall.ui.feature.login.login_care_call.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.login_care_call.viewmodel.CallTimeViewModel
 import com.konkuk.medicarecall.ui.feature.login.login_info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.model.CTAButtonType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.model.CallTimes
-import com.konkuk.medicarecall.ui.model.TimeSettingType
+import com.konkuk.medicarecall.ui.type.TimeSettingType
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch

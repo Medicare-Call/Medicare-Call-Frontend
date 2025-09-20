@@ -4,7 +4,7 @@ import com.konkuk.medicarecall.data.api.MemberRegisterService
 import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
-import com.konkuk.medicarecall.ui.model.GenderType
+import com.konkuk.medicarecall.ui.type.GenderType
 import retrofit2.HttpException
 import javax.inject.Inject
 

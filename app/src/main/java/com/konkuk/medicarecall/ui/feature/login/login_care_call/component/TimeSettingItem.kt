@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.model.TimeSettingType
+import com.konkuk.medicarecall.ui.type.TimeSettingType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable

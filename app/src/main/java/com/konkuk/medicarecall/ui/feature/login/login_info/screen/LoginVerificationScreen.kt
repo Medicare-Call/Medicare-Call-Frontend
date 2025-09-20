@@ -34,7 +34,7 @@ import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.feature.login.login_info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.login_info.uistate.LoginEvent
 import com.konkuk.medicarecall.ui.feature.login.login_info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.model.CTAButtonType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch

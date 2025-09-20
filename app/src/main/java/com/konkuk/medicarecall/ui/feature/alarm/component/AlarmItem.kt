@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.model.AlarmType
+import com.konkuk.medicarecall.ui.type.AlarmType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable

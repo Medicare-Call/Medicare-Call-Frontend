@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.model.MedicationTimeType
+import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 // 반복되는 UI를 재사용 가능한 함수로 추출

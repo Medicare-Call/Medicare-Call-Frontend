@@ -37,8 +37,8 @@ import com.konkuk.medicarecall.ui.common.component.DiseaseNamesItem
 import com.konkuk.medicarecall.ui.common.component.MedicationItem
 import com.konkuk.medicarecall.ui.feature.login.login_info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.login_senior.LoginElderViewModel
-import com.konkuk.medicarecall.ui.model.CTAButtonType
-import com.konkuk.medicarecall.ui.model.HealthIssueType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

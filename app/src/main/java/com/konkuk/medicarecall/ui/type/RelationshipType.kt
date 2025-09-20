@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.model
+package com.konkuk.medicarecall.ui.type
 
 enum class RelationshipType(val displayName: String) {
     CHILD("자식"),

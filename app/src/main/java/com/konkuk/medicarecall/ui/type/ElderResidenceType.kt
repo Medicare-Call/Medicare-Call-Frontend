@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.model
+package com.konkuk.medicarecall.ui.type
 
 enum class ElderResidenceType(val displayName: String){
     ALONE("혼자 계세요"),

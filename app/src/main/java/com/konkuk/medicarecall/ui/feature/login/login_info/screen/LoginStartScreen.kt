@@ -29,7 +29,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.home.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.login_info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.model.CTAButtonType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 

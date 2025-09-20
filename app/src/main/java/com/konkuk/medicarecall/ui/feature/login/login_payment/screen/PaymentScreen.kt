@@ -37,7 +37,7 @@ import com.konkuk.medicarecall.ui.feature.home.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.login_info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.login_payment.component.PayResultItem
-import com.konkuk.medicarecall.ui.model.CTAButtonType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.text.NumberFormat

@@ -29,8 +29,8 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
-import com.konkuk.medicarecall.ui.model.CTAButtonType
-import com.konkuk.medicarecall.ui.model.GenderType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailMyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme

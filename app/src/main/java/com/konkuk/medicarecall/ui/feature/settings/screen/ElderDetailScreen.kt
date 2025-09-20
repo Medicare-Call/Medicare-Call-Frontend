@@ -32,10 +32,10 @@ import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
-import com.konkuk.medicarecall.ui.model.CTAButtonType
-import com.konkuk.medicarecall.ui.model.ElderResidenceType
-import com.konkuk.medicarecall.ui.model.GenderType
-import com.konkuk.medicarecall.ui.model.RelationshipType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.ElderResidenceType
+import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.ui.type.RelationshipType
 import com.konkuk.medicarecall.ui.feature.settings.component.DeleteConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailElderInfoViewModel

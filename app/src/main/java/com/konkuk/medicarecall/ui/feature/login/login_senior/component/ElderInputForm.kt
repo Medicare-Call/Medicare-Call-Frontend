@@ -27,8 +27,8 @@ import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.feature.login.login_senior.LoginElderViewModel
-import com.konkuk.medicarecall.ui.model.ElderResidenceType
-import com.konkuk.medicarecall.ui.model.RelationshipType
+import com.konkuk.medicarecall.ui.type.ElderResidenceType
+import com.konkuk.medicarecall.ui.type.RelationshipType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
 import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation

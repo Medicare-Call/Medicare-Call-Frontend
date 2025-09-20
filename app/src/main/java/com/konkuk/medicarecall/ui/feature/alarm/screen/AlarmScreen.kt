@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.alarm.component.AlarmItem
-import com.konkuk.medicarecall.ui.model.AlarmType
+import com.konkuk.medicarecall.ui.type.AlarmType
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 

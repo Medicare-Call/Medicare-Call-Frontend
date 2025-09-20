@@ -11,7 +11,7 @@ import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.domain.usecase.CheckLoginStatusUseCase
 import com.konkuk.medicarecall.ui.feature.login.login_info.uistate.LoginEvent
-import com.konkuk.medicarecall.ui.model.GenderType
+import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import dagger.hilt.android.lifecycle.HiltViewModel

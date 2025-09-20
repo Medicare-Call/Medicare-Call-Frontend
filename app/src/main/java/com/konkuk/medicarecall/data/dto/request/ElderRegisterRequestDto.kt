@@ -1,8 +1,8 @@
 package com.konkuk.medicarecall.data.dto.request
 
-import com.konkuk.medicarecall.ui.model.ElderResidenceType
-import com.konkuk.medicarecall.ui.model.GenderType
-import com.konkuk.medicarecall.ui.model.RelationshipType
+import com.konkuk.medicarecall.ui.type.ElderResidenceType
+import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.ui.type.RelationshipType
 import kotlinx.serialization.Serializable
 
 @Serializable

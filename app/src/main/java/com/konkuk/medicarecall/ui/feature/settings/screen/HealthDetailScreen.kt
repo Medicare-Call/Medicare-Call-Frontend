@@ -31,9 +31,9 @@ import com.konkuk.medicarecall.ui.common.component.MedInfoItem
 import com.konkuk.medicarecall.ui.common.component.SpecialNoteItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailHealthViewModel
-import com.konkuk.medicarecall.ui.model.CTAButtonType
-import com.konkuk.medicarecall.ui.model.HealthIssueType
-import com.konkuk.medicarecall.ui.model.MedicationTimeType
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.HealthIssueType
+import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlin.collections.iterator
 

@@ -41,7 +41,7 @@ import com.konkuk.medicarecall.ui.feature.settings.component.LogoutConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingInfoItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
-import com.konkuk.medicarecall.ui.model.GenderType
+import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
 import kotlinx.serialization.json.Json

@@ -16,7 +16,7 @@ import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
-import com.konkuk.medicarecall.ui.model.MedicationTimeType
+import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

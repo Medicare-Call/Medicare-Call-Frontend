@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.model
+package com.konkuk.medicarecall.ui.type
 
 enum class HealthIssueType(val displayName: String) {
     INSOMNIA("불면증 / 수면장애"),
