@@ -26,7 +26,6 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
 
     suspend fun getAccessToken(): String? {
         val preferences = context.tokenDataStore.data.first()
-        Log.d("token", "${preferences.accessToken}")
         return preferences.accessToken
     }
 
