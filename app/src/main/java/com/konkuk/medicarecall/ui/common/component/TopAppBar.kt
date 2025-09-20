@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,10 +23,9 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
-
 @Composable
 fun TopAppBar(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.Companion,
     title: String,
     navController: NavHostController
 
@@ -35,15 +34,15 @@ fun TopAppBar(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 10.dp)
-            .background(Color.White),
-        verticalAlignment = Alignment.CenterVertically,
+            .background(Color.Companion.White),
+        verticalAlignment = Alignment.Companion.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
 
 
         ) {
         // 뒤로 가기+ 상세 화면 제목
         Icon(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
@@ -55,8 +54,8 @@ fun TopAppBar(
 
 
         Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.Companion.weight(1f),
+            contentAlignment = Alignment.Companion.Center
         ) {
             Text(
                 text = title,
@@ -65,12 +64,12 @@ fun TopAppBar(
             )
         }
 
-        Box(modifier = Modifier.size(24.dp))
+        Box(modifier = Modifier.Companion.size(24.dp))
 
 
     }
     HorizontalDivider(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.Companion.fillMaxWidth(),
         color = MediCareCallTheme.colors.gray2,
         thickness = 1.dp
     )
