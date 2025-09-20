@@ -44,7 +44,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
+import com.konkuk.medicarecall.ui.feature.home.navigation.Route
 import com.konkuk.medicarecall.ui.feature.login.login_payment.viewmodel.NaverPayViewModel
 import com.konkuk.medicarecall.ui.model.PaymentResult
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar

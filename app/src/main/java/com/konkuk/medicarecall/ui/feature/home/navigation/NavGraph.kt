@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.navigation
+package com.konkuk.medicarecall.ui.feature.home.navigation
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
@@ -23,8 +23,8 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.calendar.CalendarViewModel
-import com.konkuk.medicarecall.ui.feature.home.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.screen.HomeScreen
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetail
@@ -57,7 +57,7 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
-import com.konkuk.medicarecall.ui.statistics.screen.StatisticsScreen
+import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
 import kotlinx.serialization.json.Json
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets

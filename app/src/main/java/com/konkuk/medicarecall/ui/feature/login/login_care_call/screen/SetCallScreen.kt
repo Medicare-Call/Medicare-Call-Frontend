@@ -41,7 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.konkuk.medicarecall.navigation.Route
+import com.konkuk.medicarecall.ui.feature.home.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.login_care_call.component.BenefitItem
 import com.konkuk.medicarecall.ui.feature.login.login_care_call.component.TimePickerBottomSheet
