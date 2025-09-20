@@ -1,30 +1,40 @@
 package com.konkuk.medicarecall.data.di
 
-import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import android.content.Context
+import com.konkuk.medicarecall.data.api.ElderRegisterService
+import com.konkuk.medicarecall.data.api.EldersInfoService
+import com.konkuk.medicarecall.data.api.MemberRegisterService
+import com.konkuk.medicarecall.data.api.NaverPayService
+import com.konkuk.medicarecall.data.api.NoticeService
+import com.konkuk.medicarecall.data.api.SetCallService
+import com.konkuk.medicarecall.data.api.SettingService
+import com.konkuk.medicarecall.data.api.SubscribeService
+import com.konkuk.medicarecall.data.api.VerificationService
+import com.konkuk.medicarecall.data.repositoryimpl.DataStoreRepository
+import com.konkuk.medicarecall.data.repositoryimpl.ElderIdRepository
+import com.konkuk.medicarecall.data.repositoryimpl.ElderRegisterRepository
+import com.konkuk.medicarecall.data.repositoryimpl.EldersHealthInfoRepository
+import com.konkuk.medicarecall.data.repositoryimpl.EldersInfoRepository
+import com.konkuk.medicarecall.data.repositoryimpl.MemberRegisterRepository
+import com.konkuk.medicarecall.data.repositoryimpl.NaverPayRepository
+import com.konkuk.medicarecall.data.repositoryimpl.NoticeRepository
+import com.konkuk.medicarecall.data.repositoryimpl.SetCallRepository
+import com.konkuk.medicarecall.data.repositoryimpl.SubscribeRepository
+import com.konkuk.medicarecall.data.repositoryimpl.UpdateElderInfoRepository
+import com.konkuk.medicarecall.data.repositoryimpl.UserRepository
+import com.konkuk.medicarecall.data.repositoryimpl.VerificationRepository
 import com.konkuk.medicarecall.data.repositoryimpl.DataStoreRepositoryImpl
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repositoryimpl.ElderIdRepositoryImpl
-import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.repositoryimpl.ElderRegisterRepositoryImpl
-import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repositoryimpl.EldersHealthInfoRepositoryImpl
-import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repositoryimpl.EldersInfoRepositoryImpl
-import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repositoryimpl.MemberRegisterRepositoryImpl
-import com.konkuk.medicarecall.data.repository.NaverPayRepository
 import com.konkuk.medicarecall.data.repositoryimpl.NaverPayRepositoryImpl
-import com.konkuk.medicarecall.data.repository.NoticeRepository
 import com.konkuk.medicarecall.data.repositoryimpl.NoticeRepositoryImpl
-import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.data.repositoryimpl.SetCallRepositoryImpl
-import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import com.konkuk.medicarecall.data.repositoryimpl.SubscribeRepositoryImpl
-import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import com.konkuk.medicarecall.data.repositoryimpl.UpdateElderInfoRepositoryImpl
-import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.repositoryimpl.UserRepositoryImpl
-import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.data.repositoryimpl.VerificationRepositoryImpl
 import com.konkuk.medicarecall.ui.feature.home.data.HomeRepository
 import com.konkuk.medicarecall.ui.feature.home.data.HomeRepositoryImpl
@@ -40,99 +50,89 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data.HealthRepo
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data.HealthRepositoryImpl
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.data.MentalRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.data.MentalRepositoryImpl
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepository
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsRepositoryImpl
+import com.konkuk.medicarecall.ui.feature.statistics.data.StatisticsRepository
+import com.konkuk.medicarecall.ui.feature.statistics.data.StatisticsRepositoryImpl
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+object RepositoryModule {
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindDataStoreRepository(dataStoreRepositoryImpl: DataStoreRepositoryImpl): DataStoreRepository
+    fun provideDataStoreRepository(@ApplicationContext context: Context): DataStoreRepository {
+        return DataStoreRepository(context)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindEldersInfoRepository(eldersInfoRepositoryImpl: EldersInfoRepositoryImpl): EldersInfoRepository
+    fun provideEldersInfoRepository(service: EldersInfoService): EldersInfoRepository {
+        return EldersInfoRepository(service)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindVerificationRepository(verificationRepositoryImpl: VerificationRepositoryImpl): VerificationRepository
+    fun provideVerificationRepository(service: VerificationService): VerificationRepository {
+        return VerificationRepository(service)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindMemberRegisterRepository(memberRegisterRepositoryImpl: MemberRegisterRepositoryImpl): MemberRegisterRepository
+    fun provideMemberRegisterRepository(service: MemberRegisterService): MemberRegisterRepository {
+        return MemberRegisterRepository(service)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindNoticeRepository(noticeRepositoryImpl: NoticeRepositoryImpl): NoticeRepository
+    fun provideNoticeRepository(service: NoticeService): NoticeRepository {
+        return NoticeRepository(service)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindSetCallRepository(setCallRepositoryImpl: SetCallRepositoryImpl): SetCallRepository
+    fun provideSetCallRepository(service: SetCallService): SetCallRepository {
+        return SetCallRepository(service)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindSubscribeRepository(subscribeRepositoryImpl: SubscribeRepositoryImpl): SubscribeRepository
+    fun provideSubscribeRepository(service: SubscribeService): SubscribeRepository {
+        return SubscribeRepository(service)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindEldersHealthInfoRepository(eldersHealthInfoRepositoryImpl: EldersHealthInfoRepositoryImpl): EldersHealthInfoRepository
+    fun provideEldersHealthInfoRepository(
+        elderInfoService: EldersInfoService,
+        elderRegisterService: ElderRegisterService
+    ): EldersHealthInfoRepository {
+        return EldersHealthInfoRepository(elderInfoService, elderRegisterService)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
+    fun provideUserRepository(
+        settingService: SettingService,
+        dataStoreRepository: DataStoreRepository
+    ): UserRepository {
+        return UserRepository(settingService, dataStoreRepository)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindUpdateElderInfoRepository(updateElderInfoRepositoryImpl: UpdateElderInfoRepositoryImpl): UpdateElderInfoRepository
+    fun provideUpdateElderRepository(eldersInfoService: EldersInfoService): UpdateElderInfoRepository {
+        return UpdateElderInfoRepository(eldersInfoService)
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindNaverPayRepository(naverPayRepositoryImpl: NaverPayRepositoryImpl): NaverPayRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindElderRegisterRepository(elderRegisterRepositoryImpl: ElderRegisterRepositoryImpl): ElderRegisterRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindElderIdRepository(elderIdRepositoryImpl: ElderIdRepositoryImpl): ElderIdRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindHomeRepository(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindGlucoseRepository(glucoseRepositoryImpl: GlucoseRepositoryImpl): GlucoseRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindMealRepository(mealRepositoryImpl: MealRepositoryImpl): MealRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindMedicineRepository(medicineRepositoryImpl: MedicineRepositoryImpl): MedicineRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindSleepRepository(sleepRepositoryImpl: SleepRepositoryImpl): SleepRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindHealthRepository(healthRepositoryImpl: HealthRepositoryImpl): HealthRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindMentalRepository(mentalRepositoryImpl: MentalRepositoryImpl): MentalRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindStatisticsRepository(statisticsRepositoryImpl: StatisticsRepositoryImpl): StatisticsRepository
+    fun provideNaverPayRepository(naverPayService: NaverPayService): NaverPayRepository {
+        return NaverPayRepository(naverPayService)
+    }
 }
