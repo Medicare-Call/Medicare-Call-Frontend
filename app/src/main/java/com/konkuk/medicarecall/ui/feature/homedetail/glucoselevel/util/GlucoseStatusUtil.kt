@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel
+package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.util
 
 object GlucoseStatusUtil {
 
@@ -27,4 +27,3 @@ object GlucoseStatusUtil {
     }
 
 }
-

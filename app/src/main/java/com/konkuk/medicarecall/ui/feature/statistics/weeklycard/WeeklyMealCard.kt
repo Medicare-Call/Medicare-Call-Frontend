@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.statistics.WeeklySummaryUtil
+import com.konkuk.medicarecall.ui.feature.statistics.util.WeeklySummaryUtil
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -76,7 +76,7 @@ fun WeeklyMealCard(
                     val iconColor = if (isUnrecorded) {
                         MediCareCallTheme.colors.gray2
                     } else {
-                        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.WeeklySummaryUtil.getMealIconColor(weeklyMeal, MediCareCallTheme.colors)
+                        WeeklySummaryUtil.getMealIconColor(weeklyMeal, MediCareCallTheme.colors)
                     }
 
                     val countText = if (isUnrecorded) {
