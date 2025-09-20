@@ -17,7 +17,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.data.MedicineServi
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.data.SleepService
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data.HealthService
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.data.MentalService
-import com.konkuk.medicarecall.ui.statistics.data.StatisticsService
+import com.konkuk.medicarecall.ui.feature.statistics.data.StatisticsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
