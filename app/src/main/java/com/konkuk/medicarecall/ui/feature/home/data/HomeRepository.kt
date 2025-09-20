@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.home.data
 
-import com.konkuk.medicarecall.ui.feature.home.model.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import java.time.LocalDate
 
 interface HomeRepository {

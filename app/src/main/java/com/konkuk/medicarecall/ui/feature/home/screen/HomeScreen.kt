@@ -58,7 +58,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
-import com.konkuk.medicarecall.ui.feature.home.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallFloatingButton
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallSnackBar
 import com.konkuk.medicarecall.ui.feature.home.component.HomeGlucoseLevelContainer
@@ -68,8 +68,8 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
 import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
-import com.konkuk.medicarecall.ui.feature.home.model.HomeUiState
-import com.konkuk.medicarecall.ui.feature.home.model.MedicineUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.main
 import kotlinx.coroutines.delay

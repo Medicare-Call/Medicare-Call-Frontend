@@ -28,7 +28,7 @@ import com.konkuk.medicarecall.ui.feature.calendar.CalendarUiState
 import com.konkuk.medicarecall.ui.feature.calendar.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
-import com.konkuk.medicarecall.ui.feature.home.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.TopAppBar
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.MentalViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard

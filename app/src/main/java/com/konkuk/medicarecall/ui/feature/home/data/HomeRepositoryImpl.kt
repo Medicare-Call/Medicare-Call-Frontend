@@ -2,9 +2,9 @@ package com.konkuk.medicarecall.ui.feature.home.data
 
 import android.util.Log
 import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
-import com.konkuk.medicarecall.ui.feature.home.model.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.model.ImmediateCallRequestDto
-import com.konkuk.medicarecall.ui.feature.home.model.MedicineUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import retrofit2.HttpException
 import java.time.LocalDate
 import javax.inject.Inject

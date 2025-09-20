@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.home
+package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.feature.home.data.HomeRepository
-import com.konkuk.medicarecall.ui.feature.home.model.HomeUiState
-import com.konkuk.medicarecall.ui.feature.home.model.MedicineUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.time.LocalDate
 import javax.inject.Inject
-
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
@@ -249,5 +248,5 @@ fun <T, R> StateFlow<T>.mapState(
     scope: CoroutineScope = GlobalScope,
     transform: (T) -> R
 ): StateFlow<R> {
-    return map(transform).stateIn(scope, SharingStarted.Eagerly, transform(value))
+    return map(transform).stateIn(scope, SharingStarted.Companion.Eagerly, transform(value))
 }
