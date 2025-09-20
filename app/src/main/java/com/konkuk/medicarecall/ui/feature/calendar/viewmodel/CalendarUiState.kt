@@ -1,7 +1,6 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.feature.calendar.viewmodel
 
 import java.time.LocalDate
-
 
 data class CalendarUiState(
     val currentYear: Int,               // 현재 연도
