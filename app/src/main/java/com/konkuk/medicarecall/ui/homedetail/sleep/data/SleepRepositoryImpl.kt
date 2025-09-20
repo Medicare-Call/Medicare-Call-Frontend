@@ -8,7 +8,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class SleepRepositoryImpl @Inject constructor(
-    private val sleepApi: SleepApi
+    private val sleepService: SleepService
 ) : SleepRepository {
 
 
@@ -28,7 +28,7 @@ class SleepRepositoryImpl @Inject constructor(
         date: LocalDate
     ): SleepUiState {
         return try {
-            val response = sleepApi.getDailySleep(elderId, date.toString())
+            val response = sleepService.getDailySleep(elderId, date.toString())
 
             // 서버 응답의 모든 값이 유효한지 확인
             if (response.totalSleep?.hours != null && response.totalSleep.minutes != null && !response.sleepTime.isNullOrBlank() && !response.wakeTime.isNullOrBlank()) {
