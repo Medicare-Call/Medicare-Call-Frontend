@@ -39,8 +39,8 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.feature.home.navigation.BottomNavItem
 import com.konkuk.medicarecall.ui.feature.home.navigation.NavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateTopLevel
-import com.konkuk.medicarecall.ui.feature.login.login_info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.login_senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import dagger.hilt.android.AndroidEntryPoint
 
