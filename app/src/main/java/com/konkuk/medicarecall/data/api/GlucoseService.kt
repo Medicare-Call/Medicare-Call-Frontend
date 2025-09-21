@@ -1,5 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.data
-
+package com.konkuk.medicarecall.data.api
 
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseResponseDto
 import retrofit2.Response

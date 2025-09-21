@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statemental.data
 
 import android.util.Log
+import com.konkuk.medicarecall.data.api.MentalService
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import java.time.LocalDate
 import javax.inject.Inject

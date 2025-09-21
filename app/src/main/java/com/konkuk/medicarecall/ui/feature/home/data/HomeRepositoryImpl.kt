@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.home.data
 
 import android.util.Log
+import com.konkuk.medicarecall.data.api.HomeService
 import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.model.ImmediateCallRequestDto

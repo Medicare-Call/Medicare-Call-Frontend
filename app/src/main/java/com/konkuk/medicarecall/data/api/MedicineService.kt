@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.medicine.data
+package com.konkuk.medicarecall.data.api
 
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.model.MedicineResponseDto
 import retrofit2.Response

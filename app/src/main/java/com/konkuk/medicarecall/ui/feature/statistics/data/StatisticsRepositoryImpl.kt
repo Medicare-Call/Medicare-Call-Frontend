@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.statistics.data
 
+import com.konkuk.medicarecall.data.api.StatisticsService
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import retrofit2.HttpException
 import java.time.LocalDate

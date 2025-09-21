@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data
 
+import com.konkuk.medicarecall.data.api.HealthService
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import java.time.LocalDate
 import javax.inject.Inject

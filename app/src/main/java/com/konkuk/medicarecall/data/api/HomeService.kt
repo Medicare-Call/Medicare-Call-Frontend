@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.home.data
+package com.konkuk.medicarecall.data.api
 
 import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
 import com.konkuk.medicarecall.ui.feature.home.model.ImmediateCallRequestDto

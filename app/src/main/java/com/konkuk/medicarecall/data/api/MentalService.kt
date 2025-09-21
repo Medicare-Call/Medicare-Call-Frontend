@@ -1,5 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.statemental.data
-
+package com.konkuk.medicarecall.data.api
 
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.model.MentalResponseDto
 import retrofit2.http.GET
