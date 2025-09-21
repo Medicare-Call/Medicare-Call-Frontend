@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseTiming
+import com.konkuk.medicarecall.domain.GlucoseTiming
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

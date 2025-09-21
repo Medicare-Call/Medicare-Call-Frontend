@@ -1,6 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model
-
-
+package com.konkuk.medicarecall.domain
 
 enum class GlucoseLevel { LOW, NORMAL, HIGH }
 
@@ -21,4 +19,3 @@ fun classifyGlucose(x: Float, timing: GlucoseTiming): GlucoseLevel {
         else               -> GlucoseLevel.HIGH
     }
 }
-

@@ -28,10 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseLevel
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseTiming
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GraphDataPoint
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.classifyGlucose
+import com.konkuk.medicarecall.domain.GlucoseLevel
+import com.konkuk.medicarecall.domain.GlucoseTiming
+import com.konkuk.medicarecall.domain.GraphDataPoint
+import com.konkuk.medicarecall.domain.classifyGlucose
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

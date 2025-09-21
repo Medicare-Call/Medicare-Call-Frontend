@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model
+package com.konkuk.medicarecall.domain
 
 import java.time.LocalDate
 
