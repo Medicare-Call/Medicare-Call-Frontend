@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
-import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 
 data class HomeUiState(
     val isLoading: Boolean = true,

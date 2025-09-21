@@ -1,10 +1,16 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.StatisticsService
+import com.konkuk.medicarecall.data.dto.response.AverageSleepDto
+import com.konkuk.medicarecall.data.dto.response.BloodSugarDetailDto
+import com.konkuk.medicarecall.data.dto.response.BloodSugarDto
+import com.konkuk.medicarecall.data.dto.response.MealStatsDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
-import com.konkuk.medicarecall.ui.feature.statistics.model.MedicationStatDto
-import com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto
+import com.konkuk.medicarecall.data.dto.response.MedicationStatDto
+import com.konkuk.medicarecall.data.dto.response.PsychSummaryDto
+import com.konkuk.medicarecall.data.dto.response.StatisticsResponseDto
+import com.konkuk.medicarecall.data.dto.response.SummaryStatsDto
 import retrofit2.HttpException
 import java.time.LocalDate
 import javax.inject.Inject
@@ -47,37 +53,37 @@ class StatisticsRepositoryImpl @Inject constructor(
             }
             ?: emptyMap()
 
-        return _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto(
+        return StatisticsResponseDto(
             elderName = elderName,
-            summaryStats = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.SummaryStatsDto(
+            summaryStats = SummaryStatsDto(
                 mealRate = -1,
                 medicationRate = -1,
                 healthSignals = -1,
                 missedCalls = -1
             ),
-            mealStats = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.MealStatsDto(
+            mealStats = MealStatsDto(
                 breakfast = -1,
                 lunch = -1,
                 dinner = -1
             ),
             medicationStats = medicationStats,
             healthSummary = "아직 충분한 기록이 쌓이지 않았어요.",
-            averageSleep = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.AverageSleepDto(
+            averageSleep = AverageSleepDto(
                 hours = null,
                 minutes = null
             ),
-            psychSummary = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.PsychSummaryDto(
+            psychSummary = PsychSummaryDto(
                 good = -1,
                 normal = -1,
                 bad = -1
             ),
-            bloodSugar = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.BloodSugarDto(
-                beforeMeal = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.BloodSugarDetailDto(
+            bloodSugar = BloodSugarDto(
+                beforeMeal = BloodSugarDetailDto(
                     normal = 0,
                     high = 0,
                     low = 0
                 ),
-                afterMeal = _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.BloodSugarDetailDto(
+                afterMeal = BloodSugarDetailDto(
                     normal = 0,
                     high = 0,
                     low = 0

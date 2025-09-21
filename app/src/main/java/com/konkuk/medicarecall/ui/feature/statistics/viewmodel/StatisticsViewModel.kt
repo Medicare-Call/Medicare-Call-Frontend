@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
-import com.konkuk.medicarecall.ui.feature.statistics.model.MedicationStatDto
-import com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto
+import com.konkuk.medicarecall.data.dto.response.MedicationStatDto
+import com.konkuk.medicarecall.data.dto.response.StatisticsResponseDto
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState

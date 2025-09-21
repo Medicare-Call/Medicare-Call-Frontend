@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.api
 
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseResponseDto
+import com.konkuk.medicarecall.data.dto.response.GlucoseResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

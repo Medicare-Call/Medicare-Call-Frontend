@@ -1,8 +1,7 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.medicine.model
+package com.konkuk.medicarecall.data.dto.response
 
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 data class MedicineResponseDto(

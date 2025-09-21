@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.api
 
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.model.MealResponseDto
+import com.konkuk.medicarecall.data.dto.response.MealResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

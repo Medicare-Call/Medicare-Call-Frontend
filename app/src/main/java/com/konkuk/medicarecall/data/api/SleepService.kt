@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.api
 
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.model.SleepResponseDto
+import com.konkuk.medicarecall.data.dto.response.SleepResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

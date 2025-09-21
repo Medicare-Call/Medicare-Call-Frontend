@@ -1,7 +1,6 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.statemental.model
+package com.konkuk.medicarecall.data.dto.response
 
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 data class MentalResponseDto(

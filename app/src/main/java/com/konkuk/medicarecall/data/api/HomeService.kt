@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.api
 
-import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
-import com.konkuk.medicarecall.ui.feature.home.model.ImmediateCallRequestDto
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
+import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

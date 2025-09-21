@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.home.model
+package com.konkuk.medicarecall.data.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

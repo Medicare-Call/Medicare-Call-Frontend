@@ -67,7 +67,7 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
-import com.konkuk.medicarecall.ui.feature.home.model.HomeResponseDto
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
