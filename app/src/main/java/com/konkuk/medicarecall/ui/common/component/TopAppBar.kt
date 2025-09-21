@@ -25,53 +25,53 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun TopAppBar(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     title: String,
-    navController: NavHostController
+    navController: NavHostController,
 
-) {
+    ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 10.dp)
-            .background(Color.Companion.White),
-        verticalAlignment = Alignment.Companion.CenterVertically,
+            .background(Color.White),
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
 
 
         ) {
         // 뒤로 가기+ 상세 화면 제목
         Icon(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
                 },
             painter = painterResource(id = R.drawable.ic_arrow_big_back),
             contentDescription = "big arrow back",
-            tint = MediCareCallTheme.colors.gray3
+            tint = MediCareCallTheme.colors.gray3,
         )
 
 
         Box(
-            modifier = Modifier.Companion.weight(1f),
-            contentAlignment = Alignment.Companion.Center
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = title,
                 style = MediCareCallTheme.typography.SB_20,
-                color = MediCareCallTheme.colors.black
+                color = MediCareCallTheme.colors.black,
             )
         }
 
-        Box(modifier = Modifier.Companion.size(24.dp))
+        Box(modifier = Modifier.size(24.dp))
 
 
     }
     HorizontalDivider(
-        modifier = Modifier.Companion.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         color = MediCareCallTheme.colors.gray2,
-        thickness = 1.dp
+        thickness = 1.dp,
     )
 }
 
@@ -81,6 +81,6 @@ fun TopAppBar(
 private fun PreviewTopAppBar() {
     TopAppBar(
         title = "식사",
-        navController = rememberNavController()
+        navController = rememberNavController(),
     )
 }
