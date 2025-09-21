@@ -80,7 +80,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.media3.common.ktx)
     testImplementation(libs.junit)
