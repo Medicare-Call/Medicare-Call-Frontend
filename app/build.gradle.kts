@@ -42,24 +42,23 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
 
+    }
     kotlinOptions {
         jvmTarget = "11"
     }
-
     buildFeatures {
         compose = true
         buildConfig = true
     }
+
 }
 
 dependencies {
@@ -76,7 +75,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.play.services.vision.common)
