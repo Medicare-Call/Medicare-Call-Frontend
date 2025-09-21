@@ -1,3 +1,5 @@
+package com.konkuk.medicarecall.data.repositoryimpl
+
 import android.content.Context
 import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.Token
@@ -6,12 +8,14 @@ import com.konkuk.medicarecall.data.util.TokenSerializer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+import javax.inject.Singleton
 
 val Context.tokenDataStore by dataStore(
     fileName = "tokens",
     serializer = TokenSerializer,
 )
 
+@Singleton
 class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) :
     DataStoreRepository {
 
