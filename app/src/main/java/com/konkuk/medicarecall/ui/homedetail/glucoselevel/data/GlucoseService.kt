@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface GlucoseApi {
+interface GlucoseService {
 
 
     @GET("elders/{elderId}/blood-sugar/weekly")
