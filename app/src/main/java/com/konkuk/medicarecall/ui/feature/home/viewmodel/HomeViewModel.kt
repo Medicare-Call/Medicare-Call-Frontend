@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
-import com.konkuk.medicarecall.ui.feature.home.data.HomeRepository
+import com.konkuk.medicarecall.data.repository.HomeRepository
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

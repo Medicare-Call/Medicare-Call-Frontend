@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data
+package com.konkuk.medicarecall.data.repository
 
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import java.time.LocalDate

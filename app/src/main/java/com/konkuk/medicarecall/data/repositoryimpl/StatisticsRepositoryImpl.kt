@@ -1,7 +1,10 @@
-package com.konkuk.medicarecall.ui.feature.statistics.data
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.StatisticsService
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
+import com.konkuk.medicarecall.data.repository.StatisticsRepository
+import com.konkuk.medicarecall.ui.feature.statistics.model.MedicationStatDto
+import com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto
 import retrofit2.HttpException
 import java.time.LocalDate
 import javax.inject.Inject
@@ -11,7 +14,7 @@ class StatisticsRepositoryImpl @Inject constructor(
     private val eldersHealthInfoRepository: EldersHealthInfoRepository
 ) : StatisticsRepository {
 
-    override suspend fun getStatistics(elderId: Int, startDate: String): com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto {
+    override suspend fun getStatistics(elderId: Int, startDate: String): StatisticsResponseDto {
         return try {
             val response = statisticsService.getStatistics(elderId = elderId, startDate = startDate)
             response
@@ -26,7 +29,7 @@ class StatisticsRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun createUnrecordedStatisticsDto(elderId: Int): com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto {
+    private suspend fun createUnrecordedStatisticsDto(elderId: Int): StatisticsResponseDto {
         val healthInfo = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
@@ -37,7 +40,7 @@ class StatisticsRepositoryImpl @Inject constructor(
             ?.flatten()
             ?.distinct()
             ?.associateWith {
-                _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.model.MedicationStatDto(
+                MedicationStatDto(
                     takenCount = -1,
                     totalCount = 0
                 )

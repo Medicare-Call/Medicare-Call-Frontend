@@ -3,7 +3,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.data.MealRepository
+import com.konkuk.medicarecall.data.repository.MealRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

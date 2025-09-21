@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.data
+package com.konkuk.medicarecall.data.repository
 
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseResponseDto
 

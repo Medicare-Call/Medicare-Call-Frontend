@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.statistics.data
+package com.konkuk.medicarecall.data.repository
 
 import com.konkuk.medicarecall.ui.feature.statistics.model.StatisticsResponseDto
 

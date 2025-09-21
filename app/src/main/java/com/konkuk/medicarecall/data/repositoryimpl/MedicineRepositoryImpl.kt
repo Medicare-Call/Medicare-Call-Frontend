@@ -1,7 +1,8 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.medicine.data
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.MedicineService
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
+import com.konkuk.medicarecall.data.repository.MedicineRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState

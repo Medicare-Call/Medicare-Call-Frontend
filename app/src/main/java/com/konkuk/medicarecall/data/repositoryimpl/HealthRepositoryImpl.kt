@@ -1,11 +1,10 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.data
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.HealthService
+import com.konkuk.medicarecall.data.repository.HealthRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlin.collections.orEmpty
-import kotlin.text.orEmpty
 
 class HealthRepositoryImpl @Inject constructor(
     private val healthService: HealthService

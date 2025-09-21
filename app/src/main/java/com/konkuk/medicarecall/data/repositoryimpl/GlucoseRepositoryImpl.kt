@@ -1,6 +1,7 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.data
+package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.GlucoseService
+import com.konkuk.medicarecall.data.repository.GlucoseRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.model.GlucoseResponseDto
 import retrofit2.HttpException
 import javax.inject.Inject

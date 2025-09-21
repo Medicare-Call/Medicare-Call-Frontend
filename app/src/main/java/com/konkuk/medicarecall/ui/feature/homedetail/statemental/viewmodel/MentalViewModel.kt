@@ -3,7 +3,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.data.MentalRepository
+import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
