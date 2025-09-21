@@ -5,9 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsetsController
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
@@ -20,7 +23,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,10 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -58,7 +66,6 @@ class MainActivity : ComponentActivity() {
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-
             )
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
@@ -69,24 +76,21 @@ class MainActivity : ComponentActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-
         }
         if (Build.VERSION.SDK_INT >= 35) {
             window.isNavigationBarContrastEnforced = false
         } else {
             window.isNavigationBarContrastEnforced = false
-
             @Suppress("DEPRECATION")
             window.navigationBarColor = android.graphics.Color.TRANSPARENT
-
         }
-
-
 
         setContent {
             MediCareCallTheme {
-                val navController = rememberNavController()
+                // 알림 권한 요청
+                RequestNotificationPermission()
 
+                val navController = rememberNavController()
                 val navBarItems = listOf(
                     BottomNavItem(
                         label = "홈",
@@ -110,36 +114,29 @@ class MainActivity : ComponentActivity() {
 
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-
-
                 var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
 
                 val loginViewModel: LoginViewModel = hiltViewModel()
                 val loginElderViewModel: LoginElderViewModel = hiltViewModel()
-                val bottomBarRoutes = listOf(
-                    "home", "statistics", "settings",
-                )
+                val bottomBarRoutes = listOf("home", "statistics", "settings")
 
                 Scaffold(
                     modifier = Modifier.background(MediCareCallTheme.colors.bg),
-                    contentWindowInsets = WindowInsets.systemBars
-                        .only(WindowInsetsSides.Horizontal),
+                    contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
                     bottomBar = {
                         if (currentRoute in bottomBarRoutes)
                             NavigationBar(
-                                modifier = Modifier
-                                    .drawBehind {
-                                        val strokeWidth = 1.dp.toPx()
-                                        drawLine(
-                                            color = Color(0xFFECECEC), // NavigationBar의 상단 테두리
-                                            start = Offset(0f, 0f),
-                                            end = Offset(size.width, 0f),
-                                            strokeWidth = strokeWidth,
-                                        )
-                                    },
+                                modifier = Modifier.drawBehind {
+                                    val strokeWidth = 1.dp.toPx()
+                                    drawLine(
+                                        color = Color(0xFFECECEC),
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width, 0f),
+                                        strokeWidth = strokeWidth,
+                                    )
+                                },
                                 containerColor = MediCareCallTheme.colors.white
-                            )
-                            {
+                            ) {
                                 navBarItems.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         selected = currentRoute == item.route,
@@ -153,7 +150,7 @@ class MainActivity : ComponentActivity() {
                                         onClick = {
                                             selectedIndex = index
                                             if (currentRoute != item.route)
-                                                navController.navigateTopLevel(item.route) // 네비게이션 아이템 클릭 시 해당 라우트로 이동
+                                                navController.navigateTopLevel(item.route)
                                         },
                                         icon = {
                                             Icon(
@@ -167,10 +164,10 @@ class MainActivity : ComponentActivity() {
                                         },
                                         colors = NavigationBarItemDefaults.colors(
                                             indicatorColor = Color.Transparent,
-                                            selectedIconColor = MediCareCallTheme.colors.main, // 선택된 아이콘 색
-                                            unselectedIconColor = Color.Black, // 선택되지 않은 아이콘 색상
-                                            selectedTextColor = MediCareCallTheme.colors.main, // 선택된 텍스트 색
-                                            unselectedTextColor = Color.Black // 선택되지 않은 텍스트 색상
+                                            selectedIconColor = MediCareCallTheme.colors.main,
+                                            unselectedIconColor = Color.Black,
+                                            selectedTextColor = MediCareCallTheme.colors.main,
+                                            unselectedTextColor = Color.Black
                                         )
                                     )
                                 }
@@ -181,11 +178,35 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         loginViewModel = loginViewModel,
                         loginElderViewModel = loginElderViewModel,
-                        modifier = Modifier
-                            .padding(bottom = innerPadding.calculateBottomPadding())
+                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
                     )
-
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun RequestNotificationPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val context = LocalContext.current
+        val permission = android.Manifest.permission.POST_NOTIFICATIONS
+
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                Toast.makeText(context, "알림 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "알림 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            if (ContextCompat.checkSelfPermission(context, permission)
+                != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                launcher.launch(permission)
             }
         }
     }
