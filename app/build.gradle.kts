@@ -42,10 +42,11 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -54,6 +55,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -114,4 +116,5 @@ dependencies {
 
     // Detekt formatting plugin
     detektPlugins(libs.detekt.formatting)
+    ksp(libs.hilt.manager)
 }
