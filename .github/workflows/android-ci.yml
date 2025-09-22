@@ -52,6 +52,9 @@ jobs:
                   "package_name": "com.konkuk.medicarecall"
                 }
               }
+            }],
+            "api_key": [{
+              "current_key": "DUMMY_API_KEY"
             }]
           }
           EOF
