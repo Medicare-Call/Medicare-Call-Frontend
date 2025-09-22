@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.util
+package com.konkuk.medicarecall.ui.common.util
 
 object GlucoseStatusUtil {
 

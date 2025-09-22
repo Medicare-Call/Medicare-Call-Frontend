@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.statistics.util
+package com.konkuk.medicarecall.ui.common.util
 
 import androidx.compose.ui.graphics.Color
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
