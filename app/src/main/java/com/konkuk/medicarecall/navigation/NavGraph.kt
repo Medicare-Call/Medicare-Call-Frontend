@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.home.navigation
+package com.konkuk.medicarecall.navigation
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler

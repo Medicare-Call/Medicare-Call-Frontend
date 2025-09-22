@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.domain
+package com.konkuk.medicarecall.ui.model
 
 import java.time.LocalDate
 

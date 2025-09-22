@@ -36,7 +36,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.navigation.Route
+import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.feature.settings.component.LogoutConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingInfoItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar

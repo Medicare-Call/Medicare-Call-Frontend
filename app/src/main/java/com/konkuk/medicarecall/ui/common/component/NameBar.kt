@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.navigation.Route
+import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable

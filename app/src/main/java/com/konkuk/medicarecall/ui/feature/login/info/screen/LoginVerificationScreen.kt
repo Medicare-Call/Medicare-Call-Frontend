@@ -27,7 +27,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.konkuk.medicarecall.ui.feature.home.navigation.Route
+import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField

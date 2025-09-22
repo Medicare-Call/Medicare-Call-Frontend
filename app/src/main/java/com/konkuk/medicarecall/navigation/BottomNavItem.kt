@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.home.navigation
+package com.konkuk.medicarecall.navigation
 
 data class BottomNavItem(
     val label: String,

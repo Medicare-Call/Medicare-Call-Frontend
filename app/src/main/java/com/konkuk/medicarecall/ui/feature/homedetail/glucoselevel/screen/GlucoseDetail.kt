@@ -45,9 +45,9 @@ import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.Gluc
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseTimingButton
-import com.konkuk.medicarecall.domain.GlucoseTiming
+import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseUiState
-import com.konkuk.medicarecall.domain.GraphDataPoint
+import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate

@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
-import com.konkuk.medicarecall.domain.GlucoseTiming
-import com.konkuk.medicarecall.domain.GraphDataPoint
+import com.konkuk.medicarecall.ui.model.GlucoseTiming
+import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

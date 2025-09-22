@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.navigation.Route
+import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.payment.component.PayResultItem

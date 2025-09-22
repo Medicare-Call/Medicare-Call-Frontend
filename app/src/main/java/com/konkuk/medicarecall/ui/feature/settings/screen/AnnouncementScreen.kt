@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.navigation.Route
+import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.feature.settings.component.AnnouncementCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.NoticeViewModel

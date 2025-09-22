@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.domain
+package com.konkuk.medicarecall.ui.model
 
 enum class GlucoseTiming {
     BEFORE_MEAL,

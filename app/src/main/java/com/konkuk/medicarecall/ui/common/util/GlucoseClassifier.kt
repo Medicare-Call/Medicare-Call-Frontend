@@ -1,4 +1,6 @@
-package com.konkuk.medicarecall.domain
+package com.konkuk.medicarecall.ui.common.util
+
+import com.konkuk.medicarecall.ui.model.GlucoseTiming
 
 enum class GlucoseLevel { LOW, NORMAL, HIGH }
 

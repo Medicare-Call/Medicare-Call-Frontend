@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.navigation.Route
+import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
