@@ -1,12 +1,12 @@
 name: Android CI
 
 on:
-  push: # 코드 푸시 이벤트에 대한 설정
-    branches: [ "develop" ]  # "develop" 브랜치에 푸시될 때만 트리거된다.
-  pull_request: # 풀 리퀘스트 이벤트에 대한 설정
-    branches: [ "develop" ]  # "develop" 브랜치로의 풀 리퀘스트가 생성될 때만 트리거된다.
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
-jobs: # CI에서 수행할 작업을 정의한다.
+jobs:
   ci-build:
     runs-on: ubuntu-latest
 
@@ -37,7 +37,6 @@ jobs: # CI에서 수행할 작업을 정의한다.
         run: |
           echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
 
-   # (여기에 더미 google-services.json을 생성하는 스텝을 추가하세요!)
       - name: Create dummy google-services.json
         run: |
           cat <<EOF > app/google-services.json
@@ -56,17 +55,6 @@ jobs: # CI에서 수행할 작업을 정의한다.
             }]
           }
           EOF
-
-      - name: Run build
-        run: ./gradlew buildDebug --stacktrace
-          
-#      - name: Generate google-services.json
-#        run: |
-#          echo '${{ secrets.GOOGLE_SERVICES }}' >> ./app/google-services.json
-
-#      - name: Code style checks
-#        run: |
-#          ./gradlew detekt
 
       - name: Run build
         run: ./gradlew buildDebug --stacktrace
