@@ -37,6 +37,29 @@ jobs: # CI에서 수행할 작업을 정의한다.
         run: |
           echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
 
+   # (여기에 더미 google-services.json을 생성하는 스텝을 추가하세요!)
+      - name: Create dummy google-services.json
+        run: |
+          cat <<EOF > app/google-services.json
+          {
+            "project_info": {
+              "project_number": "000000000000",
+              "project_id": "dummy-project"
+            },
+            "client": [{
+              "client_info": {
+                "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                "android_client_info": {
+                  "package_name": "com.example.dummy"
+                }
+              }
+            }]
+          }
+          EOF
+
+      - name: Run build
+        run: ./gradlew buildDebug --stacktrace
+          
 #      - name: Generate google-services.json
 #        run: |
 #          echo '${{ secrets.GOOGLE_SERVICES }}' >> ./app/google-services.json
