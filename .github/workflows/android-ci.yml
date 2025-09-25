@@ -12,18 +12,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
+    
     # local.properties 생성 (필요하다면)
     - name: Generate local.properties
       run: |
+        # 이 단계는 GitHub Secrets에 LOCAL_PROPERTIES 시크릿이 설정되어 있을 경우에만 필요합니다.
         echo "${{ secrets.LOCAL_PROPERTIES }}" > ./local.properties
 
-    # google-services.json 생성 (필수, 제대로 동작하게 수정)
+    # google-services.json 생성 (Base64 디코딩으로 안전하게 파일 복원)
     - name: Generate google-services.json
-      run: |
-        echo "${{ secrets.GOOGLE_SERVICES }}" > ./app/google-services.json
+      # Base64로 인코딩된 google-services.json 내용을 복호화하여 파일로 저장합니다.
+      # 이전에 GitHub Secrets에 'GOOGLE_SERVICES_JSON_BASE64'라는 이름으로 Base64 문자열을 저장해야 합니다.
+      run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > app/google-services.json
 
-    # 캐시(선택)
+    # Gradle Cache 설정
     - name: Gradle Caches
       uses: actions/cache@v3
       with:
@@ -34,10 +36,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
+    # 빌드 권한 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
     # 빌드 실행
     - name: Run build
       run: ./gradlew assembleDebug --stacktrace
-
-    # 필요하다면 추가 단계(예: test, detekt 등)
-    # - name: Run Detekt
-    #   run: ./gradlew detekt
