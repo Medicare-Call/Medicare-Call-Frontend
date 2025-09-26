@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GlucoseViewModel @Inject constructor(
-    private val glucoseRepository: GlucoseRepository
+    private val glucoseRepository: GlucoseRepository,
 ) : ViewModel() {
 
     private companion object {
@@ -37,7 +37,7 @@ class GlucoseViewModel @Inject constructor(
         elderId: Int,
         counter: Int,
         type: GlucoseTiming,
-        isRefresh: Boolean = false
+        isRefresh: Boolean = false,
     ) {
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
@@ -48,7 +48,7 @@ class GlucoseViewModel @Inject constructor(
                     val newData = processedData.map { record ->
                         GraphDataPoint(
                             date = LocalDate.parse(record.date),
-                            value = record.value.toFloat()
+                            value = record.value.toFloat(),
                         )
                     }
 
@@ -70,19 +70,11 @@ class GlucoseViewModel @Inject constructor(
                     if (_uiState.value.selectedTiming == type) {
                         _uiState.update {
 
-                            // 새로고침일 때만 선택 인덱스를 업데이트
-                            val newSelectedIndex = if (isRefresh) {
-                                // 가장 최근 날짜(마지막 인덱스)를 선택
-                                updatedDataList.lastIndex.takeIf { i -> i >= 0 } ?: -1
-                            } else {
-                                it.selectedIndex // 새로고침이 아니면 기존 선택 유지
-                            }
-
 
                             it.copy(
                                 graphDataPoints = updatedDataList,
-                                selectedIndex = newSelectedIndex,
-                                hasNext = response.hasNextPage
+                                selectedIndex = updatedDataList.lastIndex,
+                                hasNext = response.hasNextPage,
                             )
                         }
                     }
