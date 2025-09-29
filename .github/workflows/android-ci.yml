@@ -11,35 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    
-    # local.properties 생성 (필요하다면)
-    - name: Generate local.properties
-      run: |
-        # 이 단계는 GitHub Secrets에 LOCAL_PROPERTIES 시크릿이 설정되어 있을 경우에만 필요합니다.
-        echo "${{ secrets.LOCAL_PROPERTIES }}" > ./local.properties
 
-    # google-services.json 생성 (Base64 디코딩으로 안전하게 파일 복원)
-    - name: Generate google-services.json
-      # Base64로 인코딩된 google-services.json 내용을 복호화하여 파일로 저장합니다.
-      # 이전에 GitHub Secrets에 'GOOGLE_SERVICES_JSON_BASE64'라는 이름으로 Base64 문자열을 저장해야 합니다.
-      run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > app/google-services.json
+      - uses: actions/checkout@v4
 
-    # Gradle Cache 설정
-    - name: Gradle Caches
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    # 빌드 권한 부여
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-    # 빌드 실행
-    - name: Run build
-      run: ./gradlew assembleDebug --stacktrace
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Generate local.properties
+        run: |
+          echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
+
+      - name: Generate google-services.json
+        run: |
+          echo '${{ secrets.GOOGLE_SERVICES }}' >> ./app/google-services.json
+
+#      - name: Code style checks
+#        run: |
+#          ./gradlew detekt
+
+      - name: Run build
+        run: ./gradlew buildDebug --stacktrace
