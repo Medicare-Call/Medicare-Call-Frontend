@@ -39,15 +39,12 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StateMentalDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mentalViewModel: MentalViewModel = hiltViewModel(),
 
     ) {
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(MainTabRoute.Home)
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -69,7 +66,7 @@ fun StateMentalDetail(
 
 
     StateMentalDetailLayout(
-        navController = navController,
+        onBack = onBack,
         selectedDate = selectedDate,
         mental = mental,
         weekDates = calendarViewModel.getCurrentWeekDates(),
@@ -82,7 +79,7 @@ fun StateMentalDetail(
 @Composable
 fun StateMentalDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     mental: MentalUiState,
     weekDates: List<LocalDate>,
@@ -100,7 +97,7 @@ fun StateMentalDetailLayout(
         ) {
             TopAppBar(
                 title = "심리상태 요약",
-                navController = navController,
+                onBack = onBack,
             )
             Column(
                 modifier = Modifier
@@ -137,7 +134,7 @@ fun StateMentalDetailLayout(
 @Composable
 fun PreviewStateMentalDetail() {
     StateMentalDetailLayout(
-        navController = rememberNavController(),
+        onBack = {},
         selectedDate = LocalDate.now(),
         mental = MentalUiState.Companion.EMPTY,
         weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },

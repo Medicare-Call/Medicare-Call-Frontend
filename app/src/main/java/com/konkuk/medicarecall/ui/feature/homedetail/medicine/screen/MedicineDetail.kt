@@ -43,14 +43,11 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedicineDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     medicineViewModel: MedicineViewModel = hiltViewModel()
 ) {
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(MainTabRoute.Home)
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
@@ -71,7 +68,7 @@ fun MedicineDetail(
 
 
     MedicineDetailLayout(
-        navController = navController,
+        onBack = onBack,
         selectedDate = selectedDate,
         medicines = uiState.items,
         weekDates = calendarViewModel.getCurrentWeekDates(),
@@ -85,7 +82,7 @@ fun MedicineDetail(
 @Composable
 fun MedicineDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     medicines: List<MedicineUiState>,
     weekDates: List<LocalDate>,
@@ -103,7 +100,7 @@ fun MedicineDetailLayout(
         ) {
             TopAppBar(
                 title = "복약",
-                navController = navController
+                onBack = onBack
             )
             Column(
                 modifier = Modifier
@@ -166,7 +163,7 @@ fun PreviewMedicineDetail() {
 
     MediCareCallTheme {
         MedicineDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = LocalDate.now(),
             medicines = dummyMedicines,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },

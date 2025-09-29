@@ -53,12 +53,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallFloatingButton
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallSnackBar
 import com.konkuk.medicarecall.ui.feature.home.component.HomeGlucoseLevelContainer
@@ -67,8 +65,8 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
-import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.main
@@ -77,15 +75,14 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    onNavigateToMealDetail: () -> Unit,
-    onNavigateToMedicineDetail: () -> Unit,
-    onNavigateToSleepDetail: () -> Unit,
-    onNavigateToStateHealthDetail: () -> Unit,
-    onNavigateToStateMentalDetail: () -> Unit,
-    onNavigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetail: () -> Unit,
+    navigateToMedicineDetail: () -> Unit,
+    navigateToSleepDetail: () -> Unit,
+    navigateToStateHealthDetail: () -> Unit,
+    navigateToStateMentalDetail: () -> Unit,
+    navigateToGlucoseDetail: () -> Unit,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsState()
     val elderNameList by homeViewModel.elderNameList.collectAsState()
@@ -99,7 +96,6 @@ fun HomeScreen(
 
     HomeScreenLayout(
         modifier = modifier,
-        navController = navController,
         homeUiState = homeUiState,
         elderNameList = elderNameList,
         isRefreshing = isRefreshing,
@@ -110,12 +106,12 @@ fun HomeScreen(
             homeViewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        onNavigateToMealDetail = onNavigateToMealDetail,
-        onNavigateToMedicineDetail = onNavigateToMedicineDetail,
-        onNavigateToSleepDetail = onNavigateToSleepDetail,
-        onNavigateToStateHealthDetail = onNavigateToStateHealthDetail,
-        onNavigateToStateMentalDetail = onNavigateToStateMentalDetail,
-        onNavigateToGlucoseDetail = onNavigateToGlucoseDetail,
+        navigateToMealDetail = navigateToMealDetail,
+        navigateToMedicineDetail = navigateToMedicineDetail,
+        navigateToSleepDetail = navigateToSleepDetail,
+        navigateToStateHealthDetail = navigateToStateHealthDetail,
+        navigateToStateMentalDetail = navigateToStateMentalDetail,
+        navigateToGlucoseDetail = navigateToGlucoseDetail,
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,
         onFabClick = {
@@ -130,7 +126,7 @@ fun HomeScreen(
         },
         immediateCall = {
             homeViewModel.callImmediate(it)
-        }
+        },
     )
 }
 
@@ -139,7 +135,6 @@ fun HomeScreen(
 @Composable
 fun HomeScreenLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
     homeUiState: HomeUiState,
     elderNameList: List<String>,
     isRefreshing: Boolean,
@@ -147,17 +142,18 @@ fun HomeScreenLayout(
     onDropdownClick: () -> Unit,
     onDropdownDismiss: () -> Unit,
     onDropdownItemSelected: (String) -> Unit,
-    onNavigateToMealDetail: () -> Unit,
-    onNavigateToMedicineDetail: () -> Unit,
-    onNavigateToSleepDetail: () -> Unit,
-    onNavigateToStateHealthDetail: () -> Unit,
-    onNavigateToStateMentalDetail: () -> Unit,
-    onNavigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetail: () -> Unit,
+    navigateToMedicineDetail: () -> Unit,
+    navigateToSleepDetail: () -> Unit,
+    navigateToStateHealthDetail: () -> Unit,
+    navigateToStateMentalDetail: () -> Unit,
+    navigateToGlucoseDetail: () -> Unit,
+    navigateToAlarm: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
     isLoading: Boolean,
     onFabClick: () -> Unit,
     onRefresh: () -> Unit,
-    immediateCall: (String) -> Unit
+    immediateCall: (String) -> Unit,
 ) {
 
     val refreshState = rememberPullToRefreshState()
@@ -177,13 +173,13 @@ fun HomeScreenLayout(
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp)
+                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp),
             ) {
                 // 세부 FAB들
                 AnimatedVisibility(visible = expanded) {
                     Column(
                         horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         CareCallFloatingButton(
                             modifier = modifier,
@@ -192,7 +188,7 @@ fun HomeScreenLayout(
                                 immediateCall("FIRST")
                             },
                             careCallOption = "FIRST",
-                            text = "1차"
+                            text = "1차",
                         )
                         CareCallFloatingButton(
                             modifier = modifier,
@@ -201,7 +197,7 @@ fun HomeScreenLayout(
                                 immediateCall("SECOND")
                             },
                             careCallOption = "SECOND",
-                            text = "2차"
+                            text = "2차",
                         )
                         CareCallFloatingButton(
                             modifier = modifier,
@@ -210,7 +206,7 @@ fun HomeScreenLayout(
                                 immediateCall("THIRD")
                             },
                             careCallOption = "THIRD",
-                            text = "3차"
+                            text = "3차",
                         )
                     }
                 }
@@ -220,11 +216,11 @@ fun HomeScreenLayout(
                     onClick = { expanded = !expanded },
                     containerColor = MediCareCallTheme.colors.main,
                     contentColor = MediCareCallTheme.colors.white,
-                    shape = CircleShape
+                    shape = CircleShape,
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_carecall),
-                        contentDescription = "메인 FAB"
+                        contentDescription = "메인 FAB",
                     )
                 }
             }
@@ -232,19 +228,19 @@ fun HomeScreenLayout(
     ) { innerPadding ->
         Box(
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.White)
-                    .padding(innerPadding)
+                    .padding(innerPadding),
             ) {
                 NameBar(
                     name = selectedElderName,
                     modifier = Modifier.statusBarsPadding(),
-                    navController = navController,
-                    onDropdownClick = onDropdownClick
+                    navigateToAlarm = navigateToAlarm,
+                    onDropdownClick = onDropdownClick,
                 )
                 val scope = rememberCoroutineScope()
 
@@ -264,18 +260,18 @@ fun HomeScreenLayout(
                             isRefreshing = isRefreshing,
                             state = refreshState,
                             color = MediCareCallTheme.colors.main,
-                            containerColor = MediCareCallTheme.colors.white
+                            containerColor = MediCareCallTheme.colors.white,
                         )
-                    }
+                    },
                 ) {
                     when (isLoading) {
                         true -> Box(
                             Modifier
-                                .fillMaxSize()
+                                .fillMaxSize(),
                         ) {
                             CircularProgressIndicator(
                                 color = MediCareCallTheme.colors.main,
-                                modifier = Modifier.align(Alignment.Center)
+                                modifier = Modifier.align(Alignment.Center),
                             )
                         }
 
@@ -283,7 +279,7 @@ fun HomeScreenLayout(
                         false -> Column(
                             modifier = Modifier
                                 .verticalScroll(rememberScrollState())
-                                .fillMaxSize()
+                                .fillMaxSize(),
                         ) {
 
 
@@ -293,16 +289,16 @@ fun HomeScreenLayout(
                                     .fillMaxWidth()
                                     .wrapContentHeight()
                                     .heightIn(min = 220.dp)
-                                    .background(main)
+                                    .background(main),
 
 
-                            ) {
+                                ) {
                                 Row(
                                     modifier = Modifier.padding(
                                         horizontal = 20.dp,
-                                        vertical = 40.dp
+                                        vertical = 40.dp,
                                     ),
-                                    verticalAlignment = Alignment.CenterVertically
+                                    verticalAlignment = Alignment.CenterVertically,
                                 ) {
 
 
@@ -318,7 +314,7 @@ fun HomeScreenLayout(
                                             .heightIn(min = 94.dp)
                                             .zIndex(2f), //겹치는 도형 위로 올림
                                         colors = CardDefaults.cardColors(containerColor = Color.White),
-                                        shape = RoundedCornerShape(10.dp)
+                                        shape = RoundedCornerShape(10.dp),
                                     ) {
 
                                         Text(
@@ -327,7 +323,7 @@ fun HomeScreenLayout(
                                             color = MediCareCallTheme.colors.gray8,
                                             modifier = Modifier
                                                 .padding(8.dp)
-                                                .background(Color.White)
+                                                .background(Color.White),
                                         )
                                     }
                                     // 꼬리
@@ -337,10 +333,10 @@ fun HomeScreenLayout(
                                             .offset(x = -2.dp, y = 20.dp)
                                             .clip(SpeechTail)
                                             .background(Color.White)
-                                            .zIndex(2f)
+                                            .zIndex(2f),
 
 
-                                    )
+                                        )
                                 }
                                 //캐릭터 그림자
                                 Image(
@@ -349,7 +345,7 @@ fun HomeScreenLayout(
                                     modifier = Modifier
                                         .align(Alignment.BottomEnd)
                                         .offset(x = (-52.13).dp, y = -56.19.dp)
-                                        .zIndex(-1f)
+                                        .zIndex(-1f),
                                 )
                                 //캐릭터
                                 Image(
@@ -359,7 +355,7 @@ fun HomeScreenLayout(
                                         .size((118.5).dp, (100.14).dp)
                                         .align(Alignment.BottomEnd)
                                         .offset(x = (-7.75).dp, y = (-55.12).dp)
-                                        .zIndex(3f)
+                                        .zIndex(3f),
                                 )
                             }
 
@@ -371,28 +367,28 @@ fun HomeScreenLayout(
                                     .wrapContentHeight()
                                     .offset(y = -40.dp)
                                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                                    .background(Color.White)
+                                    .background(Color.White),
 
 
-                            ) {
+                                ) {
                                 // 카드 내용
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .wrapContentHeight()
-                                        .padding(20.dp)
+                                        .padding(20.dp),
                                 ) {
                                     Spacer(Modifier.height(12.dp))
                                     HomeMealContainer(
                                         breakfastEaten = homeUiState.breakfastEaten,
                                         lunchEaten = homeUiState.lunchEaten,
                                         dinnerEaten = homeUiState.dinnerEaten,
-                                        onClick = { onNavigateToMealDetail() }
+                                        onClick = { navigateToMealDetail() },
                                     )
                                     Spacer(Modifier.height(12.dp))
                                     HomeMedicineContainer(
                                         medicines = homeUiState.medicines,
-                                        onClick = { onNavigateToMedicineDetail() }
+                                        onClick = { navigateToMedicineDetail() },
                                     )
                                     Spacer(Modifier.height(12.dp))
                                     val sleepData = homeUiState.sleep
@@ -400,22 +396,22 @@ fun HomeScreenLayout(
                                         totalSleepHours = sleepData.meanHours,
                                         totalSleepMinutes = sleepData.meanMinutes,
                                         isRecorded = sleepData.meanHours > 0 || sleepData.meanMinutes > 0,
-                                        onClick = { onNavigateToSleepDetail() }
+                                        onClick = { navigateToSleepDetail() },
                                     )
                                     Spacer(Modifier.height(12.dp))
                                     HomeStateHealthContainer(
                                         healthStatus = homeUiState.healthStatus,
-                                        onClick = { onNavigateToStateHealthDetail() }
+                                        onClick = { navigateToStateHealthDetail() },
                                     )
                                     Spacer(Modifier.height(12.dp))
                                     HomeStateMentalContainer(
                                         mentalStatus = homeUiState.mentalStatus,
-                                        onClick = { onNavigateToStateMentalDetail() }
+                                        onClick = { navigateToStateMentalDetail() },
                                     )
                                     Spacer(Modifier.height(12.dp))
                                     HomeGlucoseLevelContainer(
                                         glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday,
-                                        onClick = { onNavigateToGlucoseDetail() }
+                                        onClick = { navigateToGlucoseDetail() },
                                     )
                                     Spacer(Modifier.height(12.dp))
                                 }
@@ -431,14 +427,14 @@ fun HomeScreenLayout(
                     items = elderNameList,
                     selectedName = selectedElderName,
                     onDismiss = onDropdownDismiss,
-                    onItemSelected = onDropdownItemSelected
+                    onItemSelected = onDropdownItemSelected,
                 )
             }
             SnackbarHost(
                 hostState = snackbarHostState,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .offset(y = -(10.dp))
+                    .offset(y = -(10.dp)),
             ) { data ->
                 CareCallSnackBar(snackBarData = data)
             }
@@ -466,19 +462,18 @@ fun PreviewHomeScreen() {
         dinnerEaten = false,
         medicines = listOf(
             MedicineUiState("혈압약", 2, 3, "저녁"),
-            MedicineUiState("당뇨약", 1, 2, "저녁")
+            MedicineUiState("당뇨약", 1, 2, "저녁"),
         ),
         sleep = HomeResponseDto.SleepDto(meanHours = 8, meanMinutes = 15),
         healthStatus = "좋음",
         mentalStatus = "좋음",
-        glucoseLevelAverageToday = 120
+        glucoseLevelAverageToday = 120,
     )
 
     val previewNameList = listOf("김옥자", "박막례", "최이순")
 
     MediCareCallTheme {
         HomeScreenLayout(
-            navController = rememberNavController(),
             homeUiState = previewUiState,
             elderNameList = previewNameList,
             isRefreshing = false,
@@ -486,17 +481,17 @@ fun PreviewHomeScreen() {
             onDropdownClick = {},
             onDropdownDismiss = {},
             onDropdownItemSelected = {},
-            onNavigateToMealDetail = {},
-            onNavigateToMedicineDetail = {},
-            onNavigateToSleepDetail = {},
-            onNavigateToStateHealthDetail = {},
-            onNavigateToStateMentalDetail = {},
-            onNavigateToGlucoseDetail = {},
+            navigateToMealDetail = {},
+            navigateToMedicineDetail = {},
+            navigateToSleepDetail = {},
+            navigateToStateHealthDetail = {},
+            navigateToStateMentalDetail = {},
+            navigateToGlucoseDetail = {},
             snackbarHostState = SnackbarHostState(),
             isLoading = true,
             immediateCall = {},
             onRefresh = {},
-            onFabClick = {}
+            onFabClick = {},
         )
     }
 }

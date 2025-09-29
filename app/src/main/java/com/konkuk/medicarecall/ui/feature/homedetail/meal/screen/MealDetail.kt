@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,32 +22,26 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
+import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MealDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
-    mealViewModel: MealViewModel = hiltViewModel()
+    mealViewModel: MealViewModel = hiltViewModel(),
 ) {
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(MainTabRoute.Home)
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
@@ -67,12 +60,12 @@ fun MealDetail(
     val meals by mealViewModel.meals.collectAsState()
 
     MealDetailLayout(
-        navController = navController,
+        onBack = onBack,
         selectedDate = selectedDate,
         meals = meals,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
-        onMonthClick = { /* 모달 열기 */ }
+        onMonthClick = { /* 모달 열기 */ },
     )
 }
 
@@ -81,36 +74,36 @@ fun MealDetail(
 @Composable
 fun MealDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     meals: List<MealUiState>,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
-    onMonthClick: () -> Unit
+    onMonthClick: () -> Unit,
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = Color.White,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .statusBarsPadding(),
         ) {
             TopAppBar(
                 title = "식사",
-                navController = navController
+                onBack = onBack,
             )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(20.dp)
+                    .padding(20.dp),
             ) {
                 DateSelector(
                     selectedDate = selectedDate,
                     onMonthClick = onMonthClick,
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
 
                 Spacer(Modifier.height(12.dp))
@@ -120,9 +113,9 @@ fun MealDetailLayout(
                         currentYear = selectedDate.year,
                         currentMonth = selectedDate.monthValue,
                         weekDates = weekDates,
-                        selectedDate = selectedDate
+                        selectedDate = selectedDate,
                     ),
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -132,7 +125,7 @@ fun MealDetailLayout(
                         mealTime = meal.mealTime,       // 아침 점심 저녁
                         description = meal.description, // 식사 내용
                         isRecorded = meal.isRecorded,   // 식사 기록 여부
-                        isEaten = meal.isEaten          // 식사 유무
+                        isEaten = meal.isEaten,          // 식사 유무
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -150,20 +143,20 @@ fun PreviewMealDetail_Recorded() {
             mealTime = "아침",
             description = "간단히 밥과 반찬을 드셨어요.",
             isRecorded = true,
-            isEaten = true
+            isEaten = true,
         ),
         MealUiState(
             mealTime = "점심",
             description = "식사하지 않으셨어요.",
             isRecorded = true,
-            isEaten = false
+            isEaten = false,
         ),
         MealUiState(
             mealTime = "저녁",
             description = "죽을 드셨어요.",
             isRecorded = true,
-            isEaten = true
-        )
+            isEaten = true,
+        ),
     )
     val selectedDate = LocalDate.of(2025, 5, 7)
     val weekDates =
@@ -171,12 +164,12 @@ fun PreviewMealDetail_Recorded() {
 
     MediCareCallTheme {
         MealDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = selectedDate,
             meals = dummyMeals,
             weekDates = weekDates,
             onDateSelected = {},
-            onMonthClick = {}
+            onMonthClick = {},
         )
     }
 }
@@ -189,20 +182,20 @@ fun PreviewMealDetail_Unrecorded() {
             mealTime = "아침",
             description = "식사 기록 전이에요.",
             isRecorded = false,
-            isEaten = null
+            isEaten = null,
         ),
         MealUiState(
             mealTime = "점심",
             description = "식사 기록 전이에요.",
             isRecorded = false,
-            isEaten = null
+            isEaten = null,
         ),
         MealUiState(
             mealTime = "저녁",
             description = "식사 기록 전이에요.",
             isRecorded = false,
-            isEaten = null
-        )
+            isEaten = null,
+        ),
     )
     val selectedDate = LocalDate.of(2025, 5, 7)
     val weekDates =
@@ -211,12 +204,12 @@ fun PreviewMealDetail_Unrecorded() {
 
     MediCareCallTheme {
         MealDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = selectedDate,
             meals = dummyMeals,
             weekDates = weekDates,
             onDateSelected = {},
-            onMonthClick = {}
+            onMonthClick = {},
         )
     }
 }

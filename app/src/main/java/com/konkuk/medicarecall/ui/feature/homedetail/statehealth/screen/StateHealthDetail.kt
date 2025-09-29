@@ -42,17 +42,14 @@ import java.time.LocalDate
 
 @Composable
 fun StateHealthDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     healthViewModel: HealthViewModel = hiltViewModel()
 ) {
 
     val isLoading = healthViewModel.isLoading.collectAsState()
 
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(MainTabRoute.Home)
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -77,7 +74,7 @@ fun StateHealthDetail(
     if (!isLoading.value)
         StateHealthDetailLayout(
             modifier = Modifier,
-            navController = navController,
+            onBack = onBack,
             selectedDate = selectedDate,
             health = health,
             weekDates = calendarViewModel.getCurrentWeekDates(),
@@ -97,7 +94,7 @@ fun StateHealthDetail(
 @Composable
 fun StateHealthDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     health: HealthUiState,
     weekDates: List<LocalDate>,
@@ -112,7 +109,7 @@ fun StateHealthDetailLayout(
     ) {
         TopAppBar(
             title = "건강징후",
-            navController = navController
+            onBack = onBack
         )
         Column(
             modifier = Modifier
@@ -149,7 +146,7 @@ fun StateHealthDetailLayout(
 fun PreviewStateHealthDetail() {
     MediCareCallTheme {
         StateHealthDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = LocalDate.now(),
             health = HealthUiState.Companion.EMPTY,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },

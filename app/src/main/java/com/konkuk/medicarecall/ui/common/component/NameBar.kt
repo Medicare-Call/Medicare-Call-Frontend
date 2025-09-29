@@ -21,21 +21,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun NameBar(
     name: String,
     modifier: Modifier = Modifier,
-    navController: NavHostController,
-    onDropdownClick: () -> Unit
+    navigateToAlarm: () -> Unit = {},
+    onDropdownClick: () -> Unit,
 ) {
-
-
     Box(modifier = modifier.background(Color.White)) {
         Row(
             modifier = modifier
@@ -44,22 +39,19 @@ fun NameBar(
                 .padding(horizontal = 10.dp)
                 .background(Color.White),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-
-
             Row(
                 Modifier.clickable(
                     indication = null,
-                    interactionSource = null
+                    interactionSource = null,
                 ) { onDropdownClick() },
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = name,
                     style = MediCareCallTheme.typography.SB_24,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
@@ -68,7 +60,7 @@ fun NameBar(
                         .size(18.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_down),
                     contentDescription = "arrow down",
-                    tint = MediCareCallTheme.colors.gray3
+                    tint = MediCareCallTheme.colors.gray3,
                 )
 
             }
@@ -77,7 +69,7 @@ fun NameBar(
                 painter = painterResource(id = R.drawable.ic_bell),
                 "bell",
                 tint = Color.Unspecified,
-                modifier = modifier.clickable { navController.navigate(route = Route.Alarm) }
+                modifier = modifier.clickable { navigateToAlarm() },
             )
         }
 
@@ -88,14 +80,10 @@ fun NameBar(
 @Preview
 @Composable
 fun PreviewNameBar() {
-
     MediCareCallTheme {
-
         NameBar(
             name = "김옥자",
-            navController = rememberNavController(),
-            onDropdownClick = {}
+            onDropdownClick = {},
         )
     }
-
 }

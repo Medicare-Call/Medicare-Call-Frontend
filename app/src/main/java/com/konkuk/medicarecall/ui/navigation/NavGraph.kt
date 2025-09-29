@@ -85,7 +85,6 @@ fun NavGraph(
         // 홈
         composable<MainTabRoute.Home> { backStackEntry ->
             HomeScreen(
-                navController = navController,
                 onNavigateToMealDetail = { navController.navigate(Route.MealDetail) },
                 onNavigateToMedicineDetail = { navController.navigate(Route.MedicationDetail) },
                 onNavigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
@@ -98,7 +97,7 @@ fun NavGraph(
         // 홈 상세 화면_식사 화면
         composable<Route.MealDetail> {
             MealDetail(
-                navController = navController,
+                onBack = { navController.popBackStack() },
             )
         }
 
@@ -106,7 +105,7 @@ fun NavGraph(
         // 홈 상세 화면_복용 화면
         composable<Route.MedicationDetail> {
             MedicineDetail(
-                navController = navController,
+                onBack = { navController.popBackStack() },
             )
         }
 
@@ -114,7 +113,7 @@ fun NavGraph(
         //홈 상세 화면_수면 화면
         composable<Route.SleepDetail> {
             SleepDetail(
-                navController = navController,
+                onBack = { navController.popBackStack() },
             )
         }
 
@@ -122,22 +121,23 @@ fun NavGraph(
         //홈 상세 화면_건강 징후 화면
         composable<Route.HealthAnalysisDetail> {
             StateHealthDetail(
-                navController = navController,
+                onBack = { navController.popBackStack() },
             )
         }
 
         //홈 상세 화면_심리 상태 화면
         composable<Route.MentalAnalysisDetail> {
             StateMentalDetail(
-                navController = navController,
+                onBack = { navController.popBackStack() },
             )
         }
 
 
         //홈 상세 화면_혈당 화면
-
         composable<Route.GlucoseDetail> {
-            GlucoseDetail(navController = navController)
+            GlucoseDetail(
+                onBack = { navController.popBackStack() }
+            )
         }
 
 

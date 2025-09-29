@@ -27,7 +27,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun TopAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    navController: NavHostController,
+    onBack: () -> Unit,
 
     ) {
     Row(
@@ -45,7 +45,7 @@ fun TopAppBar(
             modifier = Modifier
                 .size(24.dp)
                 .clickable {
-                    navController.popBackStack()
+                    onBack()
                 },
             painter = painterResource(id = R.drawable.ic_arrow_big_back),
             contentDescription = "big arrow back",
@@ -81,6 +81,6 @@ fun TopAppBar(
 private fun PreviewTopAppBar() {
     TopAppBar(
         title = "식사",
-        navController = rememberNavController(),
+        onBack = {},
     )
 }
