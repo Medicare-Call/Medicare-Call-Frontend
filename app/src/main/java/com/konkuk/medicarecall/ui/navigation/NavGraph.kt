@@ -10,6 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
+import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
+import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
+import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.screen.HomeScreen
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -46,6 +51,7 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
 import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
+import kotlin.reflect.typeOf
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
@@ -67,7 +73,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Route.Splash,
+        startDestination = navigator.startDestination,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         modifier = modifier,
@@ -183,7 +189,9 @@ fun NavGraph(
             )
         }
 
-        composable<Route.UserInfoSetting> { navBackStackEntry ->
+        composable<Route.UserInfoSetting>(
+            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType)
+        ) { navBackStackEntry ->
             val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
             MyDetailScreen(
                 myDataInfo = myDataInfo,
@@ -203,6 +211,7 @@ fun NavGraph(
         }
 
         composable<Route.NoticeDetail>(
+            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType)
         ) { navBackStackEntry ->
             val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
             AnnouncementDetailScreen(
@@ -228,7 +237,9 @@ fun NavGraph(
             )
         }
 
-        composable<Route.SubscribeDetail> { navBackStackEntry ->
+        composable<Route.SubscribeDetail>(
+            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType)
+        ) { navBackStackEntry ->
             val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
             SubscribeDetailScreen(
                 elderInfo = elderInfo,
@@ -245,7 +256,9 @@ fun NavGraph(
             )
         }
 
-        composable<Route.ElderPersonalDetail> { navBackstackEntry ->
+        composable<Route.ElderPersonalDetail>(
+            typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType)
+        ) { navBackstackEntry ->
             val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
             PersonalDetailScreen(
                 onBack = {
@@ -264,7 +277,9 @@ fun NavGraph(
             )
         }
 
-        composable<Route.ElderHealthDetail> { navBackstackEntry ->
+        composable<Route.ElderHealthDetail>(
+            typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType)
+        ) { navBackstackEntry ->
             val healthInfo = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health
             HealthDetailScreen(
                 onBack = {
@@ -274,7 +289,9 @@ fun NavGraph(
             )
         }
 
-        composable<Route.NotificationSetting> { navBackStackEntry ->
+        composable<Route.NotificationSetting>(
+            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType)
+        ) { navBackStackEntry ->
             val myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo
             SettingAlarmScreen(
                 myDataInfo = myDataInfo,
