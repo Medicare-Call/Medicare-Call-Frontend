@@ -33,6 +33,7 @@ import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
@@ -46,7 +47,7 @@ fun SleepDetail(
 ) {
 
     val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
+        navController.getBackStackEntry(MainTabRoute.Home)
     }
     val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
 

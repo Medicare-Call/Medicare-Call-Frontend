@@ -48,6 +48,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.Gluc
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseUiState
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -65,7 +66,7 @@ fun GlucoseDetail(
 
     // 어르신 선택 상태(selectedElderId) 관리
     val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
+        navController.getBackStackEntry(MainTabRoute.Home)
     }
     val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
     val viewModel: GlucoseViewModel = hiltViewModel(homeEntry)

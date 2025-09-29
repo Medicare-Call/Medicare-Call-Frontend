@@ -24,15 +24,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -44,7 +45,7 @@ fun StateMentalDetail(
 
     ) {
     val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
+        navController.getBackStackEntry(MainTabRoute.Home)
     }
     val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
 
@@ -73,7 +74,7 @@ fun StateMentalDetail(
         mental = mental,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
-        onMonthClick = { /* 모달 열기 */ }
+        onMonthClick = { /* 모달 열기 */ },
     )
 }
 
@@ -86,31 +87,31 @@ fun StateMentalDetailLayout(
     mental: MentalUiState,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
-    onMonthClick: () -> Unit
+    onMonthClick: () -> Unit,
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = Color.White,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .statusBarsPadding(),
         ) {
             TopAppBar(
                 title = "심리상태 요약",
-                navController = navController
+                navController = navController,
             )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(20.dp)
+                    .padding(20.dp),
             ) {
                 DateSelector(
                     selectedDate = selectedDate,
                     onMonthClick = onMonthClick,
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
                 Spacer(Modifier.height(10.dp))
                 WeeklyCalendar(
@@ -118,13 +119,13 @@ fun StateMentalDetailLayout(
                         currentYear = selectedDate.year,
                         currentMonth = selectedDate.monthValue,
                         weekDates = weekDates,
-                        selectedDate = selectedDate
+                        selectedDate = selectedDate,
                     ),
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 StateMentalDetailCard(
-                    mental = mental
+                    mental = mental,
                 )
             }
         }
@@ -141,6 +142,6 @@ fun PreviewStateMentalDetail() {
         mental = MentalUiState.Companion.EMPTY,
         weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
         onDateSelected = {},
-        onMonthClick = {}
+        onMonthClick = {},
     )
 }

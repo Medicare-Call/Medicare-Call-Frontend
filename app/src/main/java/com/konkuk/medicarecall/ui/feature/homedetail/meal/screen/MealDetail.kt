@@ -34,6 +34,7 @@ import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
@@ -45,7 +46,7 @@ fun MealDetail(
     mealViewModel: MealViewModel = hiltViewModel()
 ) {
     val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
+        navController.getBackStackEntry(MainTabRoute.Home)
     }
     val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
     // 재진입 시 오늘로 초기화

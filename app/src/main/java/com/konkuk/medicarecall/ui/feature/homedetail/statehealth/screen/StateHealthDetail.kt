@@ -35,6 +35,7 @@ import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
@@ -49,7 +50,7 @@ fun StateHealthDetail(
     val isLoading = healthViewModel.isLoading.collectAsState()
 
     val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
+        navController.getBackStackEntry(MainTabRoute.Home)
     }
     val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
 
