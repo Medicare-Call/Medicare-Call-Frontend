@@ -16,6 +16,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDe
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicationDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetail
+import com.konkuk.medicarecall.ui.feature.statistics.navigation.navigateToStatistics
 import com.konkuk.medicarecall.ui.navigation.component.MainTab
 
 class MainNavigator(
@@ -43,11 +44,7 @@ class MainNavigator(
 
         when (tab) {
             MainTab.HOME -> navController.navigateToHome(navOptions)
-            MainTab.WEEKLY_STATISTICS -> navController.navigate(
-                MainTabRoute.WeeklyStatistics,
-                navOptions
-            )
-
+            MainTab.WEEKLY_STATISTICS -> navController.navigateToStatistics(navOptions)
             MainTab.SETTINGS -> navController.navigate(MainTabRoute.Settings, navOptions)
         }
     }

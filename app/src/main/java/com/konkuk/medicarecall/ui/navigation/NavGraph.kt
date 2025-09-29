@@ -15,6 +15,7 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -50,6 +51,7 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
+import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
 import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
 import kotlin.reflect.typeOf
 
@@ -179,6 +181,13 @@ fun NavGraph(
                 homeViewModel = homeViewModel,
             )
         }
+
+//        statisticsNavGraph(
+//            navController = navController,
+//            getBackStackHomeViewModel = { backStackEntry ->
+//                backStackEntry.sharedViewModel<HomeViewModel, MainTabRoute.Home>(navController)
+//            },
+//        )
 
         // 설정
         composable<MainTabRoute.Settings> {
