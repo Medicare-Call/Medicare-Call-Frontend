@@ -13,7 +13,7 @@ enum class MainTab(
     @DrawableRes val selectedIcon: Int,
     @DrawableRes val unselectedIcon: Int,
 ) {
-    DAILY_SUMMARY(
+    HOME(
         label = "홈",
         route = MainTabRoute.Home,
         description = "Home Icon",

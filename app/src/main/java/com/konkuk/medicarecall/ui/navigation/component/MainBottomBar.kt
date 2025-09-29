@@ -133,7 +133,7 @@ private fun MainBottomBarPreview() {
         MainBottomBar(
             visible = true,
             tabs = MainTab.entries,
-            currentTab = MainTab.DAILY_SUMMARY,
+            currentTab = MainTab.HOME,
             onTabSelected = {},
         )
     }

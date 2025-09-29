@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                             tabs = MainTab.entries.toImmutableList(),
                             currentTab = navigator.currentTab,
                             onTabSelected = {
-                                navigator.navigate(it)
+                                navigator.navigateToMainTab(it)
                             },
                         )
                     },

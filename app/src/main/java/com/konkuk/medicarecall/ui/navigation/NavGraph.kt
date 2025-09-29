@@ -16,7 +16,7 @@ import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
-import com.konkuk.medicarecall.ui.feature.home.screen.HomeScreen
+import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetail
@@ -101,16 +101,24 @@ fun NavGraph(
         }
 
         // 홈
-        composable<MainTabRoute.Home> { backStackEntry ->
-            HomeScreen(
-                navigateToMealDetail = { navController.navigate(Route.MealDetail) },
-                navigateToMedicationDetail = { navController.navigate(Route.MedicationDetail) },
-                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
-                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
-                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
-                navigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail) },
-            )
-        }
+//        composable<MainTabRoute.Home> { backStackEntry ->
+//            HomeScreen(
+//                navigateToMealDetail = { navController.navigate(Route.MealDetail) },
+//                navigateToMedicationDetail = { navController.navigate(Route.MedicationDetail) },
+//                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
+//                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
+//                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
+//                navigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail) },
+//            )
+//        }
+        homeNavGraph(
+            navigateToMealDetail = navigator::navigateToMealDetail,
+            navigateToMedicationDetail = navigator::navigateToMedicationDetail,
+            navigateToSleepDetail = navigator::navigateToSleepDetail,
+            navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
+            navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
+            navigateToGlucoseDetail = navigator::navigateToGlucoseDetail
+        )
 
         // 홈 상세 화면_식사 화면
         composable<Route.MealDetail> {
