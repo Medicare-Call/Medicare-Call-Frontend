@@ -34,9 +34,9 @@ class MainNavigator(
         }
 
         when (tab) {
-            MainTab.DAILY_SUMMARY -> TODO()
-            MainTab.WEEKLY_STATISTICS -> TODO()
-            MainTab.SETTINGS -> TODO()
+            MainTab.DAILY_SUMMARY -> navController.navigate(MainTabRoute.Home, navOptions)
+            MainTab.WEEKLY_STATISTICS -> navController.navigate(MainTabRoute.WeeklyStatistics, navOptions)
+            MainTab.SETTINGS -> navController.navigate(MainTabRoute.Settings, navOptions)
         }
     }
 
