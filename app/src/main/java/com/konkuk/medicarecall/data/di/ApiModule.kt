@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.di
 
-import com.konkuk.medicarecall.data.api.HomeService
+import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
