@@ -1,7 +1,8 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.SettingService
+import com.konkuk.medicarecall.data.api.auth.AuthService
+import com.konkuk.medicarecall.data.api.member.SettingService
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
@@ -10,6 +11,7 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val settingService: SettingService,
+    private val authService: AuthService,
     private val tokenStore: DataStoreRepository,
 ) : UserRepository {
     override suspend fun getMyInfo() = runCatching {
@@ -35,7 +37,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun logout(): Result<Unit> {
         val result = runCatching {
             val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
-            val response = settingService.logout("Bearer $refresh")
+            val response = authService.logout("Bearer $refresh")
             if (!response.isSuccessful) {
                 val errorBody = response.errorBody()?.string() ?: "Unknown error"
                 throw HttpException(response)
