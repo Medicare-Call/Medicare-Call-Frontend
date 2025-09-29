@@ -22,6 +22,16 @@ import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDe
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicationDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetail
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginCareCallSetting
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginFinish
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginNaverPayView
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginPhone
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginPurchase
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterElder
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterElderHealth
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterUserInfo
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginStart
+import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginVerification
 import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderHealthDetail
 import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderHealthInfo
 import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderPersonalDetail
@@ -73,7 +83,62 @@ class MainNavigator(
         navController.popBackStack()
     }
 
-    /* 홈 상세 화면 */
+    /* 로그인 */
+    fun navigateToLoginStart() {
+        navController.navigateToLoginStart()
+    }
+
+    fun navigateToLoginPhone() {
+        navController.navigateToLoginPhone()
+    }
+
+    fun navigateToLoginVerification() {
+        navController.navigateToLoginVerification()
+    }
+
+    fun navigateToLoginRegisterUserInfo() {
+        navController.navigateToLoginRegisterUserInfo(
+            navOptions {
+                popUpTo(Route.LoginVerification) { inclusive = true }
+            }
+        )
+    }
+
+    fun navigateToLoginRegisterElder() {
+        navController.navigateToLoginRegisterElder()
+    }
+
+    fun navigateToLoginRegisterElderHealth() {
+        navController.navigateToLoginRegisterElderHealth()
+    }
+
+    fun navigateToLoginCareCallSetting() {
+        navController.navigateToLoginCareCallSetting(
+            navOptions {
+                popUpTo(Route.LoginRegisterElder) {
+                    inclusive = true
+                }
+            }
+        )
+    }
+
+    fun navigateToLoginPurchase() {
+        navController.navigateToLoginPurchase()
+    }
+
+    fun navigateToLoginNaverPayView() {
+        navController.navigateToLoginNaverPayView()
+    }
+
+    fun navigateToLoginFinish() {
+        navController.navigateToLoginFinish()
+    }
+
+    /* 홈 화면 */
+    fun navigateToHome() {
+        this.navigateToMainTab(MainTab.HOME)
+    }
+
     fun navigateToMealDetail() {
         navController.navigateToMealDetail()
     }

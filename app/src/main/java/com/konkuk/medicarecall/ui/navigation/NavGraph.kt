@@ -15,6 +15,7 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -30,13 +31,13 @@ import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.navigation.loginNavGraph
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.FinishSplashScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
-import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
@@ -438,11 +439,7 @@ fun NavGraph(
             LoginElderScreen(
                 onBack = { navController.popBackStack() },
                 navigateToRegisterElderHealth = {
-                    navController.navigate(Route.LoginRegisterElder) {
-                        popUpTo(Route.LoginStart) { inclusive = false } // ← 스택 정리
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navController.navigate(Route.LoginRegisterElderHealth)
                 },
                 loginElderViewModel = loginElderViewModel
             )
@@ -503,6 +500,29 @@ fun NavGraph(
                 },
             )
         }
-    }
 
+//        loginNavGraph(
+//            popBackStack = navigator::popBackStack,
+//            navigateToHome = navigator::navigateToHome,
+//            navigateToPhone = navigator::navigateToLoginPhone,
+//            navigateToVerification = navigator::navigateToLoginVerification,
+//            navigateTpRegisterUserInfo = navigator::navigateToLoginRegisterUserInfo,
+//            navigateToRegisterElder = navigator::navigateToLoginRegisterElder,
+//            navigateToRegisterElderHealth = navigator::navigateToLoginRegisterElderHealth,
+//            navigateToCareCallSetting = navigator::navigateToLoginCareCallSetting,
+//            navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
+//            navigateToPurchase = navigator::navigateToLoginPurchase,
+//            navigateToNaverPayView = navigator::navigateToLoginNaverPayView,
+//            navigateToFinish = navigator::navigateToLoginFinish,
+//            navigateToMainAfterLogin = navController::navigateToMainAfterLogin,
+//            getBackStackLoginViewModel = { backStackEntry ->
+//                backStackEntry
+//                    .sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+//            },
+//            getBackStackLoginElderViewModel = { backStackEntry ->
+//                backStackEntry
+//                    .sharedViewModel<LoginElderViewModel, Route.LoginRegisterElder>(navController)
+//            }
+//        )
+    }
 }
