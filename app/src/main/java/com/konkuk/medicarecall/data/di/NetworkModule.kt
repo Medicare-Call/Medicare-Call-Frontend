@@ -2,7 +2,7 @@ package com.konkuk.medicarecall.data.di
 
 import android.util.Log
 import com.konkuk.medicarecall.BuildConfig
-import com.konkuk.medicarecall.data.api.TokenRefreshService
+import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.network.AuthAuthenticator
 import com.konkuk.medicarecall.data.network.AuthInterceptor
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
@@ -34,9 +34,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthAuthenticator(
         dataStoreRepository: DataStoreRepository,
-        tokenRefreshService: dagger.Lazy<TokenRefreshService>,
+        authService: AuthService
     ): AuthAuthenticator {
-        return AuthAuthenticator(dataStoreRepository, tokenRefreshService)
+        return AuthAuthenticator(dataStoreRepository, authService)
     }
 
     @Provides
