@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.NoticeService
+import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.data.repository.NoticeRepository
 import javax.inject.Inject

@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.data.di
 
 import com.konkuk.medicarecall.data.api.HomeService
-import com.konkuk.medicarecall.data.api.NoticeService
 import com.konkuk.medicarecall.data.api.SettingService
 import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
@@ -16,6 +15,7 @@ import com.konkuk.medicarecall.data.api.elders.SleepService
 import com.konkuk.medicarecall.data.api.elders.StatisticsService
 import com.konkuk.medicarecall.data.api.elders.SubscribeService
 import com.konkuk.medicarecall.data.api.member.MemberRegisterService
+import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import dagger.Module
 import dagger.Provides

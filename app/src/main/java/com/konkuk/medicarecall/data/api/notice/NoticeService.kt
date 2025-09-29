@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.notice
 
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import retrofit2.Response
