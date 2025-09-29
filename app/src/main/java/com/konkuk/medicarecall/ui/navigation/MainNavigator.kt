@@ -9,6 +9,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
+import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
+import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
+import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToHealthAnalysisDetail
@@ -16,6 +21,19 @@ import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDe
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicationDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetail
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderHealthDetail
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderHealthInfo
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderPersonalDetail
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToElderPersonalInfo
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToNotice
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToNoticeDetail
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToNotificationSetting
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToServiceCenter
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToSettings
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToSubscribeDetail
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToSubscribeInfo
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToUserInfo
+import com.konkuk.medicarecall.ui.feature.settings.navigation.navigateToUserInfoSetting
 import com.konkuk.medicarecall.ui.feature.statistics.navigation.navigateToStatistics
 import com.konkuk.medicarecall.ui.navigation.component.MainTab
 
@@ -45,7 +63,7 @@ class MainNavigator(
         when (tab) {
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.WEEKLY_STATISTICS -> navController.navigateToStatistics(navOptions)
-            MainTab.SETTINGS -> navController.navigate(MainTabRoute.Settings, navOptions)
+            MainTab.SETTINGS -> navController.navigateToSettings(navOptions)
         }
     }
 
@@ -77,6 +95,63 @@ class MainNavigator(
 
     fun navigateToGlucoseDetail() {
         navController.navigateToGlucoseDetail()
+    }
+
+    /* 설정 화면 */
+    fun navigateToElderPersonalInfo() {
+        navController.navigateToElderPersonalInfo()
+    }
+
+    fun navigateToElderPersonalDetail(info: EldersInfoResponseDto) {
+        navController.navigateToElderPersonalDetail(info)
+    }
+
+    fun navigateToHealthInfo() {
+        navController.navigateToElderHealthInfo()
+    }
+
+    fun navigateToHealthDetail(health: EldersHealthResponseDto) { // EldersHealthResponseDto
+        navController.navigateToElderHealthDetail(health)
+    }
+
+    fun navigateToNotificationSetting(myInfo: MyInfoResponseDto) {
+        navController.navigateToNotificationSetting(myInfo)
+    }
+
+    fun navigateToSubscribeInfo() {
+        navController.navigateToSubscribeInfo()
+    }
+
+    fun navigateToSubscribeDetail(subscription: EldersSubscriptionResponseDto) { // EldersSubscriptionResponseDto
+        navController.navigateToSubscribeDetail(subscription)
+    }
+
+    fun navigateToNotice() {
+        navController.navigateToNotice()
+    }
+
+    fun navigateToNoticeDetail(notice: NoticesResponseDto) {
+        navController.navigateToNoticeDetail(notice)
+    }
+
+    fun navigateToServiceCenter() {
+        navController.navigateToServiceCenter()
+    }
+
+    fun navigateToUserInfo() {
+        navController.navigateToUserInfo()
+    }
+
+    fun navigateToUserInfoSetting(myInfo: MyInfoResponseDto) {
+        navController.navigateToUserInfoSetting(myInfo)
+    }
+
+    fun navigateToLoginAfterLogout() {
+        navController.navigate(Route.LoginStart) {
+            popUpTo(MainTabRoute.Home) { inclusive = true }
+            launchSingleTop = true
+            restoreState = true
+        }
     }
 
     // 현재 화면이 BottomBar를 보여줘야 하는지 여부

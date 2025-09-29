@@ -15,7 +15,6 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
-import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -37,6 +36,7 @@ import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
+import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
@@ -51,7 +51,6 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
-import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
 import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
 import kotlin.reflect.typeOf
 
@@ -217,86 +216,6 @@ fun NavGraph(
             )
         }
 
-        composable<Route.UserInfo> {
-            MyDataSettingScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToUserInfoSetting = { myInfo ->
-                    navController.navigate(Route.UserInfoSetting(myInfo))
-                },
-                navigateToLoginAfterLogout = {
-                    navController.navigate(Route.LoginStart) {
-                        popUpTo(MainTabRoute.Home) { inclusive = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-            )
-        }
-
-        composable<Route.UserInfoSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType)
-        ) { navBackStackEntry ->
-            val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
-            MyDetailScreen(
-                myDataInfo = myDataInfo,
-                onBack = {
-                    navController.popBackStack()
-                },
-            )
-        }
-
-        composable<Route.Notice> {
-            AnnouncementScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToNoticeDetail = { notice ->
-                    navController.navigate(Route.NoticeDetail(notice))
-                },
-            )
-        }
-
-        composable<Route.NoticeDetail>(
-            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType)
-        ) { navBackStackEntry ->
-            val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
-            AnnouncementDetailScreen(
-                noticeInfo = noticeInfo,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        composable<Route.ServiceCenter> {
-            ServiceCenterScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-            )
-        }
-
-        composable<Route.SubscribeInfo> {
-            SettingSubscribeScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToSubscribeDetail = { subscription ->
-                    navController.navigate(Route.SubscribeDetail(subscription))
-                },
-            )
-        }
-
-        composable<Route.SubscribeDetail>(
-            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType)
-        ) { navBackStackEntry ->
-            val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
-            SubscribeDetailScreen(
-                elderInfo = elderInfo,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
         composable<Route.ElderPersonalInfo> {
             PersonalInfoScreen(
                 onBack = {
@@ -354,6 +273,103 @@ fun NavGraph(
                 },
             )
         }
+
+        composable<Route.SubscribeInfo> {
+            SettingSubscribeScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+                navigateToSubscribeDetail = { subscription ->
+                    navController.navigate(Route.SubscribeDetail(subscription))
+                },
+            )
+        }
+
+        composable<Route.SubscribeDetail>(
+            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType)
+        ) { navBackStackEntry ->
+            val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
+            SubscribeDetailScreen(
+                elderInfo = elderInfo,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.Notice> {
+            AnnouncementScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+                navigateToNoticeDetail = { notice ->
+                    navController.navigate(Route.NoticeDetail(notice))
+                },
+            )
+        }
+
+        composable<Route.NoticeDetail>(
+            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType)
+        ) { navBackStackEntry ->
+            val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
+            AnnouncementDetailScreen(
+                noticeInfo = noticeInfo,
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable<Route.ServiceCenter> {
+            ServiceCenterScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+            )
+        }
+
+        composable<Route.UserInfo> {
+            MyDataSettingScreen(
+                onBack = {
+                    navController.popBackStack()
+                },
+                navigateToUserInfoSetting = { myInfo ->
+                    navController.navigate(Route.UserInfoSetting(myInfo))
+                },
+                navigateToLoginAfterLogout = {
+                    navController.navigate(Route.LoginStart) {
+                        popUpTo(MainTabRoute.Home) { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
+        }
+
+        composable<Route.UserInfoSetting>(
+            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType)
+        ) { navBackStackEntry ->
+            val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
+            MyDetailScreen(
+                myDataInfo = myDataInfo,
+                onBack = {
+                    navController.popBackStack()
+                },
+            )
+        }
+
+//        settingNavGraph(
+//            popBackStack = navigator::popBackStack,
+//            navigateToElderHealthInfo = navigator::navigateToElderPersonalInfo,
+//            navigateToElderPersonalInfo = navigator::navigateToElderPersonalInfo,
+//            navigateToElderPersonalDetail = navigator::navigateToElderPersonalDetail,
+//            navigateToHealthDetail = navigator::navigateToHealthDetail,
+//            navigateToNotificationSetting = navigator::navigateToNotificationSetting,
+//            navigateToSubscribeInfo = navigator::navigateToSubscribeInfo,
+//            navigateToSubscribeDetail = navigator::navigateToSubscribeDetail,
+//            navigateToNotice = navigator::navigateToNotice,
+//            navigateToNoticeDetail = navigator::navigateToNoticeDetail,
+//            navigateToServiceCenter = navigator::navigateToServiceCenter,
+//            navigateToUserInfo = navigator::navigateToUserInfo,
+//            navigateToUserInfoSetting = navigator::navigateToUserInfoSetting,
+//            navigateToLoginAfterLogout = navigator::navigateToLoginAfterLogout
+//        )
 
         composable<Route.Alarm> {
             AlarmScreen(

@@ -82,7 +82,6 @@ sealed interface Route {
     @Serializable
     data object SubscribeInfo : Route
 
-
     @Serializable
     data class SubscribeDetail(val subscription: EldersSubscriptionResponseDto) : Route
 
