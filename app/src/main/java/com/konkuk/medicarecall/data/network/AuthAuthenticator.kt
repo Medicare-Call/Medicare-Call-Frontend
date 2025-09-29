@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
-    private val authService: AuthService,
+    private val authService: dagger.Lazy<AuthService> //순환 참조 방지
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -45,7 +45,7 @@ class AuthAuthenticator @Inject constructor(
 
             // 6. 토큰 갱신 API 호출 (runBlocking 사용)
             val refreshResponse = runBlocking {
-                authService.refreshToken(TokenRefreshRequestDto(refreshToken))
+                authService.get().refreshToken(TokenRefreshRequestDto(refreshToken))
             }
 
             return if (refreshResponse.isSuccessful && refreshResponse.body() != null) {
