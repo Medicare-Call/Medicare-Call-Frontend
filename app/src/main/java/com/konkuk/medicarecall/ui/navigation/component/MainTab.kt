@@ -15,7 +15,7 @@ enum class MainTab(
 ) {
     DAILY_SUMMARY(
         label = "홈",
-        route = MainTabRoute.DailySummary,
+        route = MainTabRoute.Home,
         description = "Home Icon",
         selectedIcon = R.drawable.ic_home_selected,
         unselectedIcon = R.drawable.ic_home_unselected,

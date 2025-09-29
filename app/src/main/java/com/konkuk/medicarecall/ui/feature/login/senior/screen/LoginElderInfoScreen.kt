@@ -66,8 +66,8 @@ fun LoginElderScreen(
     ) {
         Column {
             LoginBackButton({
-                navController.navigate(Route.LoginRegisterElder.route) {
-                    popUpTo(Route.LoginStart.route) { inclusive = false } // ← 스택 정리
+                navController.navigate(Route.LoginRegisterElder) {
+                    popUpTo(Route.LoginStart) { inclusive = false } // ← 스택 정리
                     launchSingleTop = true
                     restoreState = true
                 }
@@ -222,7 +222,7 @@ fun LoginElderScreen(
                             }
                         else {
                             loginElderViewModel.createElderDataList()
-                            navController.navigate(Route.LoginRegisterElderHealth.route)
+                            navController.navigate(Route.LoginRegisterElderHealth)
                         }
                     },
                     modifier.padding(bottom = 20.dp)

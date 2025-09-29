@@ -162,7 +162,7 @@ fun PaymentScreen(
             CTAButton(
                 type = if (isClicked) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                 text = "결제하기",
-                onClick = { if (isClicked) navController.navigate(Route.LoginNaverPayView.route) })
+                onClick = { if (isClicked) navController.navigate(Route.LoginNaverPayView) })
         }
 
     }

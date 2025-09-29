@@ -21,6 +21,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
@@ -33,20 +34,20 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
             val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginStart.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder.route
-                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting.route
-                is NavigationDestination.GoToPayment -> Route.LoginPurchase.route
-                is NavigationDestination.GoToHome -> Route.Home.route
+                is NavigationDestination.GoToLogin -> Route.LoginStart
+                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder
+                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting
+                is NavigationDestination.GoToPayment -> Route.LoginPurchase
+                is NavigationDestination.GoToHome -> MainTabRoute.Home
 
             }
-            navController.navigate(Route.LoginStart.route) {
-                popUpTo(Route.Splash.route) { inclusive = true }
+            navController.navigate(Route.LoginStart) {
+                popUpTo(Route.Splash) { inclusive = true }
                 launchSingleTop = true
             }
             navController.navigate(route) {
-                if (route == Route.Home.route) {
-                    popUpTo(Route.LoginStart.route) {
+                if (route == MainTabRoute.Home) {
+                    popUpTo(Route.LoginStart) {
                         inclusive = true
                     }
                 }
@@ -85,7 +86,7 @@ fun SplashScreen(navController: NavController) {
             painterResource(R.drawable.bg_splash_new),
             "Medicare Call 스플래시",
             Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
     }
 }

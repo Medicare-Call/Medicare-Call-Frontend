@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
-    navigate(MainTabRoute.DailySummary) {
+    navigate(MainTabRoute.Home) {
         popUpTo(Route.LoginStart) { inclusive = true }
         launchSingleTop = true
         restoreState = true
@@ -86,7 +86,7 @@ fun NavGraph(
         }
 
         // 홈
-        composable<MainTabRoute.DailySummary> { backStackEntry ->
+        composable<MainTabRoute.Home> { backStackEntry ->
             HomeScreen(
                 navController = navController,
                 onNavigateToMealDetail = { navController.navigate(Route.MealDetail) },
@@ -147,7 +147,7 @@ fun NavGraph(
         // 통계
         composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(MainTabRoute.DailySummary)
+                navController.getBackStackEntry(MainTabRoute.Home)
             }
             val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
 

@@ -77,7 +77,7 @@ fun NameBar(
                 painter = painterResource(id = R.drawable.ic_bell),
                 "bell",
                 tint = Color.Unspecified,
-                modifier = modifier.clickable { navController.navigate(route = Route.Alarm.route) }
+                modifier = modifier.clickable { navController.navigate(route = Route.Alarm) }
             )
         }
 

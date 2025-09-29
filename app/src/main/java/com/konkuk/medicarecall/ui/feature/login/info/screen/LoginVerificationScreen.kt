@@ -27,23 +27,24 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.model.NavigationDestination
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
+import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginVerificationScreen(
     navController: NavController,
     loginViewModel: LoginViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
@@ -60,8 +61,8 @@ fun LoginVerificationScreen(
                 is LoginEvent.VerificationSuccessNew -> {
                     // 인증 성공 시 회원정보 화면으로 이동
 
-                    navController.navigate(Route.LoginRegisterUserInfo.route) {
-                        popUpTo(Route.LoginVerification.route) {
+                    navController.navigate(Route.LoginRegisterUserInfo) {
+                        popUpTo(Route.LoginVerification) {
                             inclusive = true
                         }
                     }
@@ -77,7 +78,7 @@ fun LoginVerificationScreen(
                     coroutineScope.launch {
                         snackBarState.showSnackbar(
                             message = "인증번호가 올바르지 않습니다",
-                            duration = SnackbarDuration.Short
+                            duration = SnackbarDuration.Short,
                         )
                     }
                 }
@@ -91,14 +92,14 @@ fun LoginVerificationScreen(
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
             val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginStart.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder.route
-                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting.route
-                is NavigationDestination.GoToPayment -> Route.LoginPurchase.route
-                is NavigationDestination.GoToHome -> Route.Home.route
+                is NavigationDestination.GoToLogin -> Route.LoginStart
+                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder
+                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting
+                is NavigationDestination.GoToPayment -> Route.LoginPurchase
+                is NavigationDestination.GoToHome -> MainTabRoute.Home
             }
             navController.navigate(route) {
-                popUpTo(Route.LoginPhone.route) {
+                popUpTo(Route.LoginPhone) {
                     inclusive = true
                 }
             }
@@ -118,18 +119,20 @@ fun LoginVerificationScreen(
         ) {
 
         Column {
-            LoginBackButton({
-                navController.popBackStack()
-            })
+            LoginBackButton(
+                {
+                    navController.popBackStack()
+                },
+            )
             Column(
                 Modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
                 Spacer(Modifier.height(20.dp))
                 Text(
                     "인증번호를\n입력해주세요",
                     style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(Modifier.height(40.dp))
                 DefaultTextField(
@@ -141,9 +144,9 @@ fun LoginVerificationScreen(
                     placeHolder = "인증번호 입력",
                     keyboardType = KeyboardType.Number,
                     textFieldModifier = Modifier.focusRequester(focusRequester),
-                    maxLength = 6
+                    maxLength = 6,
 
-                )
+                    )
 
                 Spacer(Modifier.height(30.dp))
 
@@ -154,20 +157,21 @@ fun LoginVerificationScreen(
                         // TODO: 서버에 인증번호 보내서 확인하기
                         loginViewModel.confirmPhoneNumber(
                             loginViewModel.phoneNumber,
-                            loginViewModel.verificationCode
+                            loginViewModel.verificationCode,
                         )
 
                         loginViewModel.onVerificationCodeChanged("")
 
 
-                    })
+                    },
+                )
             }
         }
         DefaultSnackBar(
             snackBarState,
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 14.dp)
+                .padding(bottom = 14.dp),
         )
     }
 }

@@ -44,10 +44,10 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.feature.login.payment.viewmodel.NaverPayViewModel
-import com.konkuk.medicarecall.ui.model.PaymentResult
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
+import com.konkuk.medicarecall.ui.model.PaymentResult
+import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import org.json.JSONObject
 
@@ -57,14 +57,14 @@ fun NaverPayScreen(
     onBack: () -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    naverPayViewModel: NaverPayViewModel = hiltViewModel()
+    naverPayViewModel: NaverPayViewModel = hiltViewModel(),
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
             .systemBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -76,7 +76,7 @@ fun NaverPayScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
             },
             leftIconClick = onBack,
@@ -86,10 +86,10 @@ fun NaverPayScreen(
                     painter = painterResource(id = R.drawable.ic_arrow_big),
                     contentDescription = "go_next",
                     modifier = modifier.size(24.dp),
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
             },
-            rightIconClick = { navController.navigate(Route.LoginFinish.route) }
+            rightIconClick = { navController.navigate(Route.LoginFinish) },
         )
         val context = LocalContext.current
         val baseHost = "medicare-call.shop"
@@ -115,7 +115,7 @@ fun NaverPayScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MediCareCallTheme.colors.gray2),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
@@ -136,7 +136,7 @@ fun NaverPayScreen(
                                 view: WebView?,
                                 isDialog: Boolean,
                                 isUserGesture: Boolean,
-                                resultMsg: Message?
+                                resultMsg: Message?,
                             ): Boolean {
                                 val ctx = view?.context ?: return false
                                 // 새 팝업 WebView 생성
@@ -153,81 +153,84 @@ fun NaverPayScreen(
                                     // ① 팝업에도 동일한 JS 브릿지(이름 "Android") 추가
                                     //    payment-result.html에서 Android.onPaymentComplete/closePage() 호출
                                     // ─────────────────────────────────────────────
-                                    addJavascriptInterface(object {
-                                        @JavascriptInterface
-                                        fun onPaymentComplete(json: String) {
-                                            Handler(Looper.getMainLooper())
-                                                .post {
-                                                    try {
-                                                        val o = JSONObject(json)
-                                                        val result =
-                                                            PaymentResult(
-                                                                success = o.optBoolean(
-                                                                    "success",
-                                                                    false
-                                                                ),
-                                                                orderCode = o.optString(
-                                                                    "orderCode",
-                                                                    null
-                                                                ),
-                                                                paymentId = o.optString(
-                                                                    "paymentId",
-                                                                    null
-                                                                ),
-                                                                resultCode = o.optString(
-                                                                    "resultCode",
-                                                                    null
-                                                                ),
-                                                                message = o.optString(
-                                                                    "message",
-                                                                    null
+                                    addJavascriptInterface(
+                                        object {
+                                            @JavascriptInterface
+                                            fun onPaymentComplete(json: String) {
+                                                Handler(Looper.getMainLooper())
+                                                    .post {
+                                                        try {
+                                                            val o = JSONObject(json)
+                                                            val result =
+                                                                PaymentResult(
+                                                                    success = o.optBoolean(
+                                                                        "success",
+                                                                        false,
+                                                                    ),
+                                                                    orderCode = o.optString(
+                                                                        "orderCode",
+                                                                        null,
+                                                                    ),
+                                                                    paymentId = o.optString(
+                                                                        "paymentId",
+                                                                        null,
+                                                                    ),
+                                                                    resultCode = o.optString(
+                                                                        "resultCode",
+                                                                        null,
+                                                                    ),
+                                                                    message = o.optString(
+                                                                        "message",
+                                                                        null,
+                                                                    ),
                                                                 )
-                                                            )
-                                                        Log.d(
-                                                            "NaverPayScreen",
-                                                            "Popup payment result: $result"
-                                                        )
-                                                        if (result.success && !navigated) {
-                                                            navigated = true
-                                                            // 팝업 닫고 성공 네비게이션
-                                                            popupWebView?.destroy()
-                                                            popupWebView = null
-                                                            navController.navigate(Route.LoginFinish.route) {
-                                                                popUpTo(Route.LoginNaverPayView.route) {
-                                                                    inclusive = true
-                                                                }
-                                                            }
-                                                        } else if (!result.success) {
-                                                            Log.w(
+                                                            Log.d(
                                                                 "NaverPayScreen",
-                                                                "Payment failed: ${result.message ?: "unknown"}"
+                                                                "Popup payment result: $result",
+                                                            )
+                                                            if (result.success && !navigated) {
+                                                                navigated = true
+                                                                // 팝업 닫고 성공 네비게이션
+                                                                popupWebView?.destroy()
+                                                                popupWebView = null
+                                                                navController.navigate(Route.LoginFinish) {
+                                                                    popUpTo(Route.LoginNaverPayView) {
+                                                                        inclusive = true
+                                                                    }
+                                                                }
+                                                            } else if (!result.success) {
+                                                                Log.w(
+                                                                    "NaverPayScreen",
+                                                                    "Payment failed: ${result.message ?: "unknown"}",
+                                                                )
+                                                            }
+                                                        } catch (e: Exception) {
+                                                            Log.e(
+                                                                "NaverPayScreen",
+                                                                "Parse error: ${e.message}",
                                                             )
                                                         }
-                                                    } catch (e: Exception) {
-                                                        Log.e(
-                                                            "NaverPayScreen",
-                                                            "Parse error: ${e.message}"
-                                                        )
                                                     }
-                                                }
-                                        }
+                                            }
 
-                                        @JavascriptInterface
-                                        fun closePage() {
-                                            Handler(Looper.getMainLooper())
-                                                .post {
-                                                    popupWebView?.destroy()
-                                                    popupWebView = null
-                                                }
-                                        }
-                                    }, "Android")
+                                            @JavascriptInterface
+                                            fun closePage() {
+                                                Handler(Looper.getMainLooper())
+                                                    .post {
+                                                        popupWebView?.destroy()
+                                                        popupWebView = null
+                                                    }
+                                            }
+                                        },
+                                        "Android",
+                                    )
                                     // ─────────────────────────────────────────────
                                     // ② 팝업 내 네비게이션/스킴 처리 + fallback JS
                                     // ─────────────────────────────────────────────
                                     webViewClient = object : WebViewClient() {
                                         override fun shouldOverrideUrlLoading(
                                             v: WebView,
-                                            req: WebResourceRequest
+                                            req: WebResourceRequest,
                                         ): Boolean {
                                             val url = req.url.toString()
                                             val host = req.url.host ?: ""
@@ -237,7 +240,7 @@ fun NaverPayScreen(
                                                 try {
                                                     val intent = Intent.parseUri(
                                                         url,
-                                                        Intent.URI_INTENT_SCHEME
+                                                        Intent.URI_INTENT_SCHEME,
                                                     )
                                                     try {
                                                         v.context.startActivity(intent)
@@ -251,7 +254,7 @@ fun NaverPayScreen(
                                                             if (!pkg.isNullOrEmpty()) {
                                                                 val market = Intent(
                                                                     Intent.ACTION_VIEW,
-                                                                    ("market://details?id=" + pkg).toUri()
+                                                                    ("market://details?id=" + pkg).toUri(),
                                                                 )
                                                                 v.context.startActivity(market)
                                                             }
@@ -260,7 +263,7 @@ fun NaverPayScreen(
                                                 } catch (e: Exception) {
                                                     Log.e(
                                                         "NaverPayWebView",
-                                                        "intent scheme error: ${e.message}"
+                                                        "intent scheme error: ${e.message}",
                                                     )
                                                 }
                                                 return true
@@ -269,7 +272,7 @@ fun NaverPayScreen(
                                                 try {
                                                     val i = Intent(
                                                         Intent.ACTION_VIEW,
-                                                        req.url
+                                                        req.url,
                                                     )
                                                     v.context.startActivity(i)
                                                 } catch (_: Exception) {
@@ -282,7 +285,7 @@ fun NaverPayScreen(
                                                 if (!token.isNullOrBlank()) {
                                                     v.loadUrl(
                                                         url,
-                                                        mapOf("Authorization" to "Bearer $token")
+                                                        mapOf("Authorization" to "Bearer $token"),
                                                     )
                                                     return true
                                                 }
@@ -293,7 +296,7 @@ fun NaverPayScreen(
                                         override fun onPageFinished(v: WebView, url: String) {
                                             Log.d(
                                                 "NaverPayWebView",
-                                                "POPUP FINISHED: $url"
+                                                "POPUP FINISHED: $url",
                                             )
                                             // 결제 결과 페이지 방어적 fallback 호출
                                             if (url.contains("/api/payments/result")) {
@@ -310,11 +313,11 @@ fun NaverPayScreen(
                                 return 'error:' + (e && e.message);
                               }
                             })();
-                            """.trimIndent()
+                            """.trimIndent(),
                                                 ) { ret ->
                                                     Log.d(
                                                         "NaverPayWebView",
-                                                        "popup fallback: $ret"
+                                                        "popup fallback: $ret",
                                                     )
                                                 }
                                             }
@@ -323,22 +326,22 @@ fun NaverPayScreen(
                                         override fun onReceivedHttpError(
                                             v: WebView,
                                             req: WebResourceRequest,
-                                            res: WebResourceResponse
+                                            res: WebResourceResponse,
                                         ) {
                                             Log.e(
                                                 "NaverPayWebView",
-                                                "POPUP HTTP ${res.statusCode} on ${req.url}"
+                                                "POPUP HTTP ${res.statusCode} on ${req.url}",
                                             )
                                         }
 
                                         override fun onReceivedError(
                                             v: WebView,
                                             req: WebResourceRequest,
-                                            err: WebResourceError
+                                            err: WebResourceError,
                                         ) {
                                             Log.e(
                                                 "NaverPayWebView",
-                                                "POPUP ERR ${err.errorCode} on ${req.url}: ${err.description}"
+                                                "POPUP ERR ${err.errorCode} on ${req.url}: ${err.description}",
                                             )
                                         }
                                     }
@@ -369,7 +372,7 @@ fun NaverPayScreen(
                         webViewClient = object : WebViewClient() {
                             override fun shouldOverrideUrlLoading(
                                 view: WebView,
-                                request: WebResourceRequest
+                                request: WebResourceRequest,
                             ): Boolean {
                                 val url = request.url.toString()
                                 val host = request.url.host ?: ""
@@ -379,7 +382,7 @@ fun NaverPayScreen(
                                     try {
                                         val intent = Intent.parseUri(
                                             url,
-                                            Intent.URI_INTENT_SCHEME
+                                            Intent.URI_INTENT_SCHEME,
                                         )
                                         try {
                                             view.context.startActivity(intent)
@@ -393,7 +396,7 @@ fun NaverPayScreen(
                                                 if (!pkg.isNullOrEmpty()) {
                                                     val market = Intent(
                                                         Intent.ACTION_VIEW,
-                                                        "market://details?id=$pkg".toUri()
+                                                        "market://details?id=$pkg".toUri(),
                                                     )
                                                     view.context.startActivity(market)
                                                 }
@@ -402,7 +405,7 @@ fun NaverPayScreen(
                                     } catch (e: Exception) {
                                         Log.e(
                                             "NaverPayWebView",
-                                            "intent scheme error: ${e.message}"
+                                            "intent scheme error: ${e.message}",
                                         )
                                     }
                                     return true
@@ -411,7 +414,7 @@ fun NaverPayScreen(
                                     try {
                                         val i = Intent(
                                             Intent.ACTION_VIEW,
-                                            request.url
+                                            request.url,
                                         )
                                         view.context.startActivity(i)
                                     } catch (_: Exception) {
@@ -447,7 +450,7 @@ fun NaverPayScreen(
         return 'error:' + (e && e.message);
       }
     })();
-    """.trimIndent()
+    """.trimIndent(),
                                     ) { ret -> Log.d("NaverPayWebView", "fallback bridge: $ret") }
                                 }
                             } // 서버가 호출안하면 우리가 호출 (결과 페이지 도달)
@@ -455,74 +458,77 @@ fun NaverPayScreen(
                             override fun onReceivedHttpError(
                                 view: WebView,
                                 request: WebResourceRequest,
-                                errorResponse: WebResourceResponse
+                                errorResponse: WebResourceResponse,
                             ) {
                                 Log.e(
                                     "NaverPayWebView",
-                                    "HTTP ${errorResponse.statusCode} on ${request.url}"
+                                    "HTTP ${errorResponse.statusCode} on ${request.url}",
                                 )
                             }
 
                             override fun onReceivedError(
                                 view: WebView,
                                 request: WebResourceRequest,
-                                error: WebResourceError
+                                error: WebResourceError,
                             ) {
                                 Log.e(
                                     "NaverPayWebView",
-                                    "ERR ${error.errorCode} on ${request.url}: ${error.description}"
+                                    "ERR ${error.errorCode} on ${request.url}: ${error.description}",
                                 )
                             }
                         }
-                        addJavascriptInterface(object {
-                            @JavascriptInterface
-                            fun onPaymentComplete(json: String) {
-                                Log.d("NaverPayScreen", "Payment complete callback: $json")
-                                Handler(Looper.getMainLooper()).post {
-                                    try {
-                                        val o = JSONObject(json)
-                                        val result = PaymentResult(
-                                            success = o.optBoolean("success", false),
-                                            orderCode = o.optString("orderCode", null),
-                                            paymentId = o.optString("paymentId", null),
-                                            resultCode = o.optString("resultCode", null),
-                                            message = o.optString("message", null)
-                                        )
-                                        Log.d("NaverPayScreen", "Payment result: $result")
-                                        if (result.success && !navigated) {
-                                            navigated = true
-                                            Log.d("NaverPayScreen", "navigate FinishSplash")
-                                            navController.navigate(Route.LoginFinish.route) {
-                                                // 결제 화면 스택 정리(원치 않으면 제거)
-                                                popUpTo(Route.LoginNaverPayView.route) { inclusive = true }
-                                            }
-                                        } else if (!result.success) {
-                                            Log.w(
-                                                "NaverPayScreen",
-                                                "Payment failed: ${result.message ?: "unknown"}"
+                        addJavascriptInterface(
+                            object {
+                                @JavascriptInterface
+                                fun onPaymentComplete(json: String) {
+                                    Log.d("NaverPayScreen", "Payment complete callback: $json")
+                                    Handler(Looper.getMainLooper()).post {
+                                        try {
+                                            val o = JSONObject(json)
+                                            val result = PaymentResult(
+                                                success = o.optBoolean("success", false),
+                                                orderCode = o.optString("orderCode", null),
+                                                paymentId = o.optString("paymentId", null),
+                                                resultCode = o.optString("resultCode", null),
+                                                message = o.optString("message", null),
                                             )
-                                            // TODO: 실패 UI/토스트 등
-                                            navController.popBackStack()
+                                            Log.d("NaverPayScreen", "Payment result: $result")
+                                            if (result.success && !navigated) {
+                                                navigated = true
+                                                Log.d("NaverPayScreen", "navigate FinishSplash")
+                                                navController.navigate(Route.LoginFinish) {
+                                                    // 결제 화면 스택 정리(원치 않으면 제거)
+                                                    popUpTo(Route.LoginNaverPayView) { inclusive = true }
+                                                }
+                                            } else if (!result.success) {
+                                                Log.w(
+                                                    "NaverPayScreen",
+                                                    "Payment failed: ${result.message ?: "unknown"}",
+                                                )
+                                                // TODO: 실패 UI/토스트 등
+                                                navController.popBackStack()
+                                            }
+                                        } catch (e: Exception) {
+                                            Log.e("NaverPayScreen", "Parse error: ${e.message}")
                                         }
-                                    } catch (e: Exception) {
-                                        Log.e("NaverPayScreen", "Parse error: ${e.message}")
                                     }
                                 }
-                            }
-                        }, "Android")
+                            },
+                            "Android",
+                        )
                     }
-                }
+                },
             )
             if (popupWebView != null) {
                 Dialog(
                     onDismissRequest = {
                         popupWebView?.destroy()
                         popupWebView = null
-                    }
+                    },
                 ) {
                     AndroidView(
                         factory = { popupWebView!! },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
@@ -530,7 +536,7 @@ fun NaverPayScreen(
                 Log.d("NaverPayScreen", "Waiting for orderCode/accessToken...")
                 CircularProgressIndicator(
                     color = MediCareCallTheme.colors.main,
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
         }

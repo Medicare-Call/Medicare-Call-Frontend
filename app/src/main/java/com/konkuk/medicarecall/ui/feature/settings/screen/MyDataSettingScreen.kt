@@ -36,23 +36,22 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.feature.settings.component.LogoutConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingInfoItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
+import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
-import kotlinx.serialization.json.Json
-import java.net.URLEncoder
+import com.konkuk.medicarecall.ui.type.GenderType
 
 @Composable
 fun MyDataSettingScreen(
     onBack: () -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    myDataViewModel: MyDataViewModel = hiltViewModel()
+    myDataViewModel: MyDataViewModel = hiltViewModel(),
 ) {
     val myDataInfo = myDataViewModel.myDataInfo
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -74,7 +73,7 @@ fun MyDataSettingScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
 
         SettingsTopAppBar(
@@ -87,50 +86,48 @@ fun MyDataSettingScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Column(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(20.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
                     .figmaShadow(
                         group = MediCareCallTheme.shadow.shadow03,
-                        cornerRadius = 14.dp
+                        cornerRadius = 14.dp,
                     )
                     .clip(RoundedCornerShape(14.dp))
                     .background(MediCareCallTheme.colors.white)
                     .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 Row(
                     modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         "내 정보",
                         style = MediCareCallTheme.typography.SB_18,
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
                     Spacer(modifier = modifier.weight(1f))
                     Text(
                         text = "편집",
                         style = MediCareCallTheme.typography.R_16,
                         color = MediCareCallTheme.colors.active,
-                        modifier = modifier.clickable(onClick = {
-                            val json = Json.encodeToString(myDataInfo)
-                            val encodedJson =
-                                URLEncoder.encode(json, Charsets.UTF_8.toString())
-                            // 네비게이션을 통해 MyDetail 화면으로 이동
-                            navController.navigate("${Route.UserInfoSetting.route}/$encodedJson")
-                        }
-                        )
+                        modifier = modifier.clickable(
+                            onClick = {
+                                // 네비게이션을 통해 MyDetail 화면으로 이동
+                                navController.navigate(Route.UserInfoSetting(myDataInfo))
+                            },
+                        ),
                     )
                 }
                 SettingInfoItem("이름", myDataInfo?.name ?: "이름 없음")
@@ -146,7 +143,7 @@ fun MyDataSettingScreen(
                     .fillMaxWidth()
                     .figmaShadow(
                         group = MediCareCallTheme.shadow.shadow03,
-                        cornerRadius = 14.dp
+                        cornerRadius = 14.dp,
                     )
                     .clip(RoundedCornerShape(14.dp))
                     .background(MediCareCallTheme.colors.white)
@@ -156,7 +153,7 @@ fun MyDataSettingScreen(
                 Text(
                     "계정 관리",
                     style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 Text(
                     text = "로그아웃",
@@ -166,13 +163,13 @@ fun MyDataSettingScreen(
                         .fillMaxWidth()
                         .clickable {
                             showLogoutDialog = true
-                        }
+                        },
                 )
 
                 Text(
                     text = "서비스 탈퇴",
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -187,8 +184,8 @@ fun MyDataSettingScreen(
                     onSuccess = {
                         Log.d("MyDataSettingScreen", "Logout successful")
                         // 로그아웃 성공 후 동작
-                        navController.navigate("login") {
-                            popUpTo("main") { inclusive = true }
+                        navController.navigate(Route.LoginStart) {
+                            popUpTo(MainTabRoute.Home) { inclusive = true }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -197,10 +194,10 @@ fun MyDataSettingScreen(
                     onError = { error ->
                         // 로그아웃 실패 처리 (예: 에러 메시지 표시)
                         Log.e("MyDataSettingScreen", "Logout failed: $error")
-                    }
+                    },
                 )
 
-            }
+            },
         )
     }
 }
@@ -208,7 +205,7 @@ fun MyDataSettingScreen(
 fun formatPhoneNumber(number: String): String {
     return number.replaceFirst(
         "(\\d{3})(\\d{4})(\\d{4})".toRegex(),
-        "$1-$2-$3"
+        "$1-$2-$3",
     )
 }
 

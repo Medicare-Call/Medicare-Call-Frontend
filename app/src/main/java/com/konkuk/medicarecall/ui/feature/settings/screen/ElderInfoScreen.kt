@@ -90,11 +90,7 @@ fun PersonalInfoScreen(
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        val json = Json.encodeToString(it)
-                        val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
-                        navController.navigate(
-                            "${Route.ElderPersonalDetail.route}/$encodedJson"
-                        )
+                        navController.navigate(Route.ElderPersonalDetail(it))
                     }
                 )
             }

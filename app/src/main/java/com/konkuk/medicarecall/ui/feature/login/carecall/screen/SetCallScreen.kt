@@ -354,7 +354,7 @@ fun SetCallScreen(
                     callTimeViewModel.submitAllByIds(
                         elderIds = elderIds,
                         onSuccess = {
-                            navController.navigate(Route.LoginPurchase.route)
+                            navController.navigate(Route.LoginPurchase)
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
                             Log.d("SetCallScreen", "시간 : ${callTimeViewModel.timeMap}")
                         },

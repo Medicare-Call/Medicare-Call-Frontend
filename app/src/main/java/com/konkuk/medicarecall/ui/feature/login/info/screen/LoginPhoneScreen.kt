@@ -33,6 +33,7 @@ import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
+import com.konkuk.medicarecall.ui.navigation.Route
 import kotlinx.coroutines.launch
 
 @Composable
@@ -97,7 +98,7 @@ fun LoginPhoneScreen(
                         // TODO: 서버에 인증번호 요청하기
                         if (loginViewModel.phoneNumber.startsWith("010")) {
                             loginViewModel.postPhoneNumber(loginViewModel.phoneNumber)
-                            navController.navigate("login_verification")
+                            navController.navigate(Route.LoginVerification)
                         } else {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
