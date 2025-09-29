@@ -93,7 +93,7 @@ fun PersonalInfoScreen(
                         val json = Json.encodeToString(it)
                         val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
                         navController.navigate(
-                            "${Route.PersonalDetail.route}/$encodedJson"
+                            "${Route.ElderPersonalDetail.route}/$encodedJson"
                         )
                     }
                 )

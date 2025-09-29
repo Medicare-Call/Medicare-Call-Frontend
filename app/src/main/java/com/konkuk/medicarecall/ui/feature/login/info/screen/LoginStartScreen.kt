@@ -46,9 +46,9 @@ fun LoginStartScreen(
         navigationDestination?.let { destination ->
             val route = when (destination) {
                 is NavigationDestination.GoToLogin -> Route.LoginPhone.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginElderInfoScreen.route
-                is NavigationDestination.GoToTimeSetting -> Route.SetCall.route
-                is NavigationDestination.GoToPayment -> Route.Payment.route
+                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder.route
+                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting.route
+                is NavigationDestination.GoToPayment -> Route.LoginPurchase.route
                 is NavigationDestination.GoToHome -> Route.Home.route
             }
             navController.navigate(route) {

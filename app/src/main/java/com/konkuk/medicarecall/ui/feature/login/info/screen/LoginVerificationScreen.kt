@@ -60,7 +60,7 @@ fun LoginVerificationScreen(
                 is LoginEvent.VerificationSuccessNew -> {
                     // 인증 성공 시 회원정보 화면으로 이동
 
-                    navController.navigate(Route.LoginMyInfo.route) {
+                    navController.navigate(Route.LoginRegisterUserInfo.route) {
                         popUpTo(Route.LoginVerification.route) {
                             inclusive = true
                         }
@@ -92,9 +92,9 @@ fun LoginVerificationScreen(
         navigationDestination?.let { destination ->
             val route = when (destination) {
                 is NavigationDestination.GoToLogin -> Route.LoginStart.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginElderInfoScreen.route
-                is NavigationDestination.GoToTimeSetting -> Route.SetCall.route
-                is NavigationDestination.GoToPayment -> Route.Payment.route
+                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder.route
+                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting.route
+                is NavigationDestination.GoToPayment -> Route.LoginPurchase.route
                 is NavigationDestination.GoToHome -> Route.Home.route
             }
             navController.navigate(route) {

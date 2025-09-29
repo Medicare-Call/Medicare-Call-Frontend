@@ -128,7 +128,7 @@ fun MyDataSettingScreen(
                             val encodedJson =
                                 URLEncoder.encode(json, Charsets.UTF_8.toString())
                             // 네비게이션을 통해 MyDetail 화면으로 이동
-                            navController.navigate("${Route.MyDetail.route}/$encodedJson")
+                            navController.navigate("${Route.UserInfoSetting.route}/$encodedJson")
                         }
                         )
                     )

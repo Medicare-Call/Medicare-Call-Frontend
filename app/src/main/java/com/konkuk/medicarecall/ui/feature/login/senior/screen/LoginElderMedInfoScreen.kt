@@ -182,8 +182,8 @@ fun LoginElderMedInfoScreen(
                             loginElderViewModel.updateAllEldersHealthInfo()
                             loginElderViewModel.postElderAndHealth()
                             delay(200L)
-                            navController.navigate(Route.SetCall.route) {
-                                popUpTo(Route.LoginElderInfoScreen.route) {
+                            navController.navigate(Route.LoginCareCallSetting.route) {
+                                popUpTo(Route.LoginRegisterElder.route) {
                                     inclusive = true
                                 }
                             }

@@ -76,7 +76,7 @@ fun LoginMyInfoScreen(
             when (event) {
                 is LoginEvent.MemberRegisterSuccess -> {
                     // 인증 성공 시 어르신정보 화면으로 이동
-                    navController.navigate(Route.LoginElderInfoScreen.route)
+                    navController.navigate(Route.LoginRegisterElder.route)
                 }
 
                 is LoginEvent.MemberRegisterFailure -> {

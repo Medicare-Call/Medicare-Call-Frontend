@@ -93,7 +93,7 @@ fun HealthInfoScreen(
                         val json = Json.encodeToString(it)
                         val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
                         navController.navigate(
-                            "${Route.HealthDetail.route}/$encodedJson"
+                            "${Route.ElderHealthDetail.route}/$encodedJson"
                         ) {
                             launchSingleTop = true // 중복된 화면 방지
                             restoreState = true // 이전 상태 복원

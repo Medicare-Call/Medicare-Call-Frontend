@@ -286,7 +286,7 @@ fun SettingsScreen(
                                 val encodedJson =
                                     URLEncoder.encode(json, Charsets.UTF_8.toString())
                                 navController.navigate(
-                                    "${Route.SettingAlarm.route}/$encodedJson"
+                                    "${Route.NotificationSetting.route}/$encodedJson"
                                 )
                             }
                     ) {

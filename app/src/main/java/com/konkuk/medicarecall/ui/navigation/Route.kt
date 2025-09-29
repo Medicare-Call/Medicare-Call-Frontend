@@ -3,8 +3,10 @@ package com.konkuk.medicarecall.ui.navigation
 import kotlinx.serialization.Serializable
 
 sealed interface Route {
+
+    // 로그인 및 온보딩
     @Serializable
-    data object AppSplash : Route
+    data object Splash : Route
 
     @Serializable
     data object LoginStart : Route
@@ -16,94 +18,87 @@ sealed interface Route {
     data object LoginVerification : Route
 
     @Serializable
-    data object LoginMyInfo : Route
+    data object LoginRegisterUserInfo : Route
 
     @Serializable
-    data object LoginElderInfoScreen : Route
+    data object LoginRegisterElder : Route
 
     @Serializable
-    data object LoginElderMedInfoScreen : Route
+    data object LoginRegisterElderHealth : Route
 
     @Serializable
-    data object SetCall : Route
+    data object LoginCareCallSetting : Route
 
     @Serializable
-    data object Payment : Route
+    data object LoginPurchase : Route
 
     @Serializable
-    data object NaverPay : Route
+    data object LoginNaverPayView : Route
 
     @Serializable
-    data class NaverPayWithCode(val orderCode: String) : Route
+    data object LoginFinish : Route
 
-    @Serializable
-    data object FinishSplash : Route
-
-    @Serializable
-    data object Home : Route
-
-    @Serializable
-    data object Statistics : Route
-
-    @Serializable
-    data object Settings : Route
-
-    @Serializable
-    data object Alarm : Route
-
-    @Serializable
-    data object Announcement : Route
-
-    @Serializable
-    data object AnnouncementDetail : Route
-
-    @Serializable
-    data object HealthInfo : Route
-
-    @Serializable
-    data object HealthDetail : Route
-
-    @Serializable
-    data object MyDataSetting : Route
-
-    @Serializable
-    data object MyDetail : Route
-
-    @Serializable
-    data object PersonalDetail : Route
-
-    @Serializable
-    data object PersonalInfo : Route
-
-    @Serializable
-    data object ServiceCenter : Route
-
-    @Serializable
-    data object SettingAlarm : Route
-
-    @Serializable
-    data object SettingSubscribe : Route
-
-    @Serializable
-    data object SubscribeDetail : Route
-
+    // 홈 (하루 요약)
     @Serializable
     data object MealDetail : Route
 
     @Serializable
-    data object MedicineDetail : Route
+    data object MedicationDetail : Route
 
     @Serializable
     data object SleepDetail : Route
 
     @Serializable
-    data object StateHealthDetail : Route
+    data object HealthAnalysisDetail : Route
 
     @Serializable
-    data object StateMentalDetail : Route
+    data object MentalAnalysisDetail : Route
 
     @Serializable
     data object GlucoseDetail : Route
+
+    // 설정
+    @Serializable
+    data object ElderPersonalInfo : Route
+
+    @Serializable
+    data object ElderPersonalDetail : Route
+
+
+    @Serializable
+    data object ElderHealthInfo : Route
+
+    @Serializable
+    data object ElderHealthDetail : Route
+
+    @Serializable
+    data object NotificationSetting : Route
+
+    @Serializable
+    data object SubscribeInfo : Route
+
+
+    @Serializable
+    data object SubscribeDetail : Route
+
+    @Serializable
+    data object Notice : Route
+
+    @Serializable
+    data object NoticeDetail : Route
+
+    @Serializable
+    data object ServiceCenter : Route
+
+    @Serializable
+    data object UserInfo : Route
+
+    @Serializable
+    data object UserInfoSetting : Route
+
+    // 알림
+    @Serializable
+    data object Alarm : Route
 }
 
 sealed interface MainTabRoute : Route {

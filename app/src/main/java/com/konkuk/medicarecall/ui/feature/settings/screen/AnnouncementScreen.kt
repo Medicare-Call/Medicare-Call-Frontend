@@ -78,7 +78,7 @@ fun AnnouncementScreen(
                             val json = Json.encodeToString(notice)
                             val encodedJson =
                                 URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
-                            navController.navigate("${Route.AnnouncementDetail.route}/$encodedJson")
+                            navController.navigate("${Route.NoticeDetail.route}/$encodedJson")
                         }
                     )
                 }

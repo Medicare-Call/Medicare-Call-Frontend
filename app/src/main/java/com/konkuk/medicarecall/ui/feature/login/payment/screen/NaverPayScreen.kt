@@ -89,7 +89,7 @@ fun NaverPayScreen(
                     tint = Color.Black
                 )
             },
-            rightIconClick = { navController.navigate(Route.FinishSplash.route) }
+            rightIconClick = { navController.navigate(Route.LoginFinish.route) }
         )
         val context = LocalContext.current
         val baseHost = "medicare-call.shop"
@@ -192,8 +192,8 @@ fun NaverPayScreen(
                                                             // 팝업 닫고 성공 네비게이션
                                                             popupWebView?.destroy()
                                                             popupWebView = null
-                                                            navController.navigate(Route.FinishSplash.route) {
-                                                                popUpTo(Route.NaverPay.route) {
+                                                            navController.navigate(Route.LoginFinish.route) {
+                                                                popUpTo(Route.LoginNaverPayView.route) {
                                                                     inclusive = true
                                                                 }
                                                             }
@@ -492,9 +492,9 @@ fun NaverPayScreen(
                                         if (result.success && !navigated) {
                                             navigated = true
                                             Log.d("NaverPayScreen", "navigate FinishSplash")
-                                            navController.navigate(Route.FinishSplash.route) {
+                                            navController.navigate(Route.LoginFinish.route) {
                                                 // 결제 화면 스택 정리(원치 않으면 제거)
-                                                popUpTo(Route.NaverPay.route) { inclusive = true }
+                                                popUpTo(Route.LoginNaverPayView.route) { inclusive = true }
                                             }
                                         } else if (!result.success) {
                                             Log.w(

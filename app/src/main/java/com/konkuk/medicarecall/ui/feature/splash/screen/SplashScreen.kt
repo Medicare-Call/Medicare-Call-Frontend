@@ -34,14 +34,14 @@ fun SplashScreen(navController: NavController) {
         navigationDestination?.let { destination ->
             val route = when (destination) {
                 is NavigationDestination.GoToLogin -> Route.LoginStart.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginElderInfoScreen.route
-                is NavigationDestination.GoToTimeSetting -> Route.SetCall.route
-                is NavigationDestination.GoToPayment -> Route.Payment.route
+                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder.route
+                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting.route
+                is NavigationDestination.GoToPayment -> Route.LoginPurchase.route
                 is NavigationDestination.GoToHome -> Route.Home.route
 
             }
             navController.navigate(Route.LoginStart.route) {
-                popUpTo(Route.AppSplash.route) { inclusive = true }
+                popUpTo(Route.Splash.route) { inclusive = true }
                 launchSingleTop = true
             }
             navController.navigate(route) {
