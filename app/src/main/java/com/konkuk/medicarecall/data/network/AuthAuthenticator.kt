@@ -14,7 +14,6 @@ import javax.inject.Inject
 class AuthAuthenticator @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val authService: AuthService,
-    //private val tokenRefreshService: Lazy<TokenRefreshService> // 순환 참조 방지를 위해 Lazy 주입
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
