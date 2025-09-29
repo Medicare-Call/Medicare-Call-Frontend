@@ -14,7 +14,7 @@ enum class MainTab(
     @DrawableRes val unselectedIcon: Int,
 ) {
     HOME(
-        label = "홈",
+        label = "하루 요약",
         route = MainTabRoute.Home,
         description = "Home Icon",
         selectedIcon = R.drawable.ic_home_selected,
