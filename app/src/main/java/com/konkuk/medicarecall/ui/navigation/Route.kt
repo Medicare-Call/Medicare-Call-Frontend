@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.navigation
+package com.konkuk.medicarecall.ui.navigation
 
 sealed class Route(val route: String) {
     object AppSplash : Route("app_splash")

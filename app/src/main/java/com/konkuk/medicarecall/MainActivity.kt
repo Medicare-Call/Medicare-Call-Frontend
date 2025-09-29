@@ -36,9 +36,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.navigation.BottomNavItem
-import com.konkuk.medicarecall.navigation.NavGraph
-import com.konkuk.medicarecall.navigation.navigateTopLevel
+import com.konkuk.medicarecall.ui.navigation.BottomNavItem
+import com.konkuk.medicarecall.ui.navigation.NavGraph
+import com.konkuk.medicarecall.ui.navigation.navigateTopLevel
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
