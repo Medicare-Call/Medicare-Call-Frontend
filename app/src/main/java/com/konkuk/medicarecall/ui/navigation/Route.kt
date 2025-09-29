@@ -1,5 +1,7 @@
 package com.konkuk.medicarecall.ui.navigation
 
+import kotlinx.serialization.Serializable
+
 sealed class Route(val route: String) {
     object AppSplash : Route("app_splash")
     object LoginStart : Route("login_start")
@@ -40,4 +42,15 @@ sealed class Route(val route: String) {
     object StateHealthDetail : Route("home_state_health_detail")
     object StateMentalDetail : Route("home_state_mental_detail")
     object GlucoseDetail : Route("home_glucose_detail")
+}
+
+sealed interface MainTabRoute {
+    @Serializable
+    data object DailySummary : MainTabRoute
+
+    @Serializable
+    data object WeeklyStatistics : MainTabRoute
+
+    @Serializable
+    data object Settings : MainTabRoute
 }
