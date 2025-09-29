@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.navigation
 
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
+import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import kotlinx.serialization.Serializable
@@ -83,7 +84,7 @@ sealed interface Route {
 
 
     @Serializable
-    data object SubscribeDetail : Route
+    data class SubscribeDetail(val subscription: EldersSubscriptionResponseDto) : Route
 
     @Serializable
     data object Notice : Route

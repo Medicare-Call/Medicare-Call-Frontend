@@ -7,15 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import androidx.navigation.toRoute
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.screen.HomeScreen
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -52,9 +46,6 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
 import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
-import kotlinx.serialization.json.Json
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
@@ -192,13 +183,8 @@ fun NavGraph(
             )
         }
 
-        composable(
-            route = "my_detail/{myDataJson}",
-            arguments = listOf(navArgument("myDataJson") { type = NavType.StringType }),
-        ) { backStackEntry ->
-            val encodedJson = backStackEntry.arguments?.getString("myDataJson") ?: ""
-            val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
-            val myDataInfo = Json.decodeFromString<MyInfoResponseDto>(decodedJson)
+        composable<Route.UserInfoSetting> { navBackStackEntry ->
+            val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
             MyDetailScreen(
                 myDataInfo = myDataInfo,
                 onBack = {
@@ -216,14 +202,9 @@ fun NavGraph(
             )
         }
 
-        composable(
-            route = "announcement_detail/{noticeJson}",
-            arguments = listOf(navArgument("noticeJson") { type = NavType.StringType }),
-        ) { backStackEntry ->
-            val encodedJson = backStackEntry.arguments?.getString("noticeJson") ?: ""
-            val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
-            val noticeInfo = Json.decodeFromString<NoticesResponseDto>(decodedJson)
-
+        composable<Route.NoticeDetail>(
+        ) { navBackStackEntry ->
+            val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
             AnnouncementDetailScreen(
                 noticeInfo = noticeInfo,
                 onBack = { navController.popBackStack() },
@@ -247,15 +228,8 @@ fun NavGraph(
             )
         }
 
-        composable(
-            route = "subscribe_detail/{elderJson}",
-            // elderJson을 NavArgument로 받아옴
-            arguments = listOf(navArgument("elderJson") { type = NavType.StringType }),
-        ) { backStackEntry ->
-            val encodedJson = backStackEntry.arguments?.getString("elderJson") ?: ""
-            val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
-            val elderInfo = Json.decodeFromString<EldersSubscriptionResponseDto>(decodedJson)
-
+        composable<Route.SubscribeDetail> { navBackStackEntry ->
+            val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
             SubscribeDetailScreen(
                 elderInfo = elderInfo,
                 onBack = { navController.popBackStack() },
@@ -271,24 +245,13 @@ fun NavGraph(
             )
         }
 
-        composable(
-            route = "personal_detail/{elderInfo}",
-            arguments = listOf(
-                navArgument("elderInfo") {
-                    type = NavType.StringType
-                },
-            ),
-        ) { backStackEntry ->
-            val encodedElderInfo = backStackEntry.arguments?.getString("elderInfo") ?: ""
-            val decodedElderInfo =
-                URLDecoder.decode(encodedElderInfo, StandardCharsets.UTF_8.toString())
-            val eldersInfoResponseDto =
-                Json.decodeFromString<EldersInfoResponseDto>(decodedElderInfo)
+        composable<Route.ElderPersonalDetail> { navBackstackEntry ->
+            val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
             PersonalDetailScreen(
                 onBack = {
                     navController.popBackStack()
                 },
-                eldersInfoResponseDto = eldersInfoResponseDto,
+                eldersInfoResponseDto = elderInfo,
             )
         }
 
@@ -301,36 +264,18 @@ fun NavGraph(
             )
         }
 
-        composable(
-            route = "health_detail/{healthInfo}",
-            arguments = listOf(
-                navArgument("healthInfo") {
-                    type = NavType.StringType
-                },
-            ),
-        ) { backStackEntry ->
-            val encodedHealthInfo = backStackEntry.arguments?.getString("healthInfo") ?: ""
-            val decodedHealthInfo =
-                URLDecoder.decode(encodedHealthInfo, StandardCharsets.UTF_8.toString())
-            val healthInfoResponseDto =
-                Json.decodeFromString<EldersHealthResponseDto>(decodedHealthInfo)
+        composable<Route.ElderHealthDetail> { navBackstackEntry ->
+            val healthInfo = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health
             HealthDetailScreen(
                 onBack = {
                     navController.popBackStack()
                 },
-                healthInfoResponseDto = healthInfoResponseDto,
-
-                )
+                healthInfoResponseDto = healthInfo,
+            )
         }
 
-        composable(
-            route = "setting_alarm/{myDataJson}",
-            arguments = listOf(navArgument("myDataJson") { type = NavType.StringType }),
-        ) { backStackEntry ->
-            val encodedJson = backStackEntry.arguments?.getString("myDataJson") ?: ""
-            val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
-            val myDataInfo = Json.decodeFromString<MyInfoResponseDto>(decodedJson)
-
+        composable<Route.NotificationSetting> { navBackStackEntry ->
+            val myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo
             SettingAlarmScreen(
                 myDataInfo = myDataInfo,
                 onBack = {
