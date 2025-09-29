@@ -20,8 +20,8 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun GenderToggleButton(
-    isMale: Boolean?,
-    onGenderChange: (Boolean?) -> Unit
+    isMale: Boolean = true,
+    onGenderChange: (Boolean) -> Unit,
 ) {
 
     Row(
@@ -30,17 +30,17 @@ fun GenderToggleButton(
             .height(IntrinsicSize.Max)
             .clip(RoundedCornerShape(14.dp))
             .background(
-                MediCareCallTheme.colors.white
-            )
+                MediCareCallTheme.colors.white,
+            ),
     ) {
         Box(
             Modifier
                 .weight(1f)
-                .background(color = if (isMale == true) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
+                .background(color = if (isMale) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
                 .border(
                     width = 1.2.dp,
-                    color = if (isMale == true) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                    shape = RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp)
+                    color = if (isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                    shape = RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp),
                 )
                 .clickable(
                     interactionSource = null,
@@ -48,40 +48,40 @@ fun GenderToggleButton(
                     onClick = { onGenderChange(true) },
                 ),
 
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 "남성",
-                color = if (isMale == true) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
-                style = if (isMale == true) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
+                color = if (isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
+                style = if (isMale) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
                 modifier = Modifier
-                    .padding(vertical = if (isMale == true) 15.5.dp else 16.dp)
+                    .padding(vertical = if (isMale) 15.5.dp else 16.dp),
             )
         }
         Box(
             Modifier
                 .weight(1f)
-                .background(color = if (isMale == false) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
+                .background(color = if (!isMale) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
                 .border(
                     width = 1.2.dp,
-                    color = if (isMale == false) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                    shape = RoundedCornerShape(topEnd = 14.dp, bottomEnd = 14.dp)
+                    color = if (!isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                    shape = RoundedCornerShape(topEnd = 14.dp, bottomEnd = 14.dp),
                 )
                 .clickable(
                     interactionSource = null,
                     indication = null,
-                    onClick = { onGenderChange(false) }
+                    onClick = { onGenderChange(false) },
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 "여성",
-                color = if (isMale == false) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
-                style = if (isMale == false) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
+                color = if (!isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
+                style = if (!isMale) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
                 modifier = Modifier
-                    .padding(vertical = if (isMale == false) 15.5.dp else 16.dp)
+                    .padding(vertical = if (!isMale) 15.5.dp else 16.dp),
 
-            )
+                )
         }
     }
 }
