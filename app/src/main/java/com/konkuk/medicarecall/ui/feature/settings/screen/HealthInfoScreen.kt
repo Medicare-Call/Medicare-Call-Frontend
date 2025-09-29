@@ -23,18 +23,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.PersonalInfoCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersHealthViewModel
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun HealthInfoScreen(
     onBack: () -> Unit = {},
-    navController: NavHostController,
+    navigateToHealthDetail: (EldersHealthResponseDto) -> Unit = {},
     healthInfoViewModel: EldersHealthViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -87,10 +86,7 @@ fun HealthInfoScreen(
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        navController.navigate(Route.ElderHealthDetail(it)) {
-                            launchSingleTop = true // 중복된 화면 방지
-                            restoreState = true // 이전 상태 복원
-                        }
+                        navigateToHealthDetail(it)
                     },
                 )
             }

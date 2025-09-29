@@ -79,18 +79,36 @@ fun NavGraph(
         modifier = modifier,
     ) {
         composable<Route.Splash> {
-            SplashScreen(navController)
+            SplashScreen(
+                navigateToLogin = {
+                    navController.navigate(Route.LoginStart) {
+                        popUpTo(Route.Splash) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                navigateToPhone = { navController.navigate(Route.LoginPhone) },
+                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
+                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
+                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToHome = {
+                    navController.navigate(MainTabRoute.Home) {
+                        popUpTo(Route.LoginStart) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
         }
 
         // 홈
         composable<MainTabRoute.Home> { backStackEntry ->
             HomeScreen(
-                onNavigateToMealDetail = { navController.navigate(Route.MealDetail) },
-                onNavigateToMedicineDetail = { navController.navigate(Route.MedicationDetail) },
-                onNavigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
-                onNavigateToStateHealthDetail = { navController.navigate(Route.HealthAnalysisDetail) },
-                onNavigateToStateMentalDetail = { navController.navigate(Route.MentalAnalysisDetail) },
-                onNavigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail) },
+                navigateToMealDetail = { navController.navigate(Route.MealDetail) },
+                navigateToMedicationDetail = { navController.navigate(Route.MedicationDetail) },
+                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
+                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
+                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
+                navigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail) },
             )
         }
 
@@ -158,25 +176,27 @@ fun NavGraph(
         composable<MainTabRoute.Settings> {
             //TopLevelBackHandler(navController)
             SettingsScreen(
-                onNavigateToMyDataSetting = {
+                navigateToUserInfo = {
                     navController.navigate(Route.UserInfo)
                 },
-                onNavigateToAnnouncement = {
+                navigateToNotice = {
                     navController.navigate(Route.Notice)
                 },
-                onNavigateToCenter = {
+                navigateToCenter = {
                     navController.navigate(Route.ServiceCenter)
                 },
-                onNavigateToSubscribe = {
+                navigateToSubscribe = {
                     navController.navigate(Route.SubscribeInfo)
                 },
-                onNavigateToPersonalInfo = {
+                navigateToElderPersonalInfo = {
                     navController.navigate(Route.ElderPersonalInfo)
                 },
-                onNavigateToHealthInfo = {
+                navigateToElderHealthInfo = {
                     navController.navigate(Route.ElderHealthInfo)
                 },
-                navController = navController,
+                navigateToNotificationSetting = { myInfo ->
+                    navController.navigate(Route.NotificationSetting(myInfo))
+                },
             )
         }
 
@@ -185,7 +205,16 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToUserInfoSetting = { myInfo ->
+                    navController.navigate(Route.UserInfoSetting(myInfo))
+                },
+                navigateToLoginAfterLogout = {
+                    navController.navigate(Route.LoginStart) {
+                        popUpTo(MainTabRoute.Home) { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
             )
         }
 
@@ -206,7 +235,9 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToNoticeDetail = { notice ->
+                    navController.navigate(Route.NoticeDetail(notice))
+                },
             )
         }
 
@@ -233,7 +264,9 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToSubscribeDetail = { subscription ->
+                    navController.navigate(Route.SubscribeDetail(subscription))
+                },
             )
         }
 
@@ -252,7 +285,9 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToElderDetail = { elderInfo ->
+                    navController.navigate(Route.ElderPersonalDetail(elderInfo))
+                },
             )
         }
 
@@ -273,7 +308,9 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToHealthDetail = { healthInfo ->
+                    navController.navigate(Route.ElderHealthDetail(healthInfo))
+                },
             )
         }
 
@@ -306,28 +343,89 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
             )
         }
 
         // 로그인 내비게이션
         composable<Route.LoginStart> {
-            LoginStartScreen(navController, loginViewModel)
+            LoginStartScreen(
+                navigateToPhone = { navController.navigate(Route.LoginPhone) },
+                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
+                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
+                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToHome = {
+                    navController.navigate(MainTabRoute.Home) {
+                        popUpTo(Route.LoginStart) {
+                            inclusive = true
+                        }
+                    }
+                },
+                loginViewModel = loginViewModel
+            )
         }
         composable<Route.LoginPhone> {
-            LoginPhoneScreen(navController, loginViewModel)
+            LoginPhoneScreen(
+                onBack = { navController.popBackStack() },
+                navigateToVerification = { navController.navigate(Route.LoginVerification) },
+                loginViewModel = loginViewModel
+            )
         }
         composable<Route.LoginVerification> {
-            LoginVerificationScreen(navController, loginViewModel)
+            LoginVerificationScreen(
+                onBack = { navController.popBackStack() },
+                navigateToUserInfo = {
+                    navController.navigate(Route.LoginRegisterUserInfo) {
+                        popUpTo(Route.LoginVerification) { inclusive = true }
+                    }
+                },
+                navigateToPhone = { navController.navigate(Route.LoginPhone) },
+                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
+                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
+                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToHome = {
+                    navController.navigate(MainTabRoute.Home) {
+                        popUpTo(Route.LoginStart) {
+                            inclusive = true
+                        }
+                    }
+                },
+                loginViewModel = loginViewModel
+            )
         }
         composable<Route.LoginRegisterUserInfo> {
-            LoginMyInfoScreen(navController, loginViewModel)
+            LoginMyInfoScreen(
+                onBack = { navController.popBackStack() },
+                navigateToRegisterElder = {
+                    navController.navigate(Route.LoginRegisterElder)
+                },
+                loginViewModel = loginViewModel
+            )
         }
         composable<Route.LoginRegisterElder> {
-            LoginElderScreen(navController, loginElderViewModel)
+            LoginElderScreen(
+                onBack = { navController.popBackStack() },
+                navigateToRegisterElderHealth = {
+                    navController.navigate(Route.LoginRegisterElder) {
+                        popUpTo(Route.LoginStart) { inclusive = false } // ← 스택 정리
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                loginElderViewModel = loginElderViewModel
+            )
         }
         composable<Route.LoginRegisterElderHealth> {
-            LoginElderMedInfoScreen(navController, loginElderViewModel)
+            LoginElderMedInfoScreen(
+                onBack = { navController.popBackStack() },
+                navigateToCareCallSetting = {
+                    navController.navigate(Route.LoginCareCallSetting) {
+                        popUpTo(Route.LoginRegisterElder) {
+                            inclusive = true
+                        }
+                    }
+                },
+                loginElderViewModel = loginElderViewModel
+            )
         }
 
         composable<Route.LoginCareCallSetting> {
@@ -335,7 +433,9 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToPayment = {
+                    navController.navigate(Route.LoginPurchase)
+                },
             )
         }
 
@@ -344,7 +444,9 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToNaverPay = {
+                    navController.navigate(Route.LoginNaverPayView)
+                },
             )
         }
 
@@ -353,13 +455,19 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navController = navController,
+                navigateToFinish = {
+                    navController.navigate(Route.LoginFinish) {
+                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
+                    }
+                },
             )
         }
 
         composable<Route.LoginFinish> {
             FinishSplashScreen(
-                navController = navController,
+                navigateToMain = {
+                    navController.navigateToMainAfterLogin()
+                },
             )
         }
     }

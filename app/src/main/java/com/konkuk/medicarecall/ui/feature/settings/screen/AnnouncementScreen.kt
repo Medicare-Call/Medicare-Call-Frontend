@@ -16,20 +16,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.AnnouncementCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.NoticeViewModel
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.serialization.json.Json
 
 @Composable
 fun AnnouncementScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navController: NavHostController,
+    navigateToNoticeDetail: (notice: NoticesResponseDto) -> Unit = {},
     viewModel: NoticeViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
@@ -73,7 +71,7 @@ fun AnnouncementScreen(
                         date = notice.publishedAt.replace("-", "."),
                         onClick = {
                             Log.d("AnnouncementScreen", "공지사항 클릭: ${notice.title}")
-                            navController.navigate(Route.NoticeDetail(notice))
+                            navigateToNoticeDetail(notice)
                         },
                     )
                 }

@@ -27,8 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.konkuk.medicarecall.ui.navigation.Route
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.ChipItem
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
@@ -37,17 +36,18 @@ import com.konkuk.medicarecall.ui.common.component.DiseaseNamesItem
 import com.konkuk.medicarecall.ui.common.component.MedicationItem
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
-import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginElderMedInfoScreen(
-    navController: NavController,
-    loginElderViewModel: LoginElderViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
 
@@ -61,21 +61,19 @@ fun LoginElderMedInfoScreen(
             .background(MediCareCallTheme.colors.bg)
             .padding(horizontal = 20.dp)
             .systemBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         Column {
-            LoginBackButton({
-                navController.popBackStack()
-            })
+            LoginBackButton(onBack)
             Column(
                 Modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
                 Spacer(Modifier.height(30.dp))
                 Text(
                     "건강정보 등록하기",
                     style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(Modifier.height(20.dp))
 
@@ -90,14 +88,14 @@ fun LoginElderMedInfoScreen(
                                 .background(
                                     if (index == loginElderViewModel.selectedElder)
                                         MediCareCallTheme.colors.main
-                                    else MediCareCallTheme.colors.white
+                                    else MediCareCallTheme.colors.white,
                                 )
                                 .border(
                                     width = 1.2.dp,
                                     color = if (index == loginElderViewModel.selectedElder)
                                         MediCareCallTheme.colors.main
                                     else MediCareCallTheme.colors.gray2,
-                                    shape = CircleShape
+                                    shape = CircleShape,
                                 )
                                 .clickable(
                                     interactionSource = null,
@@ -105,10 +103,10 @@ fun LoginElderMedInfoScreen(
                                     onClick = {
                                         loginElderViewModel.onSelectedElderChanged(index)
 
-                                    }
-                                )
+                                    },
+                                ),
 
-                        ) {
+                            ) {
                             Text(
                                 text = elder.name,
                                 style = if (index == loginElderViewModel.selectedElder)
@@ -117,7 +115,7 @@ fun LoginElderMedInfoScreen(
                                 color = if (index == loginElderViewModel.selectedElder)
                                     MediCareCallTheme.colors.white
                                 else MediCareCallTheme.colors.gray5,
-                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp)
+                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp),
                             )
                         }
                         Spacer(modifier = Modifier.width(8.dp)) // 버튼 간격
@@ -126,7 +124,7 @@ fun LoginElderMedInfoScreen(
                 Spacer(Modifier.height(20.dp))
                 DiseaseNamesItem(
                     loginElderViewModel.diseaseInputText[loginElderViewModel.selectedElder],
-                    loginElderViewModel.diseaseList[loginElderViewModel.selectedElder]
+                    loginElderViewModel.diseaseList[loginElderViewModel.selectedElder],
                 )
                 Spacer(Modifier.height(20.dp))
 
@@ -139,19 +137,19 @@ fun LoginElderMedInfoScreen(
                 Text(
                     "특이사항",
                     color = MediCareCallTheme.colors.gray7,
-                    style = MediCareCallTheme.typography.M_17
+                    style = MediCareCallTheme.typography.M_17,
                 )
                 Spacer(Modifier.height(10.dp))
 
                 if (loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].isNotEmpty()) {
                     Row(
                         Modifier.horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].forEach { healthIssue ->
                             ChipItem(healthIssue) {
                                 loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].remove(
-                                    healthIssue
+                                    healthIssue,
                                 )
                             }
                         }
@@ -168,9 +166,9 @@ fun LoginElderMedInfoScreen(
                     {
                         if (it !in loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder])
                             loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].add(
-                                it
+                                it,
                             )
-                    }
+                    },
                 )
                 CTAButton(
                     CTAButtonType.GREEN,
@@ -182,14 +180,10 @@ fun LoginElderMedInfoScreen(
                             loginElderViewModel.updateAllEldersHealthInfo()
                             loginElderViewModel.postElderAndHealth()
                             delay(200L)
-                            navController.navigate(Route.LoginCareCallSetting) {
-                                popUpTo(Route.LoginRegisterElder) {
-                                    inclusive = true
-                                }
-                            }
+                            navigateToCareCallSetting()
                         }
                     },
-                    Modifier.padding(top = 30.dp, bottom = 20.dp)
+                    Modifier.padding(top = 30.dp, bottom = 20.dp),
                 )
             }
         }
@@ -197,7 +191,7 @@ fun LoginElderMedInfoScreen(
             snackBarState,
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 14.dp)
+                .padding(bottom = 14.dp),
         )
     }
 }

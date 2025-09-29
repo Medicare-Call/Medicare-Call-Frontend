@@ -21,19 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.component.SubscribeCard
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.SubscribeViewModel
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun SettingSubscribeScreen(
-    modifier: Modifier = Modifier,
     onBack: () -> Unit,
-    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    navigateToSubscribeDetail: (subscription: EldersSubscriptionResponseDto) -> Unit = {},
     viewModel: SubscribeViewModel = hiltViewModel(),
 ) {
 
@@ -72,7 +71,7 @@ fun SettingSubscribeScreen(
                 SubscribeCard(
                     elderInfo = it,
                     onClick = {
-                        navController.navigate(Route.SubscribeDetail(it))
+                        navigateToSubscribeDetail(it)
                     },
                 )
             }

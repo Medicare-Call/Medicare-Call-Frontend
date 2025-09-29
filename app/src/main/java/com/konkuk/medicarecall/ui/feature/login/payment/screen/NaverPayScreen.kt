@@ -42,12 +42,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.login.payment.viewmodel.NaverPayViewModel
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.model.PaymentResult
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import org.json.JSONObject
 
@@ -55,8 +53,8 @@ import org.json.JSONObject
 @Composable
 fun NaverPayScreen(
     onBack: () -> Unit,
-    navController: NavHostController,
     modifier: Modifier = Modifier,
+    navigateToFinish: () -> Unit = {},
     naverPayViewModel: NaverPayViewModel = hiltViewModel(),
 ) {
     Column(
@@ -89,7 +87,7 @@ fun NaverPayScreen(
                     tint = Color.Black,
                 )
             },
-            rightIconClick = { navController.navigate(Route.LoginFinish) },
+            rightIconClick = navigateToFinish,
         )
         val context = LocalContext.current
         val baseHost = "medicare-call.shop"
@@ -193,11 +191,7 @@ fun NaverPayScreen(
                                                                 // 팝업 닫고 성공 네비게이션
                                                                 popupWebView?.destroy()
                                                                 popupWebView = null
-                                                                navController.navigate(Route.LoginFinish) {
-                                                                    popUpTo(Route.LoginNaverPayView) {
-                                                                        inclusive = true
-                                                                    }
-                                                                }
+                                                                navigateToFinish()
                                                             } else if (!result.success) {
                                                                 Log.w(
                                                                     "NaverPayScreen",
@@ -496,17 +490,14 @@ fun NaverPayScreen(
                                             if (result.success && !navigated) {
                                                 navigated = true
                                                 Log.d("NaverPayScreen", "navigate FinishSplash")
-                                                navController.navigate(Route.LoginFinish) {
-                                                    // 결제 화면 스택 정리(원치 않으면 제거)
-                                                    popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                                                }
+                                                navigateToFinish()
                                             } else if (!result.success) {
                                                 Log.w(
                                                     "NaverPayScreen",
                                                     "Payment failed: ${result.message ?: "unknown"}",
                                                 )
                                                 // TODO: 실패 UI/토스트 등
-                                                navController.popBackStack()
+                                                onBack()
                                             }
                                         } catch (e: Exception) {
                                             Log.e("NaverPayScreen", "Parse error: ${e.message}")

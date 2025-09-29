@@ -24,39 +24,35 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 
 @SuppressLint("SourceLockedOrientationActivity")
 @Composable
 fun LoginStartScreen(
-    navController: NavController,
-    loginViewModel: LoginViewModel,
     modifier: Modifier = Modifier,
+    navigateToPhone: () -> Unit = {},
+    navigateToRegisterElder: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    navigateToPurchase: () -> Unit = {},
+    navigateToHome: () -> Unit = {},
+    loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
     val navigationDestination by loginViewModel.navigationDestination.collectAsState()
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
-            val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginPhone
-                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder
-                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting
-                is NavigationDestination.GoToPayment -> Route.LoginPurchase
-                is NavigationDestination.GoToHome -> MainTabRoute.Home
-            }
-            navController.navigate(route) {
-                if (route == MainTabRoute.Home)
-                    popUpTo(Route.LoginStart) {
-                        inclusive = true
-                    }
+            when (destination) {
+                is NavigationDestination.GoToLogin -> navigateToPhone()
+                is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
+                is NavigationDestination.GoToTimeSetting -> navigateToCareCallSetting()
+                is NavigationDestination.GoToPayment -> navigateToPurchase()
+                is NavigationDestination.GoToHome -> navigateToHome()
             }
             loginViewModel.onNavigationHandled()
         }

@@ -24,23 +24,23 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
+import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
-import com.konkuk.medicarecall.ui.navigation.Route
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginPhoneScreen(
-    navController: NavController,
-    loginViewModel: LoginViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToVerification: () -> Unit = {},
+    loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
@@ -58,22 +58,20 @@ fun LoginPhoneScreen(
             .background(MediCareCallTheme.colors.bg)
             .padding(horizontal = 20.dp)
             .statusBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         Column {
-            LoginBackButton({
-                navController.popBackStack()
-            })
+            LoginBackButton(onBack)
             Column(
                 Modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
 
                 Spacer(Modifier.height(20.dp))
                 Text(
                     "휴대폰 번호를\n입력해주세요",
                     style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(Modifier.height(40.dp))
                 DefaultTextField(
@@ -87,7 +85,7 @@ fun LoginPhoneScreen(
                     visualTransformation = PhoneNumberVisualTransformation(),
                     textFieldModifier = Modifier
                         .focusRequester(focusRequester),
-                    maxLength = 11
+                    maxLength = 11,
                 )
 
                 Spacer(Modifier.height(30.dp))
@@ -98,16 +96,17 @@ fun LoginPhoneScreen(
                         // TODO: 서버에 인증번호 요청하기
                         if (loginViewModel.phoneNumber.startsWith("010")) {
                             loginViewModel.postPhoneNumber(loginViewModel.phoneNumber)
-                            navController.navigate(Route.LoginVerification)
+                            navigateToVerification()
                         } else {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "휴대폰 번호를 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short
+                                    duration = SnackbarDuration.Short,
                                 )
                             }
                         }
-                    })
+                    },
+                )
 
             }
         }
@@ -115,7 +114,7 @@ fun LoginPhoneScreen(
             snackBarState,
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 14.dp)
+                .padding(bottom = 14.dp),
         )
     }
 

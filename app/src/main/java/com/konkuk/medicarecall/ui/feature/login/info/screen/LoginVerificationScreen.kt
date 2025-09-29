@@ -26,7 +26,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
@@ -34,17 +34,21 @@ import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginVerificationScreen(
-    navController: NavController,
-    loginViewModel: LoginViewModel,
     modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToUserInfo: () -> Unit = {},
+    navigateToPhone: () -> Unit = {},
+    navigateToRegisterElder: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    navigateToPurchase: () -> Unit = {},
+    navigateToHome: () -> Unit = {},
+    loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
@@ -60,12 +64,7 @@ fun LoginVerificationScreen(
             when (event) {
                 is LoginEvent.VerificationSuccessNew -> {
                     // 인증 성공 시 회원정보 화면으로 이동
-
-                    navController.navigate(Route.LoginRegisterUserInfo) {
-                        popUpTo(Route.LoginVerification) {
-                            inclusive = true
-                        }
-                    }
+                    navigateToUserInfo()
                 }
 
                 is LoginEvent.VerificationSuccessExisting -> {
@@ -91,17 +90,14 @@ fun LoginVerificationScreen(
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
-            val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginStart
-                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder
-                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting
-                is NavigationDestination.GoToPayment -> Route.LoginPurchase
-                is NavigationDestination.GoToHome -> MainTabRoute.Home
-            }
-            navController.navigate(route) {
-                popUpTo(Route.LoginPhone) {
-                    inclusive = true
-                }
+            // 기존 사용자는 바로 회원정보 입력 화면으로 이동하지 않고 다른 처리가 필요할 수 있음
+            navigateToUserInfo()
+            when (destination) {
+                is NavigationDestination.GoToLogin -> navigateToPhone()
+                is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
+                is NavigationDestination.GoToTimeSetting -> navigateToCareCallSetting()
+                is NavigationDestination.GoToPayment -> navigateToPurchase()
+                is NavigationDestination.GoToHome -> navigateToHome()
             }
             loginViewModel.onNavigationHandled()
         }
@@ -120,9 +116,7 @@ fun LoginVerificationScreen(
 
         Column {
             LoginBackButton(
-                {
-                    navController.popBackStack()
-                },
+                onBack,
             )
             Column(
                 Modifier

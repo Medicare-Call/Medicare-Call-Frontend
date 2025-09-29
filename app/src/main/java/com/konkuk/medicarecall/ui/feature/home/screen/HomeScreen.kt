@@ -78,10 +78,10 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
     navigateToMealDetail: () -> Unit,
-    navigateToMedicineDetail: () -> Unit,
+    navigateToMedicationDetail: () -> Unit,
     navigateToSleepDetail: () -> Unit,
-    navigateToStateHealthDetail: () -> Unit,
-    navigateToStateMentalDetail: () -> Unit,
+    navigateToHealthAnalysisDetail: () -> Unit,
+    navigateToMentalAnalysisDetail: () -> Unit,
     navigateToGlucoseDetail: () -> Unit,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsState()
@@ -107,10 +107,10 @@ fun HomeScreen(
             dropdownOpened = false
         },
         navigateToMealDetail = navigateToMealDetail,
-        navigateToMedicineDetail = navigateToMedicineDetail,
+        navigateToMedicineDetail = navigateToMedicationDetail,
         navigateToSleepDetail = navigateToSleepDetail,
-        navigateToStateHealthDetail = navigateToStateHealthDetail,
-        navigateToStateMentalDetail = navigateToStateMentalDetail,
+        navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
+        navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
         navigateToGlucoseDetail = navigateToGlucoseDetail,
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,

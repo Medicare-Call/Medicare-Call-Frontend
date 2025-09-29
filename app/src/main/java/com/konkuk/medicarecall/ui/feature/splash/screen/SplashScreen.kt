@@ -16,16 +16,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(
+    navigateToLogin: () -> Unit = {},
+    navigateToPhone: () -> Unit = {},
+    navigateToRegisterElder: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    navigateToPurchase: () -> Unit = {},
+    navigateToHome: () -> Unit = {},
+) {
 
     val viewModel: SplashViewModel = hiltViewModel()
 
@@ -33,27 +37,14 @@ fun SplashScreen(navController: NavController) {
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
-            val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginStart
-                is NavigationDestination.GoToRegisterElder -> Route.LoginRegisterElder
-                is NavigationDestination.GoToTimeSetting -> Route.LoginCareCallSetting
-                is NavigationDestination.GoToPayment -> Route.LoginPurchase
-                is NavigationDestination.GoToHome -> MainTabRoute.Home
-
+            navigateToLogin()
+            when (destination) {
+                is NavigationDestination.GoToLogin -> navigateToPhone()
+                is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
+                is NavigationDestination.GoToTimeSetting -> navigateToCareCallSetting()
+                is NavigationDestination.GoToPayment -> navigateToPurchase()
+                is NavigationDestination.GoToHome -> navigateToHome()
             }
-            navController.navigate(Route.LoginStart) {
-                popUpTo(Route.Splash) { inclusive = true }
-                launchSingleTop = true
-            }
-            navController.navigate(route) {
-                if (route == MainTabRoute.Home) {
-                    popUpTo(Route.LoginStart) {
-                        inclusive = true
-                    }
-                }
-                launchSingleTop = true
-            }
-
         }
     }
 

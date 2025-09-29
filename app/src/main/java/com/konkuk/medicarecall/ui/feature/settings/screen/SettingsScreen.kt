@@ -30,25 +30,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.navigation.Route
+import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
-import kotlinx.serialization.json.Json
-import java.net.URLEncoder
 
 @Composable
 fun SettingsScreen(
-    onNavigateToMyDataSetting: () -> Unit = {},
-    onNavigateToAnnouncement: () -> Unit = {},
-    onNavigateToCenter: () -> Unit = {},
-    onNavigateToSubscribe: () -> Unit = {},
-    onNavigateToPersonalInfo: () -> Unit = {},
-    onNavigateToHealthInfo: () -> Unit = {},
-    navController: NavHostController,
+    navigateToUserInfo: () -> Unit = {},
+    navigateToNotice: () -> Unit = {},
+    navigateToCenter: () -> Unit = {},
+    navigateToSubscribe: () -> Unit = {},
+    navigateToElderPersonalInfo: () -> Unit = {},
+    navigateToElderHealthInfo: () -> Unit = {},
+    navigateToNotificationSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
     myDataViewModel: MyDataViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -80,7 +77,7 @@ fun SettingsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onNavigateToMyDataSetting() }
+                    .clickable { navigateToUserInfo() }
                     .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -130,7 +127,7 @@ fun SettingsScreen(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .clickable { onNavigateToAnnouncement() }
+                            .clickable { navigateToNotice() }
                             .weight(2f),
                     ) {
                         Icon(
@@ -149,7 +146,7 @@ fun SettingsScreen(
                     Column(
 
                         modifier = Modifier
-                            .clickable { onNavigateToCenter() }
+                            .clickable { navigateToCenter() }
                             .weight(2f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
@@ -169,7 +166,7 @@ fun SettingsScreen(
                     Column(
 
                         modifier = Modifier
-                            .clickable { onNavigateToSubscribe() }
+                            .clickable { navigateToSubscribe() }
                             .weight(2f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
@@ -224,7 +221,7 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable(onClick = { onNavigateToPersonalInfo() }),
+                            .clickable(onClick = { navigateToElderPersonalInfo() }),
                     ) {
                         Text(
                             text = "어르신 개인정보 설정",
@@ -243,7 +240,7 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable(onClick = { onNavigateToHealthInfo() }),
+                            .clickable(onClick = { navigateToElderHealthInfo() }),
                     ) {
                         Text(
                             text = "어르신 건강정보 설정",
@@ -282,7 +279,7 @@ fun SettingsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate(Route.NotificationSetting(myInfo))
+                                navigateToNotificationSetting(myInfo)
                             },
                     ) {
                         Text(
@@ -303,4 +300,3 @@ fun SettingsScreen(
         }
     }
 }
-

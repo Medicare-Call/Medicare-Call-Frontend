@@ -36,12 +36,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.BenefitItem
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
@@ -67,12 +66,11 @@ fun Triple<Int, Int, Int>.toDisplayString(): String {
 fun SetCallScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navController: NavHostController,
+    navigateToPayment: () -> Unit = {},
     eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
     callTimeViewModel: CallTimeViewModel = hiltViewModel()
 ) {
-
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
 
     val isLoading = eldersInfoViewModel.isLoading.value
@@ -354,14 +352,14 @@ fun SetCallScreen(
                     callTimeViewModel.submitAllByIds(
                         elderIds = elderIds,
                         onSuccess = {
-                            navController.navigate(Route.LoginPurchase)
+                            navigateToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
                             Log.d("SetCallScreen", "시간 : ${callTimeViewModel.timeMap}")
                         },
                         onError = { t ->
                             Log.e("SetCallScreen", "콜 시간 설정 실패: $t")
                             Toast.makeText(
-                                navController.context,
+                                context,
                                 "콜 시간 설정에 실패했습니다. 다시 시도해주세요.",
                                 Toast.LENGTH_SHORT
                             ).show()

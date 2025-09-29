@@ -32,24 +32,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
-import com.konkuk.medicarecall.ui.feature.login.senior.component.ElderInputForm
+import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
-import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.feature.login.senior.component.ElderInputForm
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.common.util.isValidDate
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginElderScreen(
-    navController: NavController,
-    loginElderViewModel: LoginElderViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToRegisterElderHealth: () -> Unit = {},
+    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
 ) {
 
     val scrollState = rememberScrollState()
@@ -65,22 +65,16 @@ fun LoginElderScreen(
             .imePadding(),
     ) {
         Column {
-            LoginBackButton({
-                navController.navigate(Route.LoginRegisterElder) {
-                    popUpTo(Route.LoginStart) { inclusive = false } // ← 스택 정리
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            })
+            LoginBackButton(onClick = onBack)
             Column(
                 modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
                 Spacer(Modifier.height(20.dp))
                 Text(
                     "어르신 등록하기",
                     style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(Modifier.height(30.dp))
                 repeat(loginElderViewModel.elders) { index ->
@@ -88,7 +82,7 @@ fun LoginElderScreen(
                         loginElderViewModel,
                         scrollState,
                         index == loginElderViewModel.expandedFormIndex,
-                        index
+                        index,
                     )
                 }
 
@@ -108,7 +102,7 @@ fun LoginElderScreen(
                                     MediCareCallTheme.colors.g200
                                 else
                                     MediCareCallTheme.colors.g50
-                            } else MediCareCallTheme.colors.gray1
+                            } else MediCareCallTheme.colors.gray1,
                         )
                         .border(
                             1.2.dp,
@@ -116,12 +110,12 @@ fun LoginElderScreen(
                                 MediCareCallTheme.colors.main
                             else
                                 MediCareCallTheme.colors.gray3,
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(14.dp),
                         )
                         .clickable(
                             enabled = loginElderViewModel.isInputComplete(),
                             indication = null,
-                            interactionSource = interactionSource
+                            interactionSource = interactionSource,
                         ) {
                             if (loginElderViewModel.elders < 5) {
                                 loginElderViewModel.elders++
@@ -129,27 +123,27 @@ fun LoginElderScreen(
                                     loginElderViewModel.elders - 1
                                 loginElderViewModel.onNameChanged(
                                     loginElderViewModel.expandedFormIndex,
-                                    ""
+                                    "",
                                 )
                                 loginElderViewModel.onDOBChanged(
                                     loginElderViewModel.expandedFormIndex,
-                                    ""
+                                    "",
                                 )
                                 loginElderViewModel.onRelationshipChanged(
                                     loginElderViewModel.expandedFormIndex,
-                                    ""
+                                    "",
                                 )
                                 loginElderViewModel.onGenderChanged(
                                     loginElderViewModel.expandedFormIndex,
-                                    null
+                                    null,
                                 )
                                 loginElderViewModel.onLivingTypeChanged(
                                     loginElderViewModel.expandedFormIndex,
-                                    ""
+                                    "",
                                 )
                                 loginElderViewModel.onPhoneNumberChanged(
                                     loginElderViewModel.expandedFormIndex,
-                                    ""
+                                    "",
                                 )
 
 
@@ -159,19 +153,19 @@ fun LoginElderScreen(
 
                                 }
                             }
-                        }
+                        },
                 ) {
                     Row(
                         Modifier
                             .padding(vertical = 16.dp)
-                            .align(Alignment.Center)
+                            .align(Alignment.Center),
 
-                    ) {
+                        ) {
                         Icon(
                             painterResource(R.drawable.ic_plus), contentDescription = "플러스 아이콘",
                             tint = if (loginElderViewModel.isInputComplete())
                                 MediCareCallTheme.colors.main
-                            else MediCareCallTheme.colors.gray3
+                            else MediCareCallTheme.colors.gray3,
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
@@ -179,7 +173,7 @@ fun LoginElderScreen(
                             color = if (loginElderViewModel.isInputComplete())
                                 MediCareCallTheme.colors.main
                             else MediCareCallTheme.colors.gray3,
-                            style = MediCareCallTheme.typography.B_17
+                            style = MediCareCallTheme.typography.B_17,
                         )
                     }
                 }
@@ -199,7 +193,7 @@ fun LoginElderScreen(
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "이름을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short
+                                    duration = SnackbarDuration.Short,
                                 )
                             }
                         else if (!loginElderViewModel.dateOfBirthList.filter { it.isNotEmpty() }
@@ -209,7 +203,7 @@ fun LoginElderScreen(
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "생년월일을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short
+                                    duration = SnackbarDuration.Short,
                                 )
                             }
                         else if (!loginElderViewModel.phoneNumberList.filter { it.isNotEmpty() }
@@ -217,15 +211,15 @@ fun LoginElderScreen(
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "휴대폰 번호를 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short
+                                    duration = SnackbarDuration.Short,
                                 )
                             }
                         else {
                             loginElderViewModel.createElderDataList()
-                            navController.navigate(Route.LoginRegisterElderHealth)
+                            navigateToRegisterElderHealth()
                         }
                     },
-                    modifier.padding(bottom = 20.dp)
+                    modifier.padding(bottom = 20.dp),
                 )
             }
         }
@@ -233,7 +227,7 @@ fun LoginElderScreen(
             snackBarState,
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 14.dp)
+                .padding(bottom = 14.dp),
         )
     }
 
