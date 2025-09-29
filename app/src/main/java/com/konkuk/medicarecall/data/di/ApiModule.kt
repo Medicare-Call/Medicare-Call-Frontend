@@ -1,23 +1,22 @@
 package com.konkuk.medicarecall.data.di
 
+import com.konkuk.medicarecall.data.api.HomeService
+import com.konkuk.medicarecall.data.api.NoticeService
+import com.konkuk.medicarecall.data.api.SettingService
+import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
-import com.konkuk.medicarecall.data.api.member.MemberRegisterService
-import com.konkuk.medicarecall.data.api.payments.NaverPayService
-import com.konkuk.medicarecall.data.api.NoticeService
-import com.konkuk.medicarecall.data.api.elders.SetCallService
-import com.konkuk.medicarecall.data.api.SettingService
-import com.konkuk.medicarecall.data.api.elders.SubscribeService
-import com.konkuk.medicarecall.data.api.TokenRefreshService
-import com.konkuk.medicarecall.data.api.VerificationService
-import com.konkuk.medicarecall.data.api.HomeService
 import com.konkuk.medicarecall.data.api.elders.GlucoseService
+import com.konkuk.medicarecall.data.api.elders.HealthService
 import com.konkuk.medicarecall.data.api.elders.MealService
 import com.konkuk.medicarecall.data.api.elders.MedicineService
-import com.konkuk.medicarecall.data.api.elders.SleepService
-import com.konkuk.medicarecall.data.api.elders.HealthService
 import com.konkuk.medicarecall.data.api.elders.MentalService
+import com.konkuk.medicarecall.data.api.elders.SetCallService
+import com.konkuk.medicarecall.data.api.elders.SleepService
 import com.konkuk.medicarecall.data.api.elders.StatisticsService
+import com.konkuk.medicarecall.data.api.elders.SubscribeService
+import com.konkuk.medicarecall.data.api.member.MemberRegisterService
+import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,15 +30,15 @@ object ApiModule {
 
     @Provides
     @Singleton
+    fun provideAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
     fun provideEldersInfoService(retrofit: Retrofit): EldersInfoService {
         return retrofit.create(EldersInfoService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideVerificationService(retrofit: Retrofit): VerificationService {
-        return retrofit.create(VerificationService::class.java)
-    }
 
     @Provides
     @Singleton
@@ -83,11 +82,6 @@ object ApiModule {
         return retrofit.create(NaverPayService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideTokenRefreshService(retrofit: Retrofit): TokenRefreshService {
-        return retrofit.create(TokenRefreshService::class.java)
-    }
 
     @Provides
     @Singleton
