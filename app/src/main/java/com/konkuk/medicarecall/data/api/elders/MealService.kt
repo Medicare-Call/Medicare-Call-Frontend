@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.elders
 
 import com.konkuk.medicarecall.data.dto.response.MealResponseDto
 import retrofit2.http.GET
