@@ -14,6 +14,7 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToHealthAnalysisDetail
@@ -152,6 +153,11 @@ class MainNavigator(
             launchSingleTop = true
             restoreState = true
         }
+    }
+
+    /* 알림 */
+    fun navigateToAlarm() {
+        navController.navigateToAlarm()
     }
 
     // 현재 화면이 BottomBar를 보여줘야 하는지 여부
