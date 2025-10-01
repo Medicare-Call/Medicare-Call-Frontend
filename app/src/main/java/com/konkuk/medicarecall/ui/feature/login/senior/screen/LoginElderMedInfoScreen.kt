@@ -36,7 +36,7 @@ import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DiseaseNamesItem
 import com.konkuk.medicarecall.ui.common.component.MedicationItem
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme

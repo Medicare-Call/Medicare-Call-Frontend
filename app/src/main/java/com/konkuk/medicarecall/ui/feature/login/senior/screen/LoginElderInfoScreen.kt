@@ -41,7 +41,7 @@ import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.senior.component.ElderInputForm
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
