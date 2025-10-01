@@ -2,8 +2,10 @@ package com.konkuk.medicarecall.ui.feature.login.senior.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +17,7 @@ import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,23 +30,81 @@ class LoginElderViewModel @Inject constructor(
 ) : ViewModel() {
     // 어르신 정보 화면
 
-    private val _selectedIndex = MutableStateFlow(0)
-    val selectedIndex = _selectedIndex.asStateFlow()
+    private val _uiState = MutableStateFlow(LoginElderUiState())
+    val uiState: StateFlow<LoginElderUiState> = _uiState.asStateFlow()
 
 
-    private val _elderDataList = MutableStateFlow<MutableList<ElderData>>()
-    val elderDataList = mutableStateListOf(
-        ElderData(),
-    )
+    fun updateElderName(name: String) {
+        val selectedIndex = _uiState.value.selectedIndex
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList[selectedIndex] = updatedList[selectedIndex].copy(name = name)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+    }
 
+    fun updateElderBirthDate(birthDate: String) {
+        val selectedIndex = _uiState.value.selectedIndex
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList[selectedIndex] = updatedList[selectedIndex].copy(birthDate = birthDate)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+    }
+
+    fun updateElderGender(gender: Boolean) {
+        val selectedIndex = _uiState.value.selectedIndex
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList[selectedIndex] = updatedList[selectedIndex].copy(gender = gender)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+    }
+
+    fun updateElderPhoneNumber(phoneNumber: String) {
+        val selectedIndex = _uiState.value.selectedIndex
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList[selectedIndex] = updatedList[selectedIndex].copy(phoneNumber = phoneNumber)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+    }
+
+    fun updateElderRelationship(relationship: String) {
+        val selectedIndex = _uiState.value.selectedIndex
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList[selectedIndex] = updatedList[selectedIndex].copy(relationship = relationship)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+    }
+
+    fun updateElderLivingType(livingType: String) {
+        val selectedIndex = _uiState.value.selectedIndex
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList[selectedIndex] = updatedList[selectedIndex].copy(livingType = livingType)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+    }
+
+    fun selectElder(index: Int) {
+        _uiState.value = _uiState.value.copy(
+            selectedIndex = index
+        )
+    }
+
+    fun addElder() {
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList.add(ElderData())
+        _uiState.value = _uiState.value.copy(
+            eldersList = updatedList,
+            selectedIndex = _uiState.value.selectedIndex + 1
+        )
+    }
+
+    fun removeElder(index: Int) {
+        val updatedList = _uiState.value.eldersList.toMutableList()
+        updatedList.removeAt(index)
+        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+
+    }
 
     fun isInputComplete(): Boolean {
-        return elderDataList.all {
+        return uiState.value.eldersList.all {
             it.name.isNotBlank() &&
-                it.birthDate.length == 8 &&
-                it.phoneNumber.length == 11 &&
-                it.relationship.isNotBlank() &&
-                it.livingType.isNotBlank()
+                    it.birthDate.length == 8 &&
+                    it.phoneNumber.length == 11 &&
+                    it.relationship.isNotBlank() &&
+                    it.livingType.isNotBlank()
         }
 
     }
@@ -71,7 +132,7 @@ class LoginElderViewModel @Inject constructor(
     fun createElderHealthDataList() {
 
         elderHealthDataList.apply {
-            repeat(elderDataList.size) { index ->
+            repeat(uiState.value.eldersList.size) { index ->
                 val currentId = getOrNull(index)?.id // 기존 id 보존
 
                 val healthData = ElderHealthData(
@@ -95,8 +156,8 @@ class LoginElderViewModel @Inject constructor(
     fun postElderAndHealth() {
         viewModelScope.launch {
             elderRegisterRepository.registerElderAndHealth(
-                elders = elderDataList.size,
-                elderInfoList = elderDataList,
+                elders = uiState.value.eldersList.size,
+                elderInfoList = uiState.value.eldersList,
                 elderHealthInfo = elderHealthDataList,
             )
                 .onSuccess {
@@ -113,10 +174,10 @@ class LoginElderViewModel @Inject constructor(
         viewModelScope.launch {
             val elderIds = elderIdRepository.getElderIds()
             elderIds.filterIndexed { index, it ->
-                it.values.first() == elderDataList[index].id
+                it.values.first() == uiState.value.eldersList[index].id
             }.forEachIndexed { index, it ->
                 eldersInfoRepository.updateElder(
-                    it.values.first(), elderDataList[index],
+                    it.values.first(), uiState.value.eldersList[index],
                 ).onSuccess {
                     Log.d("httplog", "어르신 재등록(수정) 성공")
                 }.onFailure { exception ->
