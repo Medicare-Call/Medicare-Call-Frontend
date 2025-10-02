@@ -68,8 +68,8 @@ fun HomeGlucoseLevelContainer(
 
                 Text(
                     "혈당",
-                    style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.main,
+                    style = MediCareCallTheme.typography.R_16,
+                    color = MediCareCallTheme.colors.gray8,
                 )
 
             }
