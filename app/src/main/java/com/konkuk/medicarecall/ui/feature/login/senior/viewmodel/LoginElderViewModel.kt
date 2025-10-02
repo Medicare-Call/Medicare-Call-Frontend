@@ -30,92 +30,91 @@ class LoginElderViewModel @Inject constructor(
 ) : ViewModel() {
     // 어르신 정보 화면
 
-    private val _uiState = MutableStateFlow(LoginElderUiState())
-    val uiState: StateFlow<LoginElderUiState> = _uiState.asStateFlow()
+    private val _elderUiState = MutableStateFlow(LoginElderUiState())
+    val elderUiState: StateFlow<LoginElderUiState> = _elderUiState.asStateFlow()
+
+    private val _elderHealthUiState = MutableStateFlow(LoginElderHealthUiState())
+    val elderHealthUiState: StateFlow<LoginElderHealthUiState> = _elderHealthUiState.asStateFlow()
 
 
     fun updateElderName(name: String) {
-        val selectedIndex = _uiState.value.selectedIndex
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val selectedIndex = _elderUiState.value.selectedIndex
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList[selectedIndex] = updatedList[selectedIndex].copy(name = name)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
     }
 
     fun updateElderBirthDate(birthDate: String) {
-        val selectedIndex = _uiState.value.selectedIndex
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val selectedIndex = _elderUiState.value.selectedIndex
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList[selectedIndex] = updatedList[selectedIndex].copy(birthDate = birthDate)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
     }
 
     fun updateElderGender(gender: Boolean) {
-        val selectedIndex = _uiState.value.selectedIndex
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val selectedIndex = _elderUiState.value.selectedIndex
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList[selectedIndex] = updatedList[selectedIndex].copy(gender = gender)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
     }
 
     fun updateElderPhoneNumber(phoneNumber: String) {
-        val selectedIndex = _uiState.value.selectedIndex
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val selectedIndex = _elderUiState.value.selectedIndex
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList[selectedIndex] = updatedList[selectedIndex].copy(phoneNumber = phoneNumber)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
     }
 
     fun updateElderRelationship(relationship: String) {
-        val selectedIndex = _uiState.value.selectedIndex
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val selectedIndex = _elderUiState.value.selectedIndex
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList[selectedIndex] = updatedList[selectedIndex].copy(relationship = relationship)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
     }
 
     fun updateElderLivingType(livingType: String) {
-        val selectedIndex = _uiState.value.selectedIndex
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val selectedIndex = _elderUiState.value.selectedIndex
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList[selectedIndex] = updatedList[selectedIndex].copy(livingType = livingType)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
     }
 
     fun selectElder(index: Int) {
-        _uiState.value = _uiState.value.copy(
-            selectedIndex = index
+        _elderUiState.value = _elderUiState.value.copy(
+            selectedIndex = index,
         )
     }
 
     fun addElder() {
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList.add(ElderData())
-        _uiState.value = _uiState.value.copy(
+        _elderUiState.value = _elderUiState.value.copy(
             eldersList = updatedList,
-            selectedIndex = _uiState.value.selectedIndex + 1
+            selectedIndex = _elderUiState.value.selectedIndex + 1,
         )
     }
 
     fun removeElder(index: Int) {
-        val updatedList = _uiState.value.eldersList.toMutableList()
+        val updatedList = _elderUiState.value.eldersList.toMutableList()
         updatedList.removeAt(index)
-        _uiState.value = _uiState.value.copy(eldersList = updatedList)
+        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
 
     }
 
     fun isInputComplete(): Boolean {
-        return uiState.value.eldersList.all {
+        return elderUiState.value.eldersList.all {
             it.name.isNotBlank() &&
-                    it.birthDate.length == 8 &&
-                    it.phoneNumber.length == 11 &&
-                    it.relationship.isNotBlank() &&
-                    it.livingType.isNotBlank()
+                it.birthDate.length == 8 &&
+                it.phoneNumber.length == 11 &&
+                it.relationship.isNotBlank() &&
+                it.livingType.isNotBlank()
         }
 
     }
 
-    // 건강정보 화면
-    var selectedElder by mutableIntStateOf(0)
-        private set
+    // suggestion: 어르신 등록과 건강정보 등록이 아예 분리된 만큼,
+    // 추후 viewModel 별개로 가지고, 이름과 id값만 내비게이션으로 넘기는 게 나을 듯.
 
-    fun onSelectedElderChanged(new: Int) {
-        selectedElder = new
-    }
 
     var diseaseInputText = mutableStateListOf<MutableState<String>>()
     var diseaseList = mutableStateListOf(mutableStateListOf<String>())
@@ -132,7 +131,7 @@ class LoginElderViewModel @Inject constructor(
     fun createElderHealthDataList() {
 
         elderHealthDataList.apply {
-            repeat(uiState.value.eldersList.size) { index ->
+            repeat(elderUiState.value.eldersList.size) { index ->
                 val currentId = getOrNull(index)?.id // 기존 id 보존
 
                 val healthData = ElderHealthData(
@@ -156,8 +155,8 @@ class LoginElderViewModel @Inject constructor(
     fun postElderAndHealth() {
         viewModelScope.launch {
             elderRegisterRepository.registerElderAndHealth(
-                elders = uiState.value.eldersList.size,
-                elderInfoList = uiState.value.eldersList,
+                elders = elderUiState.value.eldersList.size,
+                elderInfoList = elderUiState.value.eldersList,
                 elderHealthInfo = elderHealthDataList,
             )
                 .onSuccess {
@@ -174,10 +173,10 @@ class LoginElderViewModel @Inject constructor(
         viewModelScope.launch {
             val elderIds = elderIdRepository.getElderIds()
             elderIds.filterIndexed { index, it ->
-                it.values.first() == uiState.value.eldersList[index].id
+                it.values.first() == elderUiState.value.eldersList[index].id
             }.forEachIndexed { index, it ->
                 eldersInfoRepository.updateElder(
-                    it.values.first(), uiState.value.eldersList[index],
+                    it.values.first(), elderUiState.value.eldersList[index],
                 ).onSuccess {
                     Log.d("httplog", "어르신 재등록(수정) 성공")
                 }.onFailure { exception ->

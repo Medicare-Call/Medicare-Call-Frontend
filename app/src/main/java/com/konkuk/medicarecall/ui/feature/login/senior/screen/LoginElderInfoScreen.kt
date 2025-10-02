@@ -65,7 +65,7 @@ fun LoginElderScreen(
     val coroutineScope = rememberCoroutineScope()
     val nameFocusRequester = remember { FocusRequester() }
 
-    val uiState by loginElderViewModel.uiState.collectAsState()
+    val uiState by loginElderViewModel.elderUiState.collectAsState()
     val selectedIndex = uiState.selectedIndex
 
     LaunchedEffect(selectedIndex) {
