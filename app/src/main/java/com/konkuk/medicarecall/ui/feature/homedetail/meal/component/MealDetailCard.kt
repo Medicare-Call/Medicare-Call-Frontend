@@ -62,7 +62,7 @@ fun MealDetailCard(
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
                 modifier = Modifier
@@ -82,7 +82,7 @@ fun MealDetailCard(
                     Text(
                         text = "식사 기록 전이에요.",
                         style = MediCareCallTheme.typography.R_16,
-                        color = MediCareCallTheme.colors.gray4,
+                        color = MediCareCallTheme.colors.gray8,
                     )
 
                 }

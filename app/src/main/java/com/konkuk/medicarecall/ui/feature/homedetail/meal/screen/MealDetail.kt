@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.meal.screen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,15 +26,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
@@ -93,6 +94,7 @@ fun MealDetailLayout(
     ) {
         Column(
             modifier = Modifier
+                .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .statusBarsPadding()
         ) {
@@ -100,6 +102,7 @@ fun MealDetailLayout(
                 title = "식사",
                 navController = navController
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -124,7 +127,7 @@ fun MealDetailLayout(
                     onDateSelected = onDateSelected
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 meals.forEach { meal ->
                     MealDetailCard(
@@ -133,7 +136,7 @@ fun MealDetailLayout(
                         isRecorded = meal.isRecorded,   // 식사 기록 여부
                         isEaten = meal.isEaten          // 식사 유무
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         }
