@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -32,10 +31,8 @@ fun HomeGlucoseLevelContainer(
     glucoseLevelAverageToday: Int,
     onClick: () -> Unit
 ) {
-
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() }
             .figmaShadow(
@@ -48,7 +45,8 @@ fun HomeGlucoseLevelContainer(
 
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier
+                .padding(20.dp)
         ) {
             //1) Title: 혈당
             Row(
@@ -56,13 +54,17 @@ fun HomeGlucoseLevelContainer(
 
             ) {
                 Image(
-                    modifier = Modifier
-                        .size(24.dp),
+                    modifier = Modifier.padding(
+                        start = 7.dp,
+                        top = 3.dp,
+                        end = 6.dp,
+                        bottom = 3.dp
+                    ),
                     painter = painterResource(id = R.drawable.ic_glucose),
                     contentDescription = "glucose icon",
-
                     )
-                Spacer(modifier = Modifier.width(4.dp))
+
+                Spacer(modifier = Modifier.width(2.dp))
 
                 Text(
                     "혈당",
@@ -72,7 +74,7 @@ fun HomeGlucoseLevelContainer(
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             //2) 상태
             Column(
@@ -84,7 +86,8 @@ fun HomeGlucoseLevelContainer(
                 val isRecorded = glucoseLevelAverageToday > 0
                 val glucoseText = if (isRecorded) "$glucoseLevelAverageToday" else "--"
                 val textColor =
-                    if (isRecorded) MediCareCallTheme.colors.gray8 else MediCareCallTheme.colors.gray4
+                    if (isRecorded) MediCareCallTheme.colors.gray8
+                    else MediCareCallTheme.colors.gray4
 
                 Row(
                     modifier = Modifier,
@@ -100,7 +103,7 @@ fun HomeGlucoseLevelContainer(
 
                     Text(
                         text = "mg/dL",
-                        style = MediCareCallTheme.typography.R_16,
+                        style = MediCareCallTheme.typography.M_16,
                         color = MediCareCallTheme.colors.gray8
                     )
 

@@ -99,7 +99,7 @@ fun <T> DefaultDropdown(
             readOnly = true,
             trailingIcon = {
                 Icon(
-                    painterResource(if (showDropdown) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down),
+                    painterResource(if (showDropdown) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down_small),
                     contentDescription = "드롭다운 화살표",
                     tint = MediCareCallTheme.colors.black
                 )
