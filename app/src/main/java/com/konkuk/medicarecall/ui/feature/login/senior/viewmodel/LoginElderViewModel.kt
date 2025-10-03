@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -98,11 +99,7 @@ class LoginElderViewModel @Inject constructor(
 
     fun isInputComplete(): Boolean {
         return elderUiState.value.eldersList.all {
-            it.name.isNotBlank() &&
-                it.birthDate.length == 8 &&
-                it.phoneNumber.length == 11 &&
-                it.relationship.isNotBlank() &&
-                it.livingType.isNotBlank()
+            it.name.isNotBlank() && it.birthDate.length == 8 && it.phoneNumber.length == 11 && it.relationship.isNotBlank() && it.livingType.isNotBlank()
         }
 
     }
@@ -115,7 +112,7 @@ class LoginElderViewModel @Inject constructor(
     // 상기한 방법으로 변경할 시 함수 변경 필요
     fun initElderHealthData() {
         _elderHealthUiState.update { state ->
-            state.copy(elderHealthList = List(elderUiState.value.eldersList.size) { ElderHealthData() })
+            state.copy(elderHealthList = List(elderUiState.value.eldersList.size) { ElderHealthData(id = elderUiState.value.eldersList[it].id) })
         }
     }
 
@@ -205,10 +202,9 @@ class LoginElderViewModel @Inject constructor(
                     if (index == state.selectedIndex) {
                         val currentList = elder.medicationMap[time] ?: emptyList()
 
-                        val updatedMap =
-                            elder.medicationMap + if (medicine !in (elder.medicationMap[time]
-                                    ?: emptyList())
-                            ) (time to (currentList + medicine)) else return
+                        val updatedMap = elder.medicationMap + if (medicine !in (elder.medicationMap[time]
+                                ?: emptyList())
+                        ) (time to (currentList + medicine)) else return
                         elder.copy(medicationMap = updatedMap)
                     } else {
                         elder
@@ -253,20 +249,32 @@ class LoginElderViewModel @Inject constructor(
 
 
     // ------------------API 요청------------------
-    fun postElderAndHealth() {
+    fun postElderBulk() {
         viewModelScope.launch {
-            elderRegisterRepository.registerElderAndHealth(
-                elders = elderUiState.value.eldersList.size,
-                elderInfoList = elderUiState.value.eldersList,
-                elderHealthInfo = elderHealthUiState.value.elderHealthList,
-            )
+            elderRegisterRepository.postElderBulk(elderUiState.value.eldersList)
                 .onSuccess {
-                    Log.d("httplog", "어르신 및 건강정보 전부 등록 성공!")
+                    it.forEach { elder ->
+                        _elderUiState.update { state ->
+                            state.copy(
+                                eldersList = state.eldersList.map { elderData ->
+                                    if (elderData.id == elder.id) {
+                                        elderData.copy(id = elder.id)
+                                    } else {
+                                        elderData
+                                    }
+                                },
+                            )
+                        }
+                    }
                 }
                 .onFailure { exception ->
-                    Log.e("httplog", "어르신 정보 or 건강정보 등록 실패: ${exception.message}")
-                }
+                    when (exception) {
+                        is HttpException -> {
+                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message()}")
+                        }
 
+                    }
+                }
         }
     }
 

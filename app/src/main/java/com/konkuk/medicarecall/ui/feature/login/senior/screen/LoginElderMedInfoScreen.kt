@@ -193,7 +193,6 @@ fun LoginElderMedInfoScreen(
                         coroutineScope.launch {
                             loginElderViewModel.updateAllElders()
                             loginElderViewModel.updateAllEldersHealthInfo()
-                            loginElderViewModel.postElderAndHealth()
                             delay(200L)
                             navController.navigate(Route.SetCall.route) {
                                 popUpTo(Route.LoginElderInfoScreen.route) {

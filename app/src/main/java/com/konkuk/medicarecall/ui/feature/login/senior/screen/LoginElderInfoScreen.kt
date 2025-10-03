@@ -236,6 +236,7 @@ fun LoginElderScreen(
                                 )
                             }
                         else {
+                            loginElderViewModel.postElderBulk()
                             loginElderViewModel.initElderHealthData()
                             navController.navigate(Route.LoginElderMedInfoScreen.route)
                         }
