@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
@@ -36,7 +37,7 @@ fun WeeklyMentalCard(
     Card(
         modifier = modifier
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp
             ),
 
@@ -115,9 +116,11 @@ private fun MentalStatusRow(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = "$countText" + "번",
+            text = "${countText}번",
             style = MediCareCallTheme.typography.R_14,
-            color = textColor
+            color = textColor,
+            modifier = Modifier.width(22.dp),
+            textAlign = TextAlign.End
         )
 
     }

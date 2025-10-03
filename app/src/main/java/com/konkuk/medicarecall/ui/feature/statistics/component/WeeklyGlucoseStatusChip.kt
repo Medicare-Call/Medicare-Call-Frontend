@@ -32,7 +32,7 @@ fun WeeklyGlucoseStatusChip(
     Card(
         modifier = Modifier
             .height(25.dp),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = statusColor),
 
         ) {
@@ -45,7 +45,7 @@ fun WeeklyGlucoseStatusChip(
             ) {
             Text(
                 text = statusText,
-                style = MediCareCallTheme.typography.R_16,
+                style = MediCareCallTheme.typography.R_14,
                 color = Color.White
             )
         }

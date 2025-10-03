@@ -46,7 +46,7 @@ fun WeeklySleepCard(
             .fillMaxWidth()
             .fillMaxHeight()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -78,7 +78,7 @@ fun WeeklySleepCard(
             // 3) 시간
 
             Row(
-                modifier = Modifier.padding(horizontal = 10.dp),
+                modifier = Modifier.padding(end = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -90,7 +90,7 @@ fun WeeklySleepCard(
                 Text(
                     modifier = Modifier.offset(y = (2).dp),
                     text = "시간",
-                    style = MediCareCallTheme.typography.R_16,
+                    style = MediCareCallTheme.typography.M_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -103,7 +103,7 @@ fun WeeklySleepCard(
                 Text(
                     modifier = Modifier.offset(y = (2).dp),
                     text = "분",
-                    style = MediCareCallTheme.typography.R_16,
+                    style = MediCareCallTheme.typography.M_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
             }

@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.statistics.screen
 
+import WeekendBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,13 +37,20 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyGlucoseCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyHealthCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMealCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMedicineCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -150,7 +158,6 @@ fun StatisticsScreenLayout(
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value }
         )
 
-//        Spacer(modifier = Modifier.height(17.dp))
         when {
             uiState.isLoading -> {
                 Box(
@@ -163,23 +170,25 @@ fun StatisticsScreenLayout(
                 }
             }
 
-            uiState.error != null -> { /* ... */
-            }
+            uiState.error != null -> { /* ... */ }
 
             uiState.summary != null -> {
 
-                StatisticsContent(
-                    summary = uiState.summary,
-                    currentWeek = currentWeek,
-                    isLatestWeek = isLatestWeek,
-                    isEarliestWeek = isEarliestWeek,
-                    onPreviousWeek = onPreviousWeek,
-                    onNextWeek = onNextWeek
-                )
+                    WeekendBar(
+                        currentWeek = currentWeek,
+                        isLatestWeek = isLatestWeek,
+                        isEarliestWeek = isEarliestWeek,
+                        onPreviousWeek = onPreviousWeek,
+                        onNextWeek = onNextWeek
+                    )
+                Column {
+                    StatisticsContent(
+                        summary = uiState.summary
+                    )
+                }
             }
         }
     }
-
     if (dropdownOpened.value) {
         NameDropdown(
             items = elderNameList,
@@ -197,27 +206,15 @@ fun StatisticsScreenLayout(
 @Composable
 private fun StatisticsContent(
     summary: WeeklySummaryUiState,
-    currentWeek: Pair<LocalDate, LocalDate>,
-    isLatestWeek: Boolean,
-    isEarliestWeek: Boolean,
-    onPreviousWeek: () -> Unit,
-    onNextWeek: () -> Unit
 ) {
     Column(
         modifier = Modifier
+            .background(MediCareCallTheme.colors.bg)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp),
     ) {
-        Spacer(Modifier.height(17.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar(
-            currentWeek = currentWeek,
-            isLatestWeek = isLatestWeek,
-            isEarliestWeek = isEarliestWeek,
-            onPreviousWeek = onPreviousWeek,
-            onNextWeek = onNextWeek
-        )
         Spacer(modifier = Modifier.height(20.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard(
+        WeeklySummaryCard(
             summary = summary
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -229,12 +226,12 @@ private fun StatisticsContent(
                 .height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMealCard(
+            WeeklyMealCard(
                 modifier = Modifier
                     .fillMaxHeight(),
                 meal = summary.weeklyMeals
             )
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMedicineCard(
+            WeeklyMedicineCard(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -242,7 +239,7 @@ private fun StatisticsContent(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyHealthCard(
+        WeeklyHealthCard(
             healthNote = summary.weeklyHealthNote
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -253,17 +250,17 @@ private fun StatisticsContent(
                 .height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard(
+            WeeklySleepCard(
                 modifier = Modifier.weight(1f),
                 summary = summary
             )
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard(
+            WeeklyMentalCard(
                 modifier = Modifier.weight(1f),
                 mental = summary.weeklyMental
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyGlucoseCard(
+        WeeklyGlucoseCard(
             weeklyGlucose = summary.weeklyGlucose
         )
         Spacer(modifier = Modifier.height(70.dp))
@@ -276,7 +273,7 @@ private fun StatisticsContent(
 fun PreviewStatisticsScreen_Recorded() {
 
     val dummySummary = WeeklySummaryUiState(
-        elderName = "김옥자", // Preview에 이름 추가
+        elderName = "김옥자",
         weeklyMealRate = 65,
         weeklyMedicineRate = 57,
         weeklyHealthIssueCount = 3,
@@ -301,7 +298,7 @@ fun PreviewStatisticsScreen_Recorded() {
         weeklyHealthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 후흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요.",
         weeklySleepHours = 7,
         weeklySleepMinutes = 12,
-        weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 4),
+        weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
         weeklyGlucose = WeeklyGlucoseUiState(
             beforeMealNormal = 5, beforeMealHigh = 2, beforeMealLow = 1,
             afterMealNormal = 5, afterMealHigh = 0, afterMealLow = 2
@@ -336,7 +333,7 @@ fun PreviewStatisticsScreen_Unrecorded() {
         StatisticsScreenLayout(
             uiState = StatisticsUiState(
                 summary = WeeklySummaryUiState.EMPTY.copy(elderName = "김옥자")
-            ), // Preview에 이름 추가
+            ),
             elderNameList = listOf("김옥자", "박막례"),
             navController = rememberNavController(),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),

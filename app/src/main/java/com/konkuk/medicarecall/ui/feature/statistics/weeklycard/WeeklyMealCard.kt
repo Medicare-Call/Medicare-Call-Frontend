@@ -37,7 +37,7 @@ fun WeeklyMealCard(
     Card(
         modifier = modifier
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp
             ),
 
@@ -92,7 +92,7 @@ fun WeeklyMealCard(
                         Text(
                             text = weeklyMeal.mealType,
                             style = MediCareCallTheme.typography.R_15,
-                            color = MediCareCallTheme.colors.gray4
+                            color = MediCareCallTheme.colors.gray8
                         )
 
                         Spacer(modifier = Modifier.width(10.dp))

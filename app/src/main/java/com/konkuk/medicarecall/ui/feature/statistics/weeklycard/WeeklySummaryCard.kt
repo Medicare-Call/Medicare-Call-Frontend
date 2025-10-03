@@ -31,7 +31,7 @@ fun WeeklySummaryCard(
         modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -92,10 +92,11 @@ private fun WeeklySummaryItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Start),
+            modifier = Modifier
+                .align(Alignment.Start),
             text = title,
             style = MediCareCallTheme.typography.R_14,
-            color = MediCareCallTheme.colors.gray6,
+            color = MediCareCallTheme.colors.gray8,
         )
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -105,13 +106,13 @@ private fun WeeklySummaryItem(
             Text(
                 text = valueText,
                 style = MediCareCallTheme.typography.SB_22,
-                color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.black, // ◀ 색상 변경
+                color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.black,
             )
             Text(
                 text = unit,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp),
-                style = MediCareCallTheme.typography.R_16,
-                color = if (isUnrecorded) MediCareCallTheme.colors.black else MediCareCallTheme.colors.black, // ◀ 색상 변경
+                style = MediCareCallTheme.typography.M_16,
+                color = if (isUnrecorded) MediCareCallTheme.colors.black else MediCareCallTheme.colors.black,
             )
         }
     }
