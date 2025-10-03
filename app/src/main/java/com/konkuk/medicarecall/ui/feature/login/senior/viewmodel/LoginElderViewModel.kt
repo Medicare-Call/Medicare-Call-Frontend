@@ -177,7 +177,7 @@ class LoginElderViewModel @Inject constructor(
             state.copy(
                 elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) {
-                        elder.copy(notes = elder.diseaseNames.filter { it != disease })
+                        elder.copy(diseaseNames = elder.diseaseNames.filter { it != disease })
                     } else {
                         elder
                     }
