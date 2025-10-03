@@ -112,7 +112,7 @@ class LoginElderViewModel @Inject constructor(
     // 상기한 방법으로 변경할 시 함수 변경 필요
     fun initElderHealthData() {
         _elderHealthUiState.update { state ->
-            state.copy(elderHealthList = List(elderUiState.value.eldersList.size) { ElderHealthData(id = elderUiState.value.eldersList[it].id) })
+            state.copy(elderHealthList = List(elderUiState.value.eldersList.size) { ElderHealthData() })
         }
     }
 
@@ -252,19 +252,20 @@ class LoginElderViewModel @Inject constructor(
     fun postElderBulk() {
         viewModelScope.launch {
             elderRegisterRepository.postElderBulk(elderUiState.value.eldersList)
-                .onSuccess {
-                    it.forEach { elder ->
-                        _elderUiState.update { state ->
-                            state.copy(
-                                eldersList = state.eldersList.map { elderData ->
-                                    if (elderData.id == elder.id) {
-                                        elderData.copy(id = elder.id)
-                                    } else {
-                                        elderData
-                                    }
-                                },
-                            )
-                        }
+                .onSuccess { response ->
+                    _elderUiState.update { state ->
+                        state.copy(
+                            eldersList = state.eldersList.mapIndexed { index, elderData ->
+                                elderData.copy(id = response[index].id)
+                            },
+                        )
+                    }
+                    _elderHealthUiState.update { state ->
+                        state.copy(
+                            elderHealthList = state.elderHealthList.mapIndexed { index, healthData ->
+                                healthData.copy(id = response[index].id)
+                            },
+                        )
                     }
                 }
                 .onFailure { exception ->
@@ -272,10 +273,23 @@ class LoginElderViewModel @Inject constructor(
                         is HttpException -> {
                             Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message()}")
                         }
-
                     }
                 }
         }
+    }
+
+    suspend fun postElderHealthInfoBulk() {
+        elderRegisterRepository.postElderHealthInfoBulk(elderHealthUiState.value.elderHealthList)
+            .onSuccess {
+                Log.d("elderHealthRegister", "Success")
+            }
+            .onFailure { exception ->
+                when (exception) {
+                    is HttpException -> {
+                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message()}")
+                    }
+                }
+            }
     }
 
     fun updateAllElders() { // getElderIds.isNotEmpty == true

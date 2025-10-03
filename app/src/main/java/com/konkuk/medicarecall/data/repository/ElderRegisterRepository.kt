@@ -7,5 +7,5 @@ import com.konkuk.medicarecall.ui.model.ElderHealthData
 interface ElderRegisterRepository {
     suspend fun postElderHealthInfo(id: Int, elderHealthData: ElderHealthData)
     suspend fun postElderBulk(elderList: List<ElderData>): Result<ElderBulkRegisterResponseDto>
-    suspend fun postElderHealthInfoBulk(elderHealthList: List<ElderHealthData>)
+    suspend fun postElderHealthInfoBulk(elderHealthList: List<ElderHealthData>): Result<Unit>
 }

@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.ElderRegisterService
+import com.konkuk.medicarecall.data.dto.request.ElderBulkHealthInfoRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderBulkRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
@@ -83,8 +84,28 @@ class ElderRegisterRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postElderHealthInfoBulk(elderHealthList: List<ElderHealthData>) {
-        TODO("Not yet implemented")
+    override suspend fun postElderHealthInfoBulk(elderHealthList: List<ElderHealthData>): Result<Unit> = runCatching {
+        val response = elderRegisterService.postElderHealthInfoBulk(
+            ElderBulkHealthInfoRequestDto(
+                healthInfos = elderHealthList.map { elderHealthData ->
+                    ElderBulkHealthInfoRequestDto.HealthInfo(
+                        elderId = elderHealthData.id!!,
+                        diseaseNames = elderHealthData.diseaseNames,
+                        medicationSchedules = ElderHealthMapper.toRequestSchedules(elderHealthData.medicationMap).map { schedule ->
+                            ElderBulkHealthInfoRequestDto.HealthInfo.MedicationSchedule(
+                                medicationName = schedule.medicationName,
+                                scheduleTimes = schedule.scheduleTimes.map { it.name },
+                            )
+                        },
+                        notes = elderHealthData.notes.map { note ->
+                            HealthIssueType.entries.find { it.displayName == note }!!.name
+                        },
+                    )
+                },
+            ),
+        )
+        if (!response.isSuccessful) {
+            throw HttpException(response)
+        }
     }
-
 }

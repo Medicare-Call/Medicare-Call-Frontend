@@ -42,6 +42,7 @@ import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewM
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -191,9 +192,7 @@ fun LoginElderMedInfoScreen(
                     "다음",
                     {
                         coroutineScope.launch {
-                            loginElderViewModel.updateAllElders()
-                            loginElderViewModel.updateAllEldersHealthInfo()
-                            delay(200L)
+                            loginElderViewModel.postElderHealthInfoBulk()
                             navController.navigate(Route.SetCall.route) {
                                 popUpTo(Route.LoginElderInfoScreen.route) {
                                     inclusive = true
