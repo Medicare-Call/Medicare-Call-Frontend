@@ -1,12 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.login.senior.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
@@ -19,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -113,40 +108,146 @@ class LoginElderViewModel @Inject constructor(
     }
 
     // suggestion: 어르신 등록과 건강정보 등록이 아예 분리된 만큼,
-    // 추후 viewModel 별개로 가지고, 이름과 id값만 내비게이션으로 넘기는 게 나을 듯.
+    // 추후 viewModel 별개로 가지고, 이름과 id값만 내비게이션으로 넘기는 게 나을 것 같습니다.
+
+    // ------------------건강정보 관련 함수------------------
+
+    // 상기한 방법으로 변경할 시 함수 변경 필요
+    fun initElderHealthData() {
+        _elderHealthUiState.update { state ->
+            state.copy(elderHealthList = List(elderUiState.value.eldersList.size) { ElderHealthData() })
+        }
+    }
+
+    fun selectElderInHealth(index: Int) {
+        _elderHealthUiState.update { state ->
+            state.copy(selectedIndex = index)
+        }
+    }
 
 
-    var diseaseInputText = mutableStateListOf<MutableState<String>>()
-    var diseaseList = mutableStateListOf(mutableStateListOf<String>())
+    fun updateDiseasesText(text: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(diseaseInputText = text)
+        }
+    }
 
-    var medMap = mutableStateListOf<SnapshotStateMap<MedicationTimeType, MutableList<String>>>(
+    fun updateMedicationText(text: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(medicationInputText = text)
+        }
+    }
 
-    )
-    var medInputText = mutableStateListOf<MutableState<String>>()
-    var healthIssueList = mutableStateListOf(mutableStateListOf<String>())
+    fun addDisease(disease: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(
+                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex && disease !in elder.diseaseNames) {
+                        elder.copy(diseaseNames = elder.diseaseNames + disease)
+                    } else {
+                        elder
+                    }
+                },
+            )
+        }
+
+    }
+
+    fun removeDisease(disease: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(
+                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) {
+                        elder.copy(notes = elder.diseaseNames.filter { it != disease })
+                    } else {
+                        elder
+                    }
+                },
+            )
+        }
+    }
 
 
-    val elderHealthDataList = mutableStateListOf<ElderHealthData>()
+    fun addHealthNote(note: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(
+                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex && note !in elder.notes) {
+                        elder.copy(notes = elder.notes + note)
+                    } else {
+                        elder
+                    }
+                },
+            )
+        }
+    }
 
-    fun createElderHealthDataList() {
+    fun removeHealthNote(note: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(
+                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) {
+                        elder.copy(notes = elder.notes.filter { it != note })
+                    } else {
+                        elder
+                    }
+                },
+            )
+        }
+    }
 
-        elderHealthDataList.apply {
-            repeat(elderUiState.value.eldersList.size) { index ->
-                val currentId = getOrNull(index)?.id // 기존 id 보존
+    fun addMedication(time: MedicationTimeType?, medicine: String) {
+        if (time == null) return
 
-                val healthData = ElderHealthData(
-                    diseaseNames = diseaseList[index],
-                    medicationMap = medMap[index],
-                    notes = healthIssueList[index],
-                    id = currentId,
-                )
+        _elderHealthUiState.update { state ->
+            state.copy(
+                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) {
+                        val currentList = elder.medicationMap[time] ?: emptyList()
 
-                if (index < size) {
-                    set(index, healthData) // 항상 덮어쓰기
+                        val updatedMap =
+                            elder.medicationMap + if (medicine !in (elder.medicationMap[time]
+                                    ?: emptyList())
+                            ) (time to (currentList + medicine)) else return
+                        elder.copy(medicationMap = updatedMap)
+                    } else {
+                        elder
+                    }
+                },
+            )
+        }
+    }
+
+    fun removeMedication(time: MedicationTimeType, medicine: String) {
+        _elderHealthUiState.update { state ->
+            state.copy(
+                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) {
+                        val currentList = elder.medicationMap[time] ?: emptyList()
+                        val updatedList = currentList.filter { it != medicine }
+                        val updatedMap = if (updatedList.isEmpty()) {
+                            elder.medicationMap - time
+                        } else {
+                            elder.medicationMap + (time to updatedList)
+                        }
+                        elder.copy(medicationMap = updatedMap)
+                    } else {
+                        elder
+                    }
+                },
+            )
+        }
+    }
+
+    fun selectMedicationTime(time: MedicationTimeType) {
+        _elderHealthUiState.update { state ->
+            state.copy(
+                selectedMedicationTimes = if (time in state.selectedMedicationTimes) {
+                    state.selectedMedicationTimes - time
                 } else {
-                    add(healthData)
-                }
-            }
+                    state.selectedMedicationTimes + time
+                },
+            )
         }
     }
 
@@ -157,7 +258,7 @@ class LoginElderViewModel @Inject constructor(
             elderRegisterRepository.registerElderAndHealth(
                 elders = elderUiState.value.eldersList.size,
                 elderInfoList = elderUiState.value.eldersList,
-                elderHealthInfo = elderHealthDataList,
+                elderHealthInfo = elderHealthUiState.value.elderHealthList,
             )
                 .onSuccess {
                     Log.d("httplog", "어르신 및 건강정보 전부 등록 성공!")
@@ -195,12 +296,12 @@ class LoginElderViewModel @Inject constructor(
         viewModelScope.launch {
             val elderIds = elderIdRepository.getElderIds()
             elderIds.filterIndexed { index, it ->
-                it.values.first() == elderHealthDataList[index].id
+                it.values.first() == elderHealthUiState.value.elderHealthList[index].id
             }.forEachIndexed { index, it ->
                 runCatching {
                     elderRegisterRepository.postElderHealthInfo(
                         it.values.first(),
-                        elderHealthDataList[index],
+                        elderHealthUiState.value.elderHealthList[index],
                     )
                 }.onSuccess {
                     Log.d("httplog", "어르신 건강정보 재등록(수정) 성공")
