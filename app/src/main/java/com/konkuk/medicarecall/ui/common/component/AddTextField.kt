@@ -68,7 +68,12 @@ fun AddTextField(
                             else main,
                         ),
                 ) {
-                    Text(text = "등록", modifier = Modifier.padding(vertical = 6.dp, horizontal = 10.dp), color = MediCareCallTheme.colors.white)
+                    Text(
+                        text = "등록",
+                        modifier = Modifier.padding(vertical = 6.dp, horizontal = 10.dp),
+                        color = MediCareCallTheme.colors.white,
+                        style = MediCareCallTheme.typography.R_14,
+                    )
                 }
             },
         )
@@ -84,4 +89,4 @@ fun AddTextFieldPreview() {
         onTextChange = {},
         clickPlus = {},
     )
-}   
+}
