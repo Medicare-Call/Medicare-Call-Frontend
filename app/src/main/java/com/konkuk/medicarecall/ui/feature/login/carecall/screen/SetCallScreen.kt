@@ -261,7 +261,7 @@ fun SetCallScreen(
                                     listState.animateScrollToItem(idx)
                                 }
                             }
-                            .padding(vertical = 6.dp, horizontal = 24.dp),
+                            .padding(vertical = 8.dp, horizontal = 24.dp),
                         color = if (idx == selectedIndex) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.gray5,
                         style = if (idx == selectedIndex) MediCareCallTheme.typography.SB_14 else MediCareCallTheme.typography.R_14,
                     )
