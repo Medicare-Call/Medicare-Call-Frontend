@@ -34,67 +34,86 @@ class LoginElderViewModel @Inject constructor(
 
 
     fun updateElderName(name: String) {
-        val selectedIndex = _elderUiState.value.selectedIndex
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList[selectedIndex] = updatedList[selectedIndex].copy(name = name)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) elder.copy(name = name) else elder
+                },
+            )
+        }
     }
 
     fun updateElderBirthDate(birthDate: String) {
-        val selectedIndex = _elderUiState.value.selectedIndex
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList[selectedIndex] = updatedList[selectedIndex].copy(birthDate = birthDate)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) elder.copy(birthDate = birthDate) else elder
+                },
+            )
+        }
     }
 
     fun updateElderGender(gender: Boolean) {
-        val selectedIndex = _elderUiState.value.selectedIndex
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList[selectedIndex] = updatedList[selectedIndex].copy(gender = gender)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) elder.copy(gender = gender) else elder
+                },
+            )
+        }
     }
 
     fun updateElderPhoneNumber(phoneNumber: String) {
-        val selectedIndex = _elderUiState.value.selectedIndex
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList[selectedIndex] = updatedList[selectedIndex].copy(phoneNumber = phoneNumber)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) elder.copy(phoneNumber = phoneNumber) else elder
+                },
+            )
+        }
     }
 
     fun updateElderRelationship(relationship: String) {
-        val selectedIndex = _elderUiState.value.selectedIndex
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList[selectedIndex] = updatedList[selectedIndex].copy(relationship = relationship)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) elder.copy(relationship = relationship) else elder
+                },
+            )
+        }
     }
 
     fun updateElderLivingType(livingType: String) {
-        val selectedIndex = _elderUiState.value.selectedIndex
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList[selectedIndex] = updatedList[selectedIndex].copy(livingType = livingType)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) elder.copy(livingType = livingType) else elder
+                },
+            )
+        }
     }
 
     fun selectElder(index: Int) {
-        _elderUiState.value = _elderUiState.value.copy(
-            selectedIndex = index,
-        )
+        _elderUiState.update { state ->
+            state.copy(selectedIndex = index)
+        }
     }
 
     fun addElder() {
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList.add(ElderData())
-        _elderUiState.value = _elderUiState.value.copy(
-            eldersList = updatedList,
-            selectedIndex = _elderUiState.value.selectedIndex + 1,
-        )
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList + ElderData(),
+                selectedIndex = state.selectedIndex + 1,
+            )
+        }
     }
 
     fun removeElder(index: Int) {
-        val updatedList = _elderUiState.value.eldersList.toMutableList()
-        updatedList.removeAt(index)
-        _elderUiState.value = _elderUiState.value.copy(eldersList = updatedList)
-
+        _elderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.filterIndexed { i, _ -> i != index },
+            )
+        }
     }
 
     fun isInputComplete(): Boolean {
@@ -155,7 +174,7 @@ class LoginElderViewModel @Inject constructor(
             state.copy(
                 elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) {
-                        elder.copy(notes = elder.diseaseNames.filter { it != disease })
+                        elder.copy(diseaseNames = elder.diseaseNames.filter { it != disease })
                     } else {
                         elder
                     }
