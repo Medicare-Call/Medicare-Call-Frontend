@@ -1,3 +1,5 @@
+package com.konkuk.medicarecall.ui.feature.statistics.component
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

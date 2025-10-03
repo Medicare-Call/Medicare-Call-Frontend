@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.statistics.screen
 
-import WeekendBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
