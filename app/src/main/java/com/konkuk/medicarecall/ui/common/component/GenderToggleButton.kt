@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
@@ -36,7 +37,7 @@ fun GenderToggleButton(
         Box(
             Modifier
                 .weight(1f)
-                .background(color = if (isMale) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
+                .background(color = if (isMale) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white)
                 .border(
                     width = 1.2.dp,
                     color = if (isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
@@ -61,7 +62,7 @@ fun GenderToggleButton(
         Box(
             Modifier
                 .weight(1f)
-                .background(color = if (!isMale) MediCareCallTheme.colors.g100 else MediCareCallTheme.colors.white)
+                .background(color = if (!isMale) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white)
                 .border(
                     width = 1.2.dp,
                     color = if (!isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
