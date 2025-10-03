@@ -68,12 +68,18 @@ class GlucoseViewModel @Inject constructor(
 
                     // 현재 선택된 타이밍과 일치하는 경우에만 UI를 업데이트
                     if (_uiState.value.selectedTiming == type) {
+                        val newSelectedIndex = if (isRefresh) {
+                            // 새로고침이면 마지막 인덱스
+                            updatedDataList.lastIndex
+                        } else {
+                            // 페이지네이션이면 기존 선택 유지 (새 데이터가 앞에 추가되므로 인덱스 조정)
+                            _uiState.value.selectedIndex + newData.size
+                        }
+
                         _uiState.update {
-
-
                             it.copy(
                                 graphDataPoints = updatedDataList,
-                                selectedIndex = updatedDataList.lastIndex,
+                                selectedIndex = newSelectedIndex,
                                 hasNext = response.hasNextPage,
                             )
                         }
