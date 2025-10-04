@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,6 +67,14 @@ fun AddTextField(
                         .background(
                             if (inputText.isBlank()) gray2
                             else main,
+                        )
+                        .clickable(
+                            indication = null,
+                            interactionSource = null,
+                            onClick = {
+                                if (inputText.isNotBlank())
+                                    clickPlus()
+                            },
                         ),
                 ) {
                     Text(
