@@ -171,6 +171,13 @@ fun HomeScreenLayout(
         // 데이터 없음 (미기록) -> 회색
         MediCareCallTheme.colors.gray3
     }
+
+    val summaryTitleColor =
+        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+    val summaryBodyColor =
+        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+    val summaryText = if (hasSummaryData) homeUiState.balloonMessage else "아직 기록되지 않았어요."
+
     Scaffold(
 
         contentWindowInsets = WindowInsets(0),
@@ -306,7 +313,7 @@ fun HomeScreenLayout(
                             // 오늘의 건강 통계
                             Text(
                                 text = "오늘의 건강 통계",
-                                style = MediCareCallTheme.typography.SB_18, // 테마에 맞는 스타일 적용
+                                style = MediCareCallTheme.typography.SB_18,
                                 color = MediCareCallTheme.colors.gray6
                             )
 
@@ -323,21 +330,21 @@ fun HomeScreenLayout(
                                 ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Image(
-                                            painter = painterResource(id = R.drawable.char_medi), // 예시 아이콘
+                                            painter = painterResource(id = R.drawable.char_medi),
                                             contentDescription = "요약 아이콘",
                                         )
                                         Spacer(Modifier.width(8.dp))
                                         Text(
                                             text = "한 줄 요약",
-                                            style = MediCareCallTheme.typography.B_20, // Bold 스타일
-                                            color = MediCareCallTheme.colors.g50,
+                                            style = MediCareCallTheme.typography.B_20,
+                                            color = summaryTitleColor,
                                         )
                                     }
                                     Spacer(Modifier.height(30.dp))
                                     Text(
-                                        text = homeUiState.balloonMessage, // ViewModel의 요약 메시지
-                                        style = MediCareCallTheme.typography.R_16, // Regular 스타일
-                                        color = MediCareCallTheme.colors.g50,
+                                        text = summaryText,
+                                        style = MediCareCallTheme.typography.R_16,
+                                        color = summaryBodyColor,
                                     )
                                 }
                             }
