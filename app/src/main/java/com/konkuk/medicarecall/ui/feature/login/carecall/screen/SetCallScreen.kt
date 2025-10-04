@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -209,11 +210,11 @@ fun SetCallScreen(
                 }
 
 
-                Box(
+                HorizontalDivider(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .width(1.dp)
-                        .background(MediCareCallTheme.colors.gray2),
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MediCareCallTheme.colors.gray2,
                 )
                 Column(
                     modifier = modifier.fillMaxWidth(),
