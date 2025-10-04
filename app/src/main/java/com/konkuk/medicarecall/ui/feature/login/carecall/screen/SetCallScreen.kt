@@ -325,8 +325,7 @@ fun SetCallScreen(
                         color = MediCareCallTheme.colors.gray1,
                         shape = RoundedCornerShape(20.dp),
                     )
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 20.dp, bottom = 20.dp),
+                    .padding(all = 20.dp),
             ) {
                 Text(
                     text = "안내사항",
