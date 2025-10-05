@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun PayResultItem(name: String, price: String, modifier: Modifier = Modifier) {
+fun PaymentPriceItem(name: String, price: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {

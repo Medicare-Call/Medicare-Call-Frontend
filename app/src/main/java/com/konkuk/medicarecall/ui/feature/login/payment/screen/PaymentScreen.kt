@@ -36,7 +36,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.login.payment.component.PayResultItem
+import com.konkuk.medicarecall.ui.feature.login.payment.component.PaymentPriceItem
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -112,7 +112,7 @@ fun PaymentScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 elders.forEach { elder ->
-                    PayResultItem(elder, "29,000")
+                    PaymentPriceItem(elder, "29,000")
                 }
             }
             Spacer(modifier = modifier.height(50.dp))
