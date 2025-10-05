@@ -17,7 +17,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun BenefitItem(content: String, modifier: Modifier = Modifier) {
+fun CallTimeBenefit(content: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically

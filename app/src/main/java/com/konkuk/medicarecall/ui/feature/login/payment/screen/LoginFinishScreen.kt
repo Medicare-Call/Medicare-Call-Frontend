@@ -27,7 +27,7 @@ import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun FinishSplashScreen(
+fun LoginFinishScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
