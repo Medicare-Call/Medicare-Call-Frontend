@@ -36,13 +36,13 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -54,6 +54,11 @@ fun StatisticsScreen(
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(key1 = true) {
+        homeViewModel.fetchElderList()//어르신 목록 호출
+        statisticsViewModel.refresh()
+    }
+
     // 화면 복귀 시 자동 새로고침
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -84,8 +89,9 @@ fun StatisticsScreen(
     // 우선순위 2: ID를 통해 전체 목록에서 찾은 이름 (로딩 중일 때 표시)
     // 우선순위 3: 목록의 첫 번째 이름 (초기 상태)
     val currentElderName = remember(uiState.summary, elderInfoList, selectedElderId) {
-        uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
-            ?: elderInfoList.find { it.id == selectedElderId }?.name
+
+        elderInfoList.find { it.id == selectedElderId }?.name
+            ?: uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
             ?: elderNameList.firstOrNull()
             ?: "어르신 통계"
     }

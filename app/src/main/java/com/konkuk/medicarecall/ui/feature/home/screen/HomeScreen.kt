@@ -38,6 +38,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,9 +57,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallFloatingButton
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallSnackBar
 import com.konkuk.medicarecall.ui.feature.home.component.HomeGlucoseLevelContainer
@@ -67,8 +68,9 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
-import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.ElderInfo
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.main
@@ -88,20 +90,26 @@ fun HomeScreen(
     onNavigateToGlucoseDetail: () -> Unit,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsState()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
     val elderNameList by homeViewModel.elderNameList.collectAsState()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-
+    LaunchedEffect(key1 = true) {
+        homeViewModel.fetchElderList()
+    }
 
     HomeScreenLayout(
         modifier = modifier,
         navController = navController,
         homeUiState = homeUiState,
-        elderNameList = elderNameList,
+        elderInfoList = elderInfoList,
+        selectedElderId = selectedElderId,
         isRefreshing = isRefreshing,
         dropdownOpened = dropdownOpened,
         onDropdownClick = { dropdownOpened = true },
@@ -141,7 +149,8 @@ fun HomeScreenLayout(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     homeUiState: HomeUiState,
-    elderNameList: List<String>,
+    elderInfoList: List<ElderInfo>,
+    selectedElderId: Int?,
     isRefreshing: Boolean,
     dropdownOpened: Boolean,
     onDropdownClick: () -> Unit,
@@ -159,14 +168,12 @@ fun HomeScreenLayout(
     onRefresh: () -> Unit,
     immediateCall: (String) -> Unit
 ) {
-
+    val elderNameList = remember(elderInfoList) {
+        elderInfoList.map { it.name }
+    }
     val refreshState = rememberPullToRefreshState()
-
-    val selectedElderName = remember(homeUiState.elderName, elderNameList) {
-
-        homeUiState.elderName.ifEmpty {
-            elderNameList.firstOrNull() ?: "어르신 선택"
-        }
+    val selectedElderName = remember(selectedElderId, elderInfoList) {
+        elderInfoList.find { it.id == selectedElderId }?.name ?: "어르신 선택"
     }
     var expanded by remember { mutableStateOf(false) }
 
@@ -474,13 +481,19 @@ fun PreviewHomeScreen() {
         glucoseLevelAverageToday = 120
     )
 
-    val previewNameList = listOf("김옥자", "박막례", "최이순")
+    val previewElderInfoList = listOf(
+        ElderInfo(1, "김옥자", "010-1111-1111"),
+        ElderInfo(2, "박막례", "010-2222-2222"),
+        ElderInfo(3, "최이순", "010-3333-3333")
+    )
+    val previewSelectedId = 1
 
     MediCareCallTheme {
         HomeScreenLayout(
             navController = rememberNavController(),
             homeUiState = previewUiState,
-            elderNameList = previewNameList,
+            elderInfoList = previewElderInfoList,
+            selectedElderId = previewSelectedId,
             isRefreshing = false,
             dropdownOpened = false,
             onDropdownClick = {},
