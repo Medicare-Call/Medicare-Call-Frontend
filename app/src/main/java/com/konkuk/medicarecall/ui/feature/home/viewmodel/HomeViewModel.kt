@@ -10,8 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -106,7 +104,7 @@ class HomeViewModel @Inject constructor(
     }
 
     // 서버에서 어르신 전체 목록을 불러옴
-    private fun fetchElderList() {
+    fun fetchElderList() {
         viewModelScope.launch {
             _homeUiState.update { it.copy(isLoading = true) }
             eldersInfoRepository.getElders()
