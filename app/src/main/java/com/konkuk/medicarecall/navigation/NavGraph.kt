@@ -337,7 +337,8 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    eldersInfoResponseDto = eldersInfoResponseDto
+                    eldersInfoResponseDto = eldersInfoResponseDto,
+                    navController = navController
                 )
             }
 
