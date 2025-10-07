@@ -227,10 +227,9 @@ fun PersonalDetailScreen(
                                 residenceType = residenceType
                             )
                         ) {
-                            navController.previousBackStackEntry
-                                ?.savedStateHandle
-                                ?.set("ELDER_NAME_UPDATED", name)
-                            onBack()
+                            navController.getBackStackEntry("main")
+                                .savedStateHandle["ELDER_NAME_UPDATED"] = name
+                            navController.popBackStack()
 
                         }
                     }, Modifier.padding(bottom = 20.dp)
