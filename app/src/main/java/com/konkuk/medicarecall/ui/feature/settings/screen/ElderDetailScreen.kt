@@ -26,23 +26,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
-import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.settings.component.DeleteConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailElderInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
-import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
-import com.konkuk.medicarecall.ui.common.util.isValidDate
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.ElderResidenceType
+import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.ui.type.RelationshipType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -51,7 +52,8 @@ fun PersonalDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     eldersInfoResponseDto: EldersInfoResponseDto,
-    detailViewModel: DetailElderInfoViewModel = hiltViewModel()
+    detailViewModel: DetailElderInfoViewModel = hiltViewModel(),
+    navController: NavController,
 ) {
     val gender = when (eldersInfoResponseDto.gender) {
         GenderType.MALE -> true
@@ -225,6 +227,9 @@ fun PersonalDetailScreen(
                                 residenceType = residenceType
                             )
                         ) {
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("ELDER_NAME_UPDATED", name)
                             onBack()
 
                         }
