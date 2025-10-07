@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
@@ -83,6 +84,7 @@ fun HomeScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    mainBackStackEntry: NavBackStackEntry,
     onNavigateToMealDetail: () -> Unit,
     onNavigateToMedicineDetail: () -> Unit,
     onNavigateToSleepDetail: () -> Unit,
@@ -101,15 +103,14 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val back = remember { navController.currentBackStackEntry!! }
-    val updatedName by back.savedStateHandle
-        .getStateFlow("ELDER_NAME_UPDATED", "")
+    val updatedName by mainBackStackEntry.savedStateHandle
+        .getStateFlow<String?>("ELDER_NAME_UPDATED", null)
         .collectAsStateWithLifecycle()
 
     LaunchedEffect(updatedName) {
-        if (updatedName.isNotEmpty()) {
-            homeViewModel.overrideName(updatedName)                  // 네임바/드롭다운 상태 갱신
-            back.savedStateHandle.remove<String>("ELDER_NAME_UPDATED")    // 중복 방지
+        updatedName?.let {
+            homeViewModel.overrideName(it)
+            mainBackStackEntry.savedStateHandle.remove<String>("ELDER_NAME_UPDATED") // 원샷 처리
         }
     }
 
@@ -181,9 +182,12 @@ fun HomeScreenLayout(
         elderInfoList.map { it.name }
     }
     val refreshState = rememberPullToRefreshState()
-    val selectedElderName = remember(selectedElderId, elderInfoList) {
-        elderInfoList.find { it.id == selectedElderId }?.name ?: "어르신 선택"
-    }
+    val selectedElderName =
+        elderInfoList.find { it.id == selectedElderId }?.name
+            ?.takeIf { it.isNotBlank() }
+            ?: homeUiState.elderName
+                .takeIf { it.isNotBlank() }
+            ?: "어르신 선택"
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
