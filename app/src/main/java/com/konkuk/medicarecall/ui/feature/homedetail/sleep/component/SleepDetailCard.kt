@@ -29,7 +29,7 @@ fun SleepDetailCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
@@ -42,7 +42,7 @@ fun SleepDetailCard(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(11.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             //1) 총 수면 시간
             Row(
@@ -54,7 +54,7 @@ fun SleepDetailCard(
                         style = MediCareCallTheme.typography.R_15,
                         color = MediCareCallTheme.colors.gray5
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier,
                         verticalAlignment = Alignment.Bottom
@@ -97,7 +97,7 @@ fun SleepDetailCard(
                         style = MediCareCallTheme.typography.R_15,
                         color = MediCareCallTheme.colors.gray5
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier,
                         verticalAlignment = Alignment.CenterVertically
@@ -119,7 +119,7 @@ fun SleepDetailCard(
                         style = MediCareCallTheme.typography.R_15,
                         color = MediCareCallTheme.colors.gray5
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier,
                         verticalAlignment = Alignment.CenterVertically

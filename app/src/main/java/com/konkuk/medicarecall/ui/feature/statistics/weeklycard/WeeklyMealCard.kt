@@ -31,25 +31,25 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklyMealCard(
     modifier: Modifier = Modifier,
-    meal: List<WeeklyMealUiState>
+    meal: List<WeeklyMealUiState>,
 ) {
 
     Card(
         modifier = modifier
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                group = LocalMediCareCallShadowProvider.current.shadow01,
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
-
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(20.dp)
+        shape = RoundedCornerShape(14.dp),
 
         ) {
+        Column(
+            modifier = Modifier
+                .padding(20.dp),
+
+            ) {
 
             //1) Title: 식사 통계
 
@@ -66,7 +66,7 @@ fun WeeklyMealCard(
             //2) 아침+점심+저녁
             Column(
                 Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceAround,
             ) {
                 meal.forEach { weeklyMeal ->
 
@@ -87,12 +87,12 @@ fun WeeklyMealCard(
 
                     Row(
                         modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = weeklyMeal.mealType,
                             style = MediCareCallTheme.typography.R_15,
-                            color = MediCareCallTheme.colors.gray4
+                            color = MediCareCallTheme.colors.gray8,
                         )
 
                         Spacer(modifier = Modifier.width(10.dp))
@@ -102,13 +102,13 @@ fun WeeklyMealCard(
                                 .size(16.dp),
                             painter = painterResource(id = R.drawable.ic_filledbowl),
                             contentDescription = null,
-                            tint = iconColor
+                            tint = iconColor,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = countText,
                             style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray6
+                            color = MediCareCallTheme.colors.gray6,
                         )
 
                     }
@@ -128,8 +128,8 @@ fun PreviewWeeklyMealCard_Recorded() {
         meal = listOf(
             WeeklyMealUiState("아침", 7, 7),
             WeeklyMealUiState("점심", 5, 7),
-            WeeklyMealUiState("저녁", 0, 7)
-        )
+            WeeklyMealUiState("저녁", 0, 7),
+        ),
     )
 }
 
@@ -142,7 +142,7 @@ fun PreviewWeeklyMealCard_Unrecorded() {
         meal = listOf(
             WeeklyMealUiState("아침", -1, 7),
             WeeklyMealUiState("점심", -1, 7),
-            WeeklyMealUiState("저녁", -1, 7)
-        )
+            WeeklyMealUiState("저녁", -1, 7),
+        ),
     )
 }

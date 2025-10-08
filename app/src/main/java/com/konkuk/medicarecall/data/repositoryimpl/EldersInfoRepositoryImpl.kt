@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import com.konkuk.medicarecall.data.api.EldersInfoService
+import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto

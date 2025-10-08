@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.SubscribeService
+import com.konkuk.medicarecall.data.api.elders.SubscribeService
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import retrofit2.HttpException

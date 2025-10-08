@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.MentalService
+import com.konkuk.medicarecall.data.api.elders.MentalService
 import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import java.time.LocalDate

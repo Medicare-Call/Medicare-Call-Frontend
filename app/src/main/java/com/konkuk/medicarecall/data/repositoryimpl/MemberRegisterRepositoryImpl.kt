@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import com.konkuk.medicarecall.data.api.MemberRegisterService
+import com.konkuk.medicarecall.data.api.member.MemberRegisterService
 import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository

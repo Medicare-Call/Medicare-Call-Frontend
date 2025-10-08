@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.HomeService
+import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
