@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -27,17 +26,12 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 
 @Composable
 fun StateMentalDetailCard(
-
     mental: MentalUiState,
     modifier: Modifier = Modifier
 ) {
-
-//TODO: 글자 크기 배율 조정//
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 160.dp)
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
                 cornerRadius = 14.dp
@@ -73,7 +67,7 @@ fun StateMentalDetailCard(
 
                 }
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
                     modifier = Modifier
@@ -90,19 +84,19 @@ fun StateMentalDetailCard(
 
                         Column(
                             modifier = Modifier,
-
+                            verticalArrangement = Arrangement.spacedBy(2.dp),
                             ) {
                             mental.mentalSummary.forEach { mentalSummary ->
                                 Row(verticalAlignment = Alignment.Top) {
                                     Text(
                                         text = "•",
-                                        style = MediCareCallTheme.typography.R_16,
+                                        style = MediCareCallTheme.typography.M_16,
                                         color = MediCareCallTheme.colors.gray8
                                     )
-                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Spacer(modifier = Modifier.width(12.dp))
                                     Text(
                                         text = mentalSummary,
-                                        style = MediCareCallTheme.typography.R_16,
+                                        style = MediCareCallTheme.typography.M_16,
                                         color = MediCareCallTheme.colors.gray8
                                     )
                                 }

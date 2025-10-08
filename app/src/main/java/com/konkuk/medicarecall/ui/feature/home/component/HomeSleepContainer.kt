@@ -38,10 +38,8 @@ fun HomeSleepContainer(
     isRecorded: Boolean,
     onClick: () -> Unit
 ) {
-
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
@@ -54,7 +52,8 @@ fun HomeSleepContainer(
 
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier
+                .padding(20.dp)
         ) {
             //1) Title: 수면
             Row(
@@ -72,13 +71,13 @@ fun HomeSleepContainer(
 
                 Text(
                     "수면",
-                    style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.main,
+                    style = MediCareCallTheme.typography.R_16,
+                    color = MediCareCallTheme.colors.gray8,
                 )
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             //2) 수면 시간
             Column(

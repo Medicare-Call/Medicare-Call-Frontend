@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,15 +25,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
+import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -65,7 +67,6 @@ fun StateMentalDetail(
             mentalViewModel.loadMentalDataForDate(id, selectedDate)
         }
     }
-
 
     StateMentalDetailLayout(
         navController = navController,
@@ -103,6 +104,7 @@ fun StateMentalDetailLayout(
             )
             Column(
                 modifier = Modifier
+                    .background(MediCareCallTheme.colors.bg)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(20.dp)
@@ -112,7 +114,7 @@ fun StateMentalDetailLayout(
                     onMonthClick = onMonthClick,
                     onDateSelected = onDateSelected
                 )
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(24.dp))
                 WeeklyCalendar(
                     calendarUiState = CalendarUiState(
                         currentYear = selectedDate.year,
@@ -122,7 +124,7 @@ fun StateMentalDetailLayout(
                     ),
                     onDateSelected = onDateSelected
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 StateMentalDetailCard(
                     mental = mental
                 )

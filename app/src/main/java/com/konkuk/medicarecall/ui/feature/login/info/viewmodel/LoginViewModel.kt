@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     private val verificationRepository: VerificationRepository,
     private val memberRegisterRepository: MemberRegisterRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val checkLoginStatusUseCase: CheckLoginStatusUseCase
+    private val checkLoginStatusUseCase: CheckLoginStatusUseCase,
 ) : ViewModel() {
     private val _navigationDestination = MutableStateFlow<NavigationDestination?>(null)
     val navigationDestination = _navigationDestination.asStateFlow()
@@ -47,7 +47,7 @@ class LoginViewModel @Inject constructor(
         private set
     var dateOfBirth by mutableStateOf("")
         private set
-    var isMale by mutableStateOf<Boolean?>(null)
+    var isMale by mutableStateOf<Boolean>(true)
         private set
 
     // 상태 변경 함수
@@ -67,7 +67,7 @@ class LoginViewModel @Inject constructor(
         dateOfBirth = new
     }
 
-    fun onGenderChanged(new: Boolean?) {
+    fun onGenderChanged(new: Boolean) {
         isMale = new
     }
 
@@ -83,7 +83,7 @@ class LoginViewModel @Inject constructor(
                     },
                     onFailure = { error ->
                         Log.d("httplog", "실패, ${error.message.toString()}")
-                    }
+                    },
                 )
             }
         }
@@ -100,7 +100,7 @@ class LoginViewModel @Inject constructor(
                     .onSuccess {
                         Log.d(
                             "httplog",
-                            "${it.message} ${it.memberStatus} 액세스토큰: ${it.accessToken} 리프레시 토큰: ${it.refreshToken} ${it.verified} ${it.token} "
+                            "${it.message} ${it.memberStatus} 액세스토큰: ${it.accessToken} 리프레시 토큰: ${it.refreshToken} ${it.verified} ${it.token} ",
                         )
                         isVerified = it.verified
                         if (isVerified) {
@@ -132,7 +132,7 @@ class LoginViewModel @Inject constructor(
                     token,
                     name,
                     birthDate.formatAsDate(),
-                    gender
+                    gender,
                 )
                     .onSuccess {
                         // 성공 로직
