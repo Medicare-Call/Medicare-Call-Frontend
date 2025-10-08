@@ -22,30 +22,36 @@ fun GlucoseTimingButton(
     modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
+    val borderColor = if (selected) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2
+    val containerColor = if (selected) MediCareCallTheme.colors.main else Color.White
+    val textStyle = if (selected) MediCareCallTheme.typography.SB_18 else MediCareCallTheme.typography.R_18
+    val textColor = if (selected) Color.White else MediCareCallTheme.colors.gray2
+
     Card(
         modifier = modifier
             .height(40.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(40.dp),
+
         border = BorderStroke(
             width = 1.5.dp,
-            color = MediCareCallTheme.colors.main
+            color = borderColor,
         ),
         colors = CardDefaults.cardColors(
-            containerColor = if (selected) MediCareCallTheme.colors.main else Color.White
-        )
+            containerColor = containerColor,
+        ),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
 
-        ) {
+            ) {
             Text(
                 text = text,
-                style = MediCareCallTheme.typography.SB_18,
-                color = if (selected) Color.White else MediCareCallTheme.colors.main
+                style = textStyle,
+                color = textColor,
             )
         }
     }
@@ -57,7 +63,7 @@ fun GlucoseTimingButton(
 private fun PreviewGlucoseTimingButtonSelected() {
     GlucoseTimingButton(
         text = "공복",
-        selected = true
+        selected = true,
     )
 }
 
@@ -66,6 +72,6 @@ private fun PreviewGlucoseTimingButtonSelected() {
 private fun PreviewGlucoseTimingButtonUnselected() {
     GlucoseTimingButton(
         text = "식후",
-        selected = false
+        selected = false,
     )
 }

@@ -35,7 +35,7 @@ fun HomeStateMentalContainer(
 
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
@@ -58,7 +58,7 @@ fun HomeStateMentalContainer(
                 Image(
                     modifier = Modifier
                         .size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_state_mental),
+                    painter = painterResource(id = R.drawable.ic_smile),
                     contentDescription = "mental state icon",
 
                     )
@@ -66,13 +66,13 @@ fun HomeStateMentalContainer(
 
                 Text(
                     "심리상태",
-                    style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.main,
+                    style = MediCareCallTheme.typography.R_16,
+                    color = MediCareCallTheme.colors.gray8,
                 )
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             //2) 상태
             Column(
@@ -99,10 +99,7 @@ fun HomeStateMentalContainer(
                     )
                 }
             }
-
-
         }
-
     }
 }
 

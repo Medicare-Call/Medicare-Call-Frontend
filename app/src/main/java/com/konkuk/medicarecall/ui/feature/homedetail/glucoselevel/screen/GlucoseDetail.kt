@@ -39,15 +39,15 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseViewModel
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseTimingButton
-import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseViewModel
+import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
@@ -185,7 +185,7 @@ fun GlucoseDetailLayout(
             title = "혈당",
             navController = navController
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Row(
             modifier = Modifier
@@ -236,7 +236,7 @@ fun GlucoseDetailLayout(
                     scrollState = scrollState,
                     timing = selectedTiming
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(44.dp))
 
                 //그래프 점 클릭시
                 val selectedPoint = uiState.graphDataPoints.getOrNull(selectedIndex)

@@ -36,13 +36,13 @@ import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -147,7 +147,8 @@ fun StatisticsScreenLayout(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
             navController = navController,
-            onDropdownClick = { dropdownOpened.value = !dropdownOpened.value }
+            onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
+            notificationCount = 4,//TODO: 실제 알림 개수 데이터 연동 필요
         )
 
 //        Spacer(modifier = Modifier.height(17.dp))

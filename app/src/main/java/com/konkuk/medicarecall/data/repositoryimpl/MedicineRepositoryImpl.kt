@@ -55,7 +55,6 @@ class MedicineRepositoryImpl @Inject constructor(
             }
             MedicineUiState(
                 medicineName = name,
-                todayTakenCount = 0,
                 todayRequiredCount = goal,
                 doseStatusList = labels.map { lab ->
                     DoseStatusItem(time = lab, doseStatus = DoseStatus.NOT_RECORDED) // 회색
@@ -118,7 +117,6 @@ class MedicineRepositoryImpl @Inject constructor(
 
                             MedicineUiState(
                                 medicineName = m.type,
-                                todayTakenCount = m.takenCount,
                                 todayRequiredCount = m.goalCount,
                                 doseStatusList = padded
                             )
