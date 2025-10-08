@@ -198,8 +198,8 @@ fun MyDataSettingScreen(
 //                            launchSingleTop = true
 //                            restoreState = true
 //                        }
-//                        showLogoutDialog = false
                         // TODO 추후 삭제
+                        showLogoutDialog = false
                         val intent = Intent(context, MainActivity::class.java).apply {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         }
