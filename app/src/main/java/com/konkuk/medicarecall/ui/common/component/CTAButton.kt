@@ -32,7 +32,7 @@ fun CTAButton(
     val backgroundColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.white
         CTAButtonType.GREEN -> MediCareCallTheme.colors.main
-        CTAButtonType.DISABLED -> MediCareCallTheme.colors.g200
+        CTAButtonType.DISABLED -> MediCareCallTheme.colors.gray2 //g200에서 수정
     }
 
     val textColor = when (type) {

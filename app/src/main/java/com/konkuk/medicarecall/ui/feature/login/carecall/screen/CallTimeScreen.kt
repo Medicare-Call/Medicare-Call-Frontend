@@ -37,6 +37,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -162,36 +164,48 @@ fun CallTimeScreen(
                     .padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Box(
-                    modifier = modifier
-                        .background(
-                            color = MediCareCallTheme.colors.g100,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                ) {
-                    Text(
-                        text = "매일 2회 풀케어",
-                        style = MediCareCallTheme.typography.R_14,
-                        color = MediCareCallTheme.colors.main
-                    )
-                }
-
                 Row(
-                    modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.Bottom
                 ) {
-                    Text(
-                        text = "프리미엄",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.B_26
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Box(
+                            modifier = modifier
+                                .background(
+                                    color = MediCareCallTheme.colors.g50,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .padding(vertical = 4.dp, horizontal = 8.dp)
+                        ) {
+                            Text(
+                                text = "특별 할인",
+                                style = MediCareCallTheme.typography.R_14,
+                                color = MediCareCallTheme.colors.main
+                            )
+                        }
+
+
+                        Text(
+                            text = "프리미엄",
+                            color = MediCareCallTheme.colors.gray7,
+                            style = MediCareCallTheme.typography.B_26
+                        )
+                    }
                     Spacer(modifier = modifier.weight(1f))
-                    Text(
-                        text = "₩29,000/월",
-                        color = MediCareCallTheme.colors.main,
-                        style = MediCareCallTheme.typography.B_17
-                    )
+                    Column {
+                        Text(
+                            text = "₩29,000/월",
+                            color = MediCareCallTheme.colors.gray4,
+                            style = MediCareCallTheme.typography.R_14,
+                            textDecoration = TextDecoration.LineThrough
+                        )
+                        Text(
+                            text = "무료 체험",
+                            color = MediCareCallTheme.colors.black,
+                            style = MediCareCallTheme.typography.B_17
+                        )
+                    }
                 }
 
                 Box(
@@ -205,7 +219,6 @@ fun CallTimeScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     CallTimeBenefit("매일 2회 케어콜 제공")
-                    CallTimeBenefit("건강 리포트 제공")
                     CallTimeBenefit("무제한 보호자 지정")
                 }
             }
@@ -310,26 +323,19 @@ fun CallTimeScreen(
                         color = MediCareCallTheme.colors.gray1,
                         shape = RoundedCornerShape(20.dp)
                     )
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 20.dp, bottom = 12.dp)
+                    .padding(20.dp),
             ) {
                 Text(
                     text = "안내사항",
-                    style = MediCareCallTheme.typography.M_17,
+                    style = MediCareCallTheme.typography.B_17,
                     color = MediCareCallTheme.colors.gray8
                 )
                 Spacer(modifier = modifier.height(12.dp))
                 Column(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp),
+                        .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        text = "부재중일 경우 5분 단위로 3회 재발신, 전화 설정에서 수정 가능합니다",
-                        style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray8
-                    )
                     Text(
                         text = "AI 특성상 인식 오류가 있을 수 있습니다",
                         style = MediCareCallTheme.typography.R_15,
@@ -390,4 +396,3 @@ fun CallTimeScreen(
         }
     }
 }
-

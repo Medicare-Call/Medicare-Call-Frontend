@@ -46,9 +46,6 @@ fun TimeSettingItem(
                 .fillMaxWidth()
                 .background(
                     color = if (timeText == null) {
-                        if (timeType == TimeSettingType.FIRST)
-                            MediCareCallTheme.colors.g200
-                        else
                             MediCareCallTheme.colors.g50
                     } else {
                         MediCareCallTheme.colors.white
@@ -60,12 +57,11 @@ fun TimeSettingItem(
                     color = if (timeText == null) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray3,
                     shape = RoundedCornerShape(14.dp)
                 )
-                .padding(vertical = 18.dp),
+                .padding(vertical = 12.dp),
             contentAlignment = Alignment.Center
         ) {
             if (timeText == null) {
                 Row(
-                    modifier = modifier.padding(horizontal = (9.5).dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
