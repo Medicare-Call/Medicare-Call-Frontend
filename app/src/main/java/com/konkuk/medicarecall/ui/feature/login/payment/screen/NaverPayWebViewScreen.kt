@@ -53,7 +53,7 @@ import org.json.JSONObject
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun NaverPayScreen(
+fun NaverPayWebViewScreen(
     onBack: () -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier,
