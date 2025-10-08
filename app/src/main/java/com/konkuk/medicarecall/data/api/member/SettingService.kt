@@ -1,10 +1,9 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.member
 
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface SettingService {
@@ -18,8 +17,4 @@ interface SettingService {
         @Body userUpdateRequestDto: MyInfoResponseDto
     ): Response<MyInfoResponseDto> // 추후 수정 필요
 
-    @POST("auth/logout")
-    suspend fun logout(
-        @Header("Authorization") authorization: String // "Bearer <refresh>"
-    ): Response<Unit>
 }

@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.member
 
 import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto

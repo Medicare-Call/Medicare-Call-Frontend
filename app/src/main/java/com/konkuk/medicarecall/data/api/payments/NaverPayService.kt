@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.payments
 
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
