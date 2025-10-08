@@ -26,18 +26,33 @@ fun String.isValidDate(): Boolean {
     if (this.length != 8) return false
 
     return try {
-        // "yyyyMMdd" 형식으로 날짜를 파싱
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val date = LocalDate.parse(this, formatter)
+        val year = this.substring(0, 4).toInt()
+        val month = this.substring(4, 6).toInt()
+        val day = this.substring(6, 8).toInt()
 
-        // 기준 날짜 생성
+        // 월 범위 확인
+        if (month !in 1..12) return false
+
+        // 윤년 판정
+        val isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+
+        // 각 월의 최대 일수
+        val maxDay = when (month) {
+            2 -> if (isLeapYear) 29 else 28
+            4, 6, 9, 11 -> 30
+            else -> 31
+        }
+
+        // 일 범위 확인
+        if (day !in 1..maxDay) return false
+
+        // 날짜 객체 생성
+        val date = LocalDate.of(year, month, day)
         val minDate = LocalDate.of(1900, 1, 1)
 
-        // 파싱된 날짜가 기준 날짜보다 이전이 아닌지 확인 + 현재 날짜보다 이후 날짜가 아닌지 확인
+        // 날짜 범위 확인
         !date.isBefore(minDate) && !date.isAfter(LocalDate.now())
-
-    } catch (e: DateTimeParseException) {
-        // 날짜 형식이 올바르지 않거나 존재할 수 없는 날짜(예: 20250230)이면 false 반환
+    } catch (e: Exception) {
         false
     }
 }
