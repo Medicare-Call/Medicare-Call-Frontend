@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.elders
 
 import com.konkuk.medicarecall.data.dto.request.ElderBulkHealthInfoRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderBulkRegisterRequestDto
