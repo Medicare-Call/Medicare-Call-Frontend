@@ -32,7 +32,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklySleepCard(
     modifier: Modifier = Modifier,
-    summary: WeeklySummaryUiState
+    summary: WeeklySummaryUiState,
 ) {
     val isUnrecorded = summary.weeklySleepHours == null
     val hoursText = if (isUnrecorded) "--" else summary.weeklySleepHours.toString()
@@ -47,14 +47,14 @@ fun WeeklySleepCard(
             .fillMaxHeight()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow01,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
 
             //1) Title: 평균 수면
@@ -71,7 +71,7 @@ fun WeeklySleepCard(
                 painter = painterResource(id = R.drawable.ic_moon),
                 contentDescription = "moon",
                 modifier = Modifier.size(40.dp),
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
             Spacer(modifier = Modifier.height(4.dp))
 
@@ -122,8 +122,8 @@ fun PreviewWeeklySleepCard_Recorded() {
             weeklyMealRate = 0,
             weeklyMedicineRate = 0,
             weeklyHealthIssueCount = 0,
-            weeklyUnansweredCount = 0
-        )
+            weeklyUnansweredCount = 0,
+        ),
     )
 }
 
@@ -132,6 +132,6 @@ fun PreviewWeeklySleepCard_Recorded() {
 fun PreviewWeeklySleepCard_Unrecorded() {
     WeeklySleepCard(
         modifier = Modifier.width(155.dp),
-        summary = WeeklySummaryUiState.EMPTY
+        summary = WeeklySummaryUiState.EMPTY,
     )
 }

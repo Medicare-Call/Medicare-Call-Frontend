@@ -34,7 +34,7 @@ fun WeekRangeLabel(
         } else {
             Row(
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 //시작 날짜 (예: 월요일)
                 Text(startDate.format(formatter), style = textStyle, color = textColor)
@@ -55,7 +55,7 @@ fun PreviewWeekRangeLabel_ThisWeek() {
         WeekRangeLabel(
             startDate = LocalDate.now(),
             endDate = LocalDate.now(),
-            isThisWeek = true
+            isThisWeek = true,
         )
     }
 }
@@ -67,7 +67,7 @@ fun PreviewWeekRangeLabel_WithRange() {
         WeekRangeLabel(
             startDate = LocalDate.of(2025, 10, 6),
             endDate = LocalDate.of(2025, 10, 12),
-            isThisWeek = false
+            isThisWeek = false,
         )
     }
 }

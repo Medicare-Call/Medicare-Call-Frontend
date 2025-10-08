@@ -35,7 +35,7 @@ fun WeekendBar(
                 .padding(15.dp, 14.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
 
             Icon(
@@ -50,7 +50,7 @@ fun WeekendBar(
                 startDate = currentWeek.first,
                 endDate = currentWeek.second,
                 isThisWeek = isLatestWeek,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             if (!isLatestWeek) {

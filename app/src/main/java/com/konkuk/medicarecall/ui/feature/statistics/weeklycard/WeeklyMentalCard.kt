@@ -31,25 +31,25 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklyMentalCard(
     modifier: Modifier = Modifier,
-    mental: WeeklyMentalUiState
+    mental: WeeklyMentalUiState,
 ) {
 
     Card(
         modifier = modifier
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow01,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
 
-    ) {
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
 
             //1) Title: 심리 상태
@@ -67,22 +67,22 @@ fun WeeklyMentalCard(
 
             // 2) 좋음+보통+나쁨
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 MentalStatusRow(
                     label = "좋음",
                     iconResId = R.drawable.ic_emoji_good,
-                    count = mental.good
+                    count = mental.good,
                 )
                 MentalStatusRow(
                     label = "보통",
                     iconResId = R.drawable.ic_emoji_normal,
-                    count = mental.normal
+                    count = mental.normal,
                 )
                 MentalStatusRow(
                     label = "나쁨",
                     iconResId = R.drawable.ic_emoji_bad,
-                    count = mental.bad
+                    count = mental.bad,
                 )
             }
         }
@@ -94,7 +94,7 @@ fun WeeklyMentalCard(
 private fun MentalStatusRow(
     label: String,
     iconResId: Int,
-    count: Int
+    count: Int,
 ) {
     val isUnrecorded = count <= 0
     val countText = if (isUnrecorded) "-" else count.toString()
@@ -105,14 +105,14 @@ private fun MentalStatusRow(
         Text(
             text = label,
             style = MediCareCallTheme.typography.R_15,
-            color = MediCareCallTheme.colors.gray4
+            color = MediCareCallTheme.colors.gray4,
         )
         Spacer(modifier = Modifier.width(10.dp))
         Icon(
             modifier = Modifier.size(14.dp),
             painter = painterResource(id = iconResId),
             contentDescription = label,
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
@@ -120,7 +120,7 @@ private fun MentalStatusRow(
             style = MediCareCallTheme.typography.R_14,
             color = textColor,
             modifier = Modifier.width(22.dp),
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
         )
 
     }
@@ -134,8 +134,8 @@ fun PreviewWeeklyMentalCard_Recorded() {
         mental = WeeklyMentalUiState(
             good = 4,
             normal = 2,
-            bad = 1
-        )
+            bad = 1,
+        ),
     )
 }
 
@@ -144,6 +144,6 @@ fun PreviewWeeklyMentalCard_Recorded() {
 fun PreviewWeeklyMentalCard_Unrecorded() {
     WeeklyMentalCard(
         modifier = Modifier.size(155.dp),
-        mental = WeeklyMentalUiState.EMPTY
+        mental = WeeklyMentalUiState.EMPTY,
     )
 }

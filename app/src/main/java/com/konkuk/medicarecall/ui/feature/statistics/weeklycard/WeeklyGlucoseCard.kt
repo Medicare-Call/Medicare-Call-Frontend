@@ -31,7 +31,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklyGlucoseCard(
     modifier: Modifier = Modifier,
-    weeklyGlucose: WeeklyGlucoseUiState
+    weeklyGlucose: WeeklyGlucoseUiState,
 ) {
 
     val hasBeforeMealData =
@@ -45,14 +45,14 @@ fun WeeklyGlucoseCard(
             .wrapContentHeight()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow01,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
             Text(
                 text = "혈당",
@@ -64,13 +64,13 @@ fun WeeklyGlucoseCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.Top,
             ) {
                 // --- 공복 혈당 ---
                 Column(
                     modifier = Modifier.weight(1f),
 
-                ) {
+                    ) {
                     Text(
                         text = "공복",
                         style = MediCareCallTheme.typography.R_15,
@@ -81,21 +81,21 @@ fun WeeklyGlucoseCard(
 
                     Box(
                         modifier = Modifier,
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         if (hasBeforeMealData) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 if (weeklyGlucose.beforeMealNormal > 0) GlucoseStatusRow(
                                     "정상",
-                                    weeklyGlucose.beforeMealNormal
+                                    weeklyGlucose.beforeMealNormal,
                                 )
                                 if (weeklyGlucose.beforeMealHigh > 0) GlucoseStatusRow(
                                     "높음",
-                                    weeklyGlucose.beforeMealHigh
+                                    weeklyGlucose.beforeMealHigh,
                                 )
                                 if (weeklyGlucose.beforeMealLow > 0) GlucoseStatusRow(
                                     "낮음",
-                                    weeklyGlucose.beforeMealLow
+                                    weeklyGlucose.beforeMealLow,
                                 )
                             }
                         } else {
@@ -103,7 +103,7 @@ fun WeeklyGlucoseCard(
                                 text = "아직 충분한 기록이\n쌓이지 않았어요.",
                                 style = MediCareCallTheme.typography.R_14,
                                 color = MediCareCallTheme.colors.gray4,
-                                textAlign = TextAlign.Start
+                                textAlign = TextAlign.Start,
                             )
                         }
                     }
@@ -113,13 +113,13 @@ fun WeeklyGlucoseCard(
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(horizontal = 20.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     VerticalDivider(
                         modifier = Modifier
                             .fillMaxHeight()
                             .width(1.dp),
-                        color = MediCareCallTheme.colors.gray1
+                        color = MediCareCallTheme.colors.gray1,
                     )
                 }
 
@@ -127,7 +127,7 @@ fun WeeklyGlucoseCard(
                 Column(
                     modifier = Modifier.weight(1f),
 
-                ) {
+                    ) {
                     Text(
                         text = "식후",
                         style = MediCareCallTheme.typography.R_15,
@@ -137,21 +137,21 @@ fun WeeklyGlucoseCard(
 
                     Box(
                         modifier = Modifier,
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         if (hasAfterMealData) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 if (weeklyGlucose.afterMealNormal > 0) GlucoseStatusRow(
                                     "정상",
-                                    weeklyGlucose.afterMealNormal
+                                    weeklyGlucose.afterMealNormal,
                                 )
                                 if (weeklyGlucose.afterMealHigh > 0) GlucoseStatusRow(
                                     "높음",
-                                    weeklyGlucose.afterMealHigh
+                                    weeklyGlucose.afterMealHigh,
                                 )
                                 if (weeklyGlucose.afterMealLow > 0) GlucoseStatusRow(
                                     "낮음",
-                                    weeklyGlucose.afterMealLow
+                                    weeklyGlucose.afterMealLow,
                                 )
                             }
                         } else {
@@ -159,7 +159,7 @@ fun WeeklyGlucoseCard(
                                 text = "아직 충분한 기록이\n쌓이지 않았어요.",
                                 style = MediCareCallTheme.typography.R_14,
                                 color = MediCareCallTheme.colors.gray4,
-                                textAlign = TextAlign.Start
+                                textAlign = TextAlign.Start,
                             )
                         }
                     }
@@ -172,21 +172,21 @@ fun WeeklyGlucoseCard(
 @Composable
 private fun GlucoseStatusRow(
     status: String,
-    count: Int
+    count: Int,
 ) {
     if (count == 0) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 4.dp)
+        modifier = Modifier.padding(vertical = 4.dp),
     ) {
         _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.component.WeeklyGlucoseStatusChip(
-            statusText = status
+            statusText = status,
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "${count}번",
             style = MediCareCallTheme.typography.R_14,
-            color = MediCareCallTheme.colors.gray6
+            color = MediCareCallTheme.colors.gray6,
         )
     }
 }
@@ -202,8 +202,8 @@ fun PreviewWeeklyGlucoseCard_Recorded() {
             beforeMealLow = 1,
             afterMealNormal = 5,
             afterMealLow = 2,
-            afterMealHigh = 0
-        )
+            afterMealHigh = 0,
+        ),
     )
 }
 
@@ -211,6 +211,6 @@ fun PreviewWeeklyGlucoseCard_Recorded() {
 @Composable
 fun PreviewWeeklyGlucoseCard_Unrecorded() {
     WeeklyGlucoseCard(
-        weeklyGlucose = WeeklyGlucoseUiState.EMPTY
+        weeklyGlucose = WeeklyGlucoseUiState.EMPTY,
     )
 }

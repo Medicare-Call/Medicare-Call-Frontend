@@ -25,20 +25,20 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklySummaryCard(
     modifier: Modifier = Modifier,
-    summary: WeeklySummaryUiState
+    summary: WeeklySummaryUiState,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow01,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
             Text(
                 "주간 요약통계",
@@ -48,28 +48,28 @@ fun WeeklySummaryCard(
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
 
                 WeeklySummaryItem(
                     title = "식사율",
                     value = summary.weeklyMealRate,
-                    unit = "%"
+                    unit = "%",
                 )
                 WeeklySummaryItem(
                     title = "복약률",
                     value = summary.weeklyMedicineRate,
-                    unit = "%"
+                    unit = "%",
                 )
                 WeeklySummaryItem(
                     title = "건강징후",
                     value = summary.weeklyHealthIssueCount,
-                    unit = "건"
+                    unit = "건",
                 )
                 WeeklySummaryItem(
                     title = "미응답",
                     value = summary.weeklyUnansweredCount,
-                    unit = "건"
+                    unit = "건",
                 )
             }
         }
@@ -81,7 +81,7 @@ private fun WeeklySummaryItem(
     modifier: Modifier = Modifier,
     title: String,
     value: Int,
-    unit: String
+    unit: String,
 ) {
 
     val isUnrecorded = if (title != "건강징후") value <= 0 else value < 0
@@ -89,7 +89,7 @@ private fun WeeklySummaryItem(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             modifier = Modifier
@@ -101,7 +101,7 @@ private fun WeeklySummaryItem(
         Spacer(modifier = Modifier.height(4.dp))
 
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
         ) {
             Text(
                 text = valueText,
@@ -127,8 +127,8 @@ fun PreviewWeeklySummaryCard_Recorded() {
             weeklyMealRate = 65,
             weeklyMedicineRate = 57,
             weeklyHealthIssueCount = 3,
-            weeklyUnansweredCount = 8
-        )
+            weeklyUnansweredCount = 8,
+        ),
     )
 }
 

@@ -18,7 +18,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun WeeklyGlucoseStatusChip(
-    statusText: String
+    statusText: String,
 ) {
 
 
@@ -46,7 +46,7 @@ fun WeeklyGlucoseStatusChip(
             Text(
                 text = statusText,
                 style = MediCareCallTheme.typography.R_14,
-                color = Color.White
+                color = Color.White,
             )
         }
     }
