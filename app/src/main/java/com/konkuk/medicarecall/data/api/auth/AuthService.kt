@@ -14,7 +14,7 @@ import retrofit2.http.POST
 
 interface AuthService {
     @POST("auth/refresh")
-    suspend fun refreshToken(@Body req: TokenRefreshRequestDto)
+    suspend fun refreshToken(@Header("Refresh-Token") header: String)
         : Response<MemberTokenResponseDto>
 
     @POST("verifications")
