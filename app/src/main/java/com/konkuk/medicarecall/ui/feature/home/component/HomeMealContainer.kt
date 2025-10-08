@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -34,7 +33,7 @@ fun HomeMealContainer(
     breakfastEaten: Boolean?,
     lunchEaten: Boolean?,
     dinnerEaten: Boolean?,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
 
     fun getRiceBowlIcon(isEaten: Boolean?): Int {
@@ -48,90 +47,83 @@ fun HomeMealContainer(
 
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
-
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
 
-    ) {
+        ) {
 
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
 
             //1) Title: 식사
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
 
-            ) {
+                ) {
                 Image(
                     modifier = Modifier
-                        .size(24.dp),
+                        .padding(3.dp, 5.dp),
                     painter = painterResource(id = R.drawable.ic_ricebowl),
                     contentDescription = "ricebowl icon",
 
                     )
-                Spacer(Modifier.width(4.dp))
+                Spacer(Modifier.width(8.dp))
 
                 Text(
                     "식사",
-                    style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.main,
+                    style = MediCareCallTheme.typography.R_16,
+                    color = MediCareCallTheme.colors.gray8,
                 )
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             //2) 아침 점심 저녁
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 //아침
                 Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.padding(horizontal = 7.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
                         modifier = Modifier
-                            .padding(horizontal = 7.dp)
-                            .size(48.dp),
+                            .padding(7.dp, 10.dp),
                         painter = painterResource(id = getRiceBowlIcon(breakfastEaten)),
                         contentDescription = "아침 식사 기록",
-
-                        )
+                    )
 
                     Text(
                         "아침",
                         style = MediCareCallTheme.typography.R_16,
                         color = MediCareCallTheme.colors.gray6,
                     )
-
                 }
-
 
                 //점심
                 Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.padding(horizontal = 7.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
                         modifier = Modifier
-                            .padding(horizontal = 7.dp)
-                            .size(48.dp),
+                            .padding(7.dp, 10.dp),
                         painter = painterResource(id = getRiceBowlIcon(lunchEaten)),
                         contentDescription = "점심 식사 기록",
-
-                        )
+                    )
 
                     Text(
                         "점심",
@@ -141,32 +133,26 @@ fun HomeMealContainer(
 
                 }
 
-
                 //저녁
                 Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.padding(horizontal = 7.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+
                     Image(
                         modifier = Modifier
-                            .padding(horizontal = 7.dp)
-                            .size(48.dp),
+                            .padding(7.dp, 10.dp),
                         painter = painterResource(id = getRiceBowlIcon(dinnerEaten)),
                         contentDescription = "저녁 식사 기록",
-
-                        )
+                    )
 
                     Text(
                         "저녁",
                         style = MediCareCallTheme.typography.R_16,
                         color = MediCareCallTheme.colors.gray6,
                     )
-
                 }
-
-
             }
-
         }
     }
 }
@@ -181,7 +167,7 @@ fun PreviewHomeMealContainer() {
         breakfastEaten = true,
         lunchEaten = false,
         dinnerEaten = null,
-        onClick = {}
+        onClick = {},
     )
 
 }

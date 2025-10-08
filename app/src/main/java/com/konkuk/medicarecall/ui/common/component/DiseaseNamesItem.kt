@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Text
@@ -17,50 +16,54 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun DiseaseNamesItem(
-    inputText: MutableState<String>,
-    diseaseList: MutableList<String>,
-    modifier: Modifier = Modifier
+    inputText: String,
+    diseaseList: List<String>,
+    onTextChanged: (String) -> Unit,
+    onAddDisease: (String) -> Unit,
+    onRemoveChip: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
             text = "질환 정보",
             style = MediCareCallTheme.typography.M_17,
-            color = MediCareCallTheme.colors.gray7
+            color = MediCareCallTheme.colors.gray7,
         )
         if (diseaseList.isNotEmpty()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .horizontalScroll(rememberScrollState()),
             ) {
-                diseaseList.forEachIndexed { index, disease ->
+                diseaseList.forEach { disease ->
                     ChipItem(
                         text = disease,
                         onRemove = {
-                            diseaseList.removeAt(index)
-                        }
+                            onRemoveChip(disease)
+                        },
                     )
                     Spacer(Modifier.width(10.dp))
                 }
             }
         }
         AddTextField(
-            inputText = inputText.value,
+            inputText = inputText,
             placeHolder = "질환명",
-            onTextChange = { inputText.value = it },
+            onTextChange = { onTextChanged(it) },
             clickPlus = {
-                if (inputText.value.trim().isNotBlank()) {
-                    if (diseaseList.contains(inputText.value)) {
-                        inputText.value = ""
+                if (inputText.trim().isNotBlank()) {
+                    if (diseaseList.contains(inputText)) {
+                        onTextChanged("")
                     } else {
 
-                        diseaseList.add(inputText.value)
-                        inputText.value = ""
+                        onAddDisease(inputText)
+                        onTextChanged("")
                     }
                 }
-            })
+            },
+        )
     }
 }

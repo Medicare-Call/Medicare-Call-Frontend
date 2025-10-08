@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -24,10 +26,8 @@ import java.time.LocalDate
 
 @Composable
 fun WeeklyCalendar(
-    calendarUiState: CalendarUiState,        // 현재 선택된 연/월/주차 날짜 상태
-    onDateSelected: (LocalDate) -> Unit      // 날짜 클릭 시 동작할 콜백
-
-
+    calendarUiState: CalendarUiState,         // 현재 선택된 연/월/주차 날짜 상태
+    onDateSelected: (LocalDate) -> Unit,      // 날짜 클릭 시 동작할 콜백
 ) {
     val weekDays = listOf("일", "월", "화", "수", "목", "금", "토") // 요일 표시
 
@@ -37,34 +37,31 @@ fun WeeklyCalendar(
         // 요일 (일~토)
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-
-        ) {
+            horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
 
             weekDays.forEach { day ->
 
                 Box(
                     modifier = Modifier,
-                    contentAlignment = Alignment.Center
-
-
+                    contentAlignment = Alignment.Center,
                 ) {
 
                     Text(
                         modifier = Modifier
                             .padding(horizontal = 6.5.dp),
                         text = day,
-                        style = MediCareCallTheme.typography.SB_18,
-                        color = MediCareCallTheme.colors.gray9
+                        style = MediCareCallTheme.typography.R_18,
+                        color = MediCareCallTheme.colors.gray4,
                     )
                 }
             }
         }
-
+        Spacer(modifier = Modifier.height(3.dp))
         // 해당 주 날짜
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             calendarUiState.weekDates.forEach { date ->
 
@@ -76,15 +73,15 @@ fun WeeklyCalendar(
                         .clip(CircleShape)
                         .background(if (isSelected) MediCareCallTheme.colors.main else Color.Transparent)
                         .clickable { onDateSelected(date) },
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
 
 
                     Text(
                         modifier = Modifier,
                         text = "${date.dayOfMonth}",
-                        style = MediCareCallTheme.typography.R_18,
-                        color = if (isSelected) Color.White else MediCareCallTheme.colors.gray4
+                        style = if (isSelected) MediCareCallTheme.typography.SB_18 else MediCareCallTheme.typography.M_17,
+                        color = if (isSelected) Color.White else MediCareCallTheme.colors.gray4,
                     )
                 }
 
@@ -105,8 +102,8 @@ fun PreviewWeeklyCalendar() {
             currentYear = baseDate.year,
             currentMonth = baseDate.monthValue,
             weekDates = week,
-            selectedDate = baseDate.plusDays(2)
+            selectedDate = baseDate.plusDays(2),
         ),
-        onDateSelected = {}
+        onDateSelected = {},
     )
 }

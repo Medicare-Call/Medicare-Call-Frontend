@@ -35,7 +35,6 @@ data class MedicineDto(
 fun MedicineDto.toUiState(): MedicineUiState {
     return MedicineUiState(
         medicineName = name,
-        todayTakenCount = 0,
         todayRequiredCount = timesPerDay,
         doseStatusList = emptyList()
     )

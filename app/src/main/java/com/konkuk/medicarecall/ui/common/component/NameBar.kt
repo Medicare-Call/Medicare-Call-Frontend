@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +29,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 @Composable
 fun NameBar(
     name: String,
+    notificationCount: Int,
     modifier: Modifier = Modifier,
     navController: NavHostController,
     onDropdownClick: () -> Unit
@@ -40,15 +40,12 @@ fun NameBar(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = 16.dp, vertical = 14.dp)
                 .background(Color.White),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
-
-
             Row(
                 Modifier.clickable(
                     indication = null,
@@ -66,21 +63,18 @@ fun NameBar(
                     modifier = Modifier
 
                         .size(18.dp),
-                    painter = painterResource(id = R.drawable.ic_arrow_down),
+                    painter = painterResource(id = R.drawable.ic_arrow_down_big),
                     contentDescription = "arrow down",
                     tint = MediCareCallTheme.colors.gray3
                 )
 
             }
 
-            Icon(
-                painter = painterResource(id = R.drawable.ic_bell),
-                "bell",
-                tint = Color.Unspecified,
-                modifier = modifier.clickable { navController.navigate(route = Route.Alarm.route) }
+            NotificationIconWithBadge(
+                notificationCount = notificationCount,
+                onClick = { navController.navigate(route = Route.Alarm.route) }
             )
         }
-
     }
 }
 
@@ -93,6 +87,7 @@ fun PreviewNameBar() {
 
         NameBar(
             name = "김옥자",
+            notificationCount = 4,
             navController = rememberNavController(),
             onDropdownClick = {}
         )
