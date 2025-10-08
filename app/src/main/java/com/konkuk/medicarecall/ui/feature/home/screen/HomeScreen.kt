@@ -497,13 +497,18 @@ fun PreviewHomeScreen_Unrecorded() {
         glucoseLevelAverageToday = 0
     )
 
-    val previewNameList = listOf("김옥자", "박막례", "최이순")
+    val previewElderInfoList = listOf(
+        ElderInfo(1, "김옥자", "010-1111-1111"),
+        ElderInfo(2, "박막례", "010-2222-2222")
+    )
+    val previewSelectedId = 1
 
     MediCareCallTheme {
         HomeScreenLayout(
             navController = rememberNavController(),
             homeUiState = unrecordedUiState,
-            elderNameList = previewNameList,
+            elderInfoList = previewElderInfoList,
+            selectedElderId = previewSelectedId,
             isRefreshing = false,
             dropdownOpened = false,
             onDropdownClick = {},
@@ -519,9 +524,7 @@ fun PreviewHomeScreen_Unrecorded() {
             isLoading = false,
             immediateCall = {},
             onRefresh = {},
-            onFabClick = {}
+            onFabClick = {},
         )
     }
 }
-
-
