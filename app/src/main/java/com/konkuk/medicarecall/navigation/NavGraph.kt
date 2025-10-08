@@ -40,7 +40,7 @@ import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
