@@ -27,11 +27,12 @@ fun ElderChip(
     selected: Boolean,
     onRemove: () -> Unit,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         shape = RoundedCornerShape(100.dp),
         color = if (selected) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.bg,
-        modifier = Modifier
+        modifier = modifier
             .border(
                 (1.2).dp,
                 if (selected) MediCareCallTheme.colors.main
