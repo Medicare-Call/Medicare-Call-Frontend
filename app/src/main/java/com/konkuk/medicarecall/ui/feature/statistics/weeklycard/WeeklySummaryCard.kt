@@ -25,20 +25,20 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklySummaryCard(
     modifier: Modifier = Modifier,
-    summary: WeeklySummaryUiState
+    summary: WeeklySummaryUiState,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                group = LocalMediCareCallShadowProvider.current.shadow01,
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
             Text(
                 "주간 요약통계",
@@ -48,28 +48,28 @@ fun WeeklySummaryCard(
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
 
                 WeeklySummaryItem(
                     title = "식사율",
                     value = summary.weeklyMealRate,
-                    unit = "%"
+                    unit = "%",
                 )
                 WeeklySummaryItem(
                     title = "복약률",
                     value = summary.weeklyMedicineRate,
-                    unit = "%"
+                    unit = "%",
                 )
                 WeeklySummaryItem(
                     title = "건강징후",
                     value = summary.weeklyHealthIssueCount,
-                    unit = "건"
+                    unit = "건",
                 )
                 WeeklySummaryItem(
                     title = "미응답",
                     value = summary.weeklyUnansweredCount,
-                    unit = "건"
+                    unit = "건",
                 )
             }
         }
@@ -81,7 +81,7 @@ private fun WeeklySummaryItem(
     modifier: Modifier = Modifier,
     title: String,
     value: Int,
-    unit: String
+    unit: String,
 ) {
 
     val isUnrecorded = if (title != "건강징후") value <= 0 else value < 0
@@ -89,29 +89,30 @@ private fun WeeklySummaryItem(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Start),
+            modifier = Modifier
+                .align(Alignment.Start),
             text = title,
             style = MediCareCallTheme.typography.R_14,
-            color = MediCareCallTheme.colors.gray6,
+            color = MediCareCallTheme.colors.gray8,
         )
         Spacer(modifier = Modifier.height(4.dp))
 
         Row(
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
         ) {
             Text(
                 text = valueText,
                 style = MediCareCallTheme.typography.SB_22,
-                color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.black, // ◀ 색상 변경
+                color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.black,
             )
             Text(
                 text = unit,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp),
-                style = MediCareCallTheme.typography.R_16,
-                color = if (isUnrecorded) MediCareCallTheme.colors.black else MediCareCallTheme.colors.black, // ◀ 색상 변경
+                style = MediCareCallTheme.typography.M_16,
+                color = if (isUnrecorded) MediCareCallTheme.colors.black else MediCareCallTheme.colors.black,
             )
         }
     }
@@ -126,8 +127,8 @@ fun PreviewWeeklySummaryCard_Recorded() {
             weeklyMealRate = 65,
             weeklyMedicineRate = 57,
             weeklyHealthIssueCount = 3,
-            weeklyUnansweredCount = 8
-        )
+            weeklyUnansweredCount = 8,
+        ),
     )
 }
 
