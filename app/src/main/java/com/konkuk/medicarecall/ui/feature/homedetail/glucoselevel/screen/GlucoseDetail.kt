@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,15 +39,15 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseViewModel
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseTimingButton
-import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseViewModel
+import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
@@ -83,6 +84,9 @@ fun GlucoseDetail(
 
     val coroutineScope = rememberCoroutineScope()
 
+    // 로딩 요청 중복 방지를 위한 플래그
+    val isRequestingMore = remember { mutableStateOf(false) }
+
     // 데이터 새로고침 로직
     val refreshData = remember(viewModel) {
         {
@@ -106,14 +110,27 @@ fun GlucoseDetail(
     }
 
 
-    // 무한 스크롤
-    LaunchedEffect(scrollState.value) {
-        Log.d("scroll", "${scrollState.value}")
-        if (scrollState.value > scrollState.maxValue - 250 && elderId != null && !uiState.isLoading && uiState.hasNext) {
+    // 무한 스크롤 (더 빠른 트리거와 중복 요청 방지)
+    LaunchedEffect(scrollState.value, scrollState.maxValue) {
+        Log.d("scroll", "value: ${scrollState.value}, max: ${scrollState.maxValue}, isLoading: ${uiState.isLoading}, hasNext: ${uiState.hasNext}")
+
+        // 더 일찍 트리거 (500dp 전에 미리 로딩)
+        val shouldLoad = scrollState.value > scrollState.maxValue - 500 || scrollState.maxValue <= 100
+
+        if (shouldLoad && elderId != null && !uiState.isLoading && uiState.hasNext && !isRequestingMore.value) {
+            isRequestingMore.value = true
             val currentTiming = uiState.selectedTiming
             val currentPage = counter.getValue(currentTiming)
-            viewModel.getGlucoseData(elderId!!, currentPage + 1, currentTiming)
+            Log.d("scroll", "Loading page ${currentPage + 1} for $currentTiming")
+            viewModel.getGlucoseData(elderId!!, currentPage + 1, currentTiming, false)
             counter[currentTiming] = currentPage + 1
+        }
+    }
+
+    // 로딩 완료 시 플래그 리셋
+    LaunchedEffect(uiState.isLoading) {
+        if (!uiState.isLoading) {
+            isRequestingMore.value = false
         }
     }
 
@@ -168,7 +185,7 @@ fun GlucoseDetailLayout(
             title = "혈당",
             navController = navController
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Row(
             modifier = Modifier
@@ -219,7 +236,7 @@ fun GlucoseDetailLayout(
                     scrollState = scrollState,
                     timing = selectedTiming
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(44.dp))
 
                 //그래프 점 클릭시
                 val selectedPoint = uiState.graphDataPoints.getOrNull(selectedIndex)

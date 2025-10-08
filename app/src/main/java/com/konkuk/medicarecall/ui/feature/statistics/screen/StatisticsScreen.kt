@@ -155,7 +155,8 @@ fun StatisticsScreenLayout(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
             navController = navController,
-            onDropdownClick = { dropdownOpened.value = !dropdownOpened.value }
+            onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
+            notificationCount = 4,//TODO: 실제 알림 개수 데이터 연동 필요
         )
 
         when {
@@ -189,6 +190,7 @@ fun StatisticsScreenLayout(
             }
         }
     }
+
     if (dropdownOpened.value) {
         NameDropdown(
             items = elderNameList,

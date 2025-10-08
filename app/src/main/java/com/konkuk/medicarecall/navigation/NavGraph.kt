@@ -31,16 +31,16 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDet
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
-import com.konkuk.medicarecall.ui.feature.login.carecall.screen.SetCallScreen
+import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.FinishSplashScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayScreen
+import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
+import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
@@ -420,11 +420,13 @@ fun NavGraph(
             }
 
             composable(route = Route.SetCall.route) {
-                SetCallScreen(
+                CallTimeScreen(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController,
+                    navigatedToPayment = {
+                        navController.navigate(Route.Payment.route)
+                    },
                 )
             }
 
@@ -438,7 +440,7 @@ fun NavGraph(
             }
 
             composable(route = Route.NaverPay.route) {
-                NaverPayScreen(
+                NaverPayWebViewScreen(
                     onBack = {
                         navController.popBackStack()
                     },
@@ -447,7 +449,7 @@ fun NavGraph(
             }
 
             composable(route = Route.FinishSplash.route) {
-                FinishSplashScreen(
+                LoginFinishScreen(
                     navController = navController,
                 )
             }
@@ -456,7 +458,7 @@ fun NavGraph(
                 route = Route.NaverPayWithCode.route,
                 arguments = listOf(navArgument("orderCode") { type = NavType.StringType })
             ) { backStackEntry ->
-                NaverPayScreen(
+                NaverPayWebViewScreen(
                     onBack = { navController.popBackStack() },
                     navController = navController
                 )

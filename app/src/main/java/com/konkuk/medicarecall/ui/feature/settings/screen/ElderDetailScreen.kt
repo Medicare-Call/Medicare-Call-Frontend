@@ -62,7 +62,7 @@ fun PersonalDetailScreen(
     val date = parseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
     val scrollState = rememberScrollState()
 
-    var isMale by remember { mutableStateOf<Boolean?>(gender) }
+    var isMale by remember { mutableStateOf<Boolean>(gender) }
     var name by remember { mutableStateOf(eldersInfoResponseDto.name) }
     var birth by remember { mutableStateOf(date) }
     var phoneNum by remember { mutableStateOf(eldersInfoResponseDto.phone) }

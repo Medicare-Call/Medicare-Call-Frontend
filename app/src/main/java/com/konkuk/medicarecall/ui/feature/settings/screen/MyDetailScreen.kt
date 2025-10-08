@@ -44,7 +44,7 @@ fun MyDetailScreen(
     onBack: () -> Unit = {},
     detailMyDataViewModel: DetailMyDataViewModel = hiltViewModel()
 ) {
-    var isMale by remember { mutableStateOf<Boolean?>(myDataInfo.gender == GenderType.MALE) }
+    var isMale by remember { mutableStateOf<Boolean>(myDataInfo.gender == GenderType.MALE) }
     var name by remember { mutableStateOf(myDataInfo.name) }
     var birth by remember { mutableStateOf(myDataInfo.birthDate.replace("-", "")) }
     val scrollState = rememberScrollState()

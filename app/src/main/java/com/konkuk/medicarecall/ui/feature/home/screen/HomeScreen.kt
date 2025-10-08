@@ -12,16 +12,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -46,19 +42,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallFloatingButton
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallSnackBar
 import com.konkuk.medicarecall.ui.feature.home.component.HomeGlucoseLevelContainer
@@ -67,11 +61,10 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
-import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.theme.main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -170,6 +163,21 @@ fun HomeScreenLayout(
     }
     var expanded by remember { mutableStateOf(false) }
 
+    val hasSummaryData = homeUiState.balloonMessage.isNotBlank()
+    val cardBackgroundColor = if (hasSummaryData) {
+        // 데이터 있음 -> 초록색
+        MediCareCallTheme.colors.main
+    } else {
+        // 데이터 없음 (미기록) -> 회색
+        MediCareCallTheme.colors.gray3
+    }
+
+    val summaryTitleColor =
+        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+    val summaryBodyColor =
+        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+    val summaryText = if (hasSummaryData) homeUiState.balloonMessage else "아직 기록되지 않았어요."
+
     Scaffold(
 
         contentWindowInsets = WindowInsets(0),
@@ -229,6 +237,15 @@ fun HomeScreenLayout(
                 }
             }
         },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.offset(y = -(10).dp)
+
+            ) { data ->
+                CareCallSnackBar(snackBarData = data)
+            }
+        }
     ) { innerPadding ->
         Box(
             modifier = modifier
@@ -244,7 +261,9 @@ fun HomeScreenLayout(
                     name = selectedElderName,
                     modifier = Modifier.statusBarsPadding(),
                     navController = navController,
-                    onDropdownClick = onDropdownClick
+                    onDropdownClick = onDropdownClick,
+                    // TODO: 실제 알림 개수 데이터 연동 필요
+                    notificationCount = 4,
                 )
                 val scope = rememberCoroutineScope()
 
@@ -256,6 +275,9 @@ fun HomeScreenLayout(
                             refreshState.animateToHidden()
                         }
                     },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MediCareCallTheme.colors.bg),
                     state = refreshState,
                     indicator = {
                         // 기본 인디케이터를 사용하되, 색상과 높이만 변경
@@ -284,174 +306,105 @@ fun HomeScreenLayout(
                             modifier = Modifier
                                 .verticalScroll(rememberScrollState())
                                 .fillMaxSize()
+                                .padding(horizontal = 20.dp)
                         ) {
+                            Spacer(Modifier.height(20.dp))
 
+                            // 오늘의 건강 통계
+                            Text(
+                                text = "오늘의 건강 통계",
+                                style = MediCareCallTheme.typography.SB_18,
+                                color = MediCareCallTheme.colors.gray6
+                            )
 
-                            //1. 초록 카드
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .heightIn(min = 220.dp)
-                                    .background(main)
+                            Spacer(Modifier.height(20.dp))
 
-
+                            // 초록색 한 줄 요약 카드
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = CardDefaults.cardColors(containerColor = cardBackgroundColor)
                             ) {
-                                Row(
-                                    modifier = Modifier.padding(
-                                        horizontal = 20.dp,
-                                        vertical = 40.dp
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically
+                                Column(
+                                    modifier = Modifier.padding(20.dp)
                                 ) {
-
-
-                                    val balloonText = homeUiState.balloonMessage
-                                    val trimmedText = balloonText.take(45)
-
-
-                                    //말풍선
-                                    Card(
-                                        modifier = Modifier
-                                            //텍스트에 따라 말풍선 늘리기
-                                            .width(196.dp)
-                                            .heightIn(min = 94.dp)
-                                            .zIndex(2f), //겹치는 도형 위로 올림
-                                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                                        shape = RoundedCornerShape(10.dp)
-                                    ) {
-
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.char_medi),
+                                            contentDescription = "요약 아이콘",
+                                        )
+                                        Spacer(Modifier.width(8.dp))
                                         Text(
-                                            text = trimmedText,
-                                            style = MediCareCallTheme.typography.R_16,
-                                            color = MediCareCallTheme.colors.gray8,
-                                            modifier = Modifier
-                                                .padding(8.dp)
-                                                .background(Color.White)
+                                            text = "한 줄 요약",
+                                            style = MediCareCallTheme.typography.B_20,
+                                            color = summaryTitleColor,
                                         )
                                     }
-                                    // 꼬리
-                                    Box(
-                                        modifier = Modifier
-                                            .size(width = 14.dp, height = 13.dp)
-                                            .offset(x = -2.dp, y = 20.dp)
-                                            .clip(SpeechTail)
-                                            .background(Color.White)
-                                            .zIndex(2f)
-
-
+                                    Spacer(Modifier.height(30.dp))
+                                    Text(
+                                        text = summaryText,
+                                        style = MediCareCallTheme.typography.R_16,
+                                        color = summaryBodyColor,
                                     )
                                 }
-                                //캐릭터 그림자
-                                Image(
-                                    painter = painterResource(id = R.drawable.char_medi_shadow),
-                                    contentDescription = "캐릭터 그림자",
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .offset(x = (-52.13).dp, y = -56.19.dp)
-                                        .zIndex(-1f)
-                                )
-                                //캐릭터
-                                Image(
-                                    painter = painterResource(id = R.drawable.char_medi),
-                                    contentDescription = "캐릭터 이미지",
-                                    modifier = Modifier
-                                        .size((118.5).dp, (100.14).dp)
-                                        .align(Alignment.BottomEnd)
-                                        .offset(x = (-7.75).dp, y = (-55.12).dp)
-                                        .zIndex(3f)
-                                )
                             }
 
-
-                            //2. 흰색 카드
-                            Box(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .offset(y = -40.dp)
-                                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                                    .background(Color.White)
-
-
+                            //건강 항목별 상세 카드
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                // 카드 내용
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight()
-                                        .padding(20.dp)
-                                ) {
-                                    Spacer(Modifier.height(12.dp))
-                                    HomeMealContainer(
-                                        breakfastEaten = homeUiState.breakfastEaten,
-                                        lunchEaten = homeUiState.lunchEaten,
-                                        dinnerEaten = homeUiState.dinnerEaten,
-                                        onClick = { onNavigateToMealDetail() }
-                                    )
-                                    Spacer(Modifier.height(12.dp))
-                                    HomeMedicineContainer(
-                                        medicines = homeUiState.medicines,
-                                        onClick = { onNavigateToMedicineDetail() }
-                                    )
-                                    Spacer(Modifier.height(12.dp))
-                                    val sleepData = homeUiState.sleep
-                                    HomeSleepContainer(
-                                        totalSleepHours = sleepData.meanHours,
-                                        totalSleepMinutes = sleepData.meanMinutes,
-                                        isRecorded = sleepData.meanHours > 0 || sleepData.meanMinutes > 0,
-                                        onClick = { onNavigateToSleepDetail() }
-                                    )
-                                    Spacer(Modifier.height(12.dp))
-                                    HomeStateHealthContainer(
-                                        healthStatus = homeUiState.healthStatus,
-                                        onClick = { onNavigateToStateHealthDetail() }
-                                    )
-                                    Spacer(Modifier.height(12.dp))
-                                    HomeStateMentalContainer(
-                                        mentalStatus = homeUiState.mentalStatus,
-                                        onClick = { onNavigateToStateMentalDetail() }
-                                    )
-                                    Spacer(Modifier.height(12.dp))
-                                    HomeGlucoseLevelContainer(
-                                        glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday,
-                                        onClick = { onNavigateToGlucoseDetail() }
-                                    )
-                                    Spacer(Modifier.height(12.dp))
-                                }
+                                Spacer(Modifier.height(30.dp))
+                                HomeMealContainer(
+                                    breakfastEaten = homeUiState.breakfastEaten,
+                                    lunchEaten = homeUiState.lunchEaten,
+                                    dinnerEaten = homeUiState.dinnerEaten,
+                                    onClick = { onNavigateToMealDetail() }
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                HomeMedicineContainer(
+                                    medicines = homeUiState.medicines,
+                                    onClick = { onNavigateToMedicineDetail() }
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                val sleepData = homeUiState.sleep
+                                HomeSleepContainer(
+                                    totalSleepHours = sleepData.meanHours,
+                                    totalSleepMinutes = sleepData.meanMinutes,
+                                    isRecorded = sleepData.meanHours > 0 || sleepData.meanMinutes > 0,
+                                    onClick = { onNavigateToSleepDetail() }
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                HomeStateHealthContainer(
+                                    healthStatus = homeUiState.healthStatus,
+                                    onClick = { onNavigateToStateHealthDetail() }
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                HomeStateMentalContainer(
+                                    mentalStatus = homeUiState.mentalStatus,
+                                    onClick = { onNavigateToStateMentalDetail() }
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                HomeGlucoseLevelContainer(
+                                    glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday,
+                                    onClick = { onNavigateToGlucoseDetail() }
+                                )
+                                Spacer(Modifier.height(12.dp))
                             }
                         }
                     }
                 }
-
-            }
-
-            if (dropdownOpened) {
-                NameDropdown(
-                    items = elderNameList,
-                    selectedName = selectedElderName,
-                    onDismiss = onDropdownDismiss,
-                    onItemSelected = onDropdownItemSelected
-                )
-            }
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .offset(y = -(10.dp))
-            ) { data ->
-                CareCallSnackBar(snackBarData = data)
             }
         }
-    }
-}
 
-val SpeechTail = GenericShape { size, _ ->
-    // 90도 회전된 삼각형
-    moveTo(0f, 0f) // 왼쪽 위
-    lineTo(size.width, size.height / 2) // 오른쪽 중간
-    lineTo(0f, size.height) // 왼쪽 아래
-    close()
+        if (dropdownOpened) {
+            NameDropdown(
+                items = elderNameList,
+                selectedName = selectedElderName,
+                onDismiss = onDropdownDismiss,
+                onItemSelected = onDropdownItemSelected
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true, heightDp = 1500)
@@ -462,8 +415,8 @@ fun PreviewHomeScreen() {
         elderName = "김옥자",
         balloonMessage = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요.",
         breakfastEaten = true,
-        lunchEaten = true,
-        dinnerEaten = false,
+        lunchEaten = false,
+        dinnerEaten = null,
         medicines = listOf(
             MedicineUiState("혈압약", 2, 3, "저녁"),
             MedicineUiState("당뇨약", 1, 2, "저녁")
@@ -493,7 +446,51 @@ fun PreviewHomeScreen() {
             onNavigateToStateMentalDetail = {},
             onNavigateToGlucoseDetail = {},
             snackbarHostState = SnackbarHostState(),
-            isLoading = true,
+            isLoading = false,
+            immediateCall = {},
+            onRefresh = {},
+            onFabClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "홈 화면 (미기록 상태)", heightDp = 1500)
+@Composable
+fun PreviewHomeScreen_Unrecorded() {
+    val unrecordedUiState = HomeUiState(
+        isLoading = false,
+        elderName = "김옥자",
+        balloonMessage = "",
+        breakfastEaten = null,
+        lunchEaten = null,
+        dinnerEaten = null,
+        medicines = emptyList(),
+        sleep = HomeResponseDto.SleepDto(0, 0),
+        healthStatus = "",
+        mentalStatus = "",
+        glucoseLevelAverageToday = 0
+    )
+
+    val previewNameList = listOf("김옥자", "박막례", "최이순")
+
+    MediCareCallTheme {
+        HomeScreenLayout(
+            navController = rememberNavController(),
+            homeUiState = unrecordedUiState,
+            elderNameList = previewNameList,
+            isRefreshing = false,
+            dropdownOpened = false,
+            onDropdownClick = {},
+            onDropdownDismiss = {},
+            onDropdownItemSelected = {},
+            onNavigateToMealDetail = {},
+            onNavigateToMedicineDetail = {},
+            onNavigateToSleepDetail = {},
+            onNavigateToStateHealthDetail = {},
+            onNavigateToStateMentalDetail = {},
+            onNavigateToGlucoseDetail = {},
+            snackbarHostState = SnackbarHostState(),
+            isLoading = false,
             immediateCall = {},
             onRefresh = {},
             onFabClick = {}
