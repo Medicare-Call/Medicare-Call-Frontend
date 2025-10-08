@@ -73,11 +73,7 @@ class StatisticsViewModel @Inject constructor(
     fun refresh() {
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastFetchTime < 60000) {
-            // 로딩 인디케이터
-            viewModelScope.launch {
-                _uiState.value = _uiState.value.copy(isLoading = true)
-                _uiState.value = _uiState.value.copy(isLoading = false)
-            }
+
             return
         }
 
