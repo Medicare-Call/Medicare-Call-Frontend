@@ -28,7 +28,6 @@ import com.konkuk.medicarecall.ui.navigation.component.MainTab
 import com.konkuk.medicarecall.ui.navigation.rememberMainNavigator
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.toImmutableList
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -80,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         MainBottomBar(
                             visible = navigator.shouldShowBottomBar(),
-                            tabs = MainTab.entries.toImmutableList(),
+                            tabs = MainTab.entries.toList(),
                             currentTab = navigator.currentTab,
                             onTabSelected = {
                                 navigator.navigateToMainTab(it)

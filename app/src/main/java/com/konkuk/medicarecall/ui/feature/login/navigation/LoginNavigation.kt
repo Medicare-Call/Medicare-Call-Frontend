@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.SetCallScreen
@@ -67,7 +66,7 @@ fun NavGraphBuilder.loginNavGraph(
     navigateToHome: () -> Unit,
     navigateToPhone: () -> Unit,
     navigateToVerification: () -> Unit,
-    navigateTpRegisterUserInfo: () -> Unit,
+    navigateToRegisterUserInfo: () -> Unit,
     navigateToRegisterElder: () -> Unit,
     navigateToRegisterElderHealth: () -> Unit,
     navigateToCareCallSetting: () -> Unit,
@@ -98,7 +97,7 @@ fun NavGraphBuilder.loginNavGraph(
     composable<Route.LoginVerification> {
         LoginVerificationScreen(
             onBack = popBackStack,
-            navigateToUserInfo = navigateTpRegisterUserInfo,
+            navigateToUserInfo = navigateToRegisterUserInfo,
             navigateToPhone = navigateToPhone,
             navigateToRegisterElder = navigateToRegisterElder,
             navigateToCareCallSetting = navigateToCareCallSetting,
