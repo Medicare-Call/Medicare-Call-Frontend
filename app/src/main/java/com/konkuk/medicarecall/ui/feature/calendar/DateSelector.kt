@@ -50,7 +50,7 @@ fun DateSelector(
             modifier = Modifier.padding(end = 4.dp)
         )
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_down),
+            painter = painterResource(id = R.drawable.ic_arrow_down_small),
             contentDescription = "Month Select",
             tint = MediCareCallTheme.colors.gray4
         )

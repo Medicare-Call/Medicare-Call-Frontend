@@ -65,10 +65,10 @@ fun Triple<Int, Int, Int>.toDisplayString(): String {
 }
 
 @Composable
-fun SetCallScreen(
+fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navController: NavHostController,
+    navigatedToPayment : () -> Unit = {},
     eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
     callTimeViewModel: CallTimeViewModel = hiltViewModel(),
 ) {
@@ -358,7 +358,7 @@ fun SetCallScreen(
                     callTimeViewModel.submitAllByIds(
                         elderIds = elderIds,
                         onSuccess = {
-                            navController.navigate(Route.Payment.route)
+                            navigatedToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
                             Log.d("SetCallScreen", "시간 : ${callTimeViewModel.timeMap}")
                         },

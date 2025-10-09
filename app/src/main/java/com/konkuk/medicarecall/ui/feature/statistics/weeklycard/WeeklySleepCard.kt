@@ -32,7 +32,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklySleepCard(
     modifier: Modifier = Modifier,
-    summary: WeeklySummaryUiState
+    summary: WeeklySummaryUiState,
 ) {
     val isUnrecorded = summary.weeklySleepHours == null
     val hoursText = if (isUnrecorded) "--" else summary.weeklySleepHours.toString()
@@ -46,15 +46,15 @@ fun WeeklySleepCard(
             .fillMaxWidth()
             .fillMaxHeight()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                group = LocalMediCareCallShadowProvider.current.shadow01,
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
 
             //1) Title: 평균 수면
@@ -71,14 +71,14 @@ fun WeeklySleepCard(
                 painter = painterResource(id = R.drawable.ic_moon),
                 contentDescription = "moon",
                 modifier = Modifier.size(40.dp),
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
             Spacer(modifier = Modifier.height(4.dp))
 
             // 3) 시간
 
             Row(
-                modifier = Modifier.padding(horizontal = 10.dp),
+                modifier = Modifier.padding(end = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -90,7 +90,7 @@ fun WeeklySleepCard(
                 Text(
                     modifier = Modifier.offset(y = (2).dp),
                     text = "시간",
-                    style = MediCareCallTheme.typography.R_16,
+                    style = MediCareCallTheme.typography.M_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -103,7 +103,7 @@ fun WeeklySleepCard(
                 Text(
                     modifier = Modifier.offset(y = (2).dp),
                     text = "분",
-                    style = MediCareCallTheme.typography.R_16,
+                    style = MediCareCallTheme.typography.M_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
             }
@@ -122,8 +122,8 @@ fun PreviewWeeklySleepCard_Recorded() {
             weeklyMealRate = 0,
             weeklyMedicineRate = 0,
             weeklyHealthIssueCount = 0,
-            weeklyUnansweredCount = 0
-        )
+            weeklyUnansweredCount = 0,
+        ),
     )
 }
 
@@ -132,6 +132,6 @@ fun PreviewWeeklySleepCard_Recorded() {
 fun PreviewWeeklySleepCard_Unrecorded() {
     WeeklySleepCard(
         modifier = Modifier.width(155.dp),
-        summary = WeeklySummaryUiState.EMPTY
+        summary = WeeklySummaryUiState.EMPTY,
     )
 }

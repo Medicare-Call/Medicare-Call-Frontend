@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.SetCallService
+import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.dto.request.SetCallTimeRequestDto
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
