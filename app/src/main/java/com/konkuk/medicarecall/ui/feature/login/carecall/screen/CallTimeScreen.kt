@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -50,11 +49,11 @@ import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBot
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel.CallTimeViewModel
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.model.CallTimes
-import com.konkuk.medicarecall.ui.type.TimeSettingType
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
+import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.TimeSettingType
 import kotlinx.coroutines.launch
 
 
