@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.login.carecall.screen
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -41,10 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import com.konkuk.medicarecall.ui.feature.login.carecall.component.BenefitItem
+import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel.CallTimeViewModel
@@ -68,7 +65,7 @@ fun Triple<Int, Int, Int>.toDisplayString(): String {
 fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navigatedToPayment : () -> Unit = {},
+    navigatedToPayment: () -> Unit = {},
     eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
     callTimeViewModel: CallTimeViewModel = hiltViewModel(),
 ) {
@@ -219,8 +216,8 @@ fun CallTimeScreen(
                     modifier = modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    BenefitItem("매일 3회 케어콜 제공")
-                    BenefitItem("무제한 보호자 지정")
+                    CallTimeBenefit("매일 3회 케어콜 제공")
+                    CallTimeBenefit("무제한 보호자 지정")
                 }
             }
             Spacer(modifier = modifier.height(30.dp))
@@ -364,11 +361,6 @@ fun CallTimeScreen(
                         },
                         onError = { t ->
                             Log.e("SetCallScreen", "콜 시간 설정 실패: $t")
-                            Toast.makeText(
-                                navController.context,
-                                "콜 시간 설정에 실패했습니다. 다시 시도해주세요.",
-                                Toast.LENGTH_SHORT,
-                            ).show()
                         },
                     )
                 },
