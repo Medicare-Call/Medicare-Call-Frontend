@@ -32,7 +32,7 @@ fun CTAButton(
     val backgroundColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.white
         CTAButtonType.GREEN -> MediCareCallTheme.colors.main
-        CTAButtonType.DISABLED -> MediCareCallTheme.colors.g200
+        CTAButtonType.DISABLED -> MediCareCallTheme.colors.gray2
     }
 
     val textColor = when (type) {
@@ -44,7 +44,7 @@ fun CTAButton(
     val clickedColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.gray1
         CTAButtonType.GREEN -> MediCareCallTheme.colors.g500
-        CTAButtonType.DISABLED -> MediCareCallTheme.colors.g200
+        CTAButtonType.DISABLED -> MediCareCallTheme.colors.gray2
     }
 
     val interactionSource = remember { MutableInteractionSource() }

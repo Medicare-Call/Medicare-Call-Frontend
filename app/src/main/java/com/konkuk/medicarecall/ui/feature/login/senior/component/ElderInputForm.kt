@@ -46,7 +46,7 @@ fun ElderInputForm(
                 onNameChanged(input)
             },
             category = "이름",
-            placeHolder = "이름",
+            placeHolder = "성함을 입력해주세요",
             textFieldModifier = if (nameFocusRequester != null)
                 Modifier.focusRequester(nameFocusRequester)
             else Modifier,
@@ -59,7 +59,7 @@ fun ElderInputForm(
                 onBirthDateChanged(filtered)
             },
             category = "생년월일",
-            placeHolder = "YYYY / MM / DD",
+            placeHolder = "0000 / 00 / 00",
             keyboardType = KeyboardType.Number,
             visualTransformation = DateOfBirthVisualTransformation(),
             maxLength = 8,
@@ -84,7 +84,7 @@ fun ElderInputForm(
                 onPhoneNumberChanged(filtered)
             },
             category = "휴대폰 번호",
-            placeHolder = "010-1234-5678",
+            placeHolder = "010-1111-1111",
             keyboardType = KeyboardType.Number,
             visualTransformation = PhoneNumberVisualTransformation(),
             maxLength = 11,
@@ -95,7 +95,7 @@ fun ElderInputForm(
         DefaultDropdown(
             enumList = RelationshipType.entries.map { it.displayName }
                 .toList(),
-            placeHolder = "관계 선택하기",
+            placeHolder = "어르신과의 관계를 선택해주세요",
             category = "어르신과의 관계",
             scrollState,
             { onRelationshipChange(it) },
@@ -108,7 +108,7 @@ fun ElderInputForm(
         DefaultDropdown(
             enumList = ElderResidenceType.entries.map { it.displayName }
                 .toList(),
-            placeHolder = "거주방식을 선택해주세요",
+            placeHolder = "어르신의 거주방식을 선택해주세요",
             category = "어르신 거주 방식",
             scrollState,
             { onLivingTypeChanged(it) },
