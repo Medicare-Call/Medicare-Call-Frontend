@@ -425,7 +425,8 @@ fun NavGraph(
                         navController.popBackStack()
                     },
                     navigatedToPayment = {
-                        navController.navigate(Route.Payment.route)
+                        //navController.navigate(Route.Payment.route) // 결제화면 이동(베타 버전에서는 결제화면 없음)
+                        navController.navigate(Route.FinishSplash.route) // 결제화면 없이 바로 완료 화면
                     },
                 )
             }
