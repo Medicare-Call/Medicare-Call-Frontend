@@ -56,9 +56,22 @@ data class HomeUiState(
                             "DINNER" -> "저녁"
                             null, "" -> "-"
                             else -> it.nextTime
-                        }
+                        },
+                        doseStatusList = it.doseStatusList
+                            ?.map { dose ->
+                                DoseStatusUiState(
+                                    time = when (dose.time) {
+                                        "MORNING" -> "아침"
+                                        "LUNCH" -> "점심"
+                                        "DINNER" -> "저녁"
+                                        else -> dose.time
+                                    },
+                                    taken = dose.taken
+                                )
+                            } ?: emptyList()
                     )
                 },
+
 
 
             sleep = dto.sleep ?: HomeResponseDto.SleepDto(0, 0),
@@ -73,5 +86,10 @@ data class MedicineUiState(
     val medicineName: String,
     val todayTakenCount: Int,
     val todayRequiredCount: Int,
-    val nextDoseTime: String?
+    val nextDoseTime: String?,
+    val doseStatusList: List<DoseStatusUiState> = emptyList()
+)
+data class DoseStatusUiState(
+    val time: String,
+    val taken: Boolean? = null
 )

@@ -32,7 +32,6 @@ data class HomeResponseDto(
     data class MedicationStatusDto(
         val totalTaken: Int = 0,
         val totalGoal: Int = 0,
-        val nextMedicationTime: String? = null,
         val medicationList: List<MedicationDto> = emptyList()
     )
 
@@ -41,7 +40,14 @@ data class HomeResponseDto(
         val type: String = "",
         val taken: Int = 0,
         val goal: Int = 0,
-        val nextTime: String? = null
+        val nextTime: String? = null,
+        val doseStatusList: List<DoseStatusDto> = emptyList()
+    )
+
+    @Serializable
+    data class DoseStatusDto(
+        val time: String = "",
+        val taken: Boolean = false
     )
 
     @Serializable
