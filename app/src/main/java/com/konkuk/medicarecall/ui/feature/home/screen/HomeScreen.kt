@@ -34,6 +34,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
@@ -61,6 +64,7 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.ElderInfo
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
@@ -73,6 +77,7 @@ fun HomeScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    mainBackStackEntry: NavBackStackEntry,
     onNavigateToMealDetail: () -> Unit,
     onNavigateToMedicineDetail: () -> Unit,
     onNavigateToSleepDetail: () -> Unit,
@@ -81,20 +86,33 @@ fun HomeScreen(
     onNavigateToGlucoseDetail: () -> Unit,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsState()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
     val elderNameList by homeViewModel.elderNameList.collectAsState()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val updatedName by mainBackStackEntry.savedStateHandle
+        .getStateFlow<String?>("ELDER_NAME_UPDATED", null)
+        .collectAsStateWithLifecycle()
 
+    LaunchedEffect(updatedName) {
+        updatedName?.let {
+            homeViewModel.overrideName(it)
+            mainBackStackEntry.savedStateHandle.remove<String>("ELDER_NAME_UPDATED") // 원샷 처리
+        }
+    }
 
     HomeScreenLayout(
         modifier = modifier,
         navController = navController,
         homeUiState = homeUiState,
-        elderNameList = elderNameList,
+        elderInfoList = elderInfoList,
+        selectedElderId = selectedElderId,
         isRefreshing = isRefreshing,
         dropdownOpened = dropdownOpened,
         onDropdownClick = { dropdownOpened = true },
@@ -134,7 +152,8 @@ fun HomeScreenLayout(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     homeUiState: HomeUiState,
-    elderNameList: List<String>,
+    elderInfoList: List<ElderInfo>,
+    selectedElderId: Int?,
     isRefreshing: Boolean,
     dropdownOpened: Boolean,
     onDropdownClick: () -> Unit,
@@ -152,15 +171,16 @@ fun HomeScreenLayout(
     onRefresh: () -> Unit,
     immediateCall: (String) -> Unit
 ) {
-
-    val refreshState = rememberPullToRefreshState()
-
-    val selectedElderName = remember(homeUiState.elderName, elderNameList) {
-
-        homeUiState.elderName.ifEmpty {
-            elderNameList.firstOrNull() ?: "어르신 선택"
-        }
+    val elderNameList = remember(elderInfoList) {
+        elderInfoList.map { it.name }
     }
+    val refreshState = rememberPullToRefreshState()
+    val selectedElderName =
+        elderInfoList.find { it.id == selectedElderId }?.name
+            ?.takeIf { it.isNotBlank() }
+            ?: homeUiState.elderName
+                .takeIf { it.isNotBlank() }
+            ?: "어르신 선택"
     var expanded by remember { mutableStateOf(false) }
 
     val hasSummaryData = homeUiState.balloonMessage.isNotBlank()
@@ -427,13 +447,19 @@ fun PreviewHomeScreen() {
         glucoseLevelAverageToday = 120
     )
 
-    val previewNameList = listOf("김옥자", "박막례", "최이순")
+    val previewElderInfoList = listOf(
+        ElderInfo(1, "김옥자", "010-1111-1111"),
+        ElderInfo(2, "박막례", "010-2222-2222"),
+        ElderInfo(3, "최이순", "010-3333-3333")
+    )
+    val previewSelectedId = 1
 
     MediCareCallTheme {
         HomeScreenLayout(
             navController = rememberNavController(),
             homeUiState = previewUiState,
-            elderNameList = previewNameList,
+            elderInfoList = previewElderInfoList,
+            selectedElderId = previewSelectedId,
             isRefreshing = false,
             dropdownOpened = false,
             onDropdownClick = {},
@@ -471,13 +497,18 @@ fun PreviewHomeScreen_Unrecorded() {
         glucoseLevelAverageToday = 0
     )
 
-    val previewNameList = listOf("김옥자", "박막례", "최이순")
+    val previewElderInfoList = listOf(
+        ElderInfo(1, "김옥자", "010-1111-1111"),
+        ElderInfo(2, "박막례", "010-2222-2222")
+    )
+    val previewSelectedId = 1
 
     MediCareCallTheme {
         HomeScreenLayout(
             navController = rememberNavController(),
             homeUiState = unrecordedUiState,
-            elderNameList = previewNameList,
+            elderInfoList = previewElderInfoList,
+            selectedElderId = previewSelectedId,
             isRefreshing = false,
             dropdownOpened = false,
             onDropdownClick = {},
@@ -493,7 +524,7 @@ fun PreviewHomeScreen_Unrecorded() {
             isLoading = false,
             immediateCall = {},
             onRefresh = {},
-            onFabClick = {}
+            onFabClick = {},
         )
     }
 }

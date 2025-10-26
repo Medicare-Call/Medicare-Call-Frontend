@@ -105,9 +105,9 @@ fun NavGraph(
     navController: NavHostController,
     loginViewModel: LoginViewModel,
     loginElderViewModel: LoginElderViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-//    val startDestination = if (loginViewModel.isLoggedIn) "main" else "login"
+    // val startDestination = if (loginViewModel.isLoggedIn) "main" else "login"
     // navController = navController, startDestination = Route.Home.route, // 시작 화면
     val calendarViewModel: CalendarViewModel = hiltViewModel()
 
@@ -116,7 +116,7 @@ fun NavGraph(
         startDestination = Route.AppSplash.route, // 시작 화면
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(route = Route.AppSplash.route) {
             SplashScreen(navController)
@@ -137,20 +137,21 @@ fun NavGraph(
 
                 HomeScreen(
                     navController = navController,
+                    homeViewModel = homeViewModel,
+                    mainBackStackEntry = parentEntry,
                     onNavigateToMealDetail = { navController.navigate(Route.MealDetail.route) },
                     onNavigateToMedicineDetail = { navController.navigate(Route.MedicineDetail.route) },
                     onNavigateToSleepDetail = { navController.navigate(Route.SleepDetail.route) },
                     onNavigateToStateHealthDetail = { navController.navigate(Route.StateHealthDetail.route) },
                     onNavigateToStateMentalDetail = { navController.navigate(Route.StateMentalDetail.route) },
                     onNavigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail.route) },
-                    homeViewModel = homeViewModel
                 )
             }
 
             // 홈 상세 화면_식사 화면
             composable(route = Route.MealDetail.route) {
                 MealDetail(
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -158,7 +159,7 @@ fun NavGraph(
             // 홈 상세 화면_복용 화면
             composable(route = Route.MedicineDetail.route) {
                 MedicineDetail(
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -166,7 +167,7 @@ fun NavGraph(
             //홈 상세 화면_수면 화면
             composable(route = Route.SleepDetail.route) {
                 SleepDetail(
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -174,14 +175,14 @@ fun NavGraph(
             //홈 상세 화면_건강 징후 화면
             composable(route = Route.StateHealthDetail.route) {
                 StateHealthDetail(
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             //홈 상세 화면_심리 상태 화면
             composable(route = Route.StateMentalDetail.route) {
                 StateMentalDetail(
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -202,7 +203,7 @@ fun NavGraph(
 
                 StatisticsScreen(
                     navController = navController,
-                    homeViewModel = homeViewModel
+                    homeViewModel = homeViewModel,
                 )
             }
 
@@ -228,24 +229,24 @@ fun NavGraph(
                     onNavigateToHealthInfo = {
                         navController.navigate(Route.HealthInfo.route)
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             composable(
-                route = Route.MyDataSetting.route
+                route = Route.MyDataSetting.route,
             ) {
                 MyDataSettingScreen(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             composable(
                 route = "my_detail/{myDataJson}",
-                arguments = listOf(navArgument("myDataJson") { type = NavType.StringType })
+                arguments = listOf(navArgument("myDataJson") { type = NavType.StringType }),
             ) { backStackEntry ->
                 val encodedJson = backStackEntry.arguments?.getString("myDataJson") ?: ""
                 val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
@@ -263,13 +264,13 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             composable(
                 route = "announcement_detail/{noticeJson}",
-                arguments = listOf(navArgument("noticeJson") { type = NavType.StringType })
+                arguments = listOf(navArgument("noticeJson") { type = NavType.StringType }),
             ) { backStackEntry ->
                 val encodedJson = backStackEntry.arguments?.getString("noticeJson") ?: ""
                 val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
@@ -277,7 +278,7 @@ fun NavGraph(
 
                 AnnouncementDetailScreen(
                     noticeInfo = noticeInfo,
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
                 )
             }
 
@@ -285,7 +286,7 @@ fun NavGraph(
                 ServiceCenterScreen(
                     onBack = {
                         navController.popBackStack()
-                    }
+                    },
                 )
             }
 
@@ -294,14 +295,14 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             composable(
                 route = "subscribe_detail/{elderJson}",
                 // elderJson을 NavArgument로 받아옴
-                arguments = listOf(navArgument("elderJson") { type = NavType.StringType })
+                arguments = listOf(navArgument("elderJson") { type = NavType.StringType }),
             ) { backStackEntry ->
                 val encodedJson = backStackEntry.arguments?.getString("elderJson") ?: ""
                 val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
@@ -309,7 +310,7 @@ fun NavGraph(
 
                 SubscribeDetailScreen(
                     elderInfo = elderInfo,
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
                 )
             }
 
@@ -318,15 +319,17 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             composable(
                 route = "personal_detail/{elderInfo}",
-                arguments = listOf(navArgument("elderInfo") {
-                    type = NavType.StringType
-                })
+                arguments = listOf(
+                    navArgument("elderInfo") {
+                        type = NavType.StringType
+                    },
+                ),
             ) { backStackEntry ->
                 val encodedElderInfo = backStackEntry.arguments?.getString("elderInfo") ?: ""
                 val decodedElderInfo =
@@ -337,7 +340,8 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    eldersInfoResponseDto = eldersInfoResponseDto
+                    eldersInfoResponseDto = eldersInfoResponseDto,
+                    navController = navController,
                 )
             }
 
@@ -346,15 +350,17 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
             composable(
                 route = "health_detail/{healthInfo}",
-                arguments = listOf(navArgument("healthInfo") {
-                    type = NavType.StringType
-                })
+                arguments = listOf(
+                    navArgument("healthInfo") {
+                        type = NavType.StringType
+                    },
+                ),
             ) { backStackEntry ->
                 val encodedHealthInfo = backStackEntry.arguments?.getString("healthInfo") ?: ""
                 val decodedHealthInfo =
@@ -372,7 +378,7 @@ fun NavGraph(
 
             composable(
                 route = "setting_alarm/{myDataJson}",
-                arguments = listOf(navArgument("myDataJson") { type = NavType.StringType })
+                arguments = listOf(navArgument("myDataJson") { type = NavType.StringType }),
             ) { backStackEntry ->
                 val encodedJson = backStackEntry.arguments?.getString("myDataJson") ?: ""
                 val decodedJson = URLDecoder.decode(encodedJson, StandardCharsets.UTF_8.toString())
@@ -382,7 +388,7 @@ fun NavGraph(
                     myDataInfo = myDataInfo,
                     onBack = {
                         navController.popBackStack()
-                    }
+                    },
                 )
             }
 
@@ -391,7 +397,7 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
         }
@@ -445,7 +451,7 @@ fun NavGraph(
                     onBack = {
                         navController.popBackStack()
                     },
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -457,16 +463,13 @@ fun NavGraph(
 
             composable(
                 route = Route.NaverPayWithCode.route,
-                arguments = listOf(navArgument("orderCode") { type = NavType.StringType })
+                arguments = listOf(navArgument("orderCode") { type = NavType.StringType }),
             ) { backStackEntry ->
                 NaverPayWebViewScreen(
                     onBack = { navController.popBackStack() },
-                    navController = navController
+                    navController = navController,
                 )
             }
         }
-
-
     }
-
 }

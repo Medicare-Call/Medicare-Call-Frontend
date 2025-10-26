@@ -3,15 +3,10 @@ package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
-import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import com.konkuk.medicarecall.data.dto.response.MedicationStatDto
 import com.konkuk.medicarecall.data.dto.response.StatisticsResponseDto
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
+import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
+import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +49,7 @@ class StatisticsViewModel @Inject constructor(
 
     // [수정 1] earliestDate의 초기값을 아주 먼 과거로 설정하여 초기 오류를 방지합니다.
     private var earliestDate: LocalDate = LocalDate.MIN
-
+    private var lastFetchTime: Long = 0
     init {
         viewModelScope.launch {
             _selectedElderId
@@ -76,6 +71,12 @@ class StatisticsViewModel @Inject constructor(
     }
 
     fun refresh() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastFetchTime < 60000) {
+
+            return
+        }
+
         val id = _selectedElderId.value ?: return
         val start = _currentWeek.value.first
         getWeeklyStatistics(
@@ -156,7 +157,7 @@ class StatisticsViewModel @Inject constructor(
 
                 repository.getStatistics(elderId, formatted) to correctOrder
             }.onSuccess { (dto, order) ->
-
+                lastFetchTime = System.currentTimeMillis()
                 // [수정 5] API 호출 성공 시 earliestDate를 처음 한 번만 설정합니다.
                 if (earliestDate == LocalDate.MIN) {
                     earliestDate = LocalDate.parse(dto.subscriptionStartDate)
