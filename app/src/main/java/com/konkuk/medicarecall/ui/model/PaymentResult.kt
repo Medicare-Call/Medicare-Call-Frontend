@@ -5,5 +5,5 @@ data class PaymentResult(
     val orderCode: String?,
     val paymentId: String?,
     val resultCode: String?,
-    val message: String?
+    val message: String?,
 )

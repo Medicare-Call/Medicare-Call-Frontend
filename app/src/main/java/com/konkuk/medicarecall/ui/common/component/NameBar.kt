@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.common.component
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,8 +30,6 @@ fun NameBar(
     navigateToAlarm: () -> Unit = {},
     onDropdownClick: () -> Unit,
 ) {
-
-
     Box(modifier = modifier.background(Color.White)) {
         Row(
             modifier = modifier
@@ -56,14 +53,11 @@ fun NameBar(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
-                    modifier = Modifier
-
-                        .size(18.dp),
+                    modifier = Modifier.size(18.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_down_big),
                     contentDescription = "arrow down",
                     tint = MediCareCallTheme.colors.gray3,
                 )
-
             }
 
             NotificationIconWithBadge(
@@ -71,10 +65,8 @@ fun NameBar(
                 onClick = navigateToAlarm,
             )
         }
-
     }
 }
-
 
 @Preview
 @Composable

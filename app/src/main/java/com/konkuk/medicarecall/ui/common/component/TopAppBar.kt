@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
@@ -72,14 +70,13 @@ fun TopAppBar(
             thickness = 1.dp,
         )
     }
-    }
+}
 
-
-    @Preview(showBackground = true)
-    @Composable
-    private fun PreviewTopAppBar() {
-        TopAppBar(
-            title = "식사",
+@Preview(showBackground = true)
+@Composable
+private fun PreviewTopAppBar() {
+    TopAppBar(
+        title = "식사",
         onBack = {},
-        )
-    }
+    )
+}
