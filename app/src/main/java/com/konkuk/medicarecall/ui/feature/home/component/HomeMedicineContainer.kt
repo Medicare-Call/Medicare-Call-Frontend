@@ -119,59 +119,58 @@ fun HomeMedicineContainer(
                             color = MediCareCallTheme.colors.gray6,
                         )
                         // 다음 복약 시간
-                        if (!medicine.nextDoseTime.isNullOrBlank() && medicine.nextDoseTime != "-") {
-                            Text(
-                                modifier = Modifier.align(Alignment.CenterVertically),
-                                text = "다음 복약 : ${medicine.nextDoseTime}약",
-                                style = MediCareCallTheme.typography.R_14,
-                                color = MediCareCallTheme.colors.main,
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            text = "다음 복약 : ${medicine.nextDoseTime ?: "아침약"}",
+                            style = MediCareCallTheme.typography.R_14,
+                            color = MediCareCallTheme.colors.main,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Column(
+                    modifier = Modifier,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        //복약 아이콘 리스트
+                        val requiredCount = medicine.todayRequiredCount.coerceAtLeast(0)
+                        val renderList = if (medicine.doseStatusList.isEmpty()) {
+                            List(requiredCount) { null }
+                        } else {
+                            val filled = medicine.doseStatusList.map { it.taken }
+                            if (filled.size < requiredCount) {
+                                filled + List(requiredCount - filled.size) { null }
+                            } else {
+                                filled.take(requiredCount)
+                            }
+                        }
+
+                        renderList.forEach { taken ->
+                            val iconRes = when (taken) {
+                                true -> R.drawable.ic_pill_taken
+                                false -> R.drawable.ic_pill_untaken
+                                null -> R.drawable.ic_pill_uncheck
+                            }
+
+                            Image(
+                                painter = painterResource(iconRes),
+                                contentDescription = "복약 상태 아이콘",
+                                modifier = Modifier.size(22.dp),
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "${medicine.todayTakenCount}/${medicine.todayRequiredCount}회 복용",
+                        style = MediCareCallTheme.typography.R_14,
+                        color = MediCareCallTheme.colors.gray5,
+                    )
 
-                    Column(
-                        modifier = Modifier,
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        ) {
-                            //복약 아이콘 리스트
-                            val requiredCount = medicine.todayRequiredCount.coerceAtLeast(0)
-                            val renderList = if (medicine.doseStatusList.isEmpty()) {
-                                List(requiredCount) { null }
-                            } else {
-                                val filled = medicine.doseStatusList.map { it.taken }
-                                if (filled.size < requiredCount) {
-                                    filled + List(requiredCount - filled.size) { null }
-                                } else {
-                                    filled.take(requiredCount)
-                                }
-                            }
-
-                            renderList.forEach { taken ->
-                                val iconRes = when (taken) {
-                                    true -> R.drawable.ic_pill_taken
-                                    false -> R.drawable.ic_pill_untaken
-                                    null -> R.drawable.ic_pill_uncheck
-                                }
-
-                                Image(
-                                    painter = painterResource(iconRes),
-                                    contentDescription = "복약 상태 아이콘",
-                                    modifier = Modifier.size(22.dp),
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "${medicine.todayTakenCount}/${medicine.todayRequiredCount}회 복용",
-                            style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray5,
-                        )
-                    }
                 }
 
                 if (idx < medicines.lastIndex) {
