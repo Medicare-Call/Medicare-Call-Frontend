@@ -193,9 +193,9 @@ fun HomeScreenLayout(
     }
 
     val summaryTitleColor =
-        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+        if (hasSummaryData) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white
     val summaryBodyColor =
-        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+        if (hasSummaryData) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white
     val summaryText = if (hasSummaryData) homeUiState.balloonMessage else "아직 기록되지 않았어요."
 
     Scaffold(
