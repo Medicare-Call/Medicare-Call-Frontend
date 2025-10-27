@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
-    private val authService: dagger.Lazy<AuthService> //순환 참조 방지
+    private val authService: dagger.Lazy<AuthService>, //순환 참조 방지
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -38,14 +38,14 @@ class AuthAuthenticator @Inject constructor(
             }
 
             // 5. RefreshToken이 없으면 갱신 불가, null 반환
-            if (refreshToken == null) {
+            if (refreshToken.isNullOrEmpty()) {
                 // 여기서 로그인 화면으로 보내는 로직을 추가할 수 있습니다. (예: EventBus, SharedFlow 등)
                 return null
             }
 
             // 6. 토큰 갱신 API 호출 (runBlocking 사용)
             val refreshResponse = runBlocking {
-                authService.get().refreshToken(TokenRefreshRequestDto(refreshToken))
+                authService.get().refreshToken(refreshToken)
             }
 
             return if (refreshResponse.isSuccessful && refreshResponse.body() != null) {
@@ -65,7 +65,7 @@ class AuthAuthenticator @Inject constructor(
                 // 9. 토큰 갱신 실패 시 (RefreshToken 만료 등), 저장된 토큰 삭제 후 null 반환
                 Log.e(
                     "AuthAuthenticator",
-                    "Failed to refresh token. Error code: ${refreshResponse.code()}"
+                    "Failed to refresh token. Error code: ${refreshResponse.code()}",
                 )
                 runBlocking { dataStoreRepository.saveRefreshToken("") }
                 // 여기서도 로그인 화면으로 보내는 로직 추가 가능
