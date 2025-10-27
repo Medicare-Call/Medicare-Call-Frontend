@@ -27,6 +27,7 @@ fun NavGraphBuilder.homeNavGraph(
             navigateToHealthAnalysisDetail = navigateToHealthAnalysisDetail,
             navigateToMentalAnalysisDetail = navigateToMentalAnalysisDetail,
             navigateToGlucoseDetail = navigateToGlucoseDetail,
+            mainBackStackEntry = backStackEntry,
         )
     }
 }

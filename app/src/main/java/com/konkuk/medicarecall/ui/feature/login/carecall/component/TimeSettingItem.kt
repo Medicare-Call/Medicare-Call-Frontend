@@ -28,16 +28,16 @@ fun TimeSettingItem(
     category: String,
     timeType: TimeSettingType,
     timeText: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         if (timeText != null) {
             Text(
                 text = category,
                 style = MediCareCallTheme.typography.M_17,
-                color = MediCareCallTheme.colors.gray5
+                color = MediCareCallTheme.colors.gray5,
             )
         }
         Spacer(modifier = modifier.height(10.dp))
@@ -46,22 +46,19 @@ fun TimeSettingItem(
                 .fillMaxWidth()
                 .background(
                     color = if (timeText == null) {
-                        if (timeType == TimeSettingType.FIRST)
-                            MediCareCallTheme.colors.g200
-                        else
-                            MediCareCallTheme.colors.g50
+                        MediCareCallTheme.colors.g50
                     } else {
                         MediCareCallTheme.colors.white
                     },
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(14.dp),
                 )
                 .border(
                     width = (1.2).dp,
                     color = if (timeText == null) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray3,
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(14.dp),
                 )
                 .padding(vertical = 18.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             if (timeText == null) {
                 Row(
@@ -72,13 +69,13 @@ fun TimeSettingItem(
                         painter = painterResource(id = R.drawable.ic_plus),
                         contentDescription = "추가 아이콘",
                         modifier = modifier.size(20.dp),
-                        tint = MediCareCallTheme.colors.main
+                        tint = MediCareCallTheme.colors.main,
                     )
                     Spacer(modifier = modifier.width(8.dp))
                     Text(
                         text = "시간 설정하기",
                         style = MediCareCallTheme.typography.B_17,
-                        color = MediCareCallTheme.colors.main
+                        color = MediCareCallTheme.colors.main,
                     )
                 }
             } else {

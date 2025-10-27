@@ -21,6 +21,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -35,11 +37,10 @@ import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DiseaseNamesItem
 import com.konkuk.medicarecall.ui.common.component.MedicationItem
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -53,6 +54,11 @@ fun LoginElderMedInfoScreen(
 
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
+    val elderUiState by loginElderViewModel.elderUiState.collectAsState()
+
+    val uiState by loginElderViewModel.elderHealthUiState.collectAsState()
+    val selectedIndex = uiState.selectedIndex
 
     Box(
 
@@ -80,19 +86,18 @@ fun LoginElderMedInfoScreen(
                 val scrollState = rememberScrollState()
                 // 상단 어르신 선택 Row
                 Row(Modifier.horizontalScroll(scrollState)) {
-                    loginElderViewModel.elderDataList.forEachIndexed { index, elder ->
-
+                    elderUiState.eldersList.forEachIndexed { index, elder ->
                         Box(
                             Modifier
                                 .clip(shape = CircleShape)
                                 .background(
-                                    if (index == loginElderViewModel.selectedElder)
+                                    if (index == selectedIndex)
                                         MediCareCallTheme.colors.main
                                     else MediCareCallTheme.colors.white,
                                 )
                                 .border(
                                     width = 1.2.dp,
-                                    color = if (index == loginElderViewModel.selectedElder)
+                                    color = if (index == selectedIndex)
                                         MediCareCallTheme.colors.main
                                     else MediCareCallTheme.colors.gray2,
                                     shape = CircleShape,
@@ -101,18 +106,17 @@ fun LoginElderMedInfoScreen(
                                     interactionSource = null,
                                     indication = null,
                                     onClick = {
-                                        loginElderViewModel.onSelectedElderChanged(index)
-
+                                        loginElderViewModel.selectElderInHealth(index)
                                     },
                                 ),
 
                             ) {
                             Text(
                                 text = elder.name,
-                                style = if (index == loginElderViewModel.selectedElder)
+                                style = if (index == selectedIndex)
                                     MediCareCallTheme.typography.SB_14
                                 else MediCareCallTheme.typography.R_14,
-                                color = if (index == loginElderViewModel.selectedElder)
+                                color = if (index == selectedIndex)
                                     MediCareCallTheme.colors.white
                                 else MediCareCallTheme.colors.gray5,
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp),
@@ -123,14 +127,26 @@ fun LoginElderMedInfoScreen(
                 }
                 Spacer(Modifier.height(20.dp))
                 DiseaseNamesItem(
-                    loginElderViewModel.diseaseInputText[loginElderViewModel.selectedElder],
-                    loginElderViewModel.diseaseList[loginElderViewModel.selectedElder],
+                    inputText = uiState.diseaseInputText,
+                    diseaseList = uiState.elderHealthList[selectedIndex].diseaseNames,
+                    onTextChanged = {
+                        loginElderViewModel.updateDiseasesText(it);
+                    },
+                    onRemoveChip = {
+                        loginElderViewModel.removeDisease(it)
+                    },
+                    onAddDisease = { loginElderViewModel.addDisease(it) },
                 )
                 Spacer(Modifier.height(20.dp))
 
                 MedicationItem(
-                    loginElderViewModel.medMap[loginElderViewModel.selectedElder],
-                    loginElderViewModel.medInputText[loginElderViewModel.selectedElder],
+                    medicationSchedule = uiState.elderHealthList[selectedIndex].medicationMap,
+                    inputText = uiState.medicationInputText,
+                    selectedList = uiState.selectedMedicationTimes,
+                    onTextChange = { loginElderViewModel.updateMedicationText(it) },
+                    onRemoveChip = { time, medicine -> loginElderViewModel.removeMedication(time, medicine) },
+                    onSelectTime = { loginElderViewModel.selectMedicationTime(it) },
+                    onAddMedication = { time, medicine -> loginElderViewModel.addMedication(time, medicine) },
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -141,16 +157,14 @@ fun LoginElderMedInfoScreen(
                 )
                 Spacer(Modifier.height(10.dp))
 
-                if (loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].isNotEmpty()) {
+                if (uiState.elderHealthList[selectedIndex].notes.isNotEmpty()) {
                     Row(
                         Modifier.horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].forEach { healthIssue ->
-                            ChipItem(healthIssue) {
-                                loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].remove(
-                                    healthIssue,
-                                )
+                        uiState.elderHealthList[selectedIndex].notes.forEach { note ->
+                            ChipItem(note) {
+                                loginElderViewModel.removeHealthNote(note)
                             }
                         }
                     }
@@ -164,10 +178,7 @@ fun LoginElderMedInfoScreen(
                     null,
                     scrollState,
                     {
-                        if (it !in loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder])
-                            loginElderViewModel.healthIssueList[loginElderViewModel.selectedElder].add(
-                                it,
-                            )
+                        loginElderViewModel.addHealthNote(it)
                     },
                 )
                 CTAButton(
@@ -175,11 +186,7 @@ fun LoginElderMedInfoScreen(
                     "다음",
                     {
                         coroutineScope.launch {
-                            loginElderViewModel.createElderHealthDataList()
-                            loginElderViewModel.updateAllElders()
-                            loginElderViewModel.updateAllEldersHealthInfo()
-                            loginElderViewModel.postElderAndHealth()
-                            delay(200L)
+                            loginElderViewModel.postElderHealthInfoBulk()
                             navigateToCareCallSetting()
                         }
                     },

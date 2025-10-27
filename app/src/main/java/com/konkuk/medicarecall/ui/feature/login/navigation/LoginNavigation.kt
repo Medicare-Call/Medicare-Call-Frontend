@@ -6,18 +6,18 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.konkuk.medicarecall.ui.feature.login.carecall.screen.SetCallScreen
+import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.FinishSplashScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayScreen
+import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
+import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.navigation.Route
 
 fun NavController.navigateToLoginStart() {
@@ -129,7 +129,7 @@ fun NavGraphBuilder.loginNavGraph(
     }
 
     composable<Route.LoginCareCallSetting> {
-        SetCallScreen(
+        CallTimeScreen(
             onBack = popBackStack,
             navigateToPayment = navigateToPurchase,
         )
@@ -143,14 +143,14 @@ fun NavGraphBuilder.loginNavGraph(
     }
 
     composable<Route.LoginNaverPayView> {
-        NaverPayScreen(
+        NaverPayWebViewScreen(
             onBack = popBackStack,
             navigateToFinish = navigateToFinish,
         )
     }
 
     composable<Route.LoginFinish> {
-        FinishSplashScreen(
+        LoginFinishScreen(
             navigateToMain = navigateToMainAfterLogin,
         )
     }

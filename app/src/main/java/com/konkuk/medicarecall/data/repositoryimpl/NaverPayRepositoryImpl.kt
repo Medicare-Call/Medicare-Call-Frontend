@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import com.konkuk.medicarecall.data.api.NaverPayService
+import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
 import com.konkuk.medicarecall.data.repository.NaverPayRepository

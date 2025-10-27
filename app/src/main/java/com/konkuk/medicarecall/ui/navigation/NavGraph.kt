@@ -15,7 +15,6 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
-import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -25,19 +24,18 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDet
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
-import com.konkuk.medicarecall.ui.feature.login.carecall.screen.SetCallScreen
+import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.navigation.loginNavGraph
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.FinishSplashScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayScreen
+import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
+import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
@@ -119,7 +117,7 @@ fun NavGraph(
             navigateToSleepDetail = navigator::navigateToSleepDetail,
             navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
             navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
-            navigateToGlucoseDetail = navigator::navigateToGlucoseDetail
+            navigateToGlucoseDetail = navigator::navigateToGlucoseDetail,
         )
 
         // 홈 상세 화면_식사 화면
@@ -164,7 +162,7 @@ fun NavGraph(
         //홈 상세 화면_혈당 화면
         composable<Route.GlucoseDetail> {
             GlucoseDetail(
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
             )
         }
 
@@ -229,14 +227,13 @@ fun NavGraph(
         }
 
         composable<Route.ElderPersonalDetail>(
-            typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType)
+            typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
         ) { navBackstackEntry ->
             val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
             PersonalDetailScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
+                onBack = { navController.popBackStack() },
                 eldersInfoResponseDto = elderInfo,
+                navController = navController,
             )
         }
 
@@ -252,7 +249,7 @@ fun NavGraph(
         }
 
         composable<Route.ElderHealthDetail>(
-            typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType)
+            typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType),
         ) { navBackstackEntry ->
             val healthInfo = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health
             HealthDetailScreen(
@@ -264,7 +261,7 @@ fun NavGraph(
         }
 
         composable<Route.NotificationSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType)
+            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
         ) { navBackStackEntry ->
             val myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo
             SettingAlarmScreen(
@@ -287,7 +284,7 @@ fun NavGraph(
         }
 
         composable<Route.SubscribeDetail>(
-            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType)
+            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType),
         ) { navBackStackEntry ->
             val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
             SubscribeDetailScreen(
@@ -308,7 +305,7 @@ fun NavGraph(
         }
 
         composable<Route.NoticeDetail>(
-            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType)
+            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType),
         ) { navBackStackEntry ->
             val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
             AnnouncementDetailScreen(
@@ -344,7 +341,7 @@ fun NavGraph(
         }
 
         composable<Route.UserInfoSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType)
+            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
         ) { navBackStackEntry ->
             val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
             MyDetailScreen(
@@ -394,14 +391,14 @@ fun NavGraph(
                         }
                     }
                 },
-                loginViewModel = loginViewModel
+                loginViewModel = loginViewModel,
             )
         }
         composable<Route.LoginPhone> {
             LoginPhoneScreen(
                 onBack = { navController.popBackStack() },
                 navigateToVerification = { navController.navigate(Route.LoginVerification) },
-                loginViewModel = loginViewModel
+                loginViewModel = loginViewModel,
             )
         }
         composable<Route.LoginVerification> {
@@ -423,7 +420,7 @@ fun NavGraph(
                         }
                     }
                 },
-                loginViewModel = loginViewModel
+                loginViewModel = loginViewModel,
             )
         }
         composable<Route.LoginRegisterUserInfo> {
@@ -432,7 +429,7 @@ fun NavGraph(
                 navigateToRegisterElder = {
                     navController.navigate(Route.LoginRegisterElder)
                 },
-                loginViewModel = loginViewModel
+                loginViewModel = loginViewModel,
             )
         }
         composable<Route.LoginRegisterElder> {
@@ -441,7 +438,7 @@ fun NavGraph(
                 navigateToRegisterElderHealth = {
                     navController.navigate(Route.LoginRegisterElderHealth)
                 },
-                loginElderViewModel = loginElderViewModel
+                loginElderViewModel = loginElderViewModel,
             )
         }
         composable<Route.LoginRegisterElderHealth> {
@@ -454,12 +451,12 @@ fun NavGraph(
                         }
                     }
                 },
-                loginElderViewModel = loginElderViewModel
+                loginElderViewModel = loginElderViewModel,
             )
         }
 
         composable<Route.LoginCareCallSetting> {
-            SetCallScreen(
+            CallTimeScreen(
                 onBack = {
                     navController.popBackStack()
                 },
@@ -481,7 +478,7 @@ fun NavGraph(
         }
 
         composable<Route.LoginNaverPayView> {
-            NaverPayScreen(
+            NaverPayWebViewScreen(
                 onBack = {
                     navController.popBackStack()
                 },
@@ -494,7 +491,7 @@ fun NavGraph(
         }
 
         composable<Route.LoginFinish> {
-            FinishSplashScreen(
+            LoginFinishScreen(
                 navigateToMain = {
                     navController.navigateToMainAfterLogin()
                 },

@@ -2,8 +2,8 @@ package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,59 +28,58 @@ fun TopAppBar(
     modifier: Modifier = Modifier,
     title: String,
     onBack: () -> Unit,
-
-    ) {
-    Row(
+) {
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 10.dp)
             .background(Color.White),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-
-
-        ) {
-        // 뒤로 가기+ 상세 화면 제목
-        Icon(
+    ) {
+        Row(
             modifier = Modifier
-                .size(24.dp)
-                .clickable {
-                    onBack()
-                },
-            painter = painterResource(id = R.drawable.ic_arrow_big_back),
-            contentDescription = "big arrow back",
-            tint = MediCareCallTheme.colors.gray3,
-        )
-
-
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .padding(vertical = 15.dp, horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = title,
-                style = MediCareCallTheme.typography.SB_20,
-                color = MediCareCallTheme.colors.black,
+            // 뒤로 가기
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        onBack()
+                    },
+                painter = painterResource(id = R.drawable.ic_arrow_big_back),
+                contentDescription = "big arrow back",
+                tint = MediCareCallTheme.colors.gray3,
             )
+
+            // 제목
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = title,
+                    style = MediCareCallTheme.typography.SB_20,
+                    color = MediCareCallTheme.colors.gray10,
+                )
+            }
+            Box(modifier = Modifier.size(24.dp))
         }
 
-        Box(modifier = Modifier.size(24.dp))
-
-
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            color = MediCareCallTheme.colors.gray2,
+            thickness = 1.dp,
+        )
     }
-    HorizontalDivider(
-        modifier = Modifier.fillMaxWidth(),
-        color = MediCareCallTheme.colors.gray2,
-        thickness = 1.dp,
-    )
-}
+    }
 
 
-@Preview(showBackground = true)
-@Composable
-private fun PreviewTopAppBar() {
-    TopAppBar(
-        title = "식사",
+    @Preview(showBackground = true)
+    @Composable
+    private fun PreviewTopAppBar() {
+        TopAppBar(
+            title = "식사",
         onBack = {},
-    )
-}
+        )
+    }

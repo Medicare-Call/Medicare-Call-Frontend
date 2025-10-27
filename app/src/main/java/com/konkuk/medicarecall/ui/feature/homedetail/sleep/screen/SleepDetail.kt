@@ -24,15 +24,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
 import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
@@ -98,8 +98,10 @@ fun SleepDetailLayout(
             title = "수면",
             onBack = onBack
         )
+        Spacer(Modifier.height(4.dp))
         Column(
             modifier = Modifier
+                .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp)
@@ -119,7 +121,7 @@ fun SleepDetailLayout(
                 ),
                 onDateSelected = onDateSelected
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             SleepDetailCard(
                 sleep
             )

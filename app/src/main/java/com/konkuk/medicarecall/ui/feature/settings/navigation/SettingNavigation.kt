@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.settings.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -99,6 +100,7 @@ fun NavGraphBuilder.settingNavGraph(
     navigateToUserInfo: () -> Unit,
     navigateToUserInfoSetting: (MyInfoResponseDto) -> Unit,
     navigateToLoginAfterLogout: () -> Unit,
+    navController: NavHostController,
 ) {
     composable<MainTabRoute.Settings> {
         SettingsScreen(
@@ -126,6 +128,7 @@ fun NavGraphBuilder.settingNavGraph(
         PersonalDetailScreen(
             onBack = popBackStack,
             eldersInfoResponseDto = elderInfo,
+            navController = navController,
         )
     }
 

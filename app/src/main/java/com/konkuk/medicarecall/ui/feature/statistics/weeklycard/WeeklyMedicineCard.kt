@@ -34,7 +34,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklyMedicineCard(
     modifier: Modifier = Modifier,
-    medicine: List<WeeklyMedicineUiState>
+    medicine: List<WeeklyMedicineUiState>,
 ) {
 
     Card(
@@ -42,21 +42,21 @@ fun WeeklyMedicineCard(
             .fillMaxWidth()
             .fillMaxHeight()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                group = LocalMediCareCallShadowProvider.current.shadow01,
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
 
-    ) {
+        ) {
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .wrapContentWidth()
-                .wrapContentHeight()
+                .wrapContentHeight(),
 
-        ) {
+            ) {
 
             //1) Title: 복약 통계
 
@@ -73,7 +73,7 @@ fun WeeklyMedicineCard(
             //2) 약 이름
             Column(
                 verticalArrangement = Arrangement
-                    .spacedBy(0.dp)
+                    .spacedBy(0.dp),
             ) {
                 medicine.forEach { weeklyMedicine ->
 
@@ -84,7 +84,7 @@ fun WeeklyMedicineCard(
                     } else {
                         WeeklySummaryUtil.getMedicineIconColor(
                             weeklyMedicine,
-                            MediCareCallTheme.colors
+                            MediCareCallTheme.colors,
                         )
                     }
 
@@ -97,12 +97,12 @@ fun WeeklyMedicineCard(
                     Row(
                         modifier = Modifier
                             .wrapContentWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = weeklyMedicine.medicineName,
                             style = MediCareCallTheme.typography.R_15,
-                            color = MediCareCallTheme.colors.gray4
+                            color = MediCareCallTheme.colors.gray4,
                         )
                         Spacer(modifier = Modifier.width(10.dp))
 
@@ -112,13 +112,13 @@ fun WeeklyMedicineCard(
                                 .size(16.dp),
                             painter = painterResource(id = R.drawable.ic_filledpills),
                             contentDescription = null,
-                            tint = iconColor
+                            tint = iconColor,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = takenText,
                             style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray6
+                            color = MediCareCallTheme.colors.gray6,
                         )
 
                     }
@@ -138,8 +138,8 @@ fun PreviewWeeklyMedicineCard_Recorded() {
         medicine = listOf(
             WeeklyMedicineUiState("혈압약", 0, 14),
             WeeklyMedicineUiState("영양제", 4, 7),
-            WeeklyMedicineUiState("당뇨약", 21, 21)
-        )
+            WeeklyMedicineUiState("당뇨약", 21, 21),
+        ),
     )
 
 }
@@ -153,8 +153,8 @@ fun PreviewWeeklyMedicineCard_UnRecorded() {
         medicine = listOf(
             WeeklyMedicineUiState("혈압약", -1, 14),
             WeeklyMedicineUiState("영양제", -1, 7),
-            WeeklyMedicineUiState("당뇨약", -1, 21)
-        )
+            WeeklyMedicineUiState("당뇨약", -1, 21),
+        ),
     )
 
 }

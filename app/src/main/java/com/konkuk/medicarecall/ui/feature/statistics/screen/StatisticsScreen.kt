@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
@@ -42,6 +43,13 @@ import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyGlucoseCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyHealthCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMealCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMedicineCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard
+import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
@@ -54,6 +62,11 @@ fun StatisticsScreen(
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(key1 = true) {
+        homeViewModel.fetchElderList()//어르신 목록 호출
+        statisticsViewModel.refresh()
+    }
+
     // 화면 복귀 시 자동 새로고침
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -84,8 +97,9 @@ fun StatisticsScreen(
     // 우선순위 2: ID를 통해 전체 목록에서 찾은 이름 (로딩 중일 때 표시)
     // 우선순위 3: 목록의 첫 번째 이름 (초기 상태)
     val currentElderName = remember(uiState.summary, elderInfoList, selectedElderId) {
-        uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
-            ?: elderInfoList.find { it.id == selectedElderId }?.name
+
+        elderInfoList.find { it.id == selectedElderId }?.name
+            ?: uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
             ?: elderNameList.firstOrNull()
             ?: "어르신 통계"
     }
@@ -147,9 +161,9 @@ fun StatisticsScreenLayout(
             modifier = Modifier.statusBarsPadding(),
             navigateToAlarm = navigateToAlarm,
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
+            notificationCount = 4,//TODO: 실제 알림 개수 데이터 연동 필요
         )
 
-//        Spacer(modifier = Modifier.height(17.dp))
         when {
             uiState.isLoading -> {
                 Box(
@@ -167,14 +181,18 @@ fun StatisticsScreenLayout(
 
             uiState.summary != null -> {
 
-                StatisticsContent(
-                    summary = uiState.summary,
+                WeekendBar(
                     currentWeek = currentWeek,
                     isLatestWeek = isLatestWeek,
                     isEarliestWeek = isEarliestWeek,
                     onPreviousWeek = onPreviousWeek,
                     onNextWeek = onNextWeek,
                 )
+                Column {
+                    StatisticsContent(
+                        summary = uiState.summary,
+                    )
+                }
             }
         }
     }
@@ -196,27 +214,15 @@ fun StatisticsScreenLayout(
 @Composable
 private fun StatisticsContent(
     summary: WeeklySummaryUiState,
-    currentWeek: Pair<LocalDate, LocalDate>,
-    isLatestWeek: Boolean,
-    isEarliestWeek: Boolean,
-    onPreviousWeek: () -> Unit,
-    onNextWeek: () -> Unit,
 ) {
     Column(
         modifier = Modifier
+            .background(MediCareCallTheme.colors.bg)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp),
     ) {
-        Spacer(Modifier.height(17.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar(
-            currentWeek = currentWeek,
-            isLatestWeek = isLatestWeek,
-            isEarliestWeek = isEarliestWeek,
-            onPreviousWeek = onPreviousWeek,
-            onNextWeek = onNextWeek,
-        )
         Spacer(modifier = Modifier.height(20.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard(
+        WeeklySummaryCard(
             summary = summary,
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -228,12 +234,12 @@ private fun StatisticsContent(
                 .height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMealCard(
+            WeeklyMealCard(
                 modifier = Modifier
                     .fillMaxHeight(),
                 meal = summary.weeklyMeals,
             )
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMedicineCard(
+            WeeklyMedicineCard(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -241,7 +247,7 @@ private fun StatisticsContent(
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyHealthCard(
+        WeeklyHealthCard(
             healthNote = summary.weeklyHealthNote,
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -252,17 +258,17 @@ private fun StatisticsContent(
                 .height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard(
+            WeeklySleepCard(
                 modifier = Modifier.weight(1f),
                 summary = summary,
             )
-            _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard(
+            WeeklyMentalCard(
                 modifier = Modifier.weight(1f),
                 mental = summary.weeklyMental,
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        _root_ide_package_.com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyGlucoseCard(
+        WeeklyGlucoseCard(
             weeklyGlucose = summary.weeklyGlucose,
         )
         Spacer(modifier = Modifier.height(70.dp))
@@ -275,7 +281,7 @@ private fun StatisticsContent(
 fun PreviewStatisticsScreen_Recorded() {
 
     val dummySummary = WeeklySummaryUiState(
-        elderName = "김옥자", // Preview에 이름 추가
+        elderName = "김옥자",
         weeklyMealRate = 65,
         weeklyMedicineRate = 57,
         weeklyHealthIssueCount = 3,
@@ -300,7 +306,7 @@ fun PreviewStatisticsScreen_Recorded() {
         weeklyHealthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 후흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요.",
         weeklySleepHours = 7,
         weeklySleepMinutes = 12,
-        weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 4),
+        weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
         weeklyGlucose = WeeklyGlucoseUiState(
             beforeMealNormal = 5, beforeMealHigh = 2, beforeMealLow = 1,
             afterMealNormal = 5, afterMealHigh = 0, afterMealLow = 2,
@@ -334,7 +340,7 @@ fun PreviewStatisticsScreen_Unrecorded() {
         StatisticsScreenLayout(
             uiState = StatisticsUiState(
                 summary = WeeklySummaryUiState.EMPTY.copy(elderName = "김옥자"),
-            ), // Preview에 이름 추가
+            ),
             elderNameList = listOf("김옥자", "박막례"),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
             isLatestWeek = true,

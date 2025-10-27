@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.meal.screen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -87,6 +88,7 @@ fun MealDetailLayout(
     ) {
         Column(
             modifier = Modifier
+                .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .statusBarsPadding(),
         ) {
@@ -94,6 +96,7 @@ fun MealDetailLayout(
                 title = "식사",
                 onBack = onBack,
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -118,7 +121,7 @@ fun MealDetailLayout(
                     onDateSelected = onDateSelected,
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 meals.forEach { meal ->
                     MealDetailCard(
@@ -127,7 +130,7 @@ fun MealDetailLayout(
                         isRecorded = meal.isRecorded,   // 식사 기록 여부
                         isEaten = meal.isEaten,          // 식사 유무
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         }

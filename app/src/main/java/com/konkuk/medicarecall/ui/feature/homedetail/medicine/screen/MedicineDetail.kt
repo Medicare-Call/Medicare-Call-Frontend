@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,17 +26,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.component.MedicineDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
 import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
@@ -95,6 +96,7 @@ fun MedicineDetailLayout(
     ) {
         Column(
             modifier = Modifier
+                .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .statusBarsPadding()
         ) {
@@ -102,6 +104,7 @@ fun MedicineDetailLayout(
                 title = "복약",
                 onBack = onBack
             )
+            Spacer(Modifier.height(4.dp))
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -113,7 +116,7 @@ fun MedicineDetailLayout(
                     onMonthClick = onMonthClick,
                     onDateSelected = onDateSelected
                 )
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(12.dp))
                 WeeklyCalendar(
                     calendarUiState = CalendarUiState(
                         currentYear = selectedDate.year,
@@ -123,11 +126,10 @@ fun MedicineDetailLayout(
                     ),
                     onDateSelected = onDateSelected
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 medicines.forEach { medicine ->
                     MedicineDetailCard(
                         medicineName = medicine.medicineName,
-                        todayTakenCount = medicine.todayTakenCount,
                         todayRequiredCount = medicine.todayRequiredCount,
                         doseStatusList = medicine.doseStatusList
                     )
@@ -144,7 +146,6 @@ fun PreviewMedicineDetail() {
     val dummyMedicines = listOf(
         MedicineUiState(
             medicineName = "당뇨약",
-            todayTakenCount = 1,
             todayRequiredCount = 3,
             doseStatusList = listOf(
                 DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
@@ -153,7 +154,6 @@ fun PreviewMedicineDetail() {
         ),
         MedicineUiState(
             medicineName = "혈압약",
-            todayTakenCount = 1,
             todayRequiredCount = 2,
             doseStatusList = listOf(
                 DoseStatusItem(time = "아침", doseStatus = DoseStatus.TAKEN)

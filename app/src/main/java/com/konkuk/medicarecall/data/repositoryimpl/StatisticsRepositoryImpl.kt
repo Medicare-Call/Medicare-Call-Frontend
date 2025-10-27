@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import com.konkuk.medicarecall.data.api.StatisticsService
+import com.konkuk.medicarecall.data.api.elders.StatisticsService
 import com.konkuk.medicarecall.data.dto.response.AverageSleepDto
 import com.konkuk.medicarecall.data.dto.response.BloodSugarDetailDto
 import com.konkuk.medicarecall.data.dto.response.BloodSugarDto
