@@ -89,7 +89,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
@@ -383,7 +383,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
@@ -412,7 +412,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
