@@ -32,7 +32,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -59,6 +58,7 @@ import java.time.LocalDate
 fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    navigateToAlarm: () -> Unit = {},
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
 ) {
@@ -124,7 +124,6 @@ fun StatisticsScreen(
         modifier = modifier,
         uiState = uiState,
         elderNameList = elderNameList,
-        navController = navController,
         currentWeek = currentWeek,
         isLatestWeek = isLatestWeek,
         isEarliestWeek = isEarliestWeek,
@@ -141,7 +140,7 @@ fun StatisticsScreenLayout(
     modifier: Modifier = Modifier,
     uiState: StatisticsUiState,
     elderNameList: List<String>,
-    navController: NavHostController,
+    navigateToAlarm: () -> Unit = {},
     currentWeek: Pair<LocalDate, LocalDate>,
     isLatestWeek: Boolean,
     isEarliestWeek: Boolean,
@@ -160,7 +159,7 @@ fun StatisticsScreenLayout(
         NameBar(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
-            navController = navController,
+            navigateToAlarm = navigateToAlarm,
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
             notificationCount = 4,//TODO: 실제 알림 개수 데이터 연동 필요
         )
@@ -320,7 +319,6 @@ fun PreviewStatisticsScreen_Recorded() {
         StatisticsScreenLayout(
             uiState = dummyUiState,
             elderNameList = listOf("김옥자", "박막례"),
-            navController = rememberNavController(),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
             isLatestWeek = false,
             isEarliestWeek = false,
@@ -344,7 +342,6 @@ fun PreviewStatisticsScreen_Unrecorded() {
                 summary = WeeklySummaryUiState.EMPTY.copy(elderName = "김옥자"),
             ),
             elderNameList = listOf("김옥자", "박막례"),
-            navController = rememberNavController(),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
             isLatestWeek = true,
             isEarliestWeek = true,

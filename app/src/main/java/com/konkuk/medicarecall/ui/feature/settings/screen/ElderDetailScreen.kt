@@ -26,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -52,8 +52,8 @@ fun PersonalDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     eldersInfoResponseDto: EldersInfoResponseDto,
+    navController: NavHostController,
     detailViewModel: DetailElderInfoViewModel = hiltViewModel(),
-    navController: NavController,
 ) {
     val gender = when (eldersInfoResponseDto.gender) {
         GenderType.MALE -> true
@@ -79,7 +79,7 @@ fun PersonalDetailScreen(
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
             .systemBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         SettingsTopAppBar(
             title = "어르신 개인정보 설정",
@@ -88,7 +88,7 @@ fun PersonalDetailScreen(
                     painterResource(id = R.drawable.ic_settings_back),
                     contentDescription = "setting back",
                     modifier = modifier.clickable { onBack() },
-                    tint = MediCareCallTheme.colors.black
+                    tint = MediCareCallTheme.colors.black,
                 )
             },
         )
@@ -108,18 +108,18 @@ fun PersonalDetailScreen(
                     style = MediCareCallTheme.typography.SB_16,
                     modifier = Modifier.clickable {
                         showDeleteDialog = true
-                    }
+                    },
                 )
             }
             Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 Column {
                     DefaultTextField(
                         value = name,
                         onValueChange = { name = it },
                         category = "이름",
-                        placeHolder = "이름"
+                        placeHolder = "이름",
                     )
                 }
                 Column {
@@ -130,14 +130,14 @@ fun PersonalDetailScreen(
                         placeHolder = "YYYY / MM / DD",
                         keyboardType = KeyboardType.Number,
                         visualTransformation = DateOfBirthVisualTransformation(),
-                        maxLength = 8
+                        maxLength = 8,
                     )
                 }
                 Column() {
                     Text(
                         "성별",
                         style = MediCareCallTheme.typography.M_17,
-                        color = MediCareCallTheme.colors.gray7
+                        color = MediCareCallTheme.colors.gray7,
                     )
                     Spacer(modifier = modifier.height(10.dp))
                     GenderToggleButton(
@@ -145,7 +145,7 @@ fun PersonalDetailScreen(
                         onGenderChange =
                             { newValue ->
                                 isMale = newValue
-                            }
+                            },
                     )
                 }
                 Column {
@@ -155,7 +155,7 @@ fun PersonalDetailScreen(
                         placeHolder = "휴대폰 번호",
                         keyboardType = KeyboardType.Number,
                         visualTransformation = PhoneNumberVisualTransformation(),
-                        maxLength = 11
+                        maxLength = 11,
                     )
                 }
                 Column() {
@@ -170,7 +170,7 @@ fun PersonalDetailScreen(
                             relationship = RelationshipType.entries.firstOrNull {
                                 it.displayName == newValue
                             } ?: RelationshipType.ACQUAINTANCE
-                        }
+                        },
                     )
                 }
                 Column {
@@ -185,7 +185,7 @@ fun PersonalDetailScreen(
                             residenceType = ElderResidenceType.entries.firstOrNull {
                                 it.displayName == newValue
                             } ?: ElderResidenceType.WITH_FAMILY
-                        }
+                        },
                     )
                 }
 
@@ -224,15 +224,16 @@ fun PersonalDetailScreen(
                                 gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE,
                                 phone = phoneNum,
                                 relationship = relationship,
-                                residenceType = residenceType
-                            )
+                                residenceType = residenceType,
+                            ),
                         ) {
                             navController.getBackStackEntry("main")
                                 .savedStateHandle["ELDER_NAME_UPDATED"] = name
                             navController.popBackStack()
 
                         }
-                    }, Modifier.padding(bottom = 20.dp)
+                    },
+                    Modifier.padding(bottom = 20.dp),
                 )
 
             }
@@ -244,7 +245,7 @@ fun PersonalDetailScreen(
                     showDeleteDialog = false
                     detailViewModel.deleteElderInfo(eldersInfoResponseDto.elderId)
                     onBack() // 삭제 후 설정 화면으로 이동
-                }
+                },
             )
         }
     }

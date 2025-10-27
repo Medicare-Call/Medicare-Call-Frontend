@@ -33,6 +33,7 @@ import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
@@ -40,15 +41,12 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SleepDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     sleepViewModel: SleepViewModel = hiltViewModel()
 ) {
 
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -68,9 +66,10 @@ fun SleepDetail(
         }
     }
 
+
     SleepDetailLayout(
         modifier = Modifier,
-        navController = navController,
+        onBack = onBack,
         selectedDate = selectedDate,
         sleep = sleep,
         weekDates = calendarViewModel.getCurrentWeekDates(),
@@ -82,7 +81,7 @@ fun SleepDetail(
 @Composable
 fun SleepDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     sleep: SleepUiState,
     weekDates: List<LocalDate>,
@@ -97,7 +96,7 @@ fun SleepDetailLayout(
     ) {
         TopAppBar(
             title = "수면",
-            navController = navController
+            onBack = onBack
         )
         Spacer(Modifier.height(4.dp))
         Column(
@@ -136,7 +135,7 @@ fun SleepDetailLayout(
 fun PreviewSleepDetail() {
     MediCareCallTheme {
         SleepDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = LocalDate.now(),
             sleep = SleepUiState.Companion.EMPTY,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },

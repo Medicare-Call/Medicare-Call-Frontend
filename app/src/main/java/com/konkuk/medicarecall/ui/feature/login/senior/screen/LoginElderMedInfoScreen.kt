@@ -29,8 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.konkuk.medicarecall.navigation.Route
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.ChipItem
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
@@ -42,15 +41,14 @@ import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewM
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginElderMedInfoScreen(
-    navController: NavController,
-    loginElderViewModel: LoginElderViewModel,
     modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
 
@@ -72,11 +70,7 @@ fun LoginElderMedInfoScreen(
             .imePadding(),
     ) {
         Column {
-            LoginBackButton(
-                {
-                    navController.popBackStack()
-                },
-            )
+            LoginBackButton(onBack)
             Column(
                 Modifier
                     .verticalScroll(scrollState),
@@ -193,11 +187,7 @@ fun LoginElderMedInfoScreen(
                     {
                         coroutineScope.launch {
                             loginElderViewModel.postElderHealthInfoBulk()
-                            navController.navigate(Route.SetCall.route) {
-                                popUpTo(Route.LoginElderInfoScreen.route) {
-                                    inclusive = true
-                                }
-                            }
+                            navigateToCareCallSetting()
                         }
                     },
                     Modifier.padding(top = 30.dp, bottom = 20.dp),

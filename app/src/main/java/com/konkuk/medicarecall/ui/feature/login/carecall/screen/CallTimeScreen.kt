@@ -65,12 +65,10 @@ fun Triple<Int, Int, Int>.toDisplayString(): String {
 fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navigatedToPayment: () -> Unit = {},
+    navigateToPayment: () -> Unit = {},
     eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
     callTimeViewModel: CallTimeViewModel = hiltViewModel(),
 ) {
-
-
     LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
 
     val isLoading = eldersInfoViewModel.isLoading.value
@@ -355,7 +353,7 @@ fun CallTimeScreen(
                     callTimeViewModel.submitAllByIds(
                         elderIds = elderIds,
                         onSuccess = {
-                            navigatedToPayment()
+                            navigateToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
                             Log.d("SetCallScreen", "시간 : ${callTimeViewModel.timeMap}")
                         },

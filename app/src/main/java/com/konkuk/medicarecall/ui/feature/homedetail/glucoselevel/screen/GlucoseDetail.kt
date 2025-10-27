@@ -49,6 +49,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.Gluc
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseViewModel
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -59,17 +60,14 @@ import java.util.Locale
 @Composable
 fun GlucoseDetail(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    onBack: () -> Unit
 ) {
 
     val scrollState = rememberScrollState()
 
     // 어르신 선택 상태(selectedElderId) 관리
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
-    val viewModel: GlucoseViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val viewModel: GlucoseViewModel = hiltViewModel()
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -150,7 +148,7 @@ fun GlucoseDetail(
         // 그래프 점
         onPointClick = { newIndex -> viewModel.onClickDots(newIndex) },
         scrollState = scrollState,
-        navController = navController
+        onBack = onBack
     )
 }
 
@@ -164,7 +162,7 @@ fun GlucoseDetailLayout(
     onTimingChange: (GlucoseTiming) -> Unit,
     onPointClick: (Int) -> Unit,
     scrollState: ScrollState,
-    navController: NavHostController,
+    onBack: () -> Unit,
 ) {
 
     val isDataAvailable = uiState.graphDataPoints.isNotEmpty()
@@ -183,7 +181,7 @@ fun GlucoseDetailLayout(
 
         TopAppBar(
             title = "혈당",
-            navController = navController
+            onBack = onBack
         )
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -306,7 +304,7 @@ fun PreviewGlucoseDetail_DataAvailable() {
             selectedIndex = sampleData.lastIndex,
             onTimingChange = {},
             onPointClick = {},
-            navController = rememberNavController(),
+            onBack = {},
             scrollState = scrollState
         )
     }
@@ -327,7 +325,7 @@ fun PreviewGlucoseDetail_Empty() {
             selectedIndex = -1,
             onTimingChange = {},
             onPointClick = {},
-            navController = rememberNavController(),
+            onBack = {},
             scrollState = scrollState
         )
     }

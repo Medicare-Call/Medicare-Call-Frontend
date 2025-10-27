@@ -36,10 +36,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
+import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.LogoutConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingInfoItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
@@ -47,14 +46,13 @@ import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
 import com.konkuk.medicarecall.ui.type.GenderType
-import kotlinx.serialization.json.Json
-import java.net.URLEncoder
 
 @Composable
 fun MyDataSettingScreen(
     onBack: () -> Unit,
-    navController: NavHostController,
     modifier: Modifier = Modifier,
+    navigateToUserInfoSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
+    navigateToLoginAfterLogout: () -> Unit = {},
     myDataViewModel: MyDataViewModel = hiltViewModel(),
 ) {
     val myDataInfo = myDataViewModel.myDataInfo
@@ -130,11 +128,8 @@ fun MyDataSettingScreen(
                         color = MediCareCallTheme.colors.active,
                         modifier = modifier.clickable(
                             onClick = {
-                                val json = Json.encodeToString(myDataInfo)
-                                val encodedJson =
-                                    URLEncoder.encode(json, Charsets.UTF_8.toString())
                                 // 네비게이션을 통해 MyDetail 화면으로 이동
-                                navController.navigate("${Route.MyDetail.route}/$encodedJson")
+                                navigateToUserInfoSetting(myDataInfo)
                             },
                         ),
                     )
@@ -193,12 +188,6 @@ fun MyDataSettingScreen(
                     onSuccess = {
                         Log.d("MyDataSettingScreen", "Logout successful")
                         // 로그아웃 성공 후 동작
-//                        navController.navigate("login") {
-//                            popUpTo("main") { inclusive = true }
-//                            launchSingleTop = true
-//                            restoreState = true
-//                        }
-                        // TODO 추후 삭제
                         showLogoutDialog = false
                         val intent = Intent(context, MainActivity::class.java).apply {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
