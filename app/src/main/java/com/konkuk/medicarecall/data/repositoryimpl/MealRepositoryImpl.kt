@@ -7,10 +7,9 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class MealRepositoryImpl @Inject constructor(
-    private val mealService: MealService
+    private val mealService: MealService,
 ) : MealRepository {
     override suspend fun getMealUiStateList(elderId: Int, date: LocalDate): List<MealUiState> {
-
         val response = mealService.getDailyMeal(elderId, date.toString())
 
         return listOf(
@@ -18,20 +17,20 @@ class MealRepositoryImpl @Inject constructor(
                 mealTime = "아침",
                 description = response.meals.breakfast ?: "식사 기록 전이에요.",
                 isRecorded = response.meals.breakfast != null,
-                isEaten = null
+                isEaten = null,
             ),
             MealUiState(
                 mealTime = "점심",
                 description = response.meals.lunch ?: "식사 기록 전이에요.",
                 isRecorded = response.meals.lunch != null,
-                isEaten = null
+                isEaten = null,
             ),
             MealUiState(
                 mealTime = "저녁",
                 description = response.meals.dinner ?: "식사 기록 전이에요.",
                 isRecorded = response.meals.dinner != null,
-                isEaten = null
-            )
+                isEaten = null,
+            ),
         )
     }
 }

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ElderBulkRegisterRequestDto(
     @SerialName("elders")
-    val elders: List<ElderInfo>
+    val elders: List<ElderInfo>,
 ) {
     @Serializable
     data class ElderInfo(
@@ -21,6 +21,6 @@ data class ElderBulkRegisterRequestDto(
         @SerialName("relationship")
         val relationship: String,
         @SerialName("residenceType")
-        val residenceType: String
+        val residenceType: String,
     )
 }

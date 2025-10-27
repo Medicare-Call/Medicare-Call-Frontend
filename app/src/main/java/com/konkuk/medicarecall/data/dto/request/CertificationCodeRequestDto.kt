@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CertificationCodeRequestDto(
-    val phone: String
+    val phone: String,
 )

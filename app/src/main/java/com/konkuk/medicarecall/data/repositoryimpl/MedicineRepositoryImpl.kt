@@ -6,19 +6,13 @@ import com.konkuk.medicarecall.data.repository.MedicineRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import java.time.LocalDate
 import javax.inject.Inject
 
 class MedicineRepositoryImpl @Inject constructor(
     private val medicineService: MedicineService,
-    private val eldersHealthInfoRepository: EldersHealthInfoRepository
+    private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {
-
-    private val json = Json { ignoreUnknownKeys = true }
 
     /** 설정 스케줄을 “회색 카드” UI로 변환 */
     override suspend fun getConfiguredMedicineUiList(elderId: Int): List<MedicineUiState> {
@@ -58,7 +52,7 @@ class MedicineRepositoryImpl @Inject constructor(
                 todayRequiredCount = goal,
                 doseStatusList = labels.map { lab ->
                     DoseStatusItem(time = lab, doseStatus = DoseStatus.NOT_RECORDED) // 회색
-                }
+                },
             )
         }
     }
@@ -66,9 +60,8 @@ class MedicineRepositoryImpl @Inject constructor(
     /** 날짜별 기록 호출 + 없으면 스케줄 fallback */
     override suspend fun getMedicineUiStateList(
         elderId: Int,
-        date: LocalDate
+        date: LocalDate,
     ): List<MedicineUiState> {
-
         val grayTemplate =
             runCatching { getConfiguredMedicineUiList(elderId) }.getOrDefault(emptyList())
 
@@ -91,10 +84,8 @@ class MedicineRepositoryImpl @Inject constructor(
                                 .let { if (it == -1) Int.MAX_VALUE else it }
                         }
 
-
                         val order = listOf("MORNING", "LUNCH", "DINNER")
                         val kor = mapOf("MORNING" to "아침", "LUNCH" to "점심", "DINNER" to "저녁")
-
 
                         return@fold sortedMedications.map { m ->
                             val mapped = order.mapNotNull { slot ->
@@ -105,7 +96,7 @@ class MedicineRepositoryImpl @Inject constructor(
                                             true -> DoseStatus.TAKEN
                                             false -> DoseStatus.SKIPPED
                                             null -> DoseStatus.NOT_RECORDED
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -118,23 +109,16 @@ class MedicineRepositoryImpl @Inject constructor(
                             MedicineUiState(
                                 medicineName = m.type,
                                 todayRequiredCount = m.goalCount,
-                                doseStatusList = padded
+                                doseStatusList = padded,
                             )
                         }
                     } else {
-                        // 에러 응답 → 스케줄로 대체 (없으면 빈 목록)
-                        val errorMessage = res.errorBody()?.string()?.let { b ->
-                            runCatching {
-                                json.parseToJsonElement(b).jsonObject["message"]?.jsonPrimitive?.contentOrNull
-                            }.getOrNull()
-                        }
-                        if (grayTemplate.isNotEmpty()) grayTemplate else emptyList()
+                        grayTemplate.ifEmpty { emptyList() }
                     }
                 },
                 onFailure = {
-
-                    if (grayTemplate.isNotEmpty()) grayTemplate else emptyList()
-                }
+                    grayTemplate.ifEmpty { emptyList() }
+                },
             )
     }
 }
