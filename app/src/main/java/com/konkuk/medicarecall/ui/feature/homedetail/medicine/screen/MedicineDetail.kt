@@ -37,20 +37,18 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStat
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedicineDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     medicineViewModel: MedicineViewModel = hiltViewModel()
 ) {
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
@@ -71,7 +69,7 @@ fun MedicineDetail(
 
 
     MedicineDetailLayout(
-        navController = navController,
+        onBack = onBack,
         selectedDate = selectedDate,
         medicines = uiState.items,
         weekDates = calendarViewModel.getCurrentWeekDates(),
@@ -85,7 +83,7 @@ fun MedicineDetail(
 @Composable
 fun MedicineDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     medicines: List<MedicineUiState>,
     weekDates: List<LocalDate>,
@@ -104,7 +102,7 @@ fun MedicineDetailLayout(
         ) {
             TopAppBar(
                 title = "복약",
-                navController = navController
+                onBack = onBack
             )
             Spacer(Modifier.height(4.dp))
             Column(
@@ -165,7 +163,7 @@ fun PreviewMedicineDetail() {
 
     MediCareCallTheme {
         MedicineDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = LocalDate.now(),
             medicines = dummyMedicines,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },

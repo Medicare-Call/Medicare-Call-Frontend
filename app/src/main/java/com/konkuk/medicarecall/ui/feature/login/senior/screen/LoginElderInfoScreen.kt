@@ -38,9 +38,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.util.isValidDate
@@ -55,9 +54,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginElderScreen(
-    navController: NavController,
-    loginElderViewModel: LoginElderViewModel,
     modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToRegisterElderHealth: () -> Unit = {},
+    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
 ) {
 
     val scrollState = rememberScrollState()
@@ -84,15 +84,7 @@ fun LoginElderScreen(
             .imePadding(),
     ) {
         Column {
-            LoginBackButton(
-                {
-                    navController.navigate(Route.LoginElderInfoScreen.route) {
-                        popUpTo(Route.LoginStart.route) { inclusive = false } // ← 스택 정리
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-            )
+            LoginBackButton(onClick = onBack)
             Column(
                 modifier
                     .verticalScroll(scrollState),
@@ -238,7 +230,7 @@ fun LoginElderScreen(
                         else {
                             loginElderViewModel.initElderHealthData()
                             loginElderViewModel.postElderBulk()
-                            navController.navigate(Route.LoginElderMedInfoScreen.route)
+                            navigateToRegisterElderHealth()
                         }
                     },
                     modifier.padding(bottom = 20.dp),
@@ -253,4 +245,5 @@ fun LoginElderScreen(
                 .padding(bottom = 14.dp),
         )
     }
+
 }

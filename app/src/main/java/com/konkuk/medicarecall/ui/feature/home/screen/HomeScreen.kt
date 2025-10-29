@@ -34,6 +34,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,8 +48,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.common.component.NameBar
@@ -61,6 +63,7 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.ElderInfo
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
@@ -70,31 +73,43 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    onNavigateToMealDetail: () -> Unit,
-    onNavigateToMedicineDetail: () -> Unit,
-    onNavigateToSleepDetail: () -> Unit,
-    onNavigateToStateHealthDetail: () -> Unit,
-    onNavigateToStateMentalDetail: () -> Unit,
-    onNavigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetail: () -> Unit,
+    navigateToMedicationDetail: () -> Unit,
+    navigateToSleepDetail: () -> Unit,
+    navigateToHealthAnalysisDetail: () -> Unit,
+    navigateToMentalAnalysisDetail: () -> Unit,
+    navigateToGlucoseDetail: () -> Unit,
+    mainBackStackEntry: NavBackStackEntry,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsState()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
     val elderNameList by homeViewModel.elderNameList.collectAsState()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val updatedName by mainBackStackEntry.savedStateHandle
+        .getStateFlow<String?>("ELDER_NAME_UPDATED", null)
+        .collectAsStateWithLifecycle()
 
+    LaunchedEffect(updatedName) {
+        updatedName?.let {
+            homeViewModel.overrideName(it)
+            mainBackStackEntry.savedStateHandle.remove<String>("ELDER_NAME_UPDATED") // 원샷 처리
+        }
+    }
 
     HomeScreenLayout(
         modifier = modifier,
-        navController = navController,
         homeUiState = homeUiState,
-        elderNameList = elderNameList,
+        elderInfoList = elderInfoList,
+        selectedElderId = selectedElderId,
         isRefreshing = isRefreshing,
         dropdownOpened = dropdownOpened,
         onDropdownClick = { dropdownOpened = true },
@@ -103,12 +118,12 @@ fun HomeScreen(
             homeViewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        onNavigateToMealDetail = onNavigateToMealDetail,
-        onNavigateToMedicineDetail = onNavigateToMedicineDetail,
-        onNavigateToSleepDetail = onNavigateToSleepDetail,
-        onNavigateToStateHealthDetail = onNavigateToStateHealthDetail,
-        onNavigateToStateMentalDetail = onNavigateToStateMentalDetail,
-        onNavigateToGlucoseDetail = onNavigateToGlucoseDetail,
+        navigateToMealDetail = navigateToMealDetail,
+        navigateToMedicineDetail = navigateToMedicationDetail,
+        navigateToSleepDetail = navigateToSleepDetail,
+        navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
+        navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
+        navigateToGlucoseDetail = navigateToGlucoseDetail,
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,
         onFabClick = {
@@ -123,7 +138,7 @@ fun HomeScreen(
         },
         immediateCall = {
             homeViewModel.callImmediate(it)
-        }
+        },
     )
 }
 
@@ -132,35 +147,37 @@ fun HomeScreen(
 @Composable
 fun HomeScreenLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
     homeUiState: HomeUiState,
-    elderNameList: List<String>,
+    elderInfoList: List<ElderInfo>,
+    selectedElderId: Int?,
     isRefreshing: Boolean,
     dropdownOpened: Boolean,
     onDropdownClick: () -> Unit,
     onDropdownDismiss: () -> Unit,
     onDropdownItemSelected: (String) -> Unit,
-    onNavigateToMealDetail: () -> Unit,
-    onNavigateToMedicineDetail: () -> Unit,
-    onNavigateToSleepDetail: () -> Unit,
-    onNavigateToStateHealthDetail: () -> Unit,
-    onNavigateToStateMentalDetail: () -> Unit,
-    onNavigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetail: () -> Unit,
+    navigateToMedicineDetail: () -> Unit,
+    navigateToSleepDetail: () -> Unit,
+    navigateToStateHealthDetail: () -> Unit,
+    navigateToStateMentalDetail: () -> Unit,
+    navigateToGlucoseDetail: () -> Unit,
+    navigateToAlarm: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
     isLoading: Boolean,
     onFabClick: () -> Unit,
     onRefresh: () -> Unit,
-    immediateCall: (String) -> Unit
+    immediateCall: (String) -> Unit,
 ) {
-
-    val refreshState = rememberPullToRefreshState()
-
-    val selectedElderName = remember(homeUiState.elderName, elderNameList) {
-
-        homeUiState.elderName.ifEmpty {
-            elderNameList.firstOrNull() ?: "어르신 선택"
-        }
+    val elderNameList = remember(elderInfoList) {
+        elderInfoList.map { it.name }
     }
+    val refreshState = rememberPullToRefreshState()
+    val selectedElderName =
+        elderInfoList.find { it.id == selectedElderId }?.name
+            ?.takeIf { it.isNotBlank() }
+            ?: homeUiState.elderName
+                .takeIf { it.isNotBlank() }
+            ?: "어르신 선택"
     var expanded by remember { mutableStateOf(false) }
 
     val hasSummaryData = homeUiState.balloonMessage.isNotBlank()
@@ -173,9 +190,9 @@ fun HomeScreenLayout(
     }
 
     val summaryTitleColor =
-        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+        if (hasSummaryData) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white
     val summaryBodyColor =
-        if (hasSummaryData) MediCareCallTheme.colors.white else MediCareCallTheme.colors.g50
+        if (hasSummaryData) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white
     val summaryText = if (hasSummaryData) homeUiState.balloonMessage else "아직 기록되지 않았어요."
 
     Scaffold(
@@ -185,13 +202,13 @@ fun HomeScreenLayout(
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp)
+                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp),
             ) {
                 // 세부 FAB들
                 AnimatedVisibility(visible = expanded) {
                     Column(
                         horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         CareCallFloatingButton(
                             modifier = modifier,
@@ -200,7 +217,7 @@ fun HomeScreenLayout(
                                 immediateCall("FIRST")
                             },
                             careCallOption = "FIRST",
-                            text = "1차"
+                            text = "1차",
                         )
                         CareCallFloatingButton(
                             modifier = modifier,
@@ -209,7 +226,7 @@ fun HomeScreenLayout(
                                 immediateCall("SECOND")
                             },
                             careCallOption = "SECOND",
-                            text = "2차"
+                            text = "2차",
                         )
                         CareCallFloatingButton(
                             modifier = modifier,
@@ -218,7 +235,7 @@ fun HomeScreenLayout(
                                 immediateCall("THIRD")
                             },
                             careCallOption = "THIRD",
-                            text = "3차"
+                            text = "3차",
                         )
                     }
                 }
@@ -228,11 +245,11 @@ fun HomeScreenLayout(
                     onClick = { expanded = !expanded },
                     containerColor = MediCareCallTheme.colors.main,
                     contentColor = MediCareCallTheme.colors.white,
-                    shape = CircleShape
+                    shape = CircleShape,
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_carecall),
-                        contentDescription = "메인 FAB"
+                        contentDescription = "메인 FAB",
                     )
                 }
             }
@@ -240,27 +257,27 @@ fun HomeScreenLayout(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
-                modifier = Modifier.offset(y = -(10).dp)
+                modifier = Modifier.offset(y = -(10).dp),
 
-            ) { data ->
+                ) { data ->
                 CareCallSnackBar(snackBarData = data)
             }
-        }
+        },
     ) { innerPadding ->
         Box(
             modifier = modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.White)
-                    .padding(innerPadding)
+                    .padding(innerPadding),
             ) {
                 NameBar(
                     name = selectedElderName,
                     modifier = Modifier.statusBarsPadding(),
-                    navController = navController,
+                    navigateToAlarm = navigateToAlarm,
                     onDropdownClick = onDropdownClick,
                     // TODO: 실제 알림 개수 데이터 연동 필요
                     notificationCount = 4,
@@ -286,18 +303,18 @@ fun HomeScreenLayout(
                             isRefreshing = isRefreshing,
                             state = refreshState,
                             color = MediCareCallTheme.colors.main,
-                            containerColor = MediCareCallTheme.colors.white
+                            containerColor = MediCareCallTheme.colors.white,
                         )
-                    }
+                    },
                 ) {
                     when (isLoading) {
                         true -> Box(
                             Modifier
-                                .fillMaxSize()
+                                .fillMaxSize(),
                         ) {
                             CircularProgressIndicator(
                                 color = MediCareCallTheme.colors.main,
-                                modifier = Modifier.align(Alignment.Center)
+                                modifier = Modifier.align(Alignment.Center),
                             )
                         }
 
@@ -306,7 +323,7 @@ fun HomeScreenLayout(
                             modifier = Modifier
                                 .verticalScroll(rememberScrollState())
                                 .fillMaxSize()
-                                .padding(horizontal = 20.dp)
+                                .padding(horizontal = 20.dp),
                         ) {
                             Spacer(Modifier.height(20.dp))
 
@@ -314,7 +331,7 @@ fun HomeScreenLayout(
                             Text(
                                 text = "오늘의 건강 통계",
                                 style = MediCareCallTheme.typography.SB_18,
-                                color = MediCareCallTheme.colors.gray6
+                                color = MediCareCallTheme.colors.gray6,
                             )
 
                             Spacer(Modifier.height(20.dp))
@@ -323,10 +340,10 @@ fun HomeScreenLayout(
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp),
-                                colors = CardDefaults.cardColors(containerColor = cardBackgroundColor)
+                                colors = CardDefaults.cardColors(containerColor = cardBackgroundColor),
                             ) {
                                 Column(
-                                    modifier = Modifier.padding(20.dp)
+                                    modifier = Modifier.padding(20.dp),
                                 ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Image(
@@ -351,19 +368,19 @@ fun HomeScreenLayout(
 
                             //건강 항목별 상세 카드
                             Column(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             ) {
                                 Spacer(Modifier.height(30.dp))
                                 HomeMealContainer(
                                     breakfastEaten = homeUiState.breakfastEaten,
                                     lunchEaten = homeUiState.lunchEaten,
                                     dinnerEaten = homeUiState.dinnerEaten,
-                                    onClick = { onNavigateToMealDetail() }
+                                    onClick = navigateToMealDetail,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeMedicineContainer(
                                     medicines = homeUiState.medicines,
-                                    onClick = { onNavigateToMedicineDetail() }
+                                    onClick = navigateToMedicineDetail,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
@@ -371,22 +388,22 @@ fun HomeScreenLayout(
                                     totalSleepHours = sleepData.meanHours,
                                     totalSleepMinutes = sleepData.meanMinutes,
                                     isRecorded = sleepData.meanHours > 0 || sleepData.meanMinutes > 0,
-                                    onClick = { onNavigateToSleepDetail() }
+                                    onClick = navigateToSleepDetail,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateHealthContainer(
                                     healthStatus = homeUiState.healthStatus,
-                                    onClick = { onNavigateToStateHealthDetail() }
+                                    onClick = navigateToStateHealthDetail,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateMentalContainer(
                                     mentalStatus = homeUiState.mentalStatus,
-                                    onClick = { onNavigateToStateMentalDetail() }
+                                    onClick = navigateToStateMentalDetail,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeGlucoseLevelContainer(
                                     glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday,
-                                    onClick = { onNavigateToGlucoseDetail() }
+                                    onClick = navigateToGlucoseDetail,
                                 )
                                 Spacer(Modifier.height(12.dp))
                             }
@@ -401,7 +418,7 @@ fun HomeScreenLayout(
                 items = elderNameList,
                 selectedName = selectedElderName,
                 onDismiss = onDropdownDismiss,
-                onItemSelected = onDropdownItemSelected
+                onItemSelected = onDropdownItemSelected,
             )
         }
     }
@@ -419,37 +436,42 @@ fun PreviewHomeScreen() {
         dinnerEaten = null,
         medicines = listOf(
             MedicineUiState("혈압약", 2, 3, "저녁"),
-            MedicineUiState("당뇨약", 1, 2, "저녁")
+            MedicineUiState("당뇨약", 1, 2, "저녁"),
         ),
         sleep = HomeResponseDto.SleepDto(meanHours = 8, meanMinutes = 15),
         healthStatus = "좋음",
         mentalStatus = "좋음",
-        glucoseLevelAverageToday = 120
+        glucoseLevelAverageToday = 120,
     )
 
-    val previewNameList = listOf("김옥자", "박막례", "최이순")
+    val previewElderInfoList = listOf(
+        ElderInfo(1, "김옥자", "010-1111-1111"),
+        ElderInfo(2, "박막례", "010-2222-2222"),
+        ElderInfo(3, "최이순", "010-3333-3333"),
+    )
+    val previewSelectedId = 1
 
     MediCareCallTheme {
         HomeScreenLayout(
-            navController = rememberNavController(),
             homeUiState = previewUiState,
-            elderNameList = previewNameList,
+            elderInfoList = previewElderInfoList,
+            selectedElderId = previewSelectedId,
             isRefreshing = false,
             dropdownOpened = false,
             onDropdownClick = {},
             onDropdownDismiss = {},
             onDropdownItemSelected = {},
-            onNavigateToMealDetail = {},
-            onNavigateToMedicineDetail = {},
-            onNavigateToSleepDetail = {},
-            onNavigateToStateHealthDetail = {},
-            onNavigateToStateMentalDetail = {},
-            onNavigateToGlucoseDetail = {},
+            navigateToMealDetail = {},
+            navigateToMedicineDetail = {},
+            navigateToSleepDetail = {},
+            navigateToStateHealthDetail = {},
+            navigateToStateMentalDetail = {},
+            navigateToGlucoseDetail = {},
             snackbarHostState = SnackbarHostState(),
             isLoading = false,
             immediateCall = {},
             onRefresh = {},
-            onFabClick = {}
+            onFabClick = {},
         )
     }
 }
@@ -468,32 +490,37 @@ fun PreviewHomeScreen_Unrecorded() {
         sleep = HomeResponseDto.SleepDto(0, 0),
         healthStatus = "",
         mentalStatus = "",
-        glucoseLevelAverageToday = 0
+        glucoseLevelAverageToday = 0,
     )
 
-    val previewNameList = listOf("김옥자", "박막례", "최이순")
+    val previewElderInfoList = listOf(
+        ElderInfo(1, "김옥자", "010-1111-1111"),
+        ElderInfo(2, "박막례", "010-2222-2222"),
+    )
+    val previewSelectedId = 1
 
     MediCareCallTheme {
         HomeScreenLayout(
-            navController = rememberNavController(),
             homeUiState = unrecordedUiState,
-            elderNameList = previewNameList,
+            elderInfoList = previewElderInfoList,
+            selectedElderId = previewSelectedId,
             isRefreshing = false,
             dropdownOpened = false,
             onDropdownClick = {},
             onDropdownDismiss = {},
             onDropdownItemSelected = {},
-            onNavigateToMealDetail = {},
-            onNavigateToMedicineDetail = {},
-            onNavigateToSleepDetail = {},
-            onNavigateToStateHealthDetail = {},
-            onNavigateToStateMentalDetail = {},
-            onNavigateToGlucoseDetail = {},
             snackbarHostState = SnackbarHostState(),
             isLoading = false,
             immediateCall = {},
             onRefresh = {},
-            onFabClick = {}
+            onFabClick = {},
+            navigateToMealDetail = { },
+            navigateToMedicineDetail = { },
+            navigateToSleepDetail = { },
+            navigateToStateHealthDetail = { },
+            navigateToStateMentalDetail = { },
+            navigateToGlucoseDetail = { },
+            navigateToAlarm = { },
         )
     }
 }

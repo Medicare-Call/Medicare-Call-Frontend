@@ -27,25 +27,25 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun TopAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    navController: NavHostController,
+    onBack: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 15.dp, horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // 뒤로 가기
             Icon(
                 modifier = Modifier
                     .size(24.dp)
                     .clickable {
-                        navController.popBackStack()
+                        onBack()
                     },
                 painter = painterResource(id = R.drawable.ic_arrow_big_back),
                 contentDescription = "big arrow back",
@@ -72,14 +72,14 @@ fun TopAppBar(
             thickness = 1.dp,
         )
     }
-}
+    }
 
 
-@Preview(showBackground = true)
-@Composable
-private fun PreviewTopAppBar() {
-    TopAppBar(
-        title = "식사",
-        navController = rememberNavController(),
-    )
-}
+    @Preview(showBackground = true)
+    @Composable
+    private fun PreviewTopAppBar() {
+        TopAppBar(
+            title = "식사",
+        onBack = {},
+        )
+    }

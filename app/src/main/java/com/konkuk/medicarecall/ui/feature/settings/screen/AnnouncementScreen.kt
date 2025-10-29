@@ -16,23 +16,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
+import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.AnnouncementCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.NoticeViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.serialization.json.Json
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun AnnouncementScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navController: NavHostController,
-    viewModel: NoticeViewModel = hiltViewModel()
+    navigateToNoticeDetail: (notice: NoticesResponseDto) -> Unit = {},
+    viewModel: NoticeViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val notices = viewModel.noticeList
@@ -47,7 +43,7 @@ fun AnnouncementScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -59,12 +55,12 @@ fun AnnouncementScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Column(
-            modifier = modifier.verticalScroll(scrollState)
+            modifier = modifier.verticalScroll(scrollState),
         ) {
             if (error != null) {
                 AnnouncementCard("공지사항 오류 발생", error, onClick = {})
@@ -75,11 +71,8 @@ fun AnnouncementScreen(
                         date = notice.publishedAt.replace("-", "."),
                         onClick = {
                             Log.d("AnnouncementScreen", "공지사항 클릭: ${notice.title}")
-                            val json = Json.encodeToString(notice)
-                            val encodedJson =
-                                URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
-                            navController.navigate("${Route.AnnouncementDetail.route}/$encodedJson")
-                        }
+                            navigateToNoticeDetail(notice)
+                        },
                     )
                 }
             }

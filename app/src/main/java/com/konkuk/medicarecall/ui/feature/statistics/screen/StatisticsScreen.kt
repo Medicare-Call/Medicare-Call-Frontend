@@ -32,7 +32,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -59,9 +58,15 @@ import java.time.LocalDate
 fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    navigateToAlarm: () -> Unit = {},
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
 ) {
+    LaunchedEffect(key1 = true) {
+        homeViewModel.fetchElderList()//어르신 목록 호출
+        statisticsViewModel.refresh()
+    }
+
     // 화면 복귀 시 자동 새로고침
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -92,8 +97,9 @@ fun StatisticsScreen(
     // 우선순위 2: ID를 통해 전체 목록에서 찾은 이름 (로딩 중일 때 표시)
     // 우선순위 3: 목록의 첫 번째 이름 (초기 상태)
     val currentElderName = remember(uiState.summary, elderInfoList, selectedElderId) {
-        uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
-            ?: elderInfoList.find { it.id == selectedElderId }?.name
+
+        elderInfoList.find { it.id == selectedElderId }?.name
+            ?: uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
             ?: elderNameList.firstOrNull()
             ?: "어르신 통계"
     }
@@ -118,7 +124,6 @@ fun StatisticsScreen(
         modifier = modifier,
         uiState = uiState,
         elderNameList = elderNameList,
-        navController = navController,
         currentWeek = currentWeek,
         isLatestWeek = isLatestWeek,
         isEarliestWeek = isEarliestWeek,
@@ -135,7 +140,7 @@ fun StatisticsScreenLayout(
     modifier: Modifier = Modifier,
     uiState: StatisticsUiState,
     elderNameList: List<String>,
-    navController: NavHostController,
+    navigateToAlarm: () -> Unit = {},
     currentWeek: Pair<LocalDate, LocalDate>,
     isLatestWeek: Boolean,
     isEarliestWeek: Boolean,
@@ -154,7 +159,7 @@ fun StatisticsScreenLayout(
         NameBar(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
-            navController = navController,
+            navigateToAlarm = navigateToAlarm,
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
             notificationCount = 4,//TODO: 실제 알림 개수 데이터 연동 필요
         )
@@ -314,7 +319,6 @@ fun PreviewStatisticsScreen_Recorded() {
         StatisticsScreenLayout(
             uiState = dummyUiState,
             elderNameList = listOf("김옥자", "박막례"),
-            navController = rememberNavController(),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
             isLatestWeek = false,
             isEarliestWeek = false,
@@ -338,7 +342,6 @@ fun PreviewStatisticsScreen_Unrecorded() {
                 summary = WeeklySummaryUiState.EMPTY.copy(elderName = "김옥자"),
             ),
             elderNameList = listOf("김옥자", "박막례"),
-            navController = rememberNavController(),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
             isLatestWeek = true,
             isEarliestWeek = true,

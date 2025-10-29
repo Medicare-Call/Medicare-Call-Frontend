@@ -21,22 +21,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.component.SubscribeCard
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.SubscribeViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.serialization.json.Json
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun SettingSubscribeScreen(
-    modifier: Modifier = Modifier,
     onBack: () -> Unit,
-    navController: NavHostController,
-    viewModel: SubscribeViewModel = hiltViewModel()
+    modifier: Modifier = Modifier,
+    navigateToSubscribeDetail: (subscription: EldersSubscriptionResponseDto) -> Unit = {},
+    viewModel: SubscribeViewModel = hiltViewModel(),
 ) {
 
     val eldersInfo = viewModel.subscriptions
@@ -46,7 +43,7 @@ fun SettingSubscribeScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -58,25 +55,23 @@ fun SettingSubscribeScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Column(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Spacer(modifier = modifier.height(20.dp))
             eldersInfo.forEach {
                 SubscribeCard(
                     elderInfo = it,
                     onClick = {
-                        val json = Json.encodeToString(it)
-                        val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
-                        navController.navigate("subscribe_detail/$encodedJson")
+                        navigateToSubscribeDetail(it)
                     },
                 )
             }

@@ -16,15 +16,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(
+    navigateToLogin: () -> Unit = {},
+    navigateToPhone: () -> Unit = {},
+    navigateToRegisterElder: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    navigateToPurchase: () -> Unit = {},
+    navigateToHome: () -> Unit = {},
+) {
 
     val viewModel: SplashViewModel = hiltViewModel()
 
@@ -32,27 +37,14 @@ fun SplashScreen(navController: NavController) {
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
-            val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginStart.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginElderInfoScreen.route
-                is NavigationDestination.GoToTimeSetting -> Route.SetCall.route
-                is NavigationDestination.GoToPayment -> Route.Payment.route
-                is NavigationDestination.GoToHome -> Route.Home.route
-
+            navigateToLogin()
+            when (destination) {
+                is NavigationDestination.GoToLogin -> navigateToPhone()
+                is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
+                is NavigationDestination.GoToTimeSetting -> navigateToCareCallSetting()
+                is NavigationDestination.GoToPayment -> navigateToPurchase()
+                is NavigationDestination.GoToHome -> navigateToHome()
             }
-            navController.navigate(Route.LoginStart.route) {
-                popUpTo(Route.AppSplash.route) { inclusive = true }
-                launchSingleTop = true
-            }
-            navController.navigate(route) {
-                if (route == Route.Home.route) {
-                    popUpTo(Route.LoginStart.route) {
-                        inclusive = true
-                    }
-                }
-                launchSingleTop = true
-            }
-
         }
     }
 
@@ -85,7 +77,7 @@ fun SplashScreen(navController: NavController) {
             painterResource(R.drawable.bg_splash_new),
             "Medicare Call 스플래시",
             Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
     }
 }
