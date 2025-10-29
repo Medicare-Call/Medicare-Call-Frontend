@@ -92,7 +92,6 @@ class GlucoseViewModel @Inject constructor(
         }
     }
 
-
     /** 타이밍 전환*/
     fun updateTiming(newTiming: GlucoseTiming) {
         Log.d(TAG, "updateTiming(newTiming=$newTiming)")
@@ -107,7 +106,6 @@ class GlucoseViewModel @Inject constructor(
             )
         }
     }
-
 
     fun onClickDots(newIndex: Int) {
         _uiState.value = _uiState.value.copy(selectedIndex = newIndex)

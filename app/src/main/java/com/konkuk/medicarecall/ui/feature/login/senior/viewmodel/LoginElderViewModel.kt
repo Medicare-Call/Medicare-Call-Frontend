@@ -32,7 +32,6 @@ class LoginElderViewModel @Inject constructor(
     private val _elderHealthUiState = MutableStateFlow(LoginElderHealthUiState())
     val elderHealthUiState: StateFlow<LoginElderHealthUiState> = _elderHealthUiState.asStateFlow()
 
-
     fun updateElderName(name: String) {
         _elderUiState.update { state ->
             state.copy(
@@ -120,7 +119,6 @@ class LoginElderViewModel @Inject constructor(
         return elderUiState.value.eldersList.all {
             it.name.isNotBlank() && it.birthDate.length == 8 && it.phoneNumber.length == 11 && it.relationship.isNotBlank() && it.livingType.isNotBlank()
         }
-
     }
 
     // suggestion: 어르신 등록과 건강정보 등록이 아예 분리된 만큼,
@@ -140,7 +138,6 @@ class LoginElderViewModel @Inject constructor(
             state.copy(selectedIndex = index)
         }
     }
-
 
     fun updateDiseasesText(text: String) {
         _elderHealthUiState.update { state ->
@@ -166,7 +163,6 @@ class LoginElderViewModel @Inject constructor(
                 },
             )
         }
-
     }
 
     fun removeDisease(disease: String) {
@@ -182,7 +178,6 @@ class LoginElderViewModel @Inject constructor(
             )
         }
     }
-
 
     fun addHealthNote(note: String) {
         _elderHealthUiState.update { state ->
@@ -266,7 +261,6 @@ class LoginElderViewModel @Inject constructor(
         }
     }
 
-
     // ------------------API 요청------------------
     fun postElderBulk() {
         viewModelScope.launch {
@@ -314,34 +308,30 @@ class LoginElderViewModel @Inject constructor(
     fun updateAllElders() { // getElderIds.isNotEmpty == true
         viewModelScope.launch {
             val elderIds = elderIdRepository.getElderIds()
-            elderIds.filterIndexed { index, it ->
-                it.values.first() == elderUiState.value.eldersList[index].id
-            }.forEachIndexed { index, it ->
+            elderIds.filterIndexed { index, data ->
+                data.values.first() == elderUiState.value.eldersList[index].id
+            }.forEachIndexed { index, data ->
                 eldersInfoRepository.updateElder(
-                    it.values.first(), elderUiState.value.eldersList[index],
+                    data.values.first(),
+                    elderUiState.value.eldersList[index],
                 ).onSuccess {
                     Log.d("httplog", "어르신 재등록(수정) 성공")
                 }.onFailure { exception ->
                     Log.e("httplog", "어르신 정보 등록 실패: ${exception.message}")
-
-
                 }
             }
-
-
         }
-
     }
 
     fun updateAllEldersHealthInfo() {
         viewModelScope.launch {
             val elderIds = elderIdRepository.getElderIds()
-            elderIds.filterIndexed { index, it ->
-                it.values.first() == elderHealthUiState.value.elderHealthList[index].id
-            }.forEachIndexed { index, it ->
+            elderIds.filterIndexed { index, data ->
+                data.values.first() == elderHealthUiState.value.elderHealthList[index].id
+            }.forEachIndexed { index, data ->
                 runCatching {
                     elderRegisterRepository.postElderHealthInfo(
-                        it.values.first(),
+                        data.values.first(),
                         elderHealthUiState.value.elderHealthList[index],
                     )
                 }.onSuccess {

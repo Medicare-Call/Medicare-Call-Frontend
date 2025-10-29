@@ -32,8 +32,8 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 fun HomeMedicineContainer(
     modifier: Modifier = Modifier,
     medicines: List<MedicineUiState>,
-    onClick: () -> Unit
-) {   //TODO: 복약 상태 아이콘 리스트
+    onClick: () -> Unit,
+) { // TODO: 복약 상태 아이콘 리스트
 //    // 이상치 방어
 //    val safeRequired = remember(todayRequiredCount) { todayRequiredCount.coerceAtLeast(0) }
 //
@@ -62,34 +62,31 @@ fun HomeMedicineContainer(
 //            }
 //        }
 //    }
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
             // Title: 복약
             Row(
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp),
                     painter = painterResource(id = R.drawable.ic_pills),
                     contentDescription = "pills icon",
-                    )
+                )
                 Spacer(Modifier.width(4.dp))
 
                 Text(
@@ -97,22 +94,19 @@ fun HomeMedicineContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-
-                ) {
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 // 전체 복약 상태
                 val totalTaken = medicines.sumOf { it.todayTakenCount }
                 val totalRequired = medicines.sumOf { it.todayRequiredCount }
                 Row(
                     modifier = Modifier,
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
                         text = "$totalTaken/$totalRequired",
@@ -138,7 +132,7 @@ fun HomeMedicineContainer(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween, // 양 끝 배치
-                        verticalAlignment = Alignment.CenterVertically // 텍스트 높이 다를 경우 대비
+                        verticalAlignment = Alignment.CenterVertically, // 텍스트 높이 다를 경우 대비
                     ) {
                         // 복약 이름
                         Text(
@@ -159,10 +153,10 @@ fun HomeMedicineContainer(
                     Row(
                         modifier = Modifier,
                         verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        Column() {
-                            //TODO: 복약 상태 아이콘 리스트
+                        Column {
+                            // TODO: 복약 상태 아이콘 리스트
 //                            //복약 아이콘 리스트
 //                            Row {
 //                                renderList.forEach { item ->
@@ -198,13 +192,12 @@ fun HomeMedicineContainer(
     }
 }
 
-
 @Preview(showBackground = true, name = "복약 기록 있음")
 @Composable
 private fun PreviewHomeMedicineContainer() {
     val sampleMedicines = listOf(
         MedicineUiState("당뇨약", 1, 3, "점심"),
-        MedicineUiState("혈압약", 2, 2, "아침")
+        MedicineUiState("혈압약", 2, 2, "아침"),
     )
     HomeMedicineContainer(medicines = sampleMedicines, onClick = {})
 }
@@ -212,10 +205,9 @@ private fun PreviewHomeMedicineContainer() {
 @Preview(showBackground = true, name = "복약 미기록")
 @Composable
 private fun PreviewHomeMedicineContainerUnrecorded() {
-
     val sampleMedicines = listOf(
         MedicineUiState("당뇨약", 0, 3, "아침"),
-        MedicineUiState("혈압약", 0, 2, "아침")
+        MedicineUiState("혈압약", 0, 2, "아침"),
     )
     HomeMedicineContainer(medicines = sampleMedicines, onClick = {})
 }

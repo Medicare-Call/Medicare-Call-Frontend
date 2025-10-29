@@ -59,7 +59,6 @@ fun LoginElderScreen(
     navigateToRegisterElderHealth: () -> Unit = {},
     loginElderViewModel: LoginElderViewModel = hiltViewModel(),
 ) {
-
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -73,7 +72,6 @@ fun LoginElderScreen(
         delay(100L)
         scrollState.animateScrollTo(0)
     }
-
 
     Box(
         modifier
@@ -98,10 +96,9 @@ fun LoginElderScreen(
                 if (uiState.eldersList.size != 1) {
                     Spacer(Modifier.height(30.dp))
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-
-                        itemsIndexed(uiState.eldersList) { index, it ->
+                        itemsIndexed(uiState.eldersList) { index, data ->
                             ElderChip(
-                                name = it.name,
+                                name = data.name,
                                 selected = index == selectedIndex,
                                 onRemove = {
                                     if (selectedIndex == uiState.eldersList.size - 1)
@@ -110,7 +107,6 @@ fun LoginElderScreen(
                                 },
                                 onClick = { loginElderViewModel.selectElder(index) },
                             )
-
                         }
                     }
                 }
@@ -126,7 +122,6 @@ fun LoginElderScreen(
                     onLivingTypeChanged = { loginElderViewModel.updateElderLivingType(it) },
                     nameFocusRequester = nameFocusRequester,
                 )
-
 
                 val interactionSource = remember { MutableInteractionSource() }
                 // interactionSource 에서 pressed 상태 감지
@@ -163,7 +158,6 @@ fun LoginElderScreen(
                             } else {
                                 coroutineScope.launch {
                                     snackBarState.showSnackbar("어르신은 최대 5명까지 등록이 가능해요")
-
                                 }
                             }
                         },
@@ -172,10 +166,10 @@ fun LoginElderScreen(
                         Modifier
                             .padding(vertical = 16.dp)
                             .align(Alignment.Center),
-
-                        ) {
+                    ) {
                         Icon(
-                            painterResource(R.drawable.ic_plus), contentDescription = "플러스 아이콘",
+                            painterResource(R.drawable.ic_plus),
+                            contentDescription = "플러스 아이콘",
                             tint = if (loginElderViewModel.isInputComplete())
                                 MediCareCallTheme.colors.main
                             else MediCareCallTheme.colors.gray3,
@@ -245,5 +239,4 @@ fun LoginElderScreen(
                 .padding(bottom = 14.dp),
         )
     }
-
 }

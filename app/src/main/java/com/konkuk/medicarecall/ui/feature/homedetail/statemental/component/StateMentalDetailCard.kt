@@ -27,91 +27,78 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun StateMentalDetailCard(
     mental: MentalUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                //심리상태 요약
+                // 심리상태 요약
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-
-
                     Text(
                         text = "심리상태 요약",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray5
+                        color = MediCareCallTheme.colors.gray5,
                     )
-
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-
                     if (!mental.isRecorded) {
                         Text(
                             text = "건강징후 기록 전이에요.",
                             style = MediCareCallTheme.typography.R_16,
-                            color = MediCareCallTheme.colors.gray4
+                            color = MediCareCallTheme.colors.gray4,
                         )
                     } else {
-
                         Column(
                             modifier = Modifier,
                             verticalArrangement = Arrangement.spacedBy(2.dp),
-                            ) {
+                        ) {
                             mental.mentalSummary.forEach { mentalSummary ->
                                 Row(verticalAlignment = Alignment.Top) {
                                     Text(
                                         text = "•",
                                         style = MediCareCallTheme.typography.M_16,
-                                        color = MediCareCallTheme.colors.gray8
+                                        color = MediCareCallTheme.colors.gray8,
                                     )
                                     Spacer(modifier = Modifier.width(12.dp))
                                     Text(
                                         text = mentalSummary,
                                         style = MediCareCallTheme.typography.M_16,
-                                        color = MediCareCallTheme.colors.gray8
+                                        color = MediCareCallTheme.colors.gray8,
                                     )
                                 }
-
                             }
                         }
                     }
                 }
             }
-
-
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -120,10 +107,9 @@ fun PreviewStateMentalDetailCard() {
         mental = MentalUiState(
             mentalSummary = listOf(
                 "날씨가 좋아서 기분이 좋음",
-                "여느 때와 비슷함"
+                "여느 때와 비슷함",
             ),
-            isRecorded = true
-        )
+            isRecorded = true,
+        ),
     )
 }
-

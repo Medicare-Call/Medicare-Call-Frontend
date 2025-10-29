@@ -94,6 +94,5 @@ fun HealthInfoScreen(
 //            PersonalInfoCard("박막례",  onClick = {navController.navigate(Route.HealthDetail.route)})
             Spacer(modifier = Modifier.height(20.dp))
         }
-
     }
 }

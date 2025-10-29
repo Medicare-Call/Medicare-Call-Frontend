@@ -33,11 +33,10 @@ class CallTimeViewModel @Inject constructor(
     fun isAllComplete(ids: List<Int>): Boolean =
         ids.isNotEmpty() && ids.all { isCompleteFor(it) }
 
-
     fun submitAllByIds(
         elderIds: List<Int>,
         onSuccess: () -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Throwable) -> Unit,
     ) {
         viewModelScope.launch {
             isLoading.value = true
@@ -63,4 +62,3 @@ class CallTimeViewModel @Inject constructor(
         }
     }
 }
-

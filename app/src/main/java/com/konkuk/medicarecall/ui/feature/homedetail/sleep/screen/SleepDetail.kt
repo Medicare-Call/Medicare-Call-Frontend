@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,8 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
@@ -33,19 +30,16 @@ import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SleepDetail(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
-    sleepViewModel: SleepViewModel = hiltViewModel()
+    sleepViewModel: SleepViewModel = hiltViewModel(),
 ) {
-
     val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
@@ -66,7 +60,6 @@ fun SleepDetail(
         }
     }
 
-
     SleepDetailLayout(
         modifier = Modifier,
         onBack = onBack,
@@ -74,7 +67,7 @@ fun SleepDetail(
         sleep = sleep,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
-        onMonthClick = { /* 모달 열기 */ }
+        onMonthClick = { /* 모달 열기 */ },
     )
 }
 
@@ -86,17 +79,17 @@ fun SleepDetailLayout(
     sleep: SleepUiState,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
-    onMonthClick: () -> Unit
+    onMonthClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         TopAppBar(
             title = "수면",
-            onBack = onBack
+            onBack = onBack,
         )
         Spacer(Modifier.height(4.dp))
         Column(
@@ -104,12 +97,12 @@ fun SleepDetailLayout(
                 .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
             DateSelector(
                 selectedDate = selectedDate,
                 onMonthClick = onMonthClick,
-                onDateSelected = onDateSelected
+                onDateSelected = onDateSelected,
             )
             Spacer(Modifier.height(12.dp))
             WeeklyCalendar(
@@ -117,18 +110,17 @@ fun SleepDetailLayout(
                     currentYear = selectedDate.year,
                     currentMonth = selectedDate.monthValue,
                     weekDates = weekDates,
-                    selectedDate = selectedDate
+                    selectedDate = selectedDate,
                 ),
-                onDateSelected = onDateSelected
+                onDateSelected = onDateSelected,
             )
             Spacer(modifier = Modifier.height(32.dp))
             SleepDetailCard(
-                sleep
+                sleep,
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -140,7 +132,7 @@ fun PreviewSleepDetail() {
             sleep = SleepUiState.Companion.EMPTY,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
-            onMonthClick = {}
+            onMonthClick = {},
         )
     }
 }

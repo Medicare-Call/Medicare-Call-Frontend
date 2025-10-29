@@ -19,33 +19,32 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun MentalRowItem(
     label: String,
     count: Int,
-    iconRes: Int
+    iconRes: Int,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = Modifier,
     ) {
         Text(
             text = label,
             style = MediCareCallTheme.typography.R_14,
-            color = MediCareCallTheme.colors.gray6
+            color = MediCareCallTheme.colors.gray6,
         )
         Spacer(modifier = Modifier.width(10.dp))
 
         Icon(
             painter = painterResource(id = iconRes),
             contentDescription = null,
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "${count}번",
             style = MediCareCallTheme.typography.R_14,
-            color = MediCareCallTheme.colors.gray6
+            color = MediCareCallTheme.colors.gray6,
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -53,6 +52,6 @@ fun PreviewMentalRowItem() {
     MentalRowItem(
         label = "좋음",
         count = 4,
-        iconRes = R.drawable.ic_emoji_good
+        iconRes = R.drawable.ic_emoji_good,
     )
 }

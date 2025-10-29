@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.MedicineRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
-    private val medicineRepository: MedicineRepository
+    private val medicineRepository: MedicineRepository,
 ) : ViewModel() {
 
     private companion object {
@@ -28,7 +27,7 @@ class MedicineViewModel @Inject constructor(
         val loading: Boolean = false,
         val items: List<MedicineUiState> = emptyList(),
         val emptyDate: LocalDate? = null,
-        val hasConfiguredMeds: Boolean = false
+        val hasConfiguredMeds: Boolean = false,
     )
 
     private val _state = MutableStateFlow(ScreenState())
@@ -41,7 +40,6 @@ class MedicineViewModel @Inject constructor(
 
             _state.update { it.copy(loading = true, emptyDate = null) }
             try {
-
                 val daily = medicineRepository.getMedicineUiStateList(elderId, date)
 
                 if (daily.isNotEmpty()) {
@@ -50,12 +48,11 @@ class MedicineViewModel @Inject constructor(
                             loading = false,
                             items = daily,
                             emptyDate = null,
-                            hasConfiguredMeds = true
+                            hasConfiguredMeds = true,
                         )
                     }
                     return@launch
                 }
-
 
                 val configured = medicineRepository.getConfiguredMedicineUiList(elderId)
                 if (configured.isNotEmpty()) {
@@ -64,21 +61,19 @@ class MedicineViewModel @Inject constructor(
                             loading = false,
                             items = configured,
                             emptyDate = null,
-                            hasConfiguredMeds = true
+                            hasConfiguredMeds = true,
                         )
                     }
                 } else {
-
                     _state.update {
                         it.copy(
                             loading = false,
                             items = emptyList(),
                             emptyDate = date,
-                            hasConfiguredMeds = false
+                            hasConfiguredMeds = false,
                         )
                     }
                 }
-
             } catch (e: Exception) {
                 when (e) {
                     is HttpException -> {
@@ -95,7 +90,7 @@ class MedicineViewModel @Inject constructor(
                                     it.copy(
                                         loading = false,
                                         items = emptyList(),
-                                        emptyDate = date
+                                        emptyDate = date,
                                     )
                                 }
                             }
@@ -104,13 +99,13 @@ class MedicineViewModel @Inject constructor(
                                 Log.e(
                                     TAG,
                                     "API error code=${e.code()} elderId=$elderId, date=$formatted",
-                                    e
+                                    e,
                                 )
                                 _state.update {
                                     it.copy(
                                         loading = false,
                                         items = emptyList(),
-                                        emptyDate = date
+                                        emptyDate = date,
                                     )
                                 }
                             }
@@ -123,7 +118,7 @@ class MedicineViewModel @Inject constructor(
                             it.copy(
                                 loading = false,
                                 items = emptyList(),
-                                emptyDate = date
+                                emptyDate = date,
                             )
                         }
                     }

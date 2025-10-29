@@ -26,7 +26,7 @@ fun SettingsTopAppBar(
     leftIcon: @Composable () -> Unit = {},
     leftIconClick: () -> Unit = {},
     rightIcon: @Composable () -> Unit = {},
-    rightIconClick: () -> Unit = {}
+    rightIconClick: () -> Unit = {},
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Surface(
@@ -34,12 +34,11 @@ fun SettingsTopAppBar(
                 .fillMaxWidth()
                 .height(56.dp),
         ) {
-
             Box(
                 modifier = modifier
                     .fillMaxWidth()
                     .background(MediCareCallTheme.colors.bg)
-                    .padding(start = 10.dp, end = 12.dp)
+                    .padding(start = 10.dp, end = 12.dp),
             ) {
                 Box(
                     modifier = Modifier
@@ -48,8 +47,8 @@ fun SettingsTopAppBar(
                         .clickable(
                             indication = null,
                             interactionSource = null,
-                            onClick = { leftIconClick }
-                        )
+                            onClick = { leftIconClick },
+                        ),
                 ) {
                     leftIcon()
                 }
@@ -58,13 +57,13 @@ fun SettingsTopAppBar(
                     color = Color.Black,
                     modifier = Modifier
                         .align(Alignment.Center),
-                    style = MediCareCallTheme.typography.SB_20
+                    style = MediCareCallTheme.typography.SB_20,
                 )
                 IconButton(
                     onClick = rightIconClick,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .size(24.dp)
+                        .size(24.dp),
                 ) {
                     rightIcon()
                 }
@@ -74,27 +73,23 @@ fun SettingsTopAppBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MediCareCallTheme.colors.gray2)
-                .height(1.dp)
+                .height(1.dp),
         )
     }
 }
 
 @Preview
 @Composable
-private fun SettingTopAppBarPreview(
-) {
+private fun SettingTopAppBarPreview() {
     Box(
-        modifier = Modifier
+        modifier = Modifier,
     ) {
         SettingsTopAppBar(
             title = "설정",
-            leftIcon = {
-
-            },
+            leftIcon = { },
             leftIconClick = { /* Handle left icon click */ },
             rightIcon = { /* Add your right icon here */ },
-            rightIconClick = { /* Handle right icon click */ }
+            rightIconClick = { /* Handle right icon click */ },
         )
     }
-
 }

@@ -77,7 +77,6 @@ fun LoginStartScreen(
         }
     }
 
-
     Box(
         modifier
             .fillMaxSize()
@@ -91,8 +90,8 @@ fun LoginStartScreen(
                 .fillMaxSize()
                 .align(Alignment.Center),
             contentScale = ContentScale.FillBounds,
+        )
 
-            )
         Column(
             Modifier
                 .align(Alignment.TopStart)
@@ -108,7 +107,6 @@ fun LoginStartScreen(
                 painter = painterResource(R.drawable.typo_main),
                 "메디케어콜",
             )
-
         }
 
         CTAButton(
@@ -121,8 +119,6 @@ fun LoginStartScreen(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 20.dp)
                 .padding(horizontal = 20.dp),
-
-            )
-
+        )
     }
 }

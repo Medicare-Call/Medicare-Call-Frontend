@@ -60,7 +60,8 @@ fun LoginFinishScreen(
         )
         Spacer(modifier = modifier.weight(1f))
         CTAButton(
-            CTAButtonType.WHITE, "확인",
+            CTAButtonType.WHITE,
+            "확인",
             onClick = navigateToMain,
             modifier = modifier.padding(horizontal = 20.dp),
         )

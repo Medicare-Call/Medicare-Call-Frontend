@@ -18,29 +18,30 @@ fun AnnouncementCard(
     title: String,
     date: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = { onClick() })
             .background(color = MediCareCallTheme.colors.bg)
-            .padding(20.dp)
-
+            .padding(20.dp),
     ) {
         Text(
             text = title,
             style = MediCareCallTheme.typography.SB_16,
-            color = MediCareCallTheme.colors.black
+            color = MediCareCallTheme.colors.black,
         )
         Text(
             text = date,
             style = MediCareCallTheme.typography.R_15,
-            color = MediCareCallTheme.colors.gray4
+            color = MediCareCallTheme.colors.gray4,
         )
     }
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .height(1.dp)
-        .background(MediCareCallTheme.colors.gray2))
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(MediCareCallTheme.colors.gray2),
+    )
 }

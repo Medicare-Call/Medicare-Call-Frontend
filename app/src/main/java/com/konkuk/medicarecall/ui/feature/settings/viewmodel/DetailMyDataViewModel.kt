@@ -13,12 +13,10 @@ import kotlin.coroutines.cancellation.CancellationException
 @HiltViewModel
 class DetailMyDataViewModel @Inject constructor(
     private val userRepository: UserRepository,
-
-
-    ) : ViewModel() {
+) : ViewModel() {
     fun updateUserData(
         userInfo: MyInfoResponseDto,
-        onComplete: (() -> Unit)? = null
+        onComplete: (() -> Unit)? = null,
     ) {
         viewModelScope.launch {
             try {
@@ -42,5 +40,4 @@ class DetailMyDataViewModel @Inject constructor(
             }
         }
     }
-
 }

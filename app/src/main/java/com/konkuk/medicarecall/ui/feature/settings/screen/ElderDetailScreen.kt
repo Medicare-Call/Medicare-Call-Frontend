@@ -60,7 +60,7 @@ fun PersonalDetailScreen(
         else -> false
     }
     val parseDate =
-        LocalDate.parse(eldersInfoResponseDto.birthDate)                // yyyy-MM-dd 형식의 문자열을 LocalDate로 변환
+        LocalDate.parse(eldersInfoResponseDto.birthDate) // yyyy-MM-dd 형식의 문자열을 LocalDate로 변환
     val date = parseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
     val scrollState = rememberScrollState()
 
@@ -70,7 +70,6 @@ fun PersonalDetailScreen(
     var phoneNum by remember { mutableStateOf(eldersInfoResponseDto.phone) }
     var relationship by remember { mutableStateOf(eldersInfoResponseDto.relationship) }
     var residenceType by remember { mutableStateOf(eldersInfoResponseDto.residenceType) }
-
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -100,7 +99,7 @@ fun PersonalDetailScreen(
                 .verticalScroll(scrollState),
         ) {
             Spacer(Modifier.height(20.dp))
-            Row() {
+            Row {
                 Spacer(modifier = modifier.weight(1f))
                 Text(
                     text = "삭제",
@@ -133,7 +132,7 @@ fun PersonalDetailScreen(
                         maxLength = 8,
                     )
                 }
-                Column() {
+                Column {
                     Text(
                         "성별",
                         style = MediCareCallTheme.typography.M_17,
@@ -142,10 +141,9 @@ fun PersonalDetailScreen(
                     Spacer(modifier = modifier.height(10.dp))
                     GenderToggleButton(
                         isMale = isMale,
-                        onGenderChange =
-                            { newValue ->
-                                isMale = newValue
-                            },
+                        onGenderChange = { newValue ->
+                            isMale = newValue
+                        },
                     )
                 }
                 Column {
@@ -158,7 +156,7 @@ fun PersonalDetailScreen(
                         maxLength = 11,
                     )
                 }
-                Column() {
+                Column {
                     DefaultDropdown(
                         enumList = RelationshipType.entries.map { it.displayName }
                             .toList(),
@@ -204,8 +202,8 @@ fun PersonalDetailScreen(
 
                 CTAButton(
                     type = if (
-                        name.matches(Regex("^[가-힣a-zA-Z]*$"))
-                        && birth.length == 8 &&
+                        name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
+                        birth.length == 8 &&
                         birth.isValidDate() &&
                         phoneNum.length == 11 &&
                         phoneNum.startsWith("010")
@@ -230,12 +228,10 @@ fun PersonalDetailScreen(
                             navController.getBackStackEntry("main")
                                 .savedStateHandle["ELDER_NAME_UPDATED"] = name
                             navController.popBackStack()
-
                         }
                     },
-                    Modifier.padding(bottom = 20.dp),
+                    modifier = Modifier.padding(bottom = 20.dp),
                 )
-
             }
         }
         if (showDeleteDialog) {

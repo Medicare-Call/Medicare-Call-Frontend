@@ -17,7 +17,7 @@ class DetailElderInfoViewModel @Inject constructor(
 
     fun updateElderInfo(
         elderInfo: EldersInfoResponseDto,
-        onComplete: (() -> Unit)? = null
+        onComplete: (() -> Unit)? = null,
     ) {
         val updateInfo = ElderRegisterRequestDto(
             name = elderInfo.name,
@@ -25,13 +25,13 @@ class DetailElderInfoViewModel @Inject constructor(
             gender = elderInfo.gender,
             phone = elderInfo.phone,
             relationship = elderInfo.relationship,
-            residenceType = elderInfo.residenceType
+            residenceType = elderInfo.residenceType,
         )
         Log.d("UpdateElderInfoViewModel", "어르신 개인 정보 수정 요청: $updateInfo")
         viewModelScope.launch {
             eldersInfoRepository.updateElderInfo(
                 id = elderInfo.elderId,
-                request = updateInfo
+                request = updateInfo,
             )
                 .onSuccess {
                     Log.d("UpdateElderInfoViewModel", "어르신 개인 정보 수정 완료: $it")
@@ -49,6 +49,4 @@ class DetailElderInfoViewModel @Inject constructor(
             eldersInfoRepository.deleteElder(elderId)
         }
     }
-
-
 }

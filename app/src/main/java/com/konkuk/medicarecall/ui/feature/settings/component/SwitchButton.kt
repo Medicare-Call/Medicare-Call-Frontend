@@ -20,7 +20,7 @@ import com.konkuk.medicarecall.R
 fun SwitchButton(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val imageRes = if (checked) R.drawable.img_switch_on else R.drawable.img_switch_off
 
@@ -29,7 +29,7 @@ fun SwitchButton(
         contentDescription = null,
         modifier = modifier
             .size(width = 52.dp, height = 32.dp)
-            .clickable { onCheckedChange(!checked) }
+            .clickable { onCheckedChange(!checked) },
     )
 }
 
@@ -38,7 +38,7 @@ fun SwitchButton(
 fun SwitchItemOffPreview() {
     SwitchButton(
         checked = false,
-        onCheckedChange = {}
+        onCheckedChange = {},
     )
 }
 
@@ -47,7 +47,7 @@ fun SwitchItemOffPreview() {
 fun SwitchItemOnPreview() {
     SwitchButton(
         checked = true,
-        onCheckedChange = {}
+        onCheckedChange = {},
     )
 }
 
@@ -58,7 +58,6 @@ fun SwitchItemInteractivePreview() {
     SwitchButton(
         checked = checked,
         onCheckedChange = { checked = it },
-        modifier = Modifier.clip(CircleShape)
+        modifier = Modifier.clip(CircleShape),
     )
 }
-

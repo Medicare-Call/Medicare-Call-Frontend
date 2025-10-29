@@ -57,7 +57,6 @@ fun MealDetail(
         elderId?.let { mealViewModel.loadMealsForDate(it, selectedDate) }
     }
 
-
     val meals by mealViewModel.meals.collectAsState()
 
     MealDetailLayout(
@@ -69,7 +68,6 @@ fun MealDetail(
         onMonthClick = { /* 모달 열기 */ },
     )
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -125,10 +123,10 @@ fun MealDetailLayout(
 
                 meals.forEach { meal ->
                     MealDetailCard(
-                        mealTime = meal.mealTime,       // 아침 점심 저녁
+                        mealTime = meal.mealTime, // 아침 점심 저녁
                         description = meal.description, // 식사 내용
-                        isRecorded = meal.isRecorded,   // 식사 기록 여부
-                        isEaten = meal.isEaten,          // 식사 유무
+                        isRecorded = meal.isRecorded, // 식사 기록 여부
+                        isEaten = meal.isEaten, // 식사 유무
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -136,7 +134,6 @@ fun MealDetailLayout(
         }
     }
 }
-
 
 @Preview(name = "식사 - 기록 있음", showBackground = true)
 @Composable
@@ -203,7 +200,6 @@ fun PreviewMealDetail_Unrecorded() {
     val selectedDate = LocalDate.of(2025, 5, 7)
     val weekDates =
         (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
-
 
     MediCareCallTheme {
         MealDetailLayout(

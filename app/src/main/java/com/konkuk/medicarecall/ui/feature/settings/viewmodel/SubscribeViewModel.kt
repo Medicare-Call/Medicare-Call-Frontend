@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
-    private val repository: SubscribeRepository
+    private val repository: SubscribeRepository,
 ) : ViewModel() {
     var subscriptions by mutableStateOf<List<EldersSubscriptionResponseDto>>(emptyList())
         private set

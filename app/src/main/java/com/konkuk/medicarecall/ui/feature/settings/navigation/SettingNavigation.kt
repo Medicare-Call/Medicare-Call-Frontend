@@ -124,10 +124,9 @@ fun NavGraphBuilder.settingNavGraph(
     composable<Route.ElderPersonalDetail>(
         typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
     ) { navBackstackEntry ->
-        val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
         PersonalDetailScreen(
             onBack = popBackStack,
-            eldersInfoResponseDto = elderInfo,
+            eldersInfoResponseDto = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info,
             navController = navController,
         )
     }
@@ -142,19 +141,17 @@ fun NavGraphBuilder.settingNavGraph(
     composable<Route.ElderHealthDetail>(
         typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType),
     ) { navBackstackEntry ->
-        val healthInfo = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health
         HealthDetailScreen(
             onBack = popBackStack,
-            healthInfoResponseDto = healthInfo,
+            healthInfoResponseDto = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health,
         )
     }
 
     composable<Route.NotificationSetting>(
         typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
     ) { navBackStackEntry ->
-        val myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo
         SettingAlarmScreen(
-            myDataInfo = myDataInfo,
+            myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo,
             onBack = popBackStack,
         )
     }
@@ -169,9 +166,8 @@ fun NavGraphBuilder.settingNavGraph(
     composable<Route.SubscribeDetail>(
         typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType),
     ) { navBackStackEntry ->
-        val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
         SubscribeDetailScreen(
-            elderInfo = elderInfo,
+            elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription,
             onBack = popBackStack,
         )
     }
@@ -186,9 +182,8 @@ fun NavGraphBuilder.settingNavGraph(
     composable<Route.NoticeDetail>(
         typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType),
     ) { navBackStackEntry ->
-        val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
         AnnouncementDetailScreen(
-            noticeInfo = noticeInfo,
+            noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice,
             onBack = popBackStack,
         )
     }
@@ -210,9 +205,8 @@ fun NavGraphBuilder.settingNavGraph(
     composable<Route.UserInfoSetting>(
         typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
     ) { navBackStackEntry ->
-        val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
         MyDetailScreen(
-            myDataInfo = myDataInfo,
+            myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo,
             onBack = popBackStack,
         )
     }
