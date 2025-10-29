@@ -43,8 +43,7 @@ class MainActivity : ComponentActivity() {
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-
-                )
+            )
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
@@ -54,16 +53,13 @@ class MainActivity : ComponentActivity() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-
         }
         if (Build.VERSION.SDK_INT >= 35) {
             window.isNavigationBarContrastEnforced = false
         } else {
             window.isNavigationBarContrastEnforced = false
-
             @Suppress("DEPRECATION")
             window.navigationBarColor = android.graphics.Color.TRANSPARENT
-
         }
 
         setContent {
