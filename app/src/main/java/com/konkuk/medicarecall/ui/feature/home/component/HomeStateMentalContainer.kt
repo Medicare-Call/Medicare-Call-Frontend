@@ -49,7 +49,7 @@ fun HomeStateMentalContainer(
             // 1) Title: 심리상태
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                ) {
+            ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp),

@@ -15,7 +15,7 @@ class DetailHealthViewModel @Inject constructor(
 ) : ViewModel() {
     fun updateElderHealth(
         healthInfo: EldersHealthResponseDto,
-        onComplete: (() -> Unit)? = null
+        onComplete: (() -> Unit)? = null,
     ) {
         viewModelScope.launch {
             eldersHealthInfoRepository.updateHealthInfo(healthInfo)
