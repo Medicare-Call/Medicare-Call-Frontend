@@ -18,6 +18,7 @@ val mediCareCallFontSemiBold = FontFamily(Font(R.font.pretendard_semibold))
 val mediCareCallFontMedium = FontFamily(Font(R.font.pretendard_medium))
 val mediCareCallFontRegular = FontFamily(Font(R.font.pretendard_regular))
 
+@Suppress("ConstructorParameterNaming")
 @Immutable
 data class MediCareCallTypography(
     // Title
