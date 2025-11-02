@@ -51,11 +51,10 @@ data class HomeUiState(
                         todayTakenCount = it.taken,
                         todayRequiredCount = it.goal,
                         nextDoseTime = when (it.nextTime) {
-                            "MORNING" -> "아침"
-                            "LUNCH" -> "점심"
-                            "DINNER" -> "저녁"
-                            null, "" -> "-"
-                            else -> it.nextTime
+                            "MORNING" -> "아침약"
+                            "LUNCH" -> "점심약"
+                            "DINNER" -> "저녁약"
+                            else -> it.nextTime.orEmpty()
                         },
                         doseStatusList = it.doseStatusList
                             ?.map { dose ->
@@ -86,7 +85,7 @@ data class MedicineUiState(
     val medicineName: String,
     val todayTakenCount: Int,
     val todayRequiredCount: Int,
-    val nextDoseTime: String?,
+    val nextDoseTime: String,
     val doseStatusList: List<DoseStatusUiState> = emptyList()
 )
 data class DoseStatusUiState(
