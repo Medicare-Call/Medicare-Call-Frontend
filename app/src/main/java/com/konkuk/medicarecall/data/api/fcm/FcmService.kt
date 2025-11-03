@@ -16,7 +16,6 @@ import com.google.firebase.messaging.RemoteMessage
 import com.konkuk.medicarecall.App
 import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +69,7 @@ class FcmService : FirebaseMessagingService() {
         }
         val contentPi = PendingIntent.getActivity(
             this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
         // 알림 빌더
