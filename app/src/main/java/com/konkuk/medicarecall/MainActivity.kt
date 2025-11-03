@@ -21,6 +21,10 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -111,6 +115,7 @@ fun RequestNotificationPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         val context = LocalContext.current
         val permission = android.Manifest.permission.POST_NOTIFICATIONS
+        var hasRequested by remember { mutableStateOf(false) }
 
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission(),
@@ -122,10 +127,13 @@ fun RequestNotificationPermission() {
             }
         }
 
-        LaunchedEffect(Unit) {
-            if (ContextCompat.checkSelfPermission(context, permission)
-                != android.content.pm.PackageManager.PERMISSION_GRANTED
+        LaunchedEffect(hasRequested) {
+            if (!hasRequested &&
+                ContextCompat.checkSelfPermission(context, permission) !=
+                android.content.pm.PackageManager.PERMISSION_GRANTED
             ) {
+                // shouldShowRequestPermissionRationale 체크 추가 권장
+                hasRequested = true
                 launcher.launch(permission)
             }
         }
