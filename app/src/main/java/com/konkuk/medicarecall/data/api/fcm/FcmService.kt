@@ -55,7 +55,7 @@ class FcmService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 channelName,
-                NotificationManager.IMPORTANCE_HIGH,
+                NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "FCM push notifications"
                 lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -68,8 +68,10 @@ class FcmService : FirebaseMessagingService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val contentPi = PendingIntent.getActivity(
-            this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         // 알림 빌더
@@ -87,7 +89,7 @@ class FcmService : FirebaseMessagingService() {
         // 알림 권한 체크 후 notify
         if (ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.POST_NOTIFICATIONS,
+                Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             val notificationId = (0..Int.MAX_VALUE).random()
