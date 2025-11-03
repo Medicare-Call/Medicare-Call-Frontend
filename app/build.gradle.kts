@@ -33,8 +33,14 @@ android {
         val properties = Properties().apply {
             load(project.rootProject.file("local.properties").inputStream())
         }
-        val baseUrl = properties["base.url"]?.toString()?.let { "\"$it\"" } ?: "\"\""
-        buildConfigField("String", "BASE_URL", baseUrl)
+
+        buildConfigField("String", "BASE_URL", "\"${properties["baseUrl"] ?: ""}\"")
+        buildConfigField("String", "CARE_CALL_URL", "\"${properties["careCallUrl"] ?: ""}\"")
+        buildConfigField("String", "NAVERPAY_SERVICE_URL", "\"${properties["nPayServiceUrl"] ?: ""}\"")
+        buildConfigField("String", "NAVERPAY_API_URL", "\"${properties["nPayApiUrl"] ?: ""}\"")
+        buildConfigField("String", "NAVERPAY_CLIENT_ID", "\"${properties["nPayClientId"] ?: ""}\"")
+        buildConfigField("String", "NAVERPAY_CHAIN_ID", "\"${properties["nPayChainId"] ?: ""}\"")
+        buildConfigField("String", "NAVERPAY_PARTNER_ID", "\"${properties["nPayPartnerId"] ?: ""}\"")
     }
 
     buildTypes {
@@ -50,8 +56,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -60,7 +66,6 @@ android {
         compose = true
         buildConfig = true
     }
-
 }
 
 dependencies {
@@ -77,10 +82,14 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.datastore)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.play.services.vision.common)
+
+    // DataStore (명시적으로 추가)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
     // Test
     testImplementation(libs.junit)
