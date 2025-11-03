@@ -47,7 +47,6 @@ fun LoginPhoneScreen(
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -63,10 +62,8 @@ fun LoginPhoneScreen(
         Column {
             LoginBackButton(onBack)
             Column(
-                Modifier
-                    .verticalScroll(scrollState),
+                modifier = Modifier.verticalScroll(scrollState),
             ) {
-
                 Spacer(Modifier.height(20.dp))
                 Text(
                     "휴대폰 번호를\n입력해주세요",
@@ -107,7 +104,6 @@ fun LoginPhoneScreen(
                         }
                     },
                 )
-
             }
         }
         DefaultSnackBar(
@@ -117,6 +113,4 @@ fun LoginPhoneScreen(
                 .padding(bottom = 14.dp),
         )
     }
-
-
 }

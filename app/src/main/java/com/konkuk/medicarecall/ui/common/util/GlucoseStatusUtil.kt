@@ -18,12 +18,10 @@ object GlucoseStatusUtil {
         }
     }
 
-
     /**
      * null 가능성을 포함한 safe version
      */
     fun getStatusName(value: Int?): String {
         return value?.let { getStatus(it) } ?: ""
     }
-
 }

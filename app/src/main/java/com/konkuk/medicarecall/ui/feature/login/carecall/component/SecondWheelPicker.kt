@@ -30,9 +30,8 @@ fun SecondTimeWheelPicker(
     modifier: Modifier = Modifier,
     initialHour: Int = 12,
     initialMinute: Int = 0,
-    onTimeChange: (hour: Int, minute: Int) -> Unit = { _, _ -> }
+    onTimeChange: (hour: Int, minute: Int) -> Unit = { _, _ -> },
 ) {
-
     var hour by remember { mutableIntStateOf(initialHour) }
     var minute by remember { mutableIntStateOf(initialMinute) }
 
@@ -43,12 +42,12 @@ fun SecondTimeWheelPicker(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // 오전 / 오후
             AndroidView(
@@ -79,7 +78,7 @@ fun SecondTimeWheelPicker(
                                     .apply { isAccessible = true }
                                 dividerField.set(
                                     this,
-                                    Color.TRANSPARENT.toDrawable()
+                                    Color.TRANSPARENT.toDrawable(),
                                 )
 
                                 // mSelectionDividerHeight(높이)를 0 으로
@@ -110,7 +109,7 @@ fun SecondTimeWheelPicker(
                                 .apply { isAccessible = true }
                             dividerField.set(
                                 this,
-                                Color.TRANSPARENT.toDrawable()
+                                Color.TRANSPARENT.toDrawable(),
                             )
 
                             // mSelectionDividerHeight(높이)를 0 으로
@@ -130,10 +129,9 @@ fun SecondTimeWheelPicker(
 //                        }
 //                    }
 //                    picker.setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
-                }
+                },
             )
             Spacer(Modifier.width(32.dp))
-
 
             AndroidView(
                 factory = { ctx ->
@@ -165,7 +163,7 @@ fun SecondTimeWheelPicker(
                                     .apply { isAccessible = true }
                                 dividerField.set(
                                     this,
-                                    Color.TRANSPARENT.toDrawable()
+                                    Color.TRANSPARENT.toDrawable(),
                                 )
 
                                 // mSelectionDividerHeight(높이)를 0 으로
@@ -200,7 +198,7 @@ fun SecondTimeWheelPicker(
                                 .apply { isAccessible = true }
                             dividerField.set(
                                 this,
-                                Color.TRANSPARENT.toDrawable()
+                                Color.TRANSPARENT.toDrawable(),
                             )
 
                             // mSelectionDividerHeight(높이)를 0 으로
@@ -220,13 +218,13 @@ fun SecondTimeWheelPicker(
 //                        }
 //                    }
 //                    picker.setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
-                }
+                },
             )
             Spacer(modifier = Modifier.width(18.dp))
             Text(
                 ":",
                 style = MediCareCallTheme.typography.M_20,
-                color = MediCareCallTheme.colors.main
+                color = MediCareCallTheme.colors.main,
             )
             Spacer(modifier = Modifier.width(18.dp))
 
@@ -260,7 +258,7 @@ fun SecondTimeWheelPicker(
                                     .apply { isAccessible = true }
                                 dividerField.set(
                                     this,
-                                    Color.TRANSPARENT.toDrawable()
+                                    Color.TRANSPARENT.toDrawable(),
                                 )
 
                                 // mSelectionDividerHeight(높이)를 0 으로
@@ -291,7 +289,7 @@ fun SecondTimeWheelPicker(
                                 .apply { isAccessible = true }
                             dividerField.set(
                                 this,
-                                Color.TRANSPARENT.toDrawable()
+                                Color.TRANSPARENT.toDrawable(),
                             )
 
                             // mSelectionDividerHeight(높이)를 0 으로
@@ -311,13 +309,11 @@ fun SecondTimeWheelPicker(
 //                        }
 //                    }
 //                    picker.setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
-                }
+                },
             )
         }
-
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -325,6 +321,6 @@ private fun TimeWheelPreview() {
     SecondTimeWheelPicker(
         modifier = Modifier
             .fillMaxWidth()
-            .height(206.dp)
+            .height(206.dp),
     )
 }

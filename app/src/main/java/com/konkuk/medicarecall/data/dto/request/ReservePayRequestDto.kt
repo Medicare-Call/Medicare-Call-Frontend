@@ -9,5 +9,5 @@ data class ReservePayRequestDto(
     val totalPayAmount: Int,
     val taxScopeAmount: Int,
     val taxExScopeAmount: Int,
-    val elderIds: List<Int>
+    val elderIds: List<Int>,
 )

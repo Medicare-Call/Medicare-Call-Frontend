@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class SetCallTimeRequestDto(
     val firstCallTime: String,
     val secondCallTime: String,
-    val thirdCallTime: String
+    val thirdCallTime: String,
 )

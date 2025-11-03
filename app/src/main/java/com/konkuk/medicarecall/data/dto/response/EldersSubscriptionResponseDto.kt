@@ -9,5 +9,5 @@ data class EldersSubscriptionResponseDto(
     val plan: String,
     val price: Int,
     val nextBillingDate: String,
-    val startDate: String
+    val startDate: String,
 )

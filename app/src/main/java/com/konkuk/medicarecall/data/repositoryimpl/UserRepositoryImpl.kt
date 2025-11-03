@@ -17,7 +17,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getMyInfo() = runCatching {
         val response = settingService.getMyInfo()
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             val errorBody = response.errorBody()?.string() ?: "Unknown error"
             throw HttpException(response)
@@ -28,7 +28,7 @@ class UserRepositoryImpl @Inject constructor(
         Log.d("UserRepository", "updateMyInfo() 진입: $userUpdateRequestDto")
         val response = settingService.updateMyInfo(userUpdateRequestDto)
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             throw HttpException(response)
         }

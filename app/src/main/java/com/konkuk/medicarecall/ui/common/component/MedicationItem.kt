@@ -31,7 +31,6 @@ private fun MedicationTimeSection(
     // 약 목록이 비어있지 않을 때만 UI를 표시
     if (medications.isNotEmpty()) {
         Column {
-
             Text(
                 text = title,
                 color = MediCareCallTheme.colors.gray5,
@@ -69,8 +68,6 @@ fun MedicationItem(
     modifier: Modifier = Modifier,
 ) {
     // UI에 표시할 제목을 Map으로 정의하여 관리 용이성을 높임
-
-
     Column(
         modifier = modifier,
     ) {
@@ -148,9 +145,7 @@ fun MedicationItem(
                     // 사용성 개선: 약 추가 후 입력 필드와 선택된 시간 초기화
                     onTextChange("")
                 }
-
             },
         )
     }
 }
-

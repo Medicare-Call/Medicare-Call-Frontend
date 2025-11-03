@@ -77,4 +77,4 @@ class App : Application() {
         private const val TAG = "FCM"
         const val FCM_CHANNEL_ID = "fcm_alert"
     }
-}
+    }

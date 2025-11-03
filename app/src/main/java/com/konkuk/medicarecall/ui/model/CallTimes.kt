@@ -4,5 +4,5 @@ package com.konkuk.medicarecall.ui.model
 data class CallTimes(
     val first: Triple<Int, Int, Int>? = null,
     val second: Triple<Int, Int, Int>? = null,
-    val third: Triple<Int, Int, Int>? = null
+    val third: Triple<Int, Int, Int>? = null,
 )

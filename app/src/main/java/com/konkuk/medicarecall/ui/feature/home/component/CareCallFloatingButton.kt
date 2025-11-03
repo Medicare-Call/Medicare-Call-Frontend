@@ -26,7 +26,7 @@ fun CareCallFloatingButton(
     text: String,
     onClick: () -> Unit = {},
 ) {
-
+    careCallOption // TODO: 현재 사용되지 않는 변수입니다. 추후 기능 추가 시 활용할 수 있습니다.
 
     Button(
         modifier = modifier,
@@ -35,34 +35,25 @@ fun CareCallFloatingButton(
         },
         shape = RoundedCornerShape(14.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MediCareCallTheme.colors.main
+            containerColor = MediCareCallTheme.colors.main,
         ),
-        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp)
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_carecall),
                 contentDescription = "Care Call",
                 tint = Color.White,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(20.dp),
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = text,
                 style = MediCareCallTheme.typography.SB_16,
-                color = Color.White
+                color = Color.White,
             )
         }
     }
 }
-
-
-//@Preview
-//@Composable
-//private fun PreviewCareCallFloatingButton() {
-//
-//    CareCallFloatingButton(onClick = {})
-//
-//}

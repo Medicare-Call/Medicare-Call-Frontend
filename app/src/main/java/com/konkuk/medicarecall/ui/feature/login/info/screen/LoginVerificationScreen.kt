@@ -57,7 +57,6 @@ fun LoginVerificationScreen(
     val focusRequester = remember { FocusRequester() }
     val navigationDestination by loginViewModel.navigationDestination.collectAsState()
 
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         loginViewModel.events.collect { event ->
@@ -103,7 +102,6 @@ fun LoginVerificationScreen(
         }
     }
 
-
     Box(
         modifier
             .fillMaxSize()
@@ -111,9 +109,7 @@ fun LoginVerificationScreen(
             .padding(horizontal = 20.dp)
             .statusBarsPadding()
             .imePadding(),
-
-        ) {
-
+    ) {
         Column {
             LoginBackButton(
                 onBack,
@@ -139,8 +135,7 @@ fun LoginVerificationScreen(
                     keyboardType = KeyboardType.Number,
                     textFieldModifier = Modifier.focusRequester(focusRequester),
                     maxLength = 6,
-
-                    )
+                )
 
                 Spacer(Modifier.height(30.dp))
 
@@ -153,10 +148,7 @@ fun LoginVerificationScreen(
                             loginViewModel.phoneNumber,
                             loginViewModel.verificationCode,
                         )
-
                         loginViewModel.onVerificationCodeChanged("")
-
-
                     },
                 )
             }

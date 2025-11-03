@@ -24,14 +24,13 @@ fun DefaultTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     maxLength: Int = Int.MAX_VALUE,
-    textFieldModifier: Modifier = Modifier
+    textFieldModifier: Modifier = Modifier,
 ) {
-
     if (category != null) {
         Text(
             category,
             color = MediCareCallTheme.colors.gray7,
-            style = MediCareCallTheme.typography.M_17
+            style = MediCareCallTheme.typography.M_17,
         )
         Spacer(Modifier.height(10.dp))
     }
@@ -59,6 +58,6 @@ fun DefaultTextField(
         ),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         singleLine = true,
-        textStyle = MediCareCallTheme.typography.M_16
+        textStyle = MediCareCallTheme.typography.M_16,
     )
 }

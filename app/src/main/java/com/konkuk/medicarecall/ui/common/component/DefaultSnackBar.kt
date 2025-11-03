@@ -24,7 +24,7 @@ fun DefaultSnackBar(hostState: SnackbarHostState, modifier: Modifier = Modifier)
                 Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(MediCareCallTheme.colors.black)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) {
                 Text(
                     it.visuals.message,
@@ -33,5 +33,6 @@ fun DefaultSnackBar(hostState: SnackbarHostState, modifier: Modifier = Modifier)
                     color = MediCareCallTheme.colors.white,
                 )
             }
-        })
+        },
+    )
 }

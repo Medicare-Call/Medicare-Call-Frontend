@@ -58,12 +58,12 @@ import java.time.LocalDate
 fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    navigateToAlarm: () -> Unit = {},
+//    navigateToAlarm: () -> Unit = {},
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
-        homeViewModel.fetchElderList()//어르신 목록 호출
+        homeViewModel.fetchElderList() // 어르신 목록 호출
         statisticsViewModel.refresh()
     }
 
@@ -72,7 +72,7 @@ fun StatisticsScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                statisticsViewModel.refresh()   // ← 현재 elderId + 현재 주 기준으로 재조회
+                statisticsViewModel.refresh() // ← 현재 elderId + 현재 주 기준으로 재조회
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -97,7 +97,6 @@ fun StatisticsScreen(
     // 우선순위 2: ID를 통해 전체 목록에서 찾은 이름 (로딩 중일 때 표시)
     // 우선순위 3: 목록의 첫 번째 이름 (초기 상태)
     val currentElderName = remember(uiState.summary, elderInfoList, selectedElderId) {
-
         elderInfoList.find { it.id == selectedElderId }?.name
             ?: uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
             ?: elderNameList.firstOrNull()
@@ -134,7 +133,6 @@ fun StatisticsScreen(
     )
 }
 
-
 @Composable
 fun StatisticsScreenLayout(
     modifier: Modifier = Modifier,
@@ -161,7 +159,7 @@ fun StatisticsScreenLayout(
             modifier = Modifier.statusBarsPadding(),
             navigateToAlarm = navigateToAlarm,
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
-            notificationCount = 4,//TODO: 실제 알림 개수 데이터 연동 필요
+            notificationCount = 4, //  TODO: 실제 알림 개수 데이터 연동 필요
         )
 
         when {
@@ -180,7 +178,6 @@ fun StatisticsScreenLayout(
             }
 
             uiState.summary != null -> {
-
                 WeekendBar(
                     currentWeek = currentWeek,
                     isLatestWeek = isLatestWeek,
@@ -210,7 +207,6 @@ fun StatisticsScreenLayout(
     }
 }
 
-
 @Composable
 private fun StatisticsContent(
     summary: WeeklySummaryUiState,
@@ -226,7 +222,6 @@ private fun StatisticsContent(
             summary = summary,
         )
         Spacer(modifier = Modifier.height(10.dp))
-
 
         Row(
             modifier = Modifier
@@ -275,11 +270,9 @@ private fun StatisticsContent(
     }
 }
 
-
 @Preview(name = "주간 통계 - 기록 있음", showBackground = true, heightDp = 1200)
 @Composable
 fun PreviewStatisticsScreen_Recorded() {
-
     val dummySummary = WeeklySummaryUiState(
         elderName = "김옥자",
         weeklyMealRate = 65,
@@ -308,18 +301,24 @@ fun PreviewStatisticsScreen_Recorded() {
         weeklySleepMinutes = 12,
         weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
         weeklyGlucose = WeeklyGlucoseUiState(
-            beforeMealNormal = 5, beforeMealHigh = 2, beforeMealLow = 1,
-            afterMealNormal = 5, afterMealHigh = 0, afterMealLow = 2,
+            beforeMealNormal = 5,
+            beforeMealHigh = 2,
+            beforeMealLow = 1,
+            afterMealNormal = 5,
+            afterMealHigh = 0,
+            afterMealLow = 2,
         ),
     )
-    val dummyUiState =
-        StatisticsUiState(summary = dummySummary)
+    val dummyUiState = StatisticsUiState(summary = dummySummary)
 
     MediCareCallTheme {
         StatisticsScreenLayout(
             uiState = dummyUiState,
             elderNameList = listOf("김옥자", "박막례"),
-            currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
+            currentWeek = Pair(
+                LocalDate.now(),
+                LocalDate.now().plusDays(6),
+            ),
             isLatestWeek = false,
             isEarliestWeek = false,
             onPreviousWeek = {},
@@ -327,15 +326,12 @@ fun PreviewStatisticsScreen_Recorded() {
             onDropdownItemSelected = {},
             currentElderName = "김옥자",
         )
-
     }
 }
-
 
 @Preview(name = "주간 통계 - 미기록", showBackground = true, heightDp = 1200)
 @Composable
 fun PreviewStatisticsScreen_Unrecorded() {
-
     MediCareCallTheme {
         StatisticsScreenLayout(
             uiState = StatisticsUiState(
@@ -351,5 +347,4 @@ fun PreviewStatisticsScreen_Unrecorded() {
             currentElderName = "김옥자",
         )
     }
-
 }

@@ -24,14 +24,13 @@ fun AgreementItem(
     text: String,
     isChecked: Boolean,
     onCheckedChange: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-
             Icon(
                 painterResource(R.drawable.ic_check_box),
                 contentDescription = "체크박스",
@@ -40,18 +39,18 @@ fun AgreementItem(
                     interactionSource = null,
                     indication = null,
                     onClick = onCheckedChange,
-                )
+                ),
             )
             Box(
                 Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .background(MediCareCallTheme.colors.negative.copy(alpha = 0.2f))
+                    .background(MediCareCallTheme.colors.negative.copy(alpha = 0.2f)),
             ) {
                 Text(
                     "필수", // 추후 필수 아닌 선택 동의 추가 가능
                     color = MediCareCallTheme.colors.negative,
                     style = MediCareCallTheme.typography.R_14,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
                 )
             }
             Text(
@@ -62,13 +61,13 @@ fun AgreementItem(
                     interactionSource = null,
                     indication = null,
                     onClick = onCheckedChange,
-                )
+                ),
             )
         }
         Icon(
             painterResource(R.drawable.ic_right_arrow),
             contentDescription = "약관 보기",
-            tint = MediCareCallTheme.colors.gray3
+            tint = MediCareCallTheme.colors.gray3,
         )
     }
 }

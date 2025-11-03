@@ -30,38 +30,33 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 fun HomeStateMentalContainer(
     modifier: Modifier = Modifier,
     mentalStatus: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-
-
     Card(
         modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
-
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
-            //1) Title: 심리상태
+            // 1) Title: 심리상태
             Row(
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp),
                     painter = painterResource(id = R.drawable.ic_smile),
                     contentDescription = "mental state icon",
+                )
 
-                    )
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
@@ -69,23 +64,18 @@ fun HomeStateMentalContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //2) 상태
+            // 2) 상태
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-
-                ) {
-
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 Row(
                     modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-
                     val textColor = if (mentalStatus.isBlank()) {
                         MediCareCallTheme.colors.gray4
                     } else {
@@ -95,7 +85,7 @@ fun HomeStateMentalContainer(
                     Text(
                         text = mentalStatus.ifBlank { "미기록" },
                         style = MediCareCallTheme.typography.SB_22,
-                        color = textColor
+                        color = textColor,
                     )
                 }
             }
@@ -106,9 +96,8 @@ fun HomeStateMentalContainer(
 @Preview
 @Composable
 fun PreviewHomeStateMentalContainer() {
-
     HomeStateMentalContainer(
         mentalStatus = "좋음",
-        onClick = {}
+        onClick = {},
     )
 }

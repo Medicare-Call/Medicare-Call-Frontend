@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 data class ReservePayResponseDto(
     val code: String,
     val message: String,
-    val body: ReserveBody
+    val body: ReserveBody,
 )
 
 @Serializable
 data class ReserveBody(
-    val code: String,              // 주문코드(or merchantPayKey)
+    val code: String, // 주문코드(or merchantPayKey)
 )

@@ -39,14 +39,14 @@ fun NameDropdown(
     items: List<String>,
     selectedName: String,
     onDismiss: () -> Unit,
-    onItemSelected: (String) -> Unit
+    onItemSelected: (String) -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false
-        )
+            decorFitsSystemWindows = false,
+        ),
     ) {
         val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
 
@@ -66,13 +66,13 @@ fun NameDropdown(
                     .background(Color.Black.copy(alpha = 0.4f))
                     .clickable(
                         indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) { onDismiss() }
+                        interactionSource = remember { MutableInteractionSource() },
+                    ) { onDismiss() },
             )
 
-            //너비를 가장 긴 아이템에 맞춤
+            // 너비를 가장 긴 아이템에 맞춤
             SubcomposeLayout(
-                modifier = Modifier.padding(start = 10.dp, top = 72.dp)
+                modifier = Modifier.padding(start = 10.dp, top = 72.dp),
             ) { constraints ->
 
                 val itemPlaceables = subcompose("items") {
@@ -86,26 +86,25 @@ fun NameDropdown(
                 }.map { it.measure(Constraints()) }
 
                 val maxWidth = itemPlaceables.maxOfOrNull { it.width } ?: 0
-                val totalHeight = itemPlaceables.sumOf { it.height }
+//                val totalHeight = itemPlaceables.sumOf { it.height }
 
                 val finalContent = subcompose("finalContent") {
                     Column(
                         modifier = Modifier
                             .shadow(elevation = 8.dp, shape = RoundedCornerShape(10.dp))
                             .clip(RoundedCornerShape(10.dp))
-                            .background(Color.White)
+                            .background(Color.White),
                     ) {
-                        items.forEachIndexed { index, item ->
+                        items.forEachIndexed { _, item ->
                             DropdownItem(
                                 name = item,
                                 selected = item == selectedName,
-                                index = index,
-                                listSize = items.size,
+//                                index = index,
                                 modifier = Modifier.width(maxWidth.toDp()),
                                 onClick = {
                                     onItemSelected(item)
                                     onDismiss()
-                                }
+                                },
                             )
                         }
                     }
@@ -124,25 +123,24 @@ private fun DropdownItem(
     name: String,
     selected: Boolean,
     modifier: Modifier = Modifier,
-    index: Int = 0,
-    listSize: Int = 1,
-    onClick: (() -> Unit)? = null
+//    index: Int = 0,
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
             .background(Color.White)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = name,
             style = MediCareCallTheme.typography.SB_18.copy(
-                lineHeight = 24.sp
+                lineHeight = 24.sp,
             ),
             color = if (selected) MediCareCallTheme.colors.black else MediCareCallTheme.colors.gray4,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -151,14 +149,16 @@ private fun DropdownItem(
 @Composable
 fun PreviewNameDropdown() {
     MediCareCallTheme {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Gray)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Gray),
+        ) {
             NameDropdown(
                 items = listOf("김옥자", "박막례", "김헬레나부시크"),
                 selectedName = "김옥자",
                 onDismiss = {},
-                onItemSelected = {}
+                onItemSelected = {},
             )
         }
     }

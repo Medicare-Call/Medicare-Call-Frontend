@@ -9,6 +9,6 @@ interface MealService {
     @GET("elders/{elderId}/meals")
     suspend fun getDailyMeal(
         @Path("elderId") elderId: Int,
-        @Query("date") date: String
+        @Query("date") date: String,
     ): MealResponseDto
 }

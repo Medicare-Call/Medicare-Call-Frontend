@@ -20,20 +20,20 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun CallTimeBenefit(content: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_present),
             contentDescription = "benefit_icon",
             modifier = modifier.size(14.dp),
-            tint = Color.Unspecified // Use default tint
+            tint = Color.Unspecified, // Use default tint
         )
         Spacer(modifier = modifier.width(6.dp))
         Text(
             text = content,
             style = MediCareCallTheme.typography.R_14,
             color = MediCareCallTheme.colors.gray5,
-            modifier = modifier.weight(1f)
+            modifier = modifier.weight(1f),
         )
     }
 }

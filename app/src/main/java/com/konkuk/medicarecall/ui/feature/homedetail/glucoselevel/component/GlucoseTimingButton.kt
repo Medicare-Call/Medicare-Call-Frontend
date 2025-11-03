@@ -46,8 +46,7 @@ fun GlucoseTimingButton(
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
-
-            ) {
+        ) {
             Text(
                 text = text,
                 style = textStyle,
@@ -56,7 +55,6 @@ fun GlucoseTimingButton(
         }
     }
 }
-
 
 @Preview
 @Composable

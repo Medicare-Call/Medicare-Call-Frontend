@@ -1,11 +1,11 @@
 package com.konkuk.medicarecall.data.di
 
-import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.api.elders.GlucoseService
 import com.konkuk.medicarecall.data.api.elders.HealthService
+import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.api.elders.MealService
 import com.konkuk.medicarecall.data.api.elders.MedicineService
 import com.konkuk.medicarecall.data.api.elders.MentalService
@@ -38,7 +38,6 @@ object ApiModule {
     fun provideEldersInfoService(retrofit: Retrofit): EldersInfoService {
         return retrofit.create(EldersInfoService::class.java)
     }
-
 
     @Provides
     @Singleton
@@ -81,7 +80,6 @@ object ApiModule {
     fun provideNaverPayService(retrofit: Retrofit): NaverPayService {
         return retrofit.create(NaverPayService::class.java)
     }
-
 
     @Provides
     @Singleton

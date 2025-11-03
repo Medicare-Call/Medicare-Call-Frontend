@@ -38,6 +38,7 @@ fun ElderInputForm(
     nameFocusRequester: FocusRequester? = null,
 ) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
     ) {
         DefaultTextField(
@@ -91,7 +92,6 @@ fun ElderInputForm(
         )
         Spacer(Modifier.height(20.dp))
 
-
         DefaultDropdown(
             enumList = RelationshipType.entries.map { it.displayName }
                 .toList(),
@@ -101,7 +101,6 @@ fun ElderInputForm(
             { onRelationshipChange(it) },
             elderData.relationship,
         )
-
 
         Spacer(Modifier.height(20.dp))
 
@@ -118,7 +117,6 @@ fun ElderInputForm(
         Spacer(Modifier.height(20.dp))
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

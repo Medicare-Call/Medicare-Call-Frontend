@@ -24,7 +24,6 @@ class CalendarViewModel @Inject constructor() : ViewModel() {
         _selectedDate.value = date
     }
 
-
     /** 현재 선택된 날짜가 속한 주(일~토)를 반환 */
     fun getCurrentWeekDates(): List<LocalDate> {
         val base = _selectedDate.value

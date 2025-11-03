@@ -34,16 +34,14 @@ fun DeleteConfirmDialog(onDismiss: () -> Unit, onDelete: () -> Unit) {
                 .clip(RoundedCornerShape(14.dp))
                 .background(MediCareCallTheme.colors.white)
                 .padding(20.dp)
-                .fillMaxWidth()
-
-
+                .fillMaxWidth(),
         ) {
             Text(
                 text = "정말 삭제할까요?",
                 style = MediCareCallTheme.typography.SB_18,
                 color = MediCareCallTheme.colors.black,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
@@ -54,18 +52,18 @@ fun DeleteConfirmDialog(onDismiss: () -> Unit, onDelete: () -> Unit) {
             Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Button(
                     onClick = onDismiss,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MediCareCallTheme.colors.gray1,
-                        contentColor = MediCareCallTheme.colors.gray6
+                        contentColor = MediCareCallTheme.colors.gray6,
                     ),
                     modifier = Modifier
                         .weight(1f)
-                        .height(50.dp)
+                        .height(50.dp),
                 ) {
                     Text("취소", style = MediCareCallTheme.typography.B_17)
                 }
@@ -75,18 +73,17 @@ fun DeleteConfirmDialog(onDismiss: () -> Unit, onDelete: () -> Unit) {
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MediCareCallTheme.colors.negative,
-                        contentColor = MediCareCallTheme.colors.white
+                        contentColor = MediCareCallTheme.colors.white,
                     ),
                     modifier = Modifier
                         .weight(1f)
-                        .height(50.dp)
+                        .height(50.dp),
                 ) {
                     Text("삭제", style = MediCareCallTheme.typography.B_17)
                 }
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -100,7 +97,7 @@ private fun DeleteDialogPreview() {
             onDelete = {
                 showDeleteDialog = false
                 // TODO: 삭제 동작 추가
-            }
+            },
         )
     }
 }

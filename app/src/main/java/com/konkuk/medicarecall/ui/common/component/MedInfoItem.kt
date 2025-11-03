@@ -27,16 +27,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.MedicationTimeType
 
 // 중복, Legacy
 @Composable
 fun MedInfoItem(
     medications: MutableList<MedicationSchedule>,
-    onAddMedication: (MedicationSchedule) -> Unit,
-    onRemoveMedication: (MedicationSchedule) -> Unit,
-    modifier: Modifier = Modifier
+//    onAddMedication: (MedicationSchedule) -> Unit,
+//    onRemoveMedication: (MedicationSchedule) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
@@ -70,7 +70,7 @@ fun MedInfoItem(
         Text(
             "복약 정보",
             style = MediCareCallTheme.typography.M_17,
-            color = MediCareCallTheme.colors.gray7
+            color = MediCareCallTheme.colors.gray7,
         )
         MedicationTimeType.entries.forEach { period ->
             val list = medsByPeriod[period]!!
@@ -79,13 +79,13 @@ fun MedInfoItem(
                 Text(
                     period.time,
                     style = MediCareCallTheme.typography.R_15,
-                    color = MediCareCallTheme.colors.gray5
+                    color = MediCareCallTheme.colors.gray5,
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .horizontalScroll(rememberScrollState())
-                        .padding(bottom = 16.dp, top = 10.dp)
+                        .padding(bottom = 16.dp, top = 10.dp),
                 ) {
                     list.forEach { name ->
                         ChipItem(
@@ -103,7 +103,7 @@ fun MedInfoItem(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
         ) {
             MedicationTimeType.entries.forEach { period ->
                 val selected = period in selectedPeriods.value
@@ -112,13 +112,13 @@ fun MedInfoItem(
                         .clip(CircleShape)
                         .background(
                             if (selected) MediCareCallTheme.colors.main
-                            else MediCareCallTheme.colors.white
+                            else MediCareCallTheme.colors.white,
                         )
                         .border(
                             width = 1.2.dp,
                             color = if (selected) MediCareCallTheme.colors.main
                             else MediCareCallTheme.colors.gray2,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .clickable(
                             interactionSource = null,
@@ -127,19 +127,23 @@ fun MedInfoItem(
                                 val new = selectedPeriods.value.toMutableSet()
                                 if (selected) new.remove(period) else new += period
                                 selectedPeriods.value = new
-                            }
-                        )
+                            },
+                        ),
                 ) {
                     Text(
                         text = period.time,
                         color = if (selected) MediCareCallTheme.colors.g50
                         else MediCareCallTheme.colors.gray5,
-                        style =
-                            if (selected) MediCareCallTheme.typography.SB_14
-                            else MediCareCallTheme.typography.R_14,
-                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 24.dp)
+                        style = if (selected) {
+                            MediCareCallTheme.typography.SB_14
+                        } else {
+                            MediCareCallTheme.typography.R_14
+                        },
+                        modifier = Modifier.padding(
+                            vertical = 8.dp,
+                            horizontal = 24.dp,
+                        ),
                     )
-
                 }
 //
 //                OutlinedButton(
@@ -176,13 +180,14 @@ fun MedInfoItem(
                 } else if (name.isNotBlank()) {
                     Toast.makeText(context, "복약 주기를 선택하세요", Toast.LENGTH_SHORT).show()
                 }
-            })
+            },
+        )
     }
 }
 
 private fun MutableList<MedicationSchedule>.addOrMerge(
     name: String,
-    times: Set<MedicationTimeType>
+    times: Set<MedicationTimeType>,
 ) {
     val idx = indexOfFirst { it.medicationName == name }
     if (idx >= 0) {
@@ -196,7 +201,7 @@ private fun MutableList<MedicationSchedule>.addOrMerge(
 
 private fun MutableList<MedicationSchedule>.removeOnePeriod(
     name: String,
-    period: MedicationTimeType
+    period: MedicationTimeType,
 ) {
     val idx = indexOfFirst { it.medicationName == name }
     if (idx >= 0) {

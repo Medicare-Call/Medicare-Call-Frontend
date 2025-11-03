@@ -8,6 +8,6 @@ interface MemberRegisterRepository {
         token: String,
         name: String,
         birthDate: String,
-        gender: GenderType
+        gender: GenderType,
     ): Result<MemberTokenResponseDto>
 }

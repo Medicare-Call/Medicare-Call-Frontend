@@ -37,14 +37,14 @@ import java.util.Locale
 fun SubscribeDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    elderInfo: EldersSubscriptionResponseDto
+    elderInfo: EldersSubscriptionResponseDto,
 ) {
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -56,16 +56,16 @@ fun SubscribeDetailScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Column(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(20.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             // 결제 정보 컴포넌트
             Column(
@@ -80,17 +80,17 @@ fun SubscribeDetailScreen(
                 Text(
                     text = "결제 정보",
                     style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 SettingInfoItem("어르신 성함", elderInfo.name)
                 Column(
                     modifier = modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(5.dp),
                 ) {
                     Text(
                         text = "구독 플랜",
                         style = MediCareCallTheme.typography.R_14,
-                        color = MediCareCallTheme.colors.gray4
+                        color = MediCareCallTheme.colors.gray4,
                     )
                     val planInfo = when (elderInfo.plan) {
                         "메디케어콜 프리미엄 플랜" -> "프리미엄 플랜"
@@ -99,12 +99,12 @@ fun SubscribeDetailScreen(
                     Text(
                         text = planInfo,
                         style = MediCareCallTheme.typography.SB_18,
-                        color = MediCareCallTheme.colors.main
+                        color = MediCareCallTheme.colors.main,
                     )
                     Text(
                         text = "월 ${"%,d".format(elderInfo.price)}원",
                         style = MediCareCallTheme.typography.SB_16,
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
                 }
                 SettingInfoItem("결제 예정일", formatDateToKorean(elderInfo.nextBillingDate))
@@ -119,27 +119,27 @@ fun SubscribeDetailScreen(
                     .height(50.dp)
                     .figmaShadow(
                         group = MediCareCallTheme.shadow.shadow03,
-                        cornerRadius = 14.dp
+                        cornerRadius = 14.dp,
                     )
                     .clip(RoundedCornerShape(14.dp))
                     .background(color = Color.White)
                     .padding(start = 20.dp)
-                    .clickable {} // 클릭 이벤트 추가
+                    .clickable {}, // 클릭 이벤트 추가
             ) {
                 Text(
                     text = "결제수단 변경하기",
                     style = MediCareCallTheme.typography.SB_14,
-                    color = MediCareCallTheme.colors.gray4
+                    color = MediCareCallTheme.colors.gray4,
                 )
             }
             Row(
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.fillMaxWidth(),
             ) {
                 Spacer(modifier = modifier.weight(1f))
                 Text(
                     text = "해지하기",
                     style = MediCareCallTheme.typography.SB_14,
-                    color = MediCareCallTheme.colors.gray3
+                    color = MediCareCallTheme.colors.gray3,
                 )
             }
         }

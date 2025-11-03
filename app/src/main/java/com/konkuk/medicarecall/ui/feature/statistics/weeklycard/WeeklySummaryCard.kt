@@ -50,7 +50,6 @@ fun WeeklySummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-
                 WeeklySummaryItem(
                     title = "식사율",
                     value = summary.weeklyMealRate,
@@ -83,7 +82,6 @@ private fun WeeklySummaryItem(
     value: Int,
     unit: String,
 ) {
-
     val isUnrecorded = if (title != "건강징후") value <= 0 else value < 0
     val valueText = if (isUnrecorded) "-" else value.toString()
 
@@ -121,7 +119,6 @@ private fun WeeklySummaryItem(
 @Preview(name = "요약 카드 - 기록 있음")
 @Composable
 fun PreviewWeeklySummaryCard_Recorded() {
-
     WeeklySummaryCard(
         summary = WeeklySummaryUiState(
             weeklyMealRate = 65,

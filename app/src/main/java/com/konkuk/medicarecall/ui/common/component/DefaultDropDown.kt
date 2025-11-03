@@ -47,14 +47,11 @@ fun <T> DefaultDropdown(
     onOptionSelect: (String) -> Unit = {},
     value: String = "",
 ) {
-
-
     var showDropdown by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf("") }
     var scrollNow by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(showDropdown) {
-
         if (showDropdown) {
             scrollNow = scrollState.value
             scrollState.animateScrollTo(scrollState.value + 200)
@@ -67,7 +64,7 @@ fun <T> DefaultDropdown(
         Text(
             category,
             color = MediCareCallTheme.colors.gray7,
-            style = MediCareCallTheme.typography.M_17
+            style = MediCareCallTheme.typography.M_17,
         )
         Spacer(Modifier.height(10.dp))
     }
@@ -84,7 +81,7 @@ fun <T> DefaultDropdown(
                     indication = null,
                     onClick = {
                         showDropdown = !showDropdown
-                    }
+                    },
                 ),
             placeholder = {
                 Text(placeHolder, style = MediCareCallTheme.typography.M_16)
@@ -101,17 +98,15 @@ fun <T> DefaultDropdown(
                 Icon(
                     painterResource(if (showDropdown) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down_small),
                     contentDescription = "드롭다운 화살표",
-                    tint = MediCareCallTheme.colors.black
+                    tint = MediCareCallTheme.colors.black,
                 )
             },
             singleLine = true,
-            textStyle = MediCareCallTheme.typography.M_17
+            textStyle = MediCareCallTheme.typography.M_17,
         )
-
 
         AnimatedVisibility(showDropdown) {
             val dropdownScrollState = rememberScrollState()
-
 
             Box(
                 Modifier
@@ -119,25 +114,23 @@ fun <T> DefaultDropdown(
                     .padding(top = 8.dp)
                     .figmaShadow(
                         group = MediCareCallTheme.shadow.shadow01,
-                        cornerRadius = 14.dp
+                        cornerRadius = 14.dp,
                     )
                     .clip(RoundedCornerShape(14.dp))
                     .background(MediCareCallTheme.colors.white)
                     .border(
                         1.2.dp,
                         shape = RoundedCornerShape(14.dp),
-                        color = MediCareCallTheme.colors.gray1
+                        color = MediCareCallTheme.colors.gray1,
                     )
                     .heightIn(max = 280.dp)
-                    .verticalScroll(dropdownScrollState)
+                    .verticalScroll(dropdownScrollState),
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MediCareCallTheme.colors.white)
+                        .background(MediCareCallTheme.colors.white),
                 ) {
-
-
                     enumList.forEach { item ->
                         Box(
                             Modifier
@@ -153,21 +146,22 @@ fun <T> DefaultDropdown(
                                         strokeWidth = strokeWidth,
                                     )
                                 }
-                                .clickable(onClick = {
-                                    selectedOption = item.toString()
-                                    onOptionSelect(selectedOption)
-                                    showDropdown = false
-                                }),
+                                .clickable(
+                                    onClick = {
+                                        selectedOption = item.toString()
+                                        onOptionSelect(selectedOption)
+                                        showDropdown = false
+                                    },
+                                ),
                         ) {
                             Text(
                                 item.toString(),
                                 color = MediCareCallTheme.colors.gray8,
                                 style = MediCareCallTheme.typography.M_16,
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier.padding(16.dp),
                             )
                         }
                     }
-
                 }
             }
         }
