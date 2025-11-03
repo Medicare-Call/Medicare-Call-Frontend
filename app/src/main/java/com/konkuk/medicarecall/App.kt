@@ -32,7 +32,7 @@ class App : Application() {
         val channel = NotificationChannel(
             FCM_CHANNEL_ID,
             "FCM 알림명",
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             description = "Firebase Cloud Messaging으로부터 수신된 알림을 표시합니다."
             enableVibration(true)
@@ -77,4 +77,4 @@ class App : Application() {
         private const val TAG = "FCM"
         const val FCM_CHANNEL_ID = "fcm_alert"
     }
-    }
+}
