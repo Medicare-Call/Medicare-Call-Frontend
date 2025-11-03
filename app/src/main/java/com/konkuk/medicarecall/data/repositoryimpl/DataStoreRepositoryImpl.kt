@@ -63,6 +63,4 @@ class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private va
             Token(null, null, null, null)
         }
     }
-
-
 }
