@@ -40,13 +40,16 @@ class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private va
         return preferences.refreshToken
     }
 
-    override suspend fun clearTokens() {
-        context.tokenDataStore.updateData {
-            Token(null, null, null, null)
-        }
+    // 추가: FcmRepositoryImpl이 의존하는 FCM 토큰 저장/조회 함수
+    override suspend fun saveFcmToken(token: String) {
+        context.tokenDataStore.updateData { it.copy(fcmToken = token) }
     }
 
-    // fcm 관련 코드
+    override suspend fun getFcmToken(): String? {
+        val preferences = context.tokenDataStore.data.first()
+        return preferences.fcmToken
+    }
+
     override suspend fun saveFcmAccessToken(token: String) {
         context.tokenDataStore.updateData { it.copy(fcmAccessToken = token) }
     }
@@ -56,13 +59,10 @@ class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private va
         return preferences.fcmAccessToken
     }
 
-    override suspend fun saveFcmToken(token: String) {
-        context.tokenDataStore.updateData { it.copy(fcmToken = token) }
-    }
-
-    override suspend fun getFcmToken(): String? {
-        val preferences = context.tokenDataStore.data.first()
-        return preferences.fcmToken
+    override suspend fun clearTokens() {
+        context.tokenDataStore.updateData {
+            Token(null, null, null, null)
+        }
     }
 
 
