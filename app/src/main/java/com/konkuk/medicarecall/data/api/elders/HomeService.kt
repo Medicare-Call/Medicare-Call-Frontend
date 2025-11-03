@@ -11,13 +11,11 @@ import retrofit2.http.Path
 interface HomeService {
     @GET("elders/{elderId}/home")
     suspend fun getHomeSummary(
-        @Path("elderId") elderId: Int
+        @Path("elderId") elderId: Int,
     ): HomeResponseDto
-
 
     @POST("care-call/immediate")
     suspend fun requestImmediateCareCall(
-        @Body request: ImmediateCallRequestDto
+        @Body request: ImmediateCallRequestDto,
     ): Response<Unit>
-
 }

@@ -36,7 +36,6 @@ fun WeeklyMedicineCard(
     modifier: Modifier = Modifier,
     medicine: List<WeeklyMedicineUiState>,
 ) {
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -48,29 +47,23 @@ fun WeeklyMedicineCard(
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(14.dp),
-
-        ) {
+    ) {
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .wrapContentWidth()
                 .wrapContentHeight(),
-
-            ) {
-
-            //1) Title: 복약 통계
-
+        ) {
+            // 1) Title: 복약 통계
             Text(
                 "복약통계",
                 style = MediCareCallTheme.typography.R_15,
                 color = MediCareCallTheme.colors.gray5,
             )
 
-
             Spacer(modifier = Modifier.height(8.dp))
 
-
-            //2) 약 이름
+            // 2) 약 이름
             Column(
                 verticalArrangement = Arrangement
                     .spacedBy(0.dp),
@@ -106,7 +99,6 @@ fun WeeklyMedicineCard(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
 
-
                         Icon(
                             modifier = Modifier
                                 .size(16.dp),
@@ -120,13 +112,11 @@ fun WeeklyMedicineCard(
                             style = MediCareCallTheme.typography.R_14,
                             color = MediCareCallTheme.colors.gray6,
                         )
-
                     }
                 }
             }
         }
     }
-
 }
 
 @Preview(name = "복약 카드 - 기록 있음")
@@ -141,7 +131,6 @@ fun PreviewWeeklyMedicineCard_Recorded() {
             WeeklyMedicineUiState("당뇨약", 21, 21),
         ),
     )
-
 }
 
 @Preview(name = "복약 카드 - 미기록")
@@ -156,5 +145,4 @@ fun PreviewWeeklyMedicineCard_UnRecorded() {
             WeeklyMedicineUiState("당뇨약", -1, 21),
         ),
     )
-
 }

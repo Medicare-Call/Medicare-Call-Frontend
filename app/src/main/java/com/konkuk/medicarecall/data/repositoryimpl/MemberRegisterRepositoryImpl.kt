@@ -28,7 +28,7 @@ class MemberRegisterRepositoryImpl @Inject constructor(
             )
 
             if (response.isSuccessful) {
-                response.body() ?: throw IllegalStateException("Response body is null")
+                response.body() ?: error("Response body is null")
             } else {
                 val errorBody = response.errorBody()?.string() ?: "Unknown error"
                 throw HttpException(response)

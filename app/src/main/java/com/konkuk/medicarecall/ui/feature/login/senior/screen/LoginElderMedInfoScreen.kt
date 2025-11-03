@@ -109,8 +109,7 @@ fun LoginElderMedInfoScreen(
                                         loginElderViewModel.selectElderInHealth(index)
                                     },
                                 ),
-
-                            ) {
+                        ) {
                             Text(
                                 text = elder.name,
                                 style = if (index == selectedIndex)
@@ -130,7 +129,7 @@ fun LoginElderMedInfoScreen(
                     inputText = uiState.diseaseInputText,
                     diseaseList = uiState.elderHealthList[selectedIndex].diseaseNames,
                     onTextChanged = {
-                        loginElderViewModel.updateDiseasesText(it);
+                        loginElderViewModel.updateDiseasesText(it)
                     },
                     onRemoveChip = {
                         loginElderViewModel.removeDisease(it)
@@ -170,7 +169,6 @@ fun LoginElderMedInfoScreen(
                     }
                     Spacer(Modifier.height(10.dp))
                 }
-
 
                 DefaultDropdown(
                     HealthIssueType.entries.map { it.displayName }.toList(),

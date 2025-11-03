@@ -4,6 +4,7 @@ import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class NaverPayRepositoryImpl @Inject constructor(
@@ -15,10 +16,9 @@ class NaverPayRepositoryImpl @Inject constructor(
     ): Result<ReservePayResponseDto> = runCatching {
         val response = naverPayService.postReservePay(request)
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw Exception("Error reserving payment: $errorBody / NaverPayRepository.kt")
+            throw HttpException(response)
         }
     }
 }

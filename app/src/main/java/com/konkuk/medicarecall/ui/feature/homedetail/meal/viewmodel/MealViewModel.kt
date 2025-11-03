@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.MealRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MealViewModel @Inject constructor(
-    private val mealRepository: MealRepository
+    private val mealRepository: MealRepository,
 ) : ViewModel() {
 
     private companion object {
@@ -48,7 +47,7 @@ class MealViewModel @Inject constructor(
                             400 -> {
                                 Log.w(
                                     TAG,
-                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}"
+                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}",
                                 )
                                 _meals.value = defaultUnrecordedMeals()
                             }
@@ -62,7 +61,7 @@ class MealViewModel @Inject constructor(
                                 Log.e(
                                     TAG,
                                     "API error code=${e.code()} elderId=$elderId, date=$formatted",
-                                    e
+                                    e,
                                 )
                                 _meals.value = defaultUnrecordedMeals()
                             }
@@ -84,7 +83,7 @@ class MealViewModel @Inject constructor(
                 mealTime = it,
                 description = "식사 기록 전이에요.",
                 isRecorded = false,
-                isEaten = null
+                isEaten = null,
             )
         }
 }

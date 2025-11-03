@@ -21,38 +21,36 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Text
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
-
 // 중복, Legacy
 @Composable
 fun IllnessInfoItem(
     diseaseList: MutableList<String>, modifier: Modifier = Modifier,
-    onAddDisease: (String) -> Unit = {}, onRemoveDisease: (String) -> Unit = {}
+    onAddDisease: (String) -> Unit = {}, onRemoveDisease: (String) -> Unit = {},
 ) {
     Log.d("IllnessInfoItem", "diseaseList: $diseaseList")
     val context = LocalContext.current
     var inputText by remember { mutableStateOf("") }
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
             text = "질환 정보",
             style = MediCareCallTheme.typography.M_17,
-            color = MediCareCallTheme.colors.gray7
+            color = MediCareCallTheme.colors.gray7,
         )
         if (diseaseList.isNotEmpty()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
+                    .horizontalScroll(rememberScrollState()),
             ) {
                 diseaseList.forEachIndexed { index, disease ->
                     ChipItem(
                         text = disease,
                         onRemove = {
                             onRemoveDisease(disease)
-
-                        }
+                        },
                     )
                     Spacer(Modifier.width(10.dp))
                 }
@@ -74,7 +72,7 @@ fun IllnessInfoItem(
                         inputText = ""
                     }
                 }
-            })
+            },
+        )
     }
 }
-

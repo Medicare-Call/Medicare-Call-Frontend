@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EldersHealthViewModel @Inject constructor(
-    private val eldersHealthInfoRepository: EldersHealthInfoRepository
+    private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
 
     var eldersInfoList by mutableStateOf<List<EldersHealthResponseDto>>(emptyList())
@@ -45,5 +45,4 @@ class EldersHealthViewModel @Inject constructor(
                 }
         }
     }
-
 }

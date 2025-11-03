@@ -8,9 +8,9 @@ import retrofit2.http.POST
 
 interface NaverPayService {
     // 결제창 호출은 아래와 같이 할 수 있습니다.
-    //https://m.pay.naver.com/payments/{reserveId}
+    // https://m.pay.naver.com/payments/{reserveId}
     @POST("payments/reserve")
     suspend fun postReservePay(
-        @Body request: ReservePayRequestDto
+        @Body request: ReservePayRequestDto,
     ): Response<ReservePayResponseDto>
 }

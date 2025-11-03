@@ -37,7 +37,6 @@ fun WeekendBar(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Icon(
                 modifier = Modifier.clickable(enabled = !isEarliestWeek) { onPreviousWeek() },
                 painter = painterResource(id = R.drawable.ic_arrow_big_back),

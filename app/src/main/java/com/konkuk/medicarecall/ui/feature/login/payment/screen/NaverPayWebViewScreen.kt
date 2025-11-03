@@ -296,18 +296,18 @@ fun NaverPayWebViewScreen(
                                             if (url.contains("/api/payments/result")) {
                                                 v.evaluateJavascript(
                                                     """
-                            (function() {
-                              try {
-                                if (window.Android && Android.onPaymentComplete && window.paymentResult) {
-                                  Android.onPaymentComplete(JSON.stringify(window.paymentResult));
-                                  return 'bridged';
-                                }
-                                return 'no-bridge-or-result';
-                              } catch (e) {
-                                return 'error:' + (e && e.message);
-                              }
-                            })();
-                            """.trimIndent(),
+                                                    (function() {
+                                                      try {
+                                                        if (window.Android && Android.onPaymentComplete && window.paymentResult) {
+                                                          Android.onPaymentComplete(JSON.stringify(window.paymentResult));
+                                                          return 'bridged';
+                                                        }
+                                                        return 'no-bridge-or-result';
+                                                      } catch (e) {
+                                                        return 'error:' + (e && e.message);
+                                                      }
+                                                    })();
+                                                    """.trimIndent(),
                                                 ) { ret ->
                                                     Log.d(
                                                         "NaverPayWebView",
@@ -433,18 +433,18 @@ fun NaverPayWebViewScreen(
                                 if (url.contains("/api/payments/result")) {
                                     view.evaluateJavascript(
                                         """
-    (function() {
-      try {
-        if (window.Android && Android.onPaymentComplete && window.paymentResult) {
-          Android.onPaymentComplete(JSON.stringify(window.paymentResult));
-          return 'bridged';
-        }onPaymentComplete
-        return 'no-bridge-or-result';
-      } catch (e) {
-        return 'error:' + (e && e.message);
-      }
-    })();
-    """.trimIndent(),
+                                        (function() {
+                                          try {
+                                            if (window.Android && Android.onPaymentComplete && window.paymentResult) {
+                                              Android.onPaymentComplete(JSON.stringify(window.paymentResult));
+                                              return 'bridged';
+                                            }
+                                            return 'no-bridge-or-result';
+                                          } catch (e) {
+                                            return 'error:' + (e && e.message);
+                                          }
+                                        })();
+                                        """.trimIndent(),
                                     ) { ret -> Log.d("NaverPayWebView", "fallback bridge: $ret") }
                                 }
                             } // 서버가 호출안하면 우리가 호출 (결과 페이지 도달)

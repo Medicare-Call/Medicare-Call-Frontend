@@ -58,7 +58,6 @@ fun DiseaseNamesItem(
                     if (diseaseList.contains(inputText)) {
                         onTextChanged("")
                     } else {
-
                         onAddDisease(inputText)
                         onTextChanged("")
                     }

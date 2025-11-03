@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class HealthResponseDto(
     val date: String,
     val symptomList: List<String>? = null,
-    val analysisComment: String? = null
+    val analysisComment: String? = null,
 )

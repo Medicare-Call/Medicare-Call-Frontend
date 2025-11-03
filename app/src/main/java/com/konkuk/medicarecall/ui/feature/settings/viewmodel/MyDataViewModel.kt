@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyDataViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     fun refresh() = getUserData()
     var myDataInfo by mutableStateOf(MyInfoResponseDto())

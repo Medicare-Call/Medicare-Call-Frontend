@@ -21,7 +21,7 @@ class EldersInfoRepositoryImpl @Inject constructor(
         val response = eldersInfoService.getElders()
         if (response.isSuccessful) {
             response.body()
-                ?: throw IllegalStateException("Response body is null(eldersPersonalInfo)")
+                ?: error("Response body is null(eldersPersonalInfo)")
         } else {
             val errorBody = response.errorBody()?.string() ?: "Unknown error(eldersPersonalInfo)"
             throw HttpException(response)
@@ -31,7 +31,7 @@ class EldersInfoRepositoryImpl @Inject constructor(
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> = runCatching {
         val response = eldersInfoService.getSubscriptions()
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             val errorBody = response.errorBody()?.string() ?: "Unknown error"
             throw HttpException(response)
@@ -54,17 +54,16 @@ class EldersInfoRepositoryImpl @Inject constructor(
             ),
         )
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw Exception(errorBody)
+            throw HttpException(response)
         }
     }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
         val response = eldersInfoService.deleteElderSettings(id)
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             val errorBody = response.errorBody()?.string() ?: "Unknown error"
             throw HttpException(response)
@@ -74,7 +73,7 @@ class EldersInfoRepositoryImpl @Inject constructor(
     override suspend fun getCareCallTimes(id: Int): Result<CallTimeResponseDto> = runCatching {
         val response = eldersInfoService.getCallTimes(id)
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             val errorBody = response.errorBody()?.string() ?: "Unknown error"
             throw HttpException(response)

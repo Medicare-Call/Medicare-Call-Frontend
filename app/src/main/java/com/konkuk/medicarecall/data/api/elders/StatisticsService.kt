@@ -7,7 +7,6 @@ import retrofit2.http.Query
 
 interface StatisticsService {
 
-
     @GET("elders/{elderId}/weekly-stats")
     suspend fun getStatistics(
         @Path("elderId") elderId: Int,

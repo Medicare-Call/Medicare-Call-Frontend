@@ -34,7 +34,7 @@ object NetworkModule {
     @Singleton
     fun provideAuthAuthenticator(
         dataStoreRepository: DataStoreRepository,
-        authService: dagger.Lazy<AuthService>
+        authService: dagger.Lazy<AuthService>,
     ): AuthAuthenticator {
         return AuthAuthenticator(dataStoreRepository, authService)
     }
@@ -52,7 +52,7 @@ object NetworkModule {
     fun provideOkHttpClient(
         authInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor,
-        authAuthenticator: AuthAuthenticator
+        authAuthenticator: AuthAuthenticator,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(20, TimeUnit.SECONDS)

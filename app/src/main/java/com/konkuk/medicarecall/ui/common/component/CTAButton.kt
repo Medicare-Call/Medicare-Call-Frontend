@@ -16,19 +16,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 
-@Composable
 // CTAButtonType을 이용해 흰 버튼인지 초록 버튼인지 정해지고,
 // 클릭 시에 버튼 색상이 바뀜.
+@Composable
 fun CTAButton(
     type: CTAButtonType,
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val backgroundColor = when (type) {
         CTAButtonType.WHITE -> MediCareCallTheme.colors.white
         CTAButtonType.GREEN -> MediCareCallTheme.colors.main
@@ -53,18 +52,16 @@ fun CTAButton(
     // isPressed 상태에 따라 버튼 색상 결정
     val buttonColor = if (isPressed) clickedColor else backgroundColor
 
-
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(color = buttonColor, shape = RoundedCornerShape(14.dp))
             .clickable(
-
                 interactionSource,
                 onClick = onClick,
                 indication = null,
-                enabled = type != CTAButtonType.DISABLED
-            )
+                enabled = type != CTAButtonType.DISABLED,
+            ),
     ) {
         Text(
             text = text,
@@ -72,7 +69,7 @@ fun CTAButton(
             style = MediCareCallTheme.typography.B_17,
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .align(Alignment.Center)
+                .align(Alignment.Center),
         )
     }
 }

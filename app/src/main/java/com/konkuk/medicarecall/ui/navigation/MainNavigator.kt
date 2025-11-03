@@ -100,7 +100,7 @@ class MainNavigator(
         navController.navigateToLoginRegisterUserInfo(
             navOptions {
                 popUpTo(Route.LoginVerification) { inclusive = true }
-            }
+            },
         )
     }
 
@@ -118,7 +118,7 @@ class MainNavigator(
                 popUpTo(Route.LoginRegisterElder) {
                     inclusive = true
                 }
-            }
+            },
         )
     }
 

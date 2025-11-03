@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
+import android.util.Log
 import android.util.TypedValue
 import android.widget.EditText
 import android.widget.NumberPicker
@@ -35,9 +36,8 @@ fun FirstTimeWheelPicker(
     modifier: Modifier = Modifier,
     initialHour: Int = 9,
     initialMinute: Int = 0,
-    onTimeChange: (hour: Int, minute: Int) -> Unit = { _, _ -> }
+    onTimeChange: (hour: Int, minute: Int) -> Unit = { _, _ -> },
 ) {
-
     var hour by remember { mutableStateOf(initialHour) }
     var minute by remember { mutableStateOf(initialMinute) }
 
@@ -48,12 +48,12 @@ fun FirstTimeWheelPicker(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // 오전 / 오후
             AndroidView(
@@ -84,7 +84,7 @@ fun FirstTimeWheelPicker(
                                     .apply { isAccessible = true }
                                 dividerField.set(
                                     this,
-                                    Color.TRANSPARENT.toDrawable()
+                                    Color.TRANSPARENT.toDrawable(),
                                 )
 
                                 // mSelectionDividerHeight(높이)를 0 으로
@@ -115,7 +115,7 @@ fun FirstTimeWheelPicker(
                                 .apply { isAccessible = true }
                             dividerField.set(
                                 this,
-                                Color.TRANSPARENT.toDrawable()
+                                Color.TRANSPARENT.toDrawable(),
                             )
 
                             // mSelectionDividerHeight(높이)를 0 으로
@@ -135,10 +135,9 @@ fun FirstTimeWheelPicker(
 //                        }
 //                    }
 //                    picker.setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
-                }
+                },
             )
             Spacer(Modifier.width(32.dp))
-
 
             AndroidView(
                 factory = { ctx ->
@@ -167,7 +166,7 @@ fun FirstTimeWheelPicker(
                                     .apply { isAccessible = true }
                                 dividerField.set(
                                     this,
-                                    Color.TRANSPARENT.toDrawable()
+                                    Color.TRANSPARENT.toDrawable(),
                                 )
 
                                 // mSelectionDividerHeight(높이)를 0 으로
@@ -198,7 +197,7 @@ fun FirstTimeWheelPicker(
                                 .apply { isAccessible = true }
                             dividerField.set(
                                 this,
-                                Color.TRANSPARENT.toDrawable()
+                                Color.TRANSPARENT.toDrawable(),
                             )
 
                             // mSelectionDividerHeight(높이)를 0 으로
@@ -218,13 +217,13 @@ fun FirstTimeWheelPicker(
 //                        }
 //                    }
 //                    picker.setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
-                }
+                },
             )
             Spacer(modifier = Modifier.width(18.dp))
             Text(
                 ":",
                 style = MediCareCallTheme.typography.M_20,
-                color = MediCareCallTheme.colors.main
+                color = MediCareCallTheme.colors.main,
             )
             Spacer(modifier = Modifier.width(18.dp))
 
@@ -258,7 +257,7 @@ fun FirstTimeWheelPicker(
                                     .apply { isAccessible = true }
                                 dividerField.set(
                                     this,
-                                    Color.TRANSPARENT.toDrawable()
+                                    Color.TRANSPARENT.toDrawable(),
                                 )
 
                                 // mSelectionDividerHeight(높이)를 0 으로
@@ -289,7 +288,7 @@ fun FirstTimeWheelPicker(
                                 .apply { isAccessible = true }
                             dividerField.set(
                                 this,
-                                Color.TRANSPARENT.toDrawable()
+                                Color.TRANSPARENT.toDrawable(),
                             )
 
                             // mSelectionDividerHeight(높이)를 0 으로
@@ -309,13 +308,11 @@ fun FirstTimeWheelPicker(
 //                        }
 //                    }
 //                    picker.setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
-                }
+                },
             )
         }
-
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -323,17 +320,15 @@ private fun TimeWheelPreview() {
     FirstTimeWheelPicker(
         modifier = Modifier
             .fillMaxWidth()
-            .height(206.dp)
+            .height(206.dp),
     )
 }
-
 
 @SuppressLint("DiscouragedPrivateApi")
 fun NumberPicker.setPickerTextColor(color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         // API 29 이상에서는 공식 setTextColor() 사용
         this.setTextColor(color)
-
     } else {
         // API 28 이하에서는 private field 접근
         try {
@@ -353,7 +348,7 @@ fun NumberPicker.setPickerTextColor(color: Int) {
             // 다시 그리기
             invalidate()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("NumberPicker", "Failed to set text style: ${e.message}")
         }
     }
 }
@@ -385,7 +380,7 @@ fun NumberPicker.setPickerTextStyle(color: Int, textSizeSp: Float, typeface: Typ
 
             invalidate()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("NumberPicker", "Failed to set text style: ${e.message}")
         }
     }
 }

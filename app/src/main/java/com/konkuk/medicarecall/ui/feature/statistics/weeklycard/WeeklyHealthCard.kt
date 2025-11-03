@@ -24,7 +24,6 @@ fun WeeklyHealthCard(
     modifier: Modifier = Modifier,
     healthNote: String,
 ) {
-
     val isUnrecorded = healthNote.isEmpty()
     val displayText = if (isUnrecorded) "아직 충분한 기록이 쌓이지 않았어요." else healthNote
 

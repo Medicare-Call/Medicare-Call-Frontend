@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val checkLoginStatusUseCase: CheckLoginStatusUseCase
+    private val checkLoginStatusUseCase: CheckLoginStatusUseCase,
 ) : ViewModel() {
     private val _navigationDestination = MutableStateFlow<NavigationDestination?>(null)
     val navigationDestination = _navigationDestination.asStateFlow()

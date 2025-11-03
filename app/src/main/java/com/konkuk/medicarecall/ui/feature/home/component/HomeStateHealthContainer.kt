@@ -30,38 +30,33 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 fun HomeStateHealthContainer(
     modifier: Modifier = Modifier,
     healthStatus: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-
-
     Card(
         modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
-
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
-            //1) Title: 건강징후
+            // 1) Title: 건강징후
             Row(
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp),
                     painter = painterResource(id = R.drawable.ic_heart),
                     contentDescription = "health state icon",
+                )
 
-                    )
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
@@ -69,19 +64,17 @@ fun HomeStateHealthContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //2) 상태
+            // 2) 상태
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                ) {
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 Row(
                     modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val textColor = if (healthStatus.isBlank()) {
                         MediCareCallTheme.colors.gray4
@@ -92,23 +85,19 @@ fun HomeStateHealthContainer(
                     Text(
                         text = healthStatus.ifBlank { "미기록" },
                         style = MediCareCallTheme.typography.SB_22,
-                        color = textColor
+                        color = textColor,
                     )
                 }
             }
-
-
         }
-
     }
 }
 
 @Preview
 @Composable
 fun PreviewHomeStateHealthContainer() {
-
     HomeStateHealthContainer(
         healthStatus = "좋음",
-        onClick = {}
+        onClick = {},
     )
 }

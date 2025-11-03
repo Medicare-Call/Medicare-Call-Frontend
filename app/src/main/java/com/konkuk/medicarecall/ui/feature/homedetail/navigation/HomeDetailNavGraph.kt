@@ -50,22 +50,22 @@ fun NavGraphBuilder.homeDetailNavGraph(
         MedicineDetail(onBack = popBackStack)
     }
 
-    //홈 상세 화면_수면 화면
+    // 홈 상세 화면_수면 화면
     composable<Route.SleepDetail> {
         SleepDetail(onBack = popBackStack)
     }
 
-    //홈 상세 화면_건강 징후 화면
+    // 홈 상세 화면_건강 징후 화면
     composable<Route.HealthAnalysisDetail> {
         StateHealthDetail(onBack = popBackStack)
     }
 
-    //홈 상세 화면_심리 상태 화면
+    // 홈 상세 화면_심리 상태 화면
     composable<Route.MentalAnalysisDetail> {
         StateMentalDetail(onBack = popBackStack)
     }
 
-    //홈 상세 화면_혈당 화면
+    // 홈 상세 화면_혈당 화면
     composable<Route.GlucoseDetail> {
         GlucoseDetail(onBack = popBackStack)
     }

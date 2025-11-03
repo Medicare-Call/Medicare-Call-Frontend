@@ -33,7 +33,6 @@ fun WeeklyMentalCard(
     modifier: Modifier = Modifier,
     mental: WeeklyMentalUiState,
 ) {
-
     Card(
         modifier = modifier
             .figmaShadow(
@@ -43,27 +42,21 @@ fun WeeklyMentalCard(
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(14.dp),
-
-        ) {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-
-            //1) Title: 심리 상태
-
-
+            // 1) Title: 심리 상태
             Text(
                 "심리상태",
                 style = MediCareCallTheme.typography.R_15,
                 color = MediCareCallTheme.colors.gray5,
             )
 
-
             Spacer(modifier = Modifier.height(8.dp))
-
 
             // 2) 좋음+보통+나쁨
             Column(
@@ -88,7 +81,6 @@ fun WeeklyMentalCard(
         }
     }
 }
-
 
 @Composable
 private fun MentalStatusRow(
@@ -122,7 +114,6 @@ private fun MentalStatusRow(
             modifier = Modifier.width(22.dp),
             textAlign = TextAlign.End,
         )
-
     }
 }
 

@@ -25,7 +25,7 @@ fun SettingTextField(category: String, value: String, hint: String, modifier: Mo
         Text(
             text = category,
             color = MediCareCallTheme.colors.gray7,
-            style = MediCareCallTheme.typography.M_17
+            style = MediCareCallTheme.typography.M_17,
         )
         Spacer(modifier = modifier.height(10.dp))
         OutlinedTextField(
@@ -38,19 +38,18 @@ fun SettingTextField(category: String, value: String, hint: String, modifier: Mo
                 Text(
                     text = hint,
                     color = MediCareCallTheme.colors.gray3,
-                    style = MediCareCallTheme.typography.M_16
+                    style = MediCareCallTheme.typography.M_16,
                 )
             },
             textStyle = MediCareCallTheme.typography.M_16.copy(
-                color = MediCareCallTheme.colors.black
+                color = MediCareCallTheme.colors.black,
             ),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MediCareCallTheme.colors.white,
                 unfocusedContainerColor = MediCareCallTheme.colors.white,
                 focusedIndicatorColor = MediCareCallTheme.colors.main,
                 unfocusedIndicatorColor = MediCareCallTheme.colors.gray2,
-
-                )
+            ),
         )
     }
 }

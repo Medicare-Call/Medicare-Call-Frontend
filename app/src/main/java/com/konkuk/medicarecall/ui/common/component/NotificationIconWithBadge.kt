@@ -29,16 +29,16 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun NotificationIconWithBadge(
     modifier: Modifier = Modifier,
     notificationCount: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier.clickable(onClick = onClick)
+        modifier = modifier.clickable(onClick = onClick),
     ) {
         // 1. 알림 아이콘
         Icon(
             painter = painterResource(id = R.drawable.ic_notification),
             contentDescription = "알림",
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
         )
 
         // 2. 알림 개수가 0보다 클 때만 배지를 표시
@@ -54,7 +54,7 @@ fun NotificationIconWithBadge(
                     .size(18.dp)
                     .clip(CircleShape)
                     .background(MediCareCallTheme.colors.negative),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = displayText,
@@ -63,14 +63,13 @@ fun NotificationIconWithBadge(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 11.sp,
                         lineHeight = 14.3.sp,
-                        letterSpacing = (-0.022).sp
-                    )
+                        letterSpacing = (-0.022).sp,
+                    ),
                 )
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

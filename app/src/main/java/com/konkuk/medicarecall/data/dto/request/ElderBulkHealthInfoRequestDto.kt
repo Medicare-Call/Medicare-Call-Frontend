@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ElderBulkHealthInfoRequestDto(
     @SerialName("healthInfos")
-    val healthInfos: List<HealthInfo>
+    val healthInfos: List<HealthInfo>,
 ) {
     @Serializable
     data class HealthInfo(
@@ -17,14 +17,14 @@ data class ElderBulkHealthInfoRequestDto(
         @SerialName("medicationSchedules")
         val medicationSchedules: List<MedicationSchedule>,
         @SerialName("notes")
-        val notes: List<String>
+        val notes: List<String>,
     ) {
         @Serializable
         data class MedicationSchedule(
             @SerialName("medicationName")
             val medicationName: String,
             @SerialName("scheduleTimes")
-            val scheduleTimes: List<String>
+            val scheduleTimes: List<String>,
         )
     }
 }

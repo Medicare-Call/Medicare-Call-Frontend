@@ -19,7 +19,7 @@ fun LoginBackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier
             .fillMaxWidth()
-            .background(MediCareCallTheme.colors.bg)
+            .background(MediCareCallTheme.colors.bg),
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_settings_back),
@@ -29,9 +29,9 @@ fun LoginBackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
                 .clickable(
                     indication = null,
                     interactionSource = null,
-                    onClick = onClick
+                    onClick = onClick,
                 ),
-            tint = MediCareCallTheme.colors.black
+            tint = MediCareCallTheme.colors.black,
         )
     }
 }
@@ -40,5 +40,4 @@ fun LoginBackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 private fun Barprev() {
     LoginBackButton({})
-
 }

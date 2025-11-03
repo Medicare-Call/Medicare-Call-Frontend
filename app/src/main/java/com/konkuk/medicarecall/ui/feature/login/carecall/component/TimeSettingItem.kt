@@ -30,6 +30,7 @@ fun TimeSettingItem(
     timeText: String?,
     modifier: Modifier = Modifier,
 ) {
+    timeType // TODO: 현재 사용되지 않는 변수입니다. 추후 기능 추가 시 활용할 수 있습니다.
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {

@@ -5,6 +5,7 @@ import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.dto.request.SetCallTimeRequestDto
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class SetCallRepositoryImpl @Inject constructor(
@@ -19,11 +20,7 @@ class SetCallRepositoryImpl @Inject constructor(
             if (!response.isSuccessful) {
                 Log.e("SetCallRepository", "HTTP ${response.code()} ${response.message()}")
                 Log.e("SetCallRepository", "ErrorBody=${response.errorBody()?.string()}")
-                throw Exception(
-                    "Error saving care call times: ${
-                        response.errorBody()?.string()
-                    } / SetCallRepository.kt",
-                )
+                throw HttpException(response)
             }
         }
 
