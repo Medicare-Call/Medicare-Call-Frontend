@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.MentalRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,9 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MentalViewModel @Inject constructor(
-    private val mentalRepository: MentalRepository
+    private val mentalRepository: MentalRepository,
 ) : ViewModel() {
-
 
     private companion object {
         const val TAG = "MENTAL_API"

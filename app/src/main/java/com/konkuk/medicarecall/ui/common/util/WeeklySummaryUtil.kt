@@ -6,8 +6,6 @@ import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiS
 import com.konkuk.medicarecall.ui.theme.MediCareCallColors
 
 object WeeklySummaryUtil {
-
-
     fun getMealIconColor(meal: WeeklyMealUiState, colors: MediCareCallColors): Color {
         return when {
             meal.eatenCount == meal.totalCount -> colors.positive
@@ -25,5 +23,4 @@ object WeeklySummaryUtil {
             else -> colors.gray3
         }
     }
-
 }

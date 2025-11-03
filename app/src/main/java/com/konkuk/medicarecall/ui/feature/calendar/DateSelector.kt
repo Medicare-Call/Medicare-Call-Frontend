@@ -25,8 +25,9 @@ import java.time.LocalDate
 fun DateSelector(
     selectedDate: LocalDate,
     onMonthClick: () -> Unit,
-    onDateSelected: (LocalDate) -> Unit
+    onDateSelected: (LocalDate) -> Unit,
 ) {
+    onMonthClick // TODO: 현재 사용되지 않는 변수입니다. 추후 기능 추가 시 활용할 수 있습니다.
     var showDatePicker by remember { mutableStateOf(false) }
 
     val year = selectedDate.year
@@ -37,22 +38,22 @@ fun DateSelector(
             .fillMaxWidth()
             .clickable(
                 indication = null,
-                interactionSource = null
+                interactionSource = null,
             ) { showDatePicker = true },
 
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "${year}년 ${month}월",
             style = MediCareCallTheme.typography.SB_20,
             color = MediCareCallTheme.colors.gray9,
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier.padding(end = 4.dp),
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_down_small),
             contentDescription = "Month Select",
-            tint = MediCareCallTheme.colors.gray4
+            tint = MediCareCallTheme.colors.gray4,
         )
     }
 
@@ -64,11 +65,10 @@ fun DateSelector(
                 onDateSelected(it)
                 showDatePicker = false
             },
-            onDismiss = { showDatePicker = false }
+            onDismiss = { showDatePicker = false },
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -77,7 +77,6 @@ fun PreviewDateSelector() {
     DateSelector(
         selectedDate = fakeDate,
         onMonthClick = { },
-        onDateSelected = { /* no-op */ }
+        onDateSelected = { /* no-op */ },
     )
-
 }

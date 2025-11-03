@@ -48,7 +48,6 @@ object TokenEncryptor {
             .generateKey()
     }
 
-
     fun encrypt(bytes: ByteArray): ByteArray {
         val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, getKey())

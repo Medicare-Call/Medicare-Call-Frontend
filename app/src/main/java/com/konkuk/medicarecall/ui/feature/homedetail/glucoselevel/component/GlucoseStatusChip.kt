@@ -22,7 +22,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 @Composable
 fun GlucoseStatusChip(
     value: Int,
-    timing: GlucoseTiming
+    timing: GlucoseTiming,
 ) {
     val level = classifyGlucose(value.toFloat(), timing)
     val (text, color) = when (level) {
@@ -31,24 +31,22 @@ fun GlucoseStatusChip(
         GlucoseLevel.HIGH -> "높음" to MediCareCallTheme.colors.negative
     }
 
-
     Card(
         modifier = Modifier
             .height(30.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = color)
+        colors = CardDefaults.cardColors(containerColor = color),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(horizontal = 20.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
-
-            ) {
+        ) {
             Text(
                 text = text,
                 style = MediCareCallTheme.typography.R_16,
-                color = Color.White
+                color = Color.White,
             )
         }
     }

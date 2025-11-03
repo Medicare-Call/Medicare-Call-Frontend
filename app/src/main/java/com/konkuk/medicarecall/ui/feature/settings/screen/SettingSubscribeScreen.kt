@@ -35,7 +35,6 @@ fun SettingSubscribeScreen(
     navigateToSubscribeDetail: (subscription: EldersSubscriptionResponseDto) -> Unit = {},
     viewModel: SubscribeViewModel = hiltViewModel(),
 ) {
-
     val eldersInfo = viewModel.subscriptions
     Log.d("SettingSubscribeScreen", "Elders Info: $eldersInfo")
 

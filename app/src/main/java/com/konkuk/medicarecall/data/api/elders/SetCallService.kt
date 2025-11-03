@@ -10,6 +10,6 @@ interface SetCallService {
     @POST("elders/{elderId}/care-call-setting")
     suspend fun saveCareCallTimes(
         @Path("elderId") elderId: Int,
-        @Body body: SetCallTimeRequestDto
+        @Body body: SetCallTimeRequestDto,
     ): Response<Unit>
 }

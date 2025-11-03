@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,8 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
@@ -37,7 +34,6 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStat
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
@@ -46,7 +42,7 @@ import java.time.LocalDate
 fun MedicineDetail(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
-    medicineViewModel: MedicineViewModel = hiltViewModel()
+    medicineViewModel: MedicineViewModel = hiltViewModel(),
 ) {
     val homeViewModel: HomeViewModel = hiltViewModel()
     // 재진입 시 오늘로 초기화
@@ -66,18 +62,15 @@ fun MedicineDetail(
     val uiState by medicineViewModel.state.collectAsState()
     Log.d("MED_UI", "render medicines=${uiState.items.size}")
 
-
-
     MedicineDetailLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         medicines = uiState.items,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
-        onMonthClick = { /* 모달 열기 */ }
+        onMonthClick = { /* 모달 열기 */ },
     )
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -92,29 +85,29 @@ fun MedicineDetailLayout(
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = Color.White,
     ) {
         Column(
             modifier = Modifier
                 .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
-                .statusBarsPadding()
+                .statusBarsPadding(),
         ) {
             TopAppBar(
                 title = "복약",
-                onBack = onBack
+                onBack = onBack,
             )
             Spacer(Modifier.height(4.dp))
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(20.dp)
+                    .padding(20.dp),
             ) {
                 DateSelector(
                     selectedDate = selectedDate,
                     onMonthClick = onMonthClick,
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
                 Spacer(Modifier.height(12.dp))
                 WeeklyCalendar(
@@ -122,16 +115,16 @@ fun MedicineDetailLayout(
                         currentYear = selectedDate.year,
                         currentMonth = selectedDate.monthValue,
                         weekDates = weekDates,
-                        selectedDate = selectedDate
+                        selectedDate = selectedDate,
                     ),
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 medicines.forEach { medicine ->
                     MedicineDetailCard(
                         medicineName = medicine.medicineName,
                         todayRequiredCount = medicine.todayRequiredCount,
-                        doseStatusList = medicine.doseStatusList
+                        doseStatusList = medicine.doseStatusList,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -149,16 +142,16 @@ fun PreviewMedicineDetail() {
             todayRequiredCount = 3,
             doseStatusList = listOf(
                 DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
-                DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED)
-            )
+                DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED),
+            ),
         ),
         MedicineUiState(
             medicineName = "혈압약",
             todayRequiredCount = 2,
             doseStatusList = listOf(
-                DoseStatusItem(time = "아침", doseStatus = DoseStatus.TAKEN)
-            )
-        )
+                DoseStatusItem(time = "아침", doseStatus = DoseStatus.TAKEN),
+            ),
+        ),
     )
 
     MediCareCallTheme {
@@ -168,7 +161,7 @@ fun PreviewMedicineDetail() {
             medicines = dummyMedicines,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
-            onMonthClick = {}
+            onMonthClick = {},
         )
     }
 }

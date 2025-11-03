@@ -3,7 +3,6 @@ package com.konkuk.medicarecall.ui.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.intl.Locale
 
 val BG = Color(0xFFFAFAFA)
 val dim = Color(0xFF000000)
@@ -71,7 +70,7 @@ data class MediCareCallColors(
     val gray8: Color,
     val gray9: Color,
     val gray10: Color,
-    val black: Color
+    val black: Color,
 )
 
 val defaultMediCareCallColors = MediCareCallColors(
@@ -103,7 +102,7 @@ val defaultMediCareCallColors = MediCareCallColors(
     gray8 = gray8,
     gray9 = gray9,
     gray10 = gray10,
-    black = Black
+    black = Black,
 )
 
 val LocalMediCareCallColorsProvider = staticCompositionLocalOf { defaultMediCareCallColors }

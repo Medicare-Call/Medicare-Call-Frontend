@@ -53,7 +53,6 @@ import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.TimeSettingType
 import kotlinx.coroutines.launch
 
-
 // helper: Triple을 "오전/오후 hh시 mm분" 형태로 바꿔주는 함수
 fun Triple<Int, Int, Int>.toDisplayString(): String {
     val (amPm, h, m) = this
@@ -123,10 +122,9 @@ fun CallTimeScreen(
     val elderIds = nameIdList.map { it.values.first() } // 어르신 아이디 리스트
 
     var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
-    val selectedId = elderIds.getOrNull(selectedIndex) ?: 0// 선택된 어르신 아이디
+    val selectedId = elderIds.getOrNull(selectedIndex) ?: 0 // 선택된 어르신 아이디
     val saved = callTimeViewModel.timeMap[selectedId] ?: CallTimes()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-
 
     val allComplete = callTimeViewModel.isAllComplete(elderIds)
 
@@ -203,7 +201,6 @@ fun CallTimeScreen(
                     }
                 }
 
-
                 HorizontalDivider(
                     modifier = modifier
                         .fillMaxWidth(),
@@ -266,7 +263,6 @@ fun CallTimeScreen(
 
             // 시간 설정 항목
 //            val callTimes = timeMap[selectedName]!!
-
 
             if (saved.first == null) {
                 TimeSettingItem(
@@ -392,4 +388,3 @@ fun CallTimeScreen(
         }
     }
 }
-

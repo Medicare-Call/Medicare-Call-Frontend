@@ -79,7 +79,6 @@ fun MyDataSettingScreen(
             .background(MediCareCallTheme.colors.bg)
             .statusBarsPadding(),
     ) {
-
         SettingsTopAppBar(
             modifier = modifier,
             title = "내 정보 설정",
@@ -167,6 +166,7 @@ fun MyDataSettingScreen(
                         .fillMaxWidth()
                         .clickable {
                             showLogoutDialog = true
+                            navigateToLoginAfterLogout()
                         },
                 )
 
@@ -178,8 +178,8 @@ fun MyDataSettingScreen(
             }
             Spacer(modifier = Modifier.height(20.dp))
         }
-
     }
+
     if (showLogoutDialog) {
         LogoutConfirmDialog(
             onDismiss = { showLogoutDialog = false },
@@ -199,7 +199,6 @@ fun MyDataSettingScreen(
                         Log.e("MyDataSettingScreen", "Logout failed: $error")
                     },
                 )
-
             },
         )
     }
@@ -211,5 +210,3 @@ fun formatPhoneNumber(number: String): String {
         "$1-$2-$3",
     )
 }
-
-

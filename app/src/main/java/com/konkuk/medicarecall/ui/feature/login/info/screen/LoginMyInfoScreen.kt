@@ -93,7 +93,6 @@ fun LoginMyInfoScreen(
         }
     }
 
-
     Box(
         modifier
             .fillMaxSize()
@@ -148,8 +147,7 @@ fun LoginMyInfoScreen(
                         keyboardType = KeyboardType.Number,
                         visualTransformation = DateOfBirthVisualTransformation(),
                         maxLength = 8,
-
-                        )
+                    )
                 }
                 Spacer(Modifier.height(20.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -163,9 +161,9 @@ fun LoginMyInfoScreen(
                 }
                 Spacer(Modifier.height(30.dp))
                 CTAButton(
-                    if (loginViewModel.name.isNotEmpty()
-                        && loginViewModel.dateOfBirth.length == 8
-                        && loginViewModel.isMale != null
+                    if (loginViewModel.name.isNotEmpty() &&
+                        loginViewModel.dateOfBirth.length == 8 &&
+                        loginViewModel.isMale != null
                     ) CTAButtonType.GREEN
                     else
                         CTAButtonType.DISABLED,
@@ -190,16 +188,13 @@ fun LoginMyInfoScreen(
                         } else {
                             showBottomSheet = true
                         }
-
                     },
                     Modifier.padding(bottom = 20.dp),
                 )
 
-
                 val sheetState = rememberModalBottomSheetState(
                     skipPartiallyExpanded = true,
                 )
-
 
                 if (showBottomSheet) {
                     ModalBottomSheet(
@@ -248,20 +243,17 @@ fun LoginMyInfoScreen(
                                     ),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-
                                 Icon(
                                     painterResource(R.drawable.ic_check_box),
                                     contentDescription = "체크박스",
                                     tint = if (allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-
-                                    )
+                                )
                                 Spacer(Modifier.width(8.dp))
                                 Text(
                                     "전체 동의하기",
                                     color = MediCareCallTheme.colors.black,
                                     style = MediCareCallTheme.typography.SB_16,
                                 )
-
                             }
                         }
                         HorizontalDivider(
@@ -290,9 +282,7 @@ fun LoginMyInfoScreen(
                                 loginViewModel.memberRegister(
                                     loginViewModel.name,
                                     loginViewModel.dateOfBirth,
-                                    if (loginViewModel.isMale
-                                            ?: true
-                                    ) GenderType.MALE else GenderType.FEMALE,
+                                    if (loginViewModel.isMale) GenderType.MALE else GenderType.FEMALE,
                                 )
                             },
                             modifier
@@ -300,7 +290,6 @@ fun LoginMyInfoScreen(
                                 .padding(bottom = 30.dp, top = 20.dp),
                         )
                     }
-
                 }
             }
         }
@@ -311,5 +300,4 @@ fun LoginMyInfoScreen(
                 .padding(bottom = 14.dp),
         )
     }
-
 }

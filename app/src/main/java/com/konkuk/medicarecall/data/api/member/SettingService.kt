@@ -14,7 +14,6 @@ interface SettingService {
     // 내 정보 수정
     @POST("member")
     suspend fun updateMyInfo(
-        @Body userUpdateRequestDto: MyInfoResponseDto
+        @Body userUpdateRequestDto: MyInfoResponseDto,
     ): Response<MyInfoResponseDto> // 추후 수정 필요
-
 }

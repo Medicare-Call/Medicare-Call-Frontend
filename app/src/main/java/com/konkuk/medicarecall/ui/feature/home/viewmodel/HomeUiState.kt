@@ -15,7 +15,7 @@ data class HomeUiState(
     val sleep: HomeResponseDto.SleepDto = HomeResponseDto.SleepDto(0, 0),
     val healthStatus: String = "",
     val mentalStatus: String = "",
-    val glucoseLevelAverageToday: Int = 0
+    val glucoseLevelAverageToday: Int = 0,
 ) {
     companion object {
         val EMPTY = HomeUiState()
@@ -28,20 +28,19 @@ data class HomeUiState(
             isRecorded = listOf(
                 dto.mealStatus.breakfast,
                 dto.mealStatus.lunch,
-                dto.mealStatus.dinner
+                dto.mealStatus.dinner,
             ).any { it != null },
 
             // 오늘 한 끼라도 먹었는지(선택적)
             isEaten = listOf(
                 dto.mealStatus.breakfast,
                 dto.mealStatus.lunch,
-                dto.mealStatus.dinner
+                dto.mealStatus.dinner,
             ).any { it == true },
 
             breakfastEaten = dto.mealStatus.breakfast,
             lunchEaten = dto.mealStatus.lunch,
             dinnerEaten = dto.mealStatus.dinner,
-
 
             medicines = dto.medicationStatus.medicationList
                 .orEmpty()
@@ -56,15 +55,13 @@ data class HomeUiState(
                             "DINNER" -> "저녁"
                             null, "" -> "-"
                             else -> it.nextTime
-                        }
+                        },
                     )
                 },
-
-
             sleep = dto.sleep ?: HomeResponseDto.SleepDto(0, 0),
             healthStatus = dto.healthStatus ?: "",
             mentalStatus = dto.mentalStatus ?: "",
-            glucoseLevelAverageToday = dto.bloodSugar?.meanValue ?: 0
+            glucoseLevelAverageToday = dto.bloodSugar?.meanValue ?: 0,
         )
     }
 }
@@ -73,5 +70,5 @@ data class MedicineUiState(
     val medicineName: String,
     val todayTakenCount: Int,
     val todayRequiredCount: Int,
-    val nextDoseTime: String?
+    val nextDoseTime: String?,
 )

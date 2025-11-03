@@ -10,6 +10,6 @@ interface MedicineService {
     @GET("elders/{elderId}/medication")
     suspend fun getDailyMedication(
         @Path("elderId") elderId: Int,
-        @Query("date") date: String
+        @Query("date") date: String,
     ): Response<MedicineResponseDto>
 }

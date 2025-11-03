@@ -4,8 +4,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -19,12 +17,12 @@ data class ShadowLayer(
     val offsetX: Dp,
     val offsetY: Dp,
     val blurRadius: Dp,
-    val color: Color
+    val color: Color,
 )
 
 @Immutable
 data class ShadowGroup(
-    val layers: List<ShadowLayer>
+    val layers: List<ShadowLayer>,
 )
 
 @Immutable
@@ -40,7 +38,7 @@ val defaultMediCareCallShadow = MediCareCallShadows(
             ShadowLayer(0.dp, 4.dp, 8.dp, Color(0xFF222222).copy(alpha = 0.02f)),
             ShadowLayer(4.dp, 0.dp, 8.dp, Color(0xFF222222).copy(alpha = 0.02f)),
             ShadowLayer(-4.dp, 0.dp, 8.dp, Color(0xFF222222).copy(alpha = 0.02f)),
-        )
+        ),
     ),
 
     shadow02 = ShadowGroup(
@@ -48,7 +46,7 @@ val defaultMediCareCallShadow = MediCareCallShadows(
             ShadowLayer(0.dp, 4.dp, 12.dp, Color(0xFF222222).copy(alpha = 0.04f)),
             ShadowLayer(4.dp, 0.dp, 12.dp, Color(0xFF222222).copy(alpha = 0.04f)),
             ShadowLayer(-4.dp, 0.dp, 12.dp, Color(0xFF222222).copy(alpha = 0.04f)),
-        )
+        ),
     ),
 
     shadow03 = ShadowGroup(
@@ -56,15 +54,15 @@ val defaultMediCareCallShadow = MediCareCallShadows(
             ShadowLayer(0.dp, 4.dp, 16.dp, Color(0xFF222222).copy(alpha = 0.04f)),
             ShadowLayer(4.dp, 0.dp, 16.dp, Color(0xFF222222).copy(alpha = 0.04f)),
             ShadowLayer(-4.dp, 0.dp, 16.dp, Color(0xFF222222).copy(alpha = 0.04f)),
-        )
-    )
+        ),
+    ),
 )
 
 val LocalMediCareCallShadowProvider = staticCompositionLocalOf { defaultMediCareCallShadow }
 
 fun Modifier.figmaShadow(
     group: ShadowGroup,
-    cornerRadius: Dp = 14.dp
+    cornerRadius: Dp = 14.dp,
 ): Modifier = this.drawWithCache {
     val radiusPx = cornerRadius.toPx()
     val paint = Paint().asFrameworkPaint().apply {
@@ -79,7 +77,7 @@ fun Modifier.figmaShadow(
                 layer.blurRadius.toPx(),
                 layer.offsetX.toPx(),
                 layer.offsetY.toPx(),
-                layer.color.toArgb()
+                layer.color.toArgb(),
             )
             drawIntoCanvas { canvas ->
                 // 안드로이드 네이티브 Canvas
@@ -91,7 +89,7 @@ fun Modifier.figmaShadow(
                     size.height,
                     radiusPx,
                     radiusPx,
-                    paint
+                    paint,
                 )
             }
         }
@@ -109,13 +107,10 @@ fun Modifier.figmaShadow(
                 size.height,
                 radiusPx,
                 radiusPx,
-                paint
+                paint,
             )
         }
         // 4) 자식 컴포저블(텍스트, 아이콘 등) 그리기
         drawContent()
     }
 }
-
-
-

@@ -7,7 +7,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class HealthRepositoryImpl @Inject constructor(
-    private val healthService: HealthService
+    private val healthService: HealthService,
 ) : HealthRepository {
     override suspend fun getHealthUiState(elderId: Int, date: LocalDate): Result<HealthUiState> =
         runCatching {
@@ -15,9 +15,7 @@ class HealthRepositoryImpl @Inject constructor(
             HealthUiState(
                 symptoms = response.symptomList.orEmpty(),
                 symptomAnalysis = response.analysisComment.orEmpty(),
-                isRecorded = response.symptomList!!.isNotEmpty() || !response.analysisComment.isNullOrBlank()
+                isRecorded = response.symptomList!!.isNotEmpty() || !response.analysisComment.isNullOrBlank(),
             )
         }
-
-
 }

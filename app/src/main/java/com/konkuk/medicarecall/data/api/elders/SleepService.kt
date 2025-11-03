@@ -9,6 +9,6 @@ interface SleepService {
     @GET("elders/{elderId}/sleep")
     suspend fun getDailySleep(
         @Path("elderId") elderId: Int,
-        @Query("date") date: String
+        @Query("date") date: String,
     ): SleepResponseDto
 }

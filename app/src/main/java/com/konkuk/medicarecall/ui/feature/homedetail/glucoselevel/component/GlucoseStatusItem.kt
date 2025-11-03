@@ -20,16 +20,14 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun GlucoseStatusItem(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(18.dp)
+        horizontalArrangement = Arrangement.spacedBy(18.dp),
     ) {
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -38,13 +36,13 @@ fun GlucoseStatusItem(
                     .size(8.dp),
                 painter = painterResource(id = R.drawable.ic_glucose_low),
                 contentDescription = "low level",
-                tint = MediCareCallTheme.colors.active
+                tint = MediCareCallTheme.colors.active,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "낮음",
                 style = MediCareCallTheme.typography.R_14,
-                color = MediCareCallTheme.colors.gray5
+                color = MediCareCallTheme.colors.gray5,
             )
         }
 
@@ -56,13 +54,13 @@ fun GlucoseStatusItem(
                     .size(8.dp),
                 painter = painterResource(id = R.drawable.ic_glucose_normal),
                 contentDescription = "normal level",
-                tint = MediCareCallTheme.colors.positive
+                tint = MediCareCallTheme.colors.positive,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "정상",
                 style = MediCareCallTheme.typography.R_14,
-                color = MediCareCallTheme.colors.gray5
+                color = MediCareCallTheme.colors.gray5,
             )
         }
 
@@ -74,26 +72,20 @@ fun GlucoseStatusItem(
                     .size(8.dp),
                 painter = painterResource(id = R.drawable.ic_glucose_high),
                 contentDescription = "high level",
-                tint = MediCareCallTheme.colors.negative
+                tint = MediCareCallTheme.colors.negative,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "높음",
                 style = MediCareCallTheme.typography.R_14,
-                color = MediCareCallTheme.colors.gray5
+                color = MediCareCallTheme.colors.gray5,
             )
         }
-
-
     }
-
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewGlucoseStatusItem() {
-
     GlucoseStatusItem()
-
 }

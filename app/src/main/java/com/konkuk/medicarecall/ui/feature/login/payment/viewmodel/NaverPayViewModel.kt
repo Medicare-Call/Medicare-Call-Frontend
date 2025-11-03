@@ -18,7 +18,7 @@ import javax.inject.Inject
 class NaverPayViewModel @Inject constructor(
     private val naverPayRepo: NaverPayRepository,
     private val elderInfoRepo: EldersInfoRepository,
-    private val dataStoreRepo: DataStoreRepository
+    private val dataStoreRepo: DataStoreRepository,
 ) : ViewModel() {
 
     var eldersIdList by mutableStateOf<List<Int>>(emptyList())
@@ -34,8 +34,7 @@ class NaverPayViewModel @Inject constructor(
     var accessToken by mutableStateOf<String?>(null)
         private set
 
-    fun postNaverPayInfo(
-    ) {
+    fun postNaverPayInfo() {
         viewModelScope.launch {
             elderInfoRepo.getElders()
                 .onSuccess {
@@ -54,7 +53,7 @@ class NaverPayViewModel @Inject constructor(
                 totalPayAmount = 29000 * eldersIdList.size,
                 taxScopeAmount = 29000 * eldersIdList.size, // 현재는 총금액과 동일하게
                 taxExScopeAmount = 0,
-                elderIds = eldersIdList
+                elderIds = eldersIdList,
             )
             Log.d("NaverPayViewModel", "네이버페이 토큰 값 불러오기")
             accessToken = dataStoreRepo.getAccessToken()

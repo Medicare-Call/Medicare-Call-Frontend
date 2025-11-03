@@ -27,7 +27,7 @@ fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
             .statusBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -39,22 +39,22 @@ fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Spacer(modifier = modifier.height(30.dp))
         Column {
             Text(
                 text = "도움이 필요하신가요?",
                 style = MediCareCallTheme.typography.SB_16,
-                color = Color.Black
+                color = Color.Black,
             )
             Spacer(modifier = modifier.height(7.dp))
             Text(
                 text = "상담시간 평일 09:00 - 18:00",
                 style = MediCareCallTheme.typography.R_14,
-                color = Color.Black
+                color = Color.Black,
             )
         }
     }
