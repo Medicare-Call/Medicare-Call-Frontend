@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -49,10 +50,12 @@ internal fun MainBottomBar(
         exit = fadeOut() + slideOut { IntOffset(0, it.height) },
     ) {
         Box(
-            modifier = Modifier.border(
-                width = 1.dp,
-                color = gray1,
-            ),
+            modifier = Modifier
+                .background(MediCareCallTheme.colors.white)
+                .border(
+                    width = 1.dp,
+                    color = gray1,
+                ),
         ) {
             Column {
                 Row(
