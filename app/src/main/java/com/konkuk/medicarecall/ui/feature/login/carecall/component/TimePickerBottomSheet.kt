@@ -27,9 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,13 +45,12 @@ fun TimePickerBottomSheet(
     onConfirm: (
         firstHour: Int, firstMinute: Int,
         secondHour: Int, secondMinute: Int,
-        thirdHour: Int, thirdMinute: Int
-    ) -> Unit
+        thirdHour: Int, thirdMinute: Int,
+    ) -> Unit,
 ) {
     if (!visible) return
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
 
     // 1차, 2차 각각의 시간 상태 관리
     var firstHour by remember { mutableIntStateOf(initialFirstHour) }
@@ -61,10 +59,8 @@ fun TimePickerBottomSheet(
     var secondHour by remember { mutableIntStateOf(initialSecondHour) }
     var secondMinute by remember { mutableIntStateOf(initialSecondMinute) }
 
-
     var thirdHour by remember { mutableIntStateOf(initialThirdHour) }
     var thirdMinute by remember { mutableIntStateOf(initialThirdMinute) }
-
 
     // 탭 구성
     var tabIndex by remember { mutableIntStateOf(initialTabIndex) }
@@ -85,12 +81,12 @@ fun TimePickerBottomSheet(
                 .fillMaxWidth()
                 .background(MediCareCallTheme.colors.bg)
                 .padding(bottom = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = "시간 설정",
                 style = MediCareCallTheme.typography.M_20,
-                color = MediCareCallTheme.colors.black
+                color = MediCareCallTheme.colors.black,
             )
             Spacer(modifier = Modifier.height(18.dp))
 
@@ -104,10 +100,10 @@ fun TimePickerBottomSheet(
                         modifier = Modifier
                             .tabIndicatorOffset(tabPositions[tabIndex])
                             .height(2.dp),
-                        color = MediCareCallTheme.colors.main
+                        color = MediCareCallTheme.colors.main,
                     )
                 },
-                divider = {}
+                divider = {},
             ) {
                 tabs.forEachIndexed { i, title ->
                     Tab(
@@ -121,7 +117,7 @@ fun TimePickerBottomSheet(
                                 color = if (i == tabIndex)
                                     MediCareCallTheme.colors.main
                                 else
-                                    MediCareCallTheme.colors.gray2
+                                    MediCareCallTheme.colors.gray2,
                             )
                         },
                     )
@@ -165,46 +161,54 @@ fun TimePickerBottomSheet(
             Spacer(modifier = Modifier.height(38.dp))
             if (tabIndex == 0) {
                 CTAButton(
-                    CTAButtonType.GREEN, "다음", onClick = {
+                    CTAButtonType.GREEN,
+                    "다음",
+                    onClick = {
                         tabIndex = 1
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            horizontal = 20.dp
-                        )
+                            horizontal = 20.dp,
+                        ),
                 )
             } else if (tabIndex == 1) {
                 CTAButton(
-                    CTAButtonType.GREEN, "다음", onClick = {
+                    CTAButtonType.GREEN,
+                    "다음",
+                    onClick = {
                         tabIndex = 2
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            horizontal = 20.dp
-                        )
+                            horizontal = 20.dp,
+                        ),
                 )
             } else if (tabIndex == 2) {
                 CTAButton(
-                    CTAButtonType.GREEN, "확인",
+                    CTAButtonType.GREEN,
+                    "확인",
                     onClick = {
                         onConfirm(
-                            firstHour, firstMinute,
-                            secondHour, secondMinute,
-                            thirdHour, thirdMinute,
+                            firstHour,
+                            firstMinute,
+                            secondHour,
+                            secondMinute,
+                            thirdHour,
+                            thirdMinute,
                         )
                         onDismiss()
-                    }, modifier = Modifier
+                    },
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            horizontal = 20.dp
-                        )
+                            horizontal = 20.dp,
+                        ),
                 )
             }
         }
     }
-
 }
 
 @Preview
@@ -214,7 +218,7 @@ private fun TimePickerBottomSheetPreview() {
         TimePickerBottomSheet(
             visible = true,
             onDismiss = {},
-            onConfirm = { _, _, _, _, _, _ -> }
+            onConfirm = { _, _, _, _, _, _ -> },
         )
     }
 }

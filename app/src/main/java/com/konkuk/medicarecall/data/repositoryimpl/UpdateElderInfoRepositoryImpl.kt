@@ -14,7 +14,7 @@ class UpdateElderInfoRepositoryImpl @Inject constructor(
         runCatching {
             val response = eldersInfoService.updateElder(id, request)
             if (response.isSuccessful) {
-                response.body() ?: throw IllegalStateException("Response body is null")
+                response.body() ?: error("Response body is null")
             } else {
                 throw HttpException(response)
             }
@@ -23,7 +23,7 @@ class UpdateElderInfoRepositoryImpl @Inject constructor(
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
         val response = eldersInfoService.deleteElderSettings(id)
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             val body = response.errorBody()?.string().orEmpty()
             Log.e("DeleteElder", "HTTP ${response.code()} body=$body")
@@ -31,4 +31,3 @@ class UpdateElderInfoRepositoryImpl @Inject constructor(
         }
     }
 }
-

@@ -26,38 +26,38 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun SleepDetailCard(
     sleeps: SleepUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
-            //1) 총 수면 시간
+            // 1) 총 수면 시간
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Column {
                     Text(
                         text = "총 수면시간",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray5
+                        color = MediCareCallTheme.colors.gray5,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier,
-                        verticalAlignment = Alignment.Bottom
+                        verticalAlignment = Alignment.Bottom,
                     ) {
                         Text(
                             text = if (sleeps.isRecorded) "${sleeps.totalSleepHours}" else "--",
@@ -86,21 +86,21 @@ fun SleepDetailCard(
                 }
             }
 
-            //취침 + 기상
+            // 취침 + 기상
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                //2) 취침 시간
+                // 2) 취침 시간
                 Column {
                     Text(
                         text = "취침 시간",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray5
+                        color = MediCareCallTheme.colors.gray5,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = sleeps.bedTime.ifBlank { "오후 --:--" },
@@ -112,17 +112,17 @@ fun SleepDetailCard(
 
                 Spacer(modifier = Modifier.width(32.dp))
 
-                //3) 기상 시간
+                // 3) 기상 시간
                 Column {
                     Text(
                         text = "기상 시간",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray5
+                        color = MediCareCallTheme.colors.gray5,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(
                         modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = sleeps.wakeUpTime.ifBlank { "오전 --:--" },
@@ -136,7 +136,6 @@ fun SleepDetailCard(
     }
 }
 
-
 @Preview(showBackground = true, name = "기록 있음")
 @Composable
 fun PreviewSleepDetailCard_Recorded() {
@@ -147,8 +146,8 @@ fun PreviewSleepDetailCard_Recorded() {
             totalSleepMinutes = 12,
             bedTime = "오후 10:12",
             wakeUpTime = "오전 06:00",
-            isRecorded = true
-        )
+            isRecorded = true,
+        ),
     )
 }
 
@@ -156,6 +155,6 @@ fun PreviewSleepDetailCard_Recorded() {
 @Composable
 fun PreviewSleepDetailCard_Unrecorded() {
     SleepDetailCard(
-        sleeps = SleepUiState.Companion.EMPTY
+        sleeps = SleepUiState.Companion.EMPTY,
     )
 }

@@ -10,10 +10,9 @@ import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.domain.usecase.CheckLoginStatusUseCase
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
+import com.konkuk.medicarecall.ui.model.NavigationDestination
+import com.konkuk.medicarecall.ui.type.GenderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,7 +70,6 @@ class LoginViewModel @Inject constructor(
         isMale = new
     }
 
-
     // 서버 통신 함수
     private val debug = false
     fun postPhoneNumber(phone: String) {
@@ -82,7 +80,7 @@ class LoginViewModel @Inject constructor(
                         Log.d("httplog", "성공, ${it.message()}")
                     },
                     onFailure = { error ->
-                        Log.d("httplog", "실패, ${error.message.toString()}")
+                        Log.d("httplog", "실패, ${error.message}")
                     },
                 )
             }
@@ -114,10 +112,9 @@ class LoginViewModel @Inject constructor(
                             _events.emit(LoginEvent.VerificationSuccessNew)
                     }
                     .onFailure { error ->
-                        Log.d("httplog", "실패, ${error.message.toString()}")
+                        Log.d("httplog", "실패, ${error.message}")
                         _events.emit(LoginEvent.VerificationFailure)
                     }
-
             } else {
                 _events.emit(LoginEvent.VerificationSuccessNew)
             }
@@ -126,7 +123,6 @@ class LoginViewModel @Inject constructor(
 
     fun memberRegister(name: String, birthDate: String, gender: GenderType) {
         viewModelScope.launch {
-
             if (!debug) {
                 memberRegisterRepository.registerMember(
                     token,
@@ -149,15 +145,11 @@ class LoginViewModel @Inject constructor(
                         // 예: 에러 메시지 표시
                         Log.e("httplog", "회원가입 실패: ${exception.message}")
                         _events.emit(LoginEvent.MemberRegisterFailure)
-
                     }
             } else {
                 _events.emit(LoginEvent.MemberRegisterSuccess)
             }
-
         }
-
-
     }
 
     fun checkStatus() {
@@ -170,7 +162,4 @@ class LoginViewModel @Inject constructor(
     fun onNavigationHandled() {
         _navigationDestination.value = null
     }
-
-
 }
-

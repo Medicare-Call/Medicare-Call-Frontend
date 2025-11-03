@@ -41,9 +41,9 @@ jobs: # CI에서 수행할 작업을 정의한다.
         run: |
           echo '${{ secrets.GOOGLE_SERVICES }}' >> ./app/google-services.json
 
-#      - name: Code style checks
-#        run: |
-#          ./gradlew detekt
+      - name: Code style checks
+        run: |
+          ./gradlew detekt
 
       - name: Run build
         run: ./gradlew buildDebug --stacktrace

@@ -9,6 +9,6 @@ interface MentalService {
     @GET("elders/{elderId}/mental-analysis")
     suspend fun getDailyMental(
         @Path("elderId") elderId: Int,
-        @Query("date") date: String
+        @Query("date") date: String,
     ): MentalResponseDto
 }

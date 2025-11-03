@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.medicine.component
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,12 +31,11 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 
 @Composable
 fun MedicineDetailCard(
-    medicineName: String,               // 약 이름
-    todayRequiredCount: Int,            // 목표 복약 횟수
-    doseStatusList: List<DoseStatusItem>,   // 복용 상태 리스트 (초록/빨강/회색)
-    modifier: Modifier = Modifier
+    medicineName: String, // 약 이름
+    todayRequiredCount: Int, // 목표 복약 횟수
+    doseStatusList: List<DoseStatusItem>, // 복용 상태 리스트 (초록/빨강/회색)
+    modifier: Modifier = Modifier,
 ) {
-
     val safeRequired = remember(todayRequiredCount) { todayRequiredCount.coerceAtLeast(0) }
 
     val renderList = remember(doseStatusList, safeRequired) {
@@ -70,18 +68,17 @@ fun MedicineDetailCard(
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
             // 약이름 + 하루 복약 횟수
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = medicineName,
@@ -91,7 +88,7 @@ fun MedicineDetailCard(
 
                 Row(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "하루 ${todayRequiredCount}회 복약",
@@ -102,10 +99,9 @@ fun MedicineDetailCard(
             }
             Spacer(modifier = Modifier.height(12.dp))
 
-            //복약 아이콘 리스트
+            // 복약 아이콘 리스트
             Row {
                 renderList.forEach { item ->
-
                     val iconResId = when (item.doseStatus) {
                         DoseStatus.TAKEN -> R.drawable.ic_pill_taken
                         DoseStatus.SKIPPED -> R.drawable.ic_pill_untaken
@@ -134,7 +130,7 @@ fun PreviewMedicineDetailCard() {
         todayRequiredCount = 3,
         doseStatusList = listOf(
             DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
-            DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED)
-        )
+            DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED),
+        ),
     )
 }

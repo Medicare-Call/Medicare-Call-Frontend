@@ -36,7 +36,7 @@ fun HomeSleepContainer(
     totalSleepHours: Int,
     totalSleepMinutes: Int,
     isRecorded: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -44,29 +44,26 @@ fun HomeSleepContainer(
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
-            //1) Title: 수면
+            // 1) Title: 수면
             Row(
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp),
                     painter = painterResource(id = R.drawable.ic_sleep),
                     contentDescription = "sleep icon",
-
-                    )
+                )
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
@@ -74,22 +71,19 @@ fun HomeSleepContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //2) 수면 시간
+            // 2) 수면 시간
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
             ) {
-
                 Row(
                     modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-
                     val hoursText = if (isRecorded) "$totalSleepHours" else "--"
                     val minutesText = if (isRecorded) "$totalSleepMinutes" else "--"
                     val textColor =
@@ -101,11 +95,11 @@ fun HomeSleepContainer(
                             platformStyle = noFontPadding,
                             lineHeightStyle = LineHeightStyle(
                                 alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            )
+                                trim = LineHeightStyle.Trim.Both,
+                            ),
                         ),
                         modifier = Modifier.alignByBaseline(),
-                        color = textColor
+                        color = textColor,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
@@ -114,11 +108,11 @@ fun HomeSleepContainer(
                             platformStyle = noFontPadding,
                             lineHeightStyle = LineHeightStyle(
                                 alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            )
+                                trim = LineHeightStyle.Trim.Both,
+                            ),
                         ),
                         modifier = Modifier.alignByBaseline(),
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
 
@@ -128,11 +122,11 @@ fun HomeSleepContainer(
                             platformStyle = noFontPadding,
                             lineHeightStyle = LineHeightStyle(
                                 alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            )
+                                trim = LineHeightStyle.Trim.Both,
+                            ),
                         ),
                         modifier = Modifier.alignByBaseline(),
-                        color = textColor
+                        color = textColor,
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -143,20 +137,15 @@ fun HomeSleepContainer(
                             platformStyle = noFontPadding,
                             lineHeightStyle = LineHeightStyle(
                                 alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.Both
-                            )
+                                trim = LineHeightStyle.Trim.Both,
+                            ),
                         ),
                         modifier = Modifier.alignByBaseline(),
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
-
-
                 }
             }
-
-
         }
-
     }
 }
 
@@ -167,7 +156,7 @@ private fun PreviewHomeSleepContainerRecorded() {
         totalSleepHours = 8,
         totalSleepMinutes = 12,
         isRecorded = true,
-        onClick = {}
+        onClick = {},
     )
 }
 
@@ -178,6 +167,6 @@ private fun PreviewHomeSleepContainerNoRecord() {
         totalSleepHours = 0,
         totalSleepMinutes = 0,
         isRecorded = false,
-        onClick = {}
+        onClick = {},
     )
 }

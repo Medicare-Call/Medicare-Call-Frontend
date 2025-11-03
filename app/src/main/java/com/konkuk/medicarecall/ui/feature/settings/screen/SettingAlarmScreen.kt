@@ -38,7 +38,7 @@ fun SettingAlarmScreen(
     modifier: Modifier = Modifier,
     myDataViewModel: DetailMyDataViewModel = hiltViewModel(),
     myDataInfo: MyInfoResponseDto,
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
 ) {
     // 1. UI를 위한 로컬 상태를 선언합니다.
     var masterChecked by remember { mutableStateOf(false) }
@@ -58,14 +58,15 @@ fun SettingAlarmScreen(
     // 3. 상태를 업데이트하고 ViewModel을 호출하는 함수를 만듭니다. (코드 중복 제거)
     val updateSettings = {
         myDataViewModel.updateUserData(
-            userInfo = myDataInfo.copy( // 기존 데이터를 복사하여 변경사항만 적용
+            userInfo = myDataInfo.copy(
+                // 기존 데이터를 복사하여 변경사항만 적용
                 pushNotification = PushNotificationDto(
                     all = if (masterChecked) "ON" else "OFF",
                     carecallCompleted = if (completeChecked) "ON" else "OFF",
                     healthAlert = if (abnormalChecked) "ON" else "OFF",
-                    carecallMissed = if (missedChecked) "ON" else "OFF"
-                )
-            )
+                    carecallMissed = if (missedChecked) "ON" else "OFF",
+                ),
+            ),
         )
     }
 
@@ -73,7 +74,7 @@ fun SettingAlarmScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         SettingsTopAppBar(
             title = "푸시 알림 설정",
@@ -84,21 +85,21 @@ fun SettingAlarmScreen(
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             // 전체 푸시 알림
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text("전체 푸시 알림", style = MediCareCallTheme.typography.SB_16, color = Color.Black)
                 SwitchButton(
@@ -111,18 +112,18 @@ fun SettingAlarmScreen(
                         missedChecked = isChecked
                         // 5. 마지막에 변경된 최종 상태로 ViewModel을 호출합니다.
                         updateSettings()
-                    }
+                    },
                 )
             }
             // 케어콜 완료 알림
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     "케어콜 완료 알림",
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 SwitchButton(
                     checked = completeChecked,
@@ -132,18 +133,18 @@ fun SettingAlarmScreen(
                             masterChecked = false
                         }
                         updateSettings()
-                    }
+                    },
                 )
             }
             // 건강 이상 징후 알림
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     "건강 이상 징후 알림",
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 SwitchButton(
                     checked = abnormalChecked,
@@ -153,18 +154,18 @@ fun SettingAlarmScreen(
                             masterChecked = false
                         }
                         updateSettings()
-                    }
+                    },
                 )
             }
             // 케어콜 부재중 알림
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     "케어콜 부재중 알림",
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 SwitchButton(
                     checked = missedChecked,
@@ -174,7 +175,7 @@ fun SettingAlarmScreen(
                             masterChecked = false
                         }
                         updateSettings()
-                    }
+                    },
                 )
             }
         }

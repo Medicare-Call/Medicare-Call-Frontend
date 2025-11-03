@@ -26,7 +26,6 @@ object TokenSerializer : Serializer<Token> {
         return Json.decodeFromString(decodedJsonString)
     }
 
-
     override suspend fun writeTo(t: Token, output: OutputStream) {
         val json = Json.Default.encodeToString(t)
         val bytes = json.toByteArray()

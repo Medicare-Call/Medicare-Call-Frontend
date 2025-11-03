@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.statistics.weeklycard
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,9 +36,7 @@ fun WeeklySleepCard(
     val isUnrecorded = summary.weeklySleepHours == null
     val hoursText = if (isUnrecorded) "--" else summary.weeklySleepHours.toString()
     val minutesText = if (isUnrecorded) "--" else summary.weeklySleepMinutes.toString()
-    val textColor =
-        if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray8
-
+    val textColor = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray8
 
     Card(
         modifier = modifier
@@ -56,9 +53,7 @@ fun WeeklySleepCard(
             modifier = Modifier
                 .padding(20.dp),
         ) {
-
-            //1) Title: 평균 수면
-
+            // 1) Title: 평균 수면
             Text(
                 "평균수면",
                 style = MediCareCallTheme.typography.R_15,

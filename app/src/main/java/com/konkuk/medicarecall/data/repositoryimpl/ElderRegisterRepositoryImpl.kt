@@ -8,7 +8,6 @@ import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.ElderRegisterResponseDto
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
@@ -24,7 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class ElderRegisterRepositoryImpl @Inject constructor(
     private val elderRegisterService: ElderRegisterService,
-    private val elderIdRepository: ElderIdRepository,
+//    private val elderIdRepository: ElderIdRepository,
 ) : ElderRegisterRepository {
     private suspend fun postElder(elderData: ElderData): ElderRegisterResponseDto {
         val response = elderRegisterService.postElder(
@@ -38,7 +37,7 @@ class ElderRegisterRepositoryImpl @Inject constructor(
             ),
         )
         if (response.isSuccessful) {
-            return response.body() ?: throw IllegalStateException("Response body is null")
+            return response.body() ?: error("Response body is null")
         } else {
             val errorBody = response.errorBody()?.string() ?: "Unknown error"
             throw HttpException(response)
@@ -78,7 +77,7 @@ class ElderRegisterRepositoryImpl @Inject constructor(
             ),
         )
         if (response.isSuccessful) {
-            response.body() ?: throw IllegalStateException("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             throw HttpException(response)
         }

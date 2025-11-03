@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class CheckLoginStatusUseCase @Inject constructor(
     private val eldersInfoRepository: EldersInfoRepository,
-    private val elderIdRepository: ElderIdRepository
+    private val elderIdRepository: ElderIdRepository,
 ) {
     /**
      * 앱의 초기 상태를 확인하여 다음에 이동할 화면을 결정합니다.
@@ -37,7 +37,7 @@ class CheckLoginStatusUseCase @Inject constructor(
             val elderIds = elderIdRepository.getElderIds()
             elderIds.forEach {
                 eldersInfoRepository.getCareCallTimes(it.values.first())
-                    .onSuccess { Log.d("httplog", "시간 설정 정보 확인 완료, ${it}") }
+                    .onSuccess { Log.d("httplog", "시간 설정 정보 확인 완료, $it") }
                     .onFailure { exception ->
                         when (exception) {
                             is HttpException -> {
@@ -52,8 +52,6 @@ class CheckLoginStatusUseCase @Inject constructor(
                                         Log.d("httplog", "시간 설정 정보 없음, 시간 등록 화면으로")
                                         return@runCatching NavigationDestination.GoToTimeSetting
                                     }
-
-
                                     else -> {
                                         return@runCatching NavigationDestination.GoToLogin
                                     }
@@ -75,7 +73,6 @@ class CheckLoginStatusUseCase @Inject constructor(
             // 모든 정보가 있으면 홈 화면으로
             Log.d("httplog", "모든 정보 있음, 홈 화면으로")
             NavigationDestination.GoToHome
-
         }.getOrElse { exception ->
             // runCatching 블록 내에서 Exception이 발생하면 이 부분이 실행됩니다.
             Log.d("httplog", "상태 확인 중 Exception 발생. 로그인 화면으로 이동.", exception)

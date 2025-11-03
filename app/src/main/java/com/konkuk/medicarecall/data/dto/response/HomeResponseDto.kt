@@ -9,7 +9,6 @@ data class HomeResponseDto(
     @SerialName("elderName")
     val elderName: String = "",
 
-
     @SerialName("aiSummary")
     val aiSummary: String = "",
 
@@ -19,13 +18,13 @@ data class HomeResponseDto(
     val sleep: SleepDto? = null,
     val healthStatus: String? = null,
     val mentalStatus: String? = null,
-    val bloodSugar: BloodSugarDto? = null
+    val bloodSugar: BloodSugarDto? = null,
 ) {
     @Serializable
     data class MealStatusDto(
         val breakfast: Boolean? = null,
         val lunch: Boolean? = null,
-        val dinner: Boolean? = null
+        val dinner: Boolean? = null,
     )
 
     @Serializable
@@ -33,7 +32,7 @@ data class HomeResponseDto(
         val totalTaken: Int = 0,
         val totalGoal: Int = 0,
         val nextMedicationTime: String? = null,
-        val medicationList: List<MedicationDto> = emptyList()
+        val medicationList: List<MedicationDto> = emptyList(),
     )
 
     @Serializable
@@ -41,19 +40,18 @@ data class HomeResponseDto(
         val type: String = "",
         val taken: Int = 0,
         val goal: Int = 0,
-        val nextTime: String? = null
+        val nextTime: String? = null,
     )
 
     @Serializable
     data class SleepDto(
         val meanHours: Int = 0,
-        val meanMinutes: Int = 0
+        val meanMinutes: Int = 0,
     )
-
 
     @Serializable
     data class BloodSugarDto(
         @SerialName("meanValue")
-        val meanValue: Int = 0
+        val meanValue: Int = 0,
     )
 }

@@ -66,5 +66,4 @@ class DateOfBirthVisualTransformation : VisualTransformation {
 
         return TransformedText(AnnotatedString(formatted), offsetTranslator)
     }
-
 }

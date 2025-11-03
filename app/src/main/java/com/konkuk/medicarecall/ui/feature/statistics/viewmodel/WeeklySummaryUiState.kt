@@ -24,7 +24,7 @@ data class WeeklySummaryUiState(
     val weeklySleepMinutes: Int? = 0,
     val weeklySleepRecorded: Boolean = true,
     val weeklyMental: WeeklyMentalUiState = WeeklyMentalUiState.EMPTY,
-    val weeklyGlucose: WeeklyGlucoseUiState = WeeklyGlucoseUiState.EMPTY
+    val weeklyGlucose: WeeklyGlucoseUiState = WeeklyGlucoseUiState.EMPTY,
 ) {
     companion object {
 
@@ -37,14 +37,14 @@ data class WeeklySummaryUiState(
             weeklyMeals = listOf(
                 WeeklyMealUiState("아침", -1, 7),
                 WeeklyMealUiState("점심", -1, 7),
-                WeeklyMealUiState("저녁", -1, 7)
+                WeeklyMealUiState("저녁", -1, 7),
             ),
             weeklyMedicines = emptyList(),
             weeklyHealthNote = "아직 충분한 기록이 쌓이지 않았어요.",
             weeklySleepHours = null,
             weeklySleepMinutes = null,
             weeklyMental = WeeklyMentalUiState.EMPTY,
-            weeklyGlucose = WeeklyGlucoseUiState.EMPTY
+            weeklyGlucose = WeeklyGlucoseUiState.EMPTY,
         )
     }
 }
@@ -54,9 +54,9 @@ data class WeeklySummaryUiState(
  * ex) 아침 7/7, 점심 5/7, 저녁 1/7
  */
 data class WeeklyMealUiState(
-    val mealType: String,  // 예: "아침"
-    val eatenCount: Int?,   // 실제 완료 횟수
-    val totalCount: Int    // 총 예정 횟수 (보통 7)
+    val mealType: String, // 예: "아침"
+    val eatenCount: Int?, // 실제 완료 횟수
+    val totalCount: Int, // 총 예정 횟수 (보통 7)
 )
 
 /**
@@ -65,8 +65,8 @@ data class WeeklyMealUiState(
  */
 data class WeeklyMedicineUiState(
     val medicineName: String, // 예: "혈압약"
-    val takenCount: Int?,      // 완료 횟수
-    val totalCount: Int       // 총 예정 횟수
+    val takenCount: Int?, // 완료 횟수
+    val totalCount: Int, // 총 예정 횟수
 )
 
 /**
@@ -74,16 +74,16 @@ data class WeeklyMedicineUiState(
  * ex) 좋음 4, 보통 4, 나쁨 4
  */
 data class WeeklyMentalUiState(
-    val good: Int,    // 좋음 횟수
-    val normal: Int,  // 보통 횟수
-    val bad: Int      // 나쁨 횟수
+    val good: Int, // 좋음 횟수
+    val normal: Int, // 보통 횟수
+    val bad: Int, // 나쁨 횟수
 ) {
 
     companion object {
         val EMPTY = WeeklyMentalUiState(
             good = -1,
             normal = -1,
-            bad = -1
+            bad = -1,
         )
     }
 }
@@ -95,12 +95,12 @@ data class WeeklyMentalUiState(
  */
 data class WeeklyGlucoseUiState(
     val beforeMealNormal: Int, // 공복 정상 횟수
-    val beforeMealHigh: Int,   // 공복 높음 횟수
-    val beforeMealLow: Int,    // 공복 낮음 횟수
+    val beforeMealHigh: Int, // 공복 높음 횟수
+    val beforeMealLow: Int, // 공복 낮음 횟수
 
-    val afterMealNormal: Int,  // 식후 정상 횟수
-    val afterMealHigh: Int,    // 식후 높음 횟수
-    val afterMealLow: Int      // 식후 낮음 횟수
+    val afterMealNormal: Int, // 식후 정상 횟수
+    val afterMealHigh: Int, // 식후 높음 횟수
+    val afterMealLow: Int, // 식후 낮음 횟수
 ) {
     companion object {
         val EMPTY = WeeklyGlucoseUiState(
@@ -109,7 +109,7 @@ data class WeeklyGlucoseUiState(
             beforeMealLow = 0,
             afterMealNormal = 0,
             afterMealHigh = 0,
-            afterMealLow = 0
+            afterMealLow = 0,
         )
     }
 }

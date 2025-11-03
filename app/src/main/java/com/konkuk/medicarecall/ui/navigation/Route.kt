@@ -69,7 +69,6 @@ sealed interface Route {
     @Serializable
     data class ElderPersonalDetail(val info: EldersInfoResponseDto) : Route
 
-
     @Serializable
     data object ElderHealthInfo : Route
 

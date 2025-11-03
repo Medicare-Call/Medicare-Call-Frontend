@@ -21,7 +21,7 @@ class VerificationRepositoryImpl @Inject constructor(
             )
 
             if (response.isSuccessful) {
-                response.body() ?: throw IllegalStateException("Response body is null")
+                response.body() ?: error("Response body is null")
             } else {
                 throw HttpException(response)
             }

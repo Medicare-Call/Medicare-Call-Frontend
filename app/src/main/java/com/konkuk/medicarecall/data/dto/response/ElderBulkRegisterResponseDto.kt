@@ -24,5 +24,5 @@ data class ElderInfo(
     @SerialName("guardianId")
     val guardianId: Int,
     @SerialName("guardianName")
-    val guardianName: String
+    val guardianName: String,
 )

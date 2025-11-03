@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class MemberRegisterRequestDto(
     val name: String,
     val birthDate: String,
-    val gender: GenderType // MALE, FEMALE
+    val gender: GenderType, // MALE, FEMALE
 )

@@ -53,10 +53,9 @@ fun GlucoseListItem(
                 .padding(20.dp, 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Column {
                 Text(
-                    //아침|공복 or 저녁|식후
+                    // 아침|공복 or 저녁|식후
                     text = timingLabel,
                     style = MediCareCallTheme.typography.R_14,
                     color = MediCareCallTheme.colors.gray6,
@@ -64,7 +63,7 @@ fun GlucoseListItem(
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
-                        //혈당값
+                        // 혈당값
                         text = value.toString(),
                         style = MediCareCallTheme.typography.SB_16,
                         color = MediCareCallTheme.colors.gray6,
@@ -83,7 +82,7 @@ fun GlucoseListItem(
             GlucoseStatusChip(
                 value = value,
                 timing = timing,
-            )//낮음,정상,높음
+            ) // 낮음,정상,높음
         }
     }
 }

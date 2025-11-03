@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,8 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
@@ -35,18 +32,15 @@ import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
-import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
-
 
 @Composable
 fun StateHealthDetail(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
-    healthViewModel: HealthViewModel = hiltViewModel()
+    healthViewModel: HealthViewModel = hiltViewModel(),
 ) {
-
     val isLoading = healthViewModel.isLoading.collectAsState()
 
     val homeViewModel: HomeViewModel = hiltViewModel()
@@ -69,8 +63,6 @@ fun StateHealthDetail(
         }
     }
 
-
-
     if (!isLoading.value)
         StateHealthDetailLayout(
             modifier = Modifier,
@@ -79,17 +71,20 @@ fun StateHealthDetail(
             health = health,
             weekDates = calendarViewModel.getCurrentWeekDates(),
             onDateSelected = { calendarViewModel.selectDate(it) },
-            onMonthClick = { /* 모달 열기 */ }
+            onMonthClick = { /* 모달 열기 */ },
         )
     else
-        Box(Modifier.fillMaxSize().background(color = MediCareCallTheme.colors.white)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(color = MediCareCallTheme.colors.white),
+        ) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
-                color = MediCareCallTheme.colors.main
+                color = MediCareCallTheme.colors.main,
             )
         }
 }
-
 
 @Composable
 fun StateHealthDetailLayout(
@@ -99,17 +94,17 @@ fun StateHealthDetailLayout(
     health: HealthUiState,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
-    onMonthClick: () -> Unit
+    onMonthClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         TopAppBar(
             title = "건강징후",
-            onBack = onBack
+            onBack = onBack,
         )
         Spacer(Modifier.height(4.dp))
         Column(
@@ -117,12 +112,12 @@ fun StateHealthDetailLayout(
                 .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
             DateSelector(
                 selectedDate = selectedDate,
                 onMonthClick = onMonthClick,
-                onDateSelected = onDateSelected
+                onDateSelected = onDateSelected,
             )
             Spacer(Modifier.height(24.dp))
             WeeklyCalendar(
@@ -130,18 +125,17 @@ fun StateHealthDetailLayout(
                     currentYear = selectedDate.year,
                     currentMonth = selectedDate.monthValue,
                     weekDates = weekDates,
-                    selectedDate = selectedDate
+                    selectedDate = selectedDate,
                 ),
-                onDateSelected = onDateSelected
+                onDateSelected = onDateSelected,
             )
             Spacer(modifier = Modifier.height(32.dp))
             StateHealthDetailCard(
-                health = health
+                health = health,
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -153,7 +147,7 @@ fun PreviewStateHealthDetail() {
             health = HealthUiState.Companion.EMPTY,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
-            onMonthClick = {}
+            onMonthClick = {},
         )
     }
 }

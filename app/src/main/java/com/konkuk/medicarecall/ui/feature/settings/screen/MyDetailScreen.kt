@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,32 +28,31 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
-import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailMyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
-import com.konkuk.medicarecall.ui.common.util.isValidDate
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.GenderType
 
 @Composable
 fun MyDetailScreen(
     myDataInfo: MyInfoResponseDto,
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    detailMyDataViewModel: DetailMyDataViewModel = hiltViewModel()
+    detailMyDataViewModel: DetailMyDataViewModel = hiltViewModel(),
 ) {
     var isMale by remember { mutableStateOf<Boolean>(myDataInfo.gender == GenderType.MALE) }
     var name by remember { mutableStateOf(myDataInfo.name) }
     var birth by remember { mutableStateOf(myDataInfo.birthDate.replace("-", "")) }
     val scrollState = rememberScrollState()
 
-    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         SettingsTopAppBar(
             title = "내 정보 설정",
@@ -63,7 +61,7 @@ fun MyDetailScreen(
                     painterResource(id = R.drawable.ic_settings_back),
                     contentDescription = "setting back",
                     modifier = Modifier.clickable { onBack() },
-                    tint = MediCareCallTheme.colors.black
+                    tint = MediCareCallTheme.colors.black,
                 )
             },
         )
@@ -77,7 +75,7 @@ fun MyDetailScreen(
                 value = name,
                 onValueChange = { name = it },
                 category = "이름",
-                placeHolder = "이름"
+                placeHolder = "이름",
             )
             Spacer(modifier = modifier.height(20.dp))
             DefaultTextField(
@@ -87,30 +85,29 @@ fun MyDetailScreen(
                 placeHolder = "YYYY / MM / DD",
                 keyboardType = KeyboardType.Number,
                 visualTransformation = DateOfBirthVisualTransformation(),
-                maxLength = 8
+                maxLength = 8,
             )
             Spacer(modifier = modifier.height(20.dp))
-            Column() {
+            Column {
                 Text(
                     "성별",
                     style = MediCareCallTheme.typography.M_17,
-                    color = MediCareCallTheme.colors.gray7
+                    color = MediCareCallTheme.colors.gray7,
                 )
                 Spacer(modifier = modifier.height(10.dp))
                 GenderToggleButton(
                     isMale = isMale,
-                    onGenderChange =
-                        { newValue ->
-                            isMale = newValue
-                        }
+                    onGenderChange = { newValue ->
+                        isMale = newValue
+                    },
                 )
             }
             Spacer(modifier = modifier.height(30.dp))
             CTAButton(
-                type = if (name.matches(Regex("^[가-힣a-zA-Z]*$"))
-                    && birth.length == 8
-                    && birth.isValidDate()
-                    && isMale != null
+                type = if (name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
+                    birth.length == 8 &&
+                    birth.isValidDate() &&
+                    isMale != null
                 ) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                 text = "확인",
                 onClick = {
@@ -120,17 +117,14 @@ fun MyDetailScreen(
                             name = name,
                             birthDate = birth.replaceFirst(
                                 "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
-                                "$1-$2-$3"
+                                "$1-$2-$3",
                             ),
                             gender = gender,
                             phone = myDataInfo.phone,
-                            pushNotification = myDataInfo.pushNotification
-                        )
-                    ) {
-                        onBack()
-
-                    }
-                }
+                            pushNotification = myDataInfo.pushNotification,
+                        ),
+                    ) { onBack() }
+                },
             )
         }
     }

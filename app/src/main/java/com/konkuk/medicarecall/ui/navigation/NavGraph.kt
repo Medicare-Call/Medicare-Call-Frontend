@@ -127,7 +127,6 @@ fun NavGraph(
             )
         }
 
-
         // 홈 상세 화면_복용 화면
         composable<Route.MedicationDetail> {
             MedicineDetail(
@@ -135,37 +134,33 @@ fun NavGraph(
             )
         }
 
-
-        //홈 상세 화면_수면 화면
+        // 홈 상세 화면_수면 화면
         composable<Route.SleepDetail> {
             SleepDetail(
                 onBack = { navController.popBackStack() },
             )
         }
 
-
-        //홈 상세 화면_건강 징후 화면
+        // 홈 상세 화면_건강 징후 화면
         composable<Route.HealthAnalysisDetail> {
             StateHealthDetail(
                 onBack = { navController.popBackStack() },
             )
         }
 
-        //홈 상세 화면_심리 상태 화면
+        // 홈 상세 화면_심리 상태 화면
         composable<Route.MentalAnalysisDetail> {
             StateMentalDetail(
                 onBack = { navController.popBackStack() },
             )
         }
 
-
-        //홈 상세 화면_혈당 화면
+        // 홈 상세 화면_혈당 화면
         composable<Route.GlucoseDetail> {
             GlucoseDetail(
                 onBack = { navController.popBackStack() },
             )
         }
-
 
         // 통계
         composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
@@ -189,7 +184,7 @@ fun NavGraph(
 
         // 설정
         composable<MainTabRoute.Settings> {
-            //TopLevelBackHandler(navController)
+            // TopLevelBackHandler(navController)
             SettingsScreen(
                 navigateToUserInfo = {
                     navController.navigate(Route.UserInfo)

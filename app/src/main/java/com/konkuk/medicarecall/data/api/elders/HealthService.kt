@@ -9,6 +9,6 @@ interface HealthService {
     @GET("elders/{elderId}/health-analysis")
     suspend fun getDailyHealth(
         @Path("elderId") elderId: Int,
-        @Query("date") date: String
+        @Query("date") date: String,
     ): HealthResponseDto
 }
