@@ -31,7 +31,7 @@ import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun PersonalInfoScreen(
+fun ElderInfoScreen(
     onBack: () -> Unit = {},
     navigateToElderDetail: (elderInfo: EldersInfoResponseDto) -> Unit = {},
     personalViewModel: EldersInfoViewModel = hiltViewModel(),

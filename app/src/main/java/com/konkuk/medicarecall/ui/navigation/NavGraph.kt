@@ -42,8 +42,8 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.PersonalDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.PersonalInfoScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
@@ -216,7 +216,7 @@ fun NavGraph(
         }
 
         composable<Route.ElderPersonalInfo> {
-            PersonalInfoScreen(
+            ElderInfoScreen(
                 onBack = {
                     navController.popBackStack()
                 },
@@ -230,7 +230,7 @@ fun NavGraph(
             typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
         ) { navBackstackEntry ->
             val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
-            PersonalDetailScreen(
+            ElderDetailScreen(
                 onBack = { navController.popBackStack() },
                 eldersInfoResponseDto = elderInfo,
                 navController = navController,
