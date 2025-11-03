@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import com.konkuk.medicarecall.data.api.MealService
+import com.konkuk.medicarecall.data.api.elders.MealService
 import com.konkuk.medicarecall.data.repository.MealRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import java.time.LocalDate

@@ -25,43 +25,55 @@ fun GlucoseListItem(
     date: LocalDate,
     timingLabel: String,
     value: Int,
-    timing: GlucoseTiming
+    timing: GlucoseTiming,
 ) {
     val formatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN)
     val formattedDate = date.format(formatter)
-    Column(modifier = modifier.padding(horizontal = 20.dp)) {
-        // 날짜 텍스트
-        Text(
-            text = formattedDate,
-            style = MediCareCallTheme.typography.R_14,
-            color = MediCareCallTheme.colors.gray4
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp),
+        ) {
+            // 날짜 텍스트
+            Text(
+                text = formattedDate,
+                style = MediCareCallTheme.typography.R_14,
+                color = MediCareCallTheme.colors.gray6,
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp, 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
 
             Column {
-                Text(//아침|공복 or 저녁|식후
+                Text(
+                    //아침|공복 or 저녁|식후
                     text = timingLabel,
                     style = MediCareCallTheme.typography.R_14,
-                    color = MediCareCallTheme.colors.gray6
+                    color = MediCareCallTheme.colors.gray6,
                 )
-
+                Spacer(modifier = Modifier.height(2.dp))
                 Row(verticalAlignment = Alignment.Bottom) {
-                    Text(//혈당값
+                    Text(
+                        //혈당값
                         text = value.toString(),
                         style = MediCareCallTheme.typography.SB_16,
-                        color = MediCareCallTheme.colors.gray6
+                        color = MediCareCallTheme.colors.gray6,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "mg/dL",
                         style = MediCareCallTheme.typography.R_14,
-                        color = MediCareCallTheme.colors.gray6
+                        color = MediCareCallTheme.colors.gray6,
                     )
                 }
             }
@@ -70,14 +82,11 @@ fun GlucoseListItem(
 
             GlucoseStatusChip(
                 value = value,
-                timing = timing
+                timing = timing,
             )//낮음,정상,높음
-
-
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -87,7 +96,7 @@ private fun PreviewGlucoseListItem() {
             date = LocalDate.now(),
             timingLabel = "아침 | 공복",
             value = 180,
-            timing = GlucoseTiming.BEFORE_MEAL
+            timing = GlucoseTiming.BEFORE_MEAL,
         )
     }
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,18 +20,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun NameBar(
     name: String,
+    notificationCount: Int,
     modifier: Modifier = Modifier,
-    navController: NavHostController,
-    onDropdownClick: () -> Unit
+    navigateToAlarm: () -> Unit = {},
+    onDropdownClick: () -> Unit,
 ) {
 
 
@@ -40,44 +37,38 @@ fun NameBar(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = 16.dp, vertical = 14.dp)
                 .background(Color.White),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-
-
             Row(
                 Modifier.clickable(
                     indication = null,
-                    interactionSource = null
+                    interactionSource = null,
                 ) { onDropdownClick() },
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = name,
                     style = MediCareCallTheme.typography.SB_24,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     modifier = Modifier
 
                         .size(18.dp),
-                    painter = painterResource(id = R.drawable.ic_arrow_down),
+                    painter = painterResource(id = R.drawable.ic_arrow_down_big),
                     contentDescription = "arrow down",
-                    tint = MediCareCallTheme.colors.gray3
+                    tint = MediCareCallTheme.colors.gray3,
                 )
 
             }
 
-            Icon(
-                painter = painterResource(id = R.drawable.ic_bell),
-                "bell",
-                tint = Color.Unspecified,
-                modifier = modifier.clickable { navController.navigate(route = Route.Alarm.route) }
+            NotificationIconWithBadge(
+                notificationCount = notificationCount,
+                onClick = navigateToAlarm,
             )
         }
 
@@ -88,14 +79,11 @@ fun NameBar(
 @Preview
 @Composable
 fun PreviewNameBar() {
-
     MediCareCallTheme {
-
         NameBar(
             name = "김옥자",
-            navController = rememberNavController(),
-            onDropdownClick = {}
+            notificationCount = 4,
+            onDropdownClick = {},
         )
     }
-
 }

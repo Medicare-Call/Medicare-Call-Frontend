@@ -35,7 +35,7 @@ fun HomeStateHealthContainer(
 
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
@@ -58,7 +58,7 @@ fun HomeStateHealthContainer(
                 Image(
                     modifier = Modifier
                         .size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_state_health),
+                    painter = painterResource(id = R.drawable.ic_heart),
                     contentDescription = "health state icon",
 
                     )
@@ -66,26 +66,23 @@ fun HomeStateHealthContainer(
 
                 Text(
                     "건강징후",
-                    style = MediCareCallTheme.typography.SB_18,
-                    color = MediCareCallTheme.colors.main,
+                    style = MediCareCallTheme.typography.R_16,
+                    color = MediCareCallTheme.colors.gray8,
                 )
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             //2) 상태
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
-
                 ) {
-
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     val textColor = if (healthStatus.isBlank()) {
                         MediCareCallTheme.colors.gray4
                     } else {

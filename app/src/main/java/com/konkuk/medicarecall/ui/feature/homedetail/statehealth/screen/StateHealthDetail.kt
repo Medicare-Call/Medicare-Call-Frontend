@@ -26,32 +26,30 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
+import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 
 @Composable
 fun StateHealthDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     healthViewModel: HealthViewModel = hiltViewModel()
 ) {
 
     val isLoading = healthViewModel.isLoading.collectAsState()
 
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -76,7 +74,7 @@ fun StateHealthDetail(
     if (!isLoading.value)
         StateHealthDetailLayout(
             modifier = Modifier,
-            navController = navController,
+            onBack = onBack,
             selectedDate = selectedDate,
             health = health,
             weekDates = calendarViewModel.getCurrentWeekDates(),
@@ -96,7 +94,7 @@ fun StateHealthDetail(
 @Composable
 fun StateHealthDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     health: HealthUiState,
     weekDates: List<LocalDate>,
@@ -111,10 +109,12 @@ fun StateHealthDetailLayout(
     ) {
         TopAppBar(
             title = "건강징후",
-            navController = navController
+            onBack = onBack
         )
+        Spacer(Modifier.height(4.dp))
         Column(
             modifier = Modifier
+                .background(MediCareCallTheme.colors.bg)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp)
@@ -124,7 +124,7 @@ fun StateHealthDetailLayout(
                 onMonthClick = onMonthClick,
                 onDateSelected = onDateSelected
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(24.dp))
             WeeklyCalendar(
                 calendarUiState = CalendarUiState(
                     currentYear = selectedDate.year,
@@ -134,7 +134,7 @@ fun StateHealthDetailLayout(
                 ),
                 onDateSelected = onDateSelected
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             StateHealthDetailCard(
                 health = health
             )
@@ -148,7 +148,7 @@ fun StateHealthDetailLayout(
 fun PreviewStateHealthDetail() {
     MediCareCallTheme {
         StateHealthDetailLayout(
-            navController = rememberNavController(),
+            onBack = {},
             selectedDate = LocalDate.now(),
             health = HealthUiState.Companion.EMPTY,
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },

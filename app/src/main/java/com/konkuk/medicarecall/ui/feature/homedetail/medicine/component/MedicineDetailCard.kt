@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+// import androidx.compose.ui.graphics.ColorFilter // ColorFilter는 더 이상 필요 없으므로 import 삭제 가능
 import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,14 +33,12 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun MedicineDetailCard(
     medicineName: String,               // 약 이름
-    todayTakenCount: Int,               // 오늘 복약 완료 횟수
     todayRequiredCount: Int,            // 목표 복약 횟수
     doseStatusList: List<DoseStatusItem>,   // 복용 상태 리스트 (초록/빨강/회색)
     modifier: Modifier = Modifier
 ) {
-    // 이상치 방어
-    val safeRequired = remember(todayRequiredCount) { todayRequiredCount.coerceAtLeast(0) }
 
+    val safeRequired = remember(todayRequiredCount) { todayRequiredCount.coerceAtLeast(0) }
 
     val renderList = remember(doseStatusList, safeRequired) {
         if (safeRequired == 0) {
@@ -68,7 +66,7 @@ fun MedicineDetailCard(
     }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
@@ -81,7 +79,7 @@ fun MedicineDetailCard(
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
-            // 제목 + 하루 복약 횟수
+            // 약이름 + 하루 복약 횟수
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -102,23 +100,25 @@ fun MedicineDetailCard(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             //복약 아이콘 리스트
             Row {
                 renderList.forEach { item ->
-                    val tintColor = when (item.doseStatus) {
-                        DoseStatus.TAKEN -> MediCareCallTheme.colors.positive
-                        DoseStatus.SKIPPED -> MediCareCallTheme.colors.negative
-                        DoseStatus.NOT_RECORDED -> MediCareCallTheme.colors.gray2
+
+                    val iconResId = when (item.doseStatus) {
+                        DoseStatus.TAKEN -> R.drawable.ic_pill_taken
+                        DoseStatus.SKIPPED -> R.drawable.ic_pill_untaken
+                        DoseStatus.NOT_RECORDED -> R.drawable.ic_pill_uncheck
                     }
+
                     Image(
-                        painter = painterResource(R.drawable.ic_pills_basic),
+
+                        painter = painterResource(iconResId),
                         contentDescription = "복약 상태 아이콘",
                         modifier = Modifier
                             .size(32.dp)
                             .padding(end = 8.dp),
-                        colorFilter = ColorFilter.tint(tintColor)
                     )
                 }
             }
@@ -131,12 +131,10 @@ fun MedicineDetailCard(
 fun PreviewMedicineDetailCard() {
     MedicineDetailCard(
         medicineName = "당뇨약",
-        todayTakenCount = 2,
         todayRequiredCount = 3,
         doseStatusList = listOf(
             DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
-            DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.TAKEN)
+            DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED)
         )
     )
 }
-

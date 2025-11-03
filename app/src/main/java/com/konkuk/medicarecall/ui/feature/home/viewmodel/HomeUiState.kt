@@ -22,7 +22,7 @@ data class HomeUiState(
 
         fun from(dto: HomeResponseDto): HomeUiState = HomeUiState(
             elderName = dto.elderName,
-            balloonMessage = dto.aiSummary,
+            balloonMessage = dto.aiSummary.orEmpty(),
 
             // 기록 존재 여부(세 끼 중 하나라도 null 아님)
             isRecorded = listOf(

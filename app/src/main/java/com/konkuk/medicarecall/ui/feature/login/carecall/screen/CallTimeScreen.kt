@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -45,11 +46,11 @@ import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBot
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel.CallTimeViewModel
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.model.CallTimes
-import com.konkuk.medicarecall.ui.type.TimeSettingType
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
+import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.TimeSettingType
 import kotlinx.coroutines.launch
 
 
@@ -64,12 +65,10 @@ fun Triple<Int, Int, Int>.toDisplayString(): String {
 fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navigatedToPayment : () -> Unit = {},
+    navigateToPayment: () -> Unit = {},
     eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
-    callTimeViewModel: CallTimeViewModel = hiltViewModel()
+    callTimeViewModel: CallTimeViewModel = hiltViewModel(),
 ) {
-
-
     LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
 
     val isLoading = eldersInfoViewModel.isLoading.value
@@ -83,11 +82,11 @@ fun CallTimeScreen(
                     .fillMaxSize()
                     .background(MediCareCallTheme.colors.bg)
                     .systemBarsPadding(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(
                     color = MediCareCallTheme.colors.main,
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
             return
@@ -97,14 +96,14 @@ fun CallTimeScreen(
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text("어르신 정보를 불러오지 못했어요.\n잠시 후 다시 시도해 주세요.")
                 Spacer(Modifier.height(12.dp))
                 CTAButton(
                     type = CTAButtonType.GREEN,
                     text = "다시 시도",
-                    onClick = { eldersInfoViewModel.refresh() }
+                    onClick = { eldersInfoViewModel.refresh() },
                 )
             }
             return
@@ -137,17 +136,17 @@ fun CallTimeScreen(
             .background(MediCareCallTheme.colors.bg)
             .padding(horizontal = 20.dp)
             .systemBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         LoginBackButton(onClick = onBack)
         Column(
-            modifier = modifier.verticalScroll(scrollState)
+            modifier = modifier.verticalScroll(scrollState),
         ) {
             Spacer(modifier = modifier.height(20.dp))
             Text(
                 text = "케어콜 설정하기",
-                style = MediCareCallTheme.typography.M_17,
-                color = MediCareCallTheme.colors.gray8
+                style = MediCareCallTheme.typography.B_26,
+                color = MediCareCallTheme.colors.gray8,
             )
             Spacer(modifier = modifier.height(20.dp))
             Column(
@@ -157,55 +156,65 @@ fun CallTimeScreen(
                     .border(
                         width = (1.2).dp,
                         color = MediCareCallTheme.colors.gray2,
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(20.dp),
                     )
                     .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                Box(
-                    modifier = modifier
-                        .background(
-                            color = MediCareCallTheme.colors.g100,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                ) {
-                    Text(
-                        text = "매일 2회 풀케어",
-                        style = MediCareCallTheme.typography.R_14,
-                        color = MediCareCallTheme.colors.main
-                    )
-                }
-
                 Row(
-                    modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text(
-                        text = "프리미엄",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.B_26
-                    )
-                    Spacer(modifier = modifier.weight(1f))
-                    Text(
-                        text = "₩29,000/월",
-                        color = MediCareCallTheme.colors.main,
-                        style = MediCareCallTheme.typography.B_17
-                    )
+                    Column {
+                        Box(
+                            modifier = modifier
+                                .background(
+                                    color = MediCareCallTheme.colors.g50,
+                                    shape = RoundedCornerShape(10.dp),
+                                )
+                                .padding(vertical = 4.dp, horizontal = 8.dp),
+                        ) {
+                            Text(
+                                text = "특별 할인",
+                                style = MediCareCallTheme.typography.R_14,
+                                color = MediCareCallTheme.colors.main,
+                            )
+                        }
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = "프리미엄",
+                            color = MediCareCallTheme.colors.gray7,
+                            style = MediCareCallTheme.typography.B_26,
+                        )
+                    }
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "₩29,000/월",
+                            color = MediCareCallTheme.colors.gray4,
+                            style = MediCareCallTheme.typography.R_14,
+                            textDecoration = TextDecoration.LineThrough,
+                        )
+                        Text(
+                            text = "무료 체험",
+                            color = MediCareCallTheme.colors.black,
+                            style = MediCareCallTheme.typography.B_17,
+                        )
+                    }
                 }
 
-                Box(
+
+                HorizontalDivider(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .width(1.dp)
-                        .background(MediCareCallTheme.colors.gray2)
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MediCareCallTheme.colors.gray2,
                 )
                 Column(
                     modifier = modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    CallTimeBenefit("매일 2회 케어콜 제공")
-                    CallTimeBenefit("건강 리포트 제공")
+                    CallTimeBenefit("매일 3회 케어콜 제공")
                     CallTimeBenefit("무제한 보호자 지정")
                 }
             }
@@ -215,7 +224,7 @@ fun CallTimeScreen(
             Text(
                 text = "전화 시간대",
                 style = MediCareCallTheme.typography.M_17,
-                color = MediCareCallTheme.colors.gray8
+                color = MediCareCallTheme.colors.gray8,
             )
             Spacer(modifier = modifier.height(10.dp))
             val listState = rememberLazyListState()
@@ -225,7 +234,7 @@ fun CallTimeScreen(
                 state = listState,
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 itemsIndexed(elderNames) { idx, name ->
                     Text(
@@ -235,11 +244,11 @@ fun CallTimeScreen(
                             .border(
                                 width = if (idx == selectedIndex) 0.dp else (1.2).dp,
                                 color = if (idx == selectedIndex) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                                shape = RoundedCornerShape(100.dp)
+                                shape = RoundedCornerShape(100.dp),
                             )
                             .background(
                                 color = if (idx == selectedIndex) MediCareCallTheme.colors.main else Color.Transparent,
-                                shape = RoundedCornerShape(100.dp)
+                                shape = RoundedCornerShape(100.dp),
                             )
                             .clickable {
                                 selectedIndex = idx
@@ -247,9 +256,9 @@ fun CallTimeScreen(
                                     listState.animateScrollToItem(idx)
                                 }
                             }
-                            .padding(vertical = 6.dp, horizontal = 24.dp),
+                            .padding(vertical = 8.dp, horizontal = 24.dp),
                         color = if (idx == selectedIndex) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.gray5,
-                        style = if (idx == selectedIndex) MediCareCallTheme.typography.SB_14 else MediCareCallTheme.typography.R_14
+                        style = if (idx == selectedIndex) MediCareCallTheme.typography.SB_14 else MediCareCallTheme.typography.R_14,
                     )
                 }
             }
@@ -267,7 +276,7 @@ fun CallTimeScreen(
                     modifier = Modifier.clickable {
                         showBottomSheet = true
                         selectedTabIndex = 0
-                    }
+                    },
                 )
             } else {
                 TimeSettingItem(
@@ -277,7 +286,7 @@ fun CallTimeScreen(
                     modifier = Modifier.clickable {
                         showBottomSheet = true
                         selectedTabIndex = 0
-                    }
+                    },
                 )
                 Spacer(modifier = modifier.height(20.dp))
                 TimeSettingItem(
@@ -287,7 +296,7 @@ fun CallTimeScreen(
                     modifier = Modifier.clickable {
                         showBottomSheet = true
                         selectedTabIndex = 1
-                    }
+                    },
                 )
                 Spacer(modifier = modifier.height(20.dp))
                 TimeSettingItem(
@@ -297,7 +306,7 @@ fun CallTimeScreen(
                     modifier = Modifier.clickable {
                         showBottomSheet = true
                         selectedTabIndex = 2
-                    }
+                    },
                 )
             }
             Spacer(modifier = modifier.height(30.dp))
@@ -308,37 +317,30 @@ fun CallTimeScreen(
                     .fillMaxWidth()
                     .background(
                         color = MediCareCallTheme.colors.gray1,
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(20.dp),
                     )
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 20.dp, bottom = 12.dp)
+                    .padding(all = 20.dp),
             ) {
                 Text(
                     text = "안내사항",
-                    style = MediCareCallTheme.typography.M_17,
-                    color = MediCareCallTheme.colors.gray8
+                    style = MediCareCallTheme.typography.B_17,
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 Spacer(modifier = modifier.height(12.dp))
                 Column(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Text(
-                        text = "부재중일 경우 5분 단위로 3회 재발신, 전화 설정에서 수정 가능합니다",
-                        style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray8
-                    )
                     Text(
                         text = "AI 특성상 인식 오류가 있을 수 있습니다",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
                     Text(
                         text = "케어콜 번호를 어르신 휴대전화 주소록에 저장해주세요",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
                 }
             }
@@ -351,16 +353,16 @@ fun CallTimeScreen(
                     callTimeViewModel.submitAllByIds(
                         elderIds = elderIds,
                         onSuccess = {
-                            navigatedToPayment()
+                            navigateToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
                             Log.d("SetCallScreen", "시간 : ${callTimeViewModel.timeMap}")
                         },
                         onError = { t ->
                             Log.e("SetCallScreen", "콜 시간 설정 실패: $t")
-                        }
+                        },
                     )
                 },
-                modifier = Modifier.padding(bottom = 20.dp)
+                modifier = Modifier.padding(bottom = 20.dp),
             ) // 입력여부에 따라 Type 바뀌도록 수정 필요
             if (showBottomSheet) {
                 TimePickerBottomSheet(
@@ -380,8 +382,8 @@ fun CallTimeScreen(
                             CallTimes(
                                 first = Triple(0, fH, fM),
                                 second = Triple(1, sH, sM),
-                                third = Triple(1, tH, tM)
-                            )
+                                third = Triple(1, tH, tM),
+                            ),
                         )
                         showBottomSheet = false
                     },

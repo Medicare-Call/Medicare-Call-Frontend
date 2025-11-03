@@ -24,38 +24,35 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 
 @SuppressLint("SourceLockedOrientationActivity")
 @Composable
 fun LoginStartScreen(
-    navController: NavController,
-    loginViewModel: LoginViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToPhone: () -> Unit = {},
+    navigateToRegisterElder: () -> Unit = {},
+    navigateToCareCallSetting: () -> Unit = {},
+    navigateToPurchase: () -> Unit = {},
+    navigateToHome: () -> Unit = {},
+    loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
     val navigationDestination by loginViewModel.navigationDestination.collectAsState()
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
-            val route = when (destination) {
-                is NavigationDestination.GoToLogin -> Route.LoginPhone.route
-                is NavigationDestination.GoToRegisterElder -> Route.LoginElderInfoScreen.route
-                is NavigationDestination.GoToTimeSetting -> Route.SetCall.route
-                is NavigationDestination.GoToPayment -> Route.Payment.route
-                is NavigationDestination.GoToHome -> Route.Home.route
-            }
-            navController.navigate(route) {
-                if (route == Route.Home.route)
-                    popUpTo(Route.LoginStart.route) {
-                        inclusive = true
-                    }
+            when (destination) {
+                is NavigationDestination.GoToLogin -> navigateToPhone()
+                is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
+                is NavigationDestination.GoToTimeSetting -> navigateToCareCallSetting()
+                is NavigationDestination.GoToPayment -> navigateToPurchase()
+                is NavigationDestination.GoToHome -> navigateToHome()
             }
             loginViewModel.onNavigationHandled()
         }
@@ -85,7 +82,7 @@ fun LoginStartScreen(
         modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.main)
-            .navigationBarsPadding()
+            .navigationBarsPadding(),
     ) {
         Image(
             painter = painterResource(R.drawable.bg_login_start_new),
@@ -93,23 +90,23 @@ fun LoginStartScreen(
             modifier
                 .fillMaxSize()
                 .align(Alignment.Center),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
 
-        )
+            )
         Column(
             Modifier
                 .align(Alignment.TopStart)
                 .statusBarsPadding()
-                .padding(top = 20.dp, start = 20.dp)
+                .padding(top = 20.dp, start = 20.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.typo_intro),
-                "AI 기반 케어콜, 부모님 건강관리는 메디케어콜"
+                "AI 기반 케어콜, 부모님 건강관리는 메디케어콜",
             )
             Spacer(Modifier.height(30.dp))
             Image(
                 painter = painterResource(R.drawable.typo_main),
-                "메디케어콜"
+                "메디케어콜",
             )
 
         }
@@ -123,9 +120,9 @@ fun LoginStartScreen(
             modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 20.dp)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp),
 
-        )
+            )
 
     }
 }

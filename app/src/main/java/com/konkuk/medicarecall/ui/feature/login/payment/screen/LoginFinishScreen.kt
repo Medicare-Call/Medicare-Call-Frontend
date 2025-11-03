@@ -17,19 +17,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.Text
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.navigateToMainAfterLogin
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.CTAButtonType
 
 @Composable
 fun LoginFinishScreen(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
+    navigateToMain: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -38,19 +36,19 @@ fun LoginFinishScreen(
             .padding(top = 146.dp)
             .systemBarsPadding()
             .imePadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_complete),
             contentDescription = "complete",
             tint = Color.Unspecified,
-            modifier = modifier.size(64.dp)
+            modifier = modifier.size(64.dp),
         )
         Spacer(modifier = modifier.size(47.dp))
         Text(
             "모든 설정이 끝났어요!",
             style = MediCareCallTheme.typography.B_26,
-            color = MediCareCallTheme.colors.white
+            color = MediCareCallTheme.colors.white,
         )
         Spacer(modifier = modifier.height(59.dp))
         Image(
@@ -63,8 +61,8 @@ fun LoginFinishScreen(
         Spacer(modifier = modifier.weight(1f))
         CTAButton(
             CTAButtonType.WHITE, "확인",
-            onClick = { navController.navigateToMainAfterLogin() },
-            modifier = modifier.padding(horizontal = 20.dp)
+            onClick = navigateToMain,
+            modifier = modifier.padding(horizontal = 20.dp),
         )
         Spacer(modifier = modifier.height(30.dp))
     }

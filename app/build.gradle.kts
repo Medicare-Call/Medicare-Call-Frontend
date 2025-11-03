@@ -118,3 +118,7 @@ dependencies {
     detektPlugins(libs.detekt.formatting)
     ksp(libs.hilt.manager)
 }
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "11"
+}

@@ -23,22 +23,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
+import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.PersonalInfoCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.serialization.json.Json
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
-fun PersonalInfoScreen(
+fun ElderInfoScreen(
     onBack: () -> Unit = {},
-    navController: NavHostController,
-    personalViewModel: EldersInfoViewModel = hiltViewModel()
+    navigateToElderDetail: (elderInfo: EldersInfoResponseDto) -> Unit = {},
+    personalViewModel: EldersInfoViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -65,7 +61,7 @@ fun PersonalInfoScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .statusBarsPadding()
+            .statusBarsPadding(),
     ) {
         SettingsTopAppBar(
             title = "어르신 개인정보 설정",
@@ -74,7 +70,7 @@ fun PersonalInfoScreen(
                     painterResource(id = R.drawable.ic_settings_back),
                     contentDescription = "setting back",
                     modifier = Modifier.clickable { onBack() },
-                    tint = MediCareCallTheme.colors.black
+                    tint = MediCareCallTheme.colors.black,
                 )
             },
         )
@@ -83,19 +79,15 @@ fun PersonalInfoScreen(
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             eldersInfo.forEach {
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        val json = Json.encodeToString(it)
-                        val encodedJson = URLEncoder.encode(json, StandardCharsets.UTF_8.toString())
-                        navController.navigate(
-                            "${Route.PersonalDetail.route}/$encodedJson"
-                        )
-                    }
+                        navigateToElderDetail(it)
+                    },
                 )
             }
 //            PersonalInfoCard("김옥자", onClick = {navController.navigate(Route.PersonalDetail.route)})

@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,31 +22,27 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
+import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
+import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StateMentalDetail(
-    navController: NavHostController,
+    onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mentalViewModel: MentalViewModel = hiltViewModel(),
 
     ) {
-    val homeEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry("main")
-    }
-    val homeViewModel: HomeViewModel = hiltViewModel(homeEntry)
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -68,12 +64,12 @@ fun StateMentalDetail(
 
 
     StateMentalDetailLayout(
-        navController = navController,
+        onBack = onBack,
         selectedDate = selectedDate,
         mental = mental,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
-        onMonthClick = { /* 모달 열기 */ }
+        onMonthClick = { /* 모달 열기 */ },
     )
 }
 
@@ -81,50 +77,51 @@ fun StateMentalDetail(
 @Composable
 fun StateMentalDetailLayout(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    onBack: () -> Unit,
     selectedDate: LocalDate,
     mental: MentalUiState,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
-    onMonthClick: () -> Unit
+    onMonthClick: () -> Unit,
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = Color.White,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .statusBarsPadding(),
         ) {
             TopAppBar(
                 title = "심리상태 요약",
-                navController = navController
+                onBack = onBack,
             )
             Column(
                 modifier = Modifier
+                    .background(MediCareCallTheme.colors.bg)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(20.dp)
+                    .padding(20.dp),
             ) {
                 DateSelector(
                     selectedDate = selectedDate,
                     onMonthClick = onMonthClick,
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(24.dp))
                 WeeklyCalendar(
                     calendarUiState = CalendarUiState(
                         currentYear = selectedDate.year,
                         currentMonth = selectedDate.monthValue,
                         weekDates = weekDates,
-                        selectedDate = selectedDate
+                        selectedDate = selectedDate,
                     ),
-                    onDateSelected = onDateSelected
+                    onDateSelected = onDateSelected,
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 StateMentalDetailCard(
-                    mental = mental
+                    mental = mental,
                 )
             }
         }
@@ -136,11 +133,11 @@ fun StateMentalDetailLayout(
 @Composable
 fun PreviewStateMentalDetail() {
     StateMentalDetailLayout(
-        navController = rememberNavController(),
+        onBack = {},
         selectedDate = LocalDate.now(),
         mental = MentalUiState.Companion.EMPTY,
         weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
         onDateSelected = {},
-        onMonthClick = {}
+        onMonthClick = {},
     )
 }

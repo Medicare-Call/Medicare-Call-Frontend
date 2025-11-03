@@ -1,20 +1,22 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import android.util.Log
-import com.konkuk.medicarecall.data.api.ElderRegisterService
+import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
+import com.konkuk.medicarecall.data.dto.request.ElderBulkHealthInfoRequestDto
+import com.konkuk.medicarecall.data.dto.request.ElderBulkRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
+import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.ElderRegisterResponseDto
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
+import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.RelationshipType
-import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -60,32 +62,50 @@ class ElderRegisterRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun registerElderAndHealth(
-        elders: Int,
-        elderInfoList: List<ElderData>,
-        elderHealthInfo: List<ElderHealthData>,
-    ): Result<Unit> {
-        return runCatching {
-            repeat(elders) { index ->
-                // 이미 등록돼 있지 않은 어르신일 경우 실행
-                if (elderInfoList[index].id == null) {
-                    val elderResponse = postElder(
-                        elderInfoList[index],
+    override suspend fun postElderBulk(elderList: List<ElderData>): Result<ElderBulkRegisterResponseDto> = runCatching {
+        val response = elderRegisterService.postElderBulk(
+            ElderBulkRegisterRequestDto(
+                elders = elderList.map { elderData ->
+                    ElderBulkRegisterRequestDto.ElderInfo(
+                        name = elderData.name,
+                        birthDate = elderData.birthDate.formatAsDate(),
+                        gender = if (elderData.gender) GenderType.MALE.name else GenderType.FEMALE.name,
+                        phone = elderData.phoneNumber,
+                        relationship = RelationshipType.entries.find { it.displayName == elderData.relationship }!!.name,
+                        residenceType = ElderResidenceType.entries.find { it.displayName == elderData.livingType }!!.name,
                     )
-                    // postElder가 성공적으로 끝나야만 이 라인으로 넘어올 수 있음
-                    val id = elderResponse.id
-                    val name = elderResponse.name
-                    elderIdRepository.addElderId(name, id)
-                    elderInfoList[index].id = id
-                    Log.d("httplog", "어르신 등록 성공, id: $id")
-                    postElderHealthInfo(
-                        id,
-                        elderHealthInfo[index],
+                },
+            ),
+        )
+        if (response.isSuccessful) {
+            response.body() ?: throw IllegalStateException("Response body is null")
+        } else {
+            throw HttpException(response)
+        }
+    }
+
+    override suspend fun postElderHealthInfoBulk(elderHealthList: List<ElderHealthData>): Result<Unit> = runCatching {
+        val response = elderRegisterService.postElderHealthInfoBulk(
+            ElderBulkHealthInfoRequestDto(
+                healthInfos = elderHealthList.map { elderHealthData ->
+                    ElderBulkHealthInfoRequestDto.HealthInfo(
+                        elderId = elderHealthData.id!!,
+                        diseaseNames = elderHealthData.diseaseNames,
+                        medicationSchedules = ElderHealthMapper.toRequestSchedules(elderHealthData.medicationMap).map { schedule ->
+                            ElderBulkHealthInfoRequestDto.HealthInfo.MedicationSchedule(
+                                medicationName = schedule.medicationName,
+                                scheduleTimes = schedule.scheduleTimes.map { it.name },
+                            )
+                        },
+                        notes = elderHealthData.notes.map { note ->
+                            HealthIssueType.entries.find { it.displayName == note }!!.name
+                        },
                     )
-                    Log.d("httplog", "어르신 건강정보 등록 성공")
-                    elderHealthInfo[index].id = id
-                }
-            }
+                },
+            ),
+        )
+        if (!response.isSuccessful) {
+            throw HttpException(response)
         }
     }
 }

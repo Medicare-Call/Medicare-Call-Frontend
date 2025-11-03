@@ -22,7 +22,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklyHealthCard(
     modifier: Modifier = Modifier,
-    healthNote: String
+    healthNote: String,
 ) {
 
     val isUnrecorded = healthNote.isEmpty()
@@ -33,16 +33,16 @@ fun WeeklyHealthCard(
             .fillMaxWidth()
             .wrapContentHeight()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                group = LocalMediCareCallShadowProvider.current.shadow01,
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(14.dp),
     ) {
         Column(
             modifier = Modifier
                 .padding(20.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Text(
                 text = "건강징후",
@@ -65,7 +65,7 @@ fun WeeklyHealthCard(
 @Composable
 fun PreviewWeeklyHealthCard_Recorded() {
     WeeklyHealthCard(
-        healthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 호흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요."
+        healthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 호흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요.",
     )
 }
 
@@ -73,6 +73,6 @@ fun PreviewWeeklyHealthCard_Recorded() {
 @Composable
 fun PreviewWeeklyHealthCard_Unrecorded() {
     WeeklyHealthCard(
-        healthNote = ""
+        healthNote = "",
     )
 }

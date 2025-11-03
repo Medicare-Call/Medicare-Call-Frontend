@@ -39,30 +39,29 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
+import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
+import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.login.info.component.AgreementItem
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
-import com.konkuk.medicarecall.ui.common.util.isValidDate
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginMyInfoScreen(
-    navController: NavController,
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
+    navigateToRegisterElder: () -> Unit = {},
     loginViewModel: LoginViewModel,
-    modifier: Modifier = Modifier
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -76,14 +75,14 @@ fun LoginMyInfoScreen(
             when (event) {
                 is LoginEvent.MemberRegisterSuccess -> {
                     // 인증 성공 시 어르신정보 화면으로 이동
-                    navController.navigate(Route.LoginElderInfoScreen.route)
+                    navigateToRegisterElder()
                 }
 
                 is LoginEvent.MemberRegisterFailure -> {
                     coroutineScope.launch {
                         snackBarState.showSnackbar(
                             message = "오류가 발생했습니다 다시 시도해주세요",
-                            duration = SnackbarDuration.Short
+                            duration = SnackbarDuration.Short,
                         )
                     }
                 }
@@ -104,25 +103,23 @@ fun LoginMyInfoScreen(
             .imePadding(),
     ) {
         Column {
-            LoginBackButton({
-                navController.popBackStack()
-            })
+            LoginBackButton(onBack)
             Column(
                 Modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
                 Spacer(Modifier.height(20.dp))
                 Text(
                     "회원 정보를\n입력해주세요",
                     style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black
+                    color = MediCareCallTheme.colors.black,
                 )
                 Spacer(Modifier.height(40.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
                         "이름",
                         color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17
+                        style = MediCareCallTheme.typography.M_17,
                     )
                     DefaultTextField(
                         loginViewModel.name,
@@ -130,7 +127,7 @@ fun LoginMyInfoScreen(
                             loginViewModel.onNameChanged(it)
                         },
                         placeHolder = "이름",
-                        textFieldModifier = Modifier.focusRequester(focusRequester)
+                        textFieldModifier = Modifier.focusRequester(focusRequester),
                     )
                 }
                 Spacer(Modifier.height(20.dp))
@@ -138,7 +135,7 @@ fun LoginMyInfoScreen(
                     Text(
                         "생년월일",
                         color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17
+                        style = MediCareCallTheme.typography.M_17,
                     )
                     // 생년월일 입력 텍스트필드
                     DefaultTextField(
@@ -150,16 +147,16 @@ fun LoginMyInfoScreen(
                         placeHolder = "YYYY / MM / DD",
                         keyboardType = KeyboardType.Number,
                         visualTransformation = DateOfBirthVisualTransformation(),
-                        maxLength = 8
+                        maxLength = 8,
 
-                    )
+                        )
                 }
                 Spacer(Modifier.height(20.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
                         "성별",
                         color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17
+                        style = MediCareCallTheme.typography.M_17,
                     )
 
                     GenderToggleButton(loginViewModel.isMale) { loginViewModel.onGenderChanged(it) }
@@ -180,14 +177,14 @@ fun LoginMyInfoScreen(
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "이름을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short
+                                    duration = SnackbarDuration.Short,
                                 )
                             }
                         } else if (!loginViewModel.dateOfBirth.isValidDate()) {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "생년월일을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short
+                                    duration = SnackbarDuration.Short,
                                 )
                             }
                         } else {
@@ -195,12 +192,12 @@ fun LoginMyInfoScreen(
                         }
 
                     },
-                    Modifier.padding(bottom = 20.dp)
+                    Modifier.padding(bottom = 20.dp),
                 )
 
 
                 val sheetState = rememberModalBottomSheetState(
-                    skipPartiallyExpanded = true
+                    skipPartiallyExpanded = true,
                 )
 
 
@@ -212,7 +209,7 @@ fun LoginMyInfoScreen(
                         sheetState = sheetState,
                         containerColor = MediCareCallTheme.colors.bg,
                         dragHandle = null,
-                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
                     ) {
                         // Sheet content
 
@@ -221,8 +218,8 @@ fun LoginMyInfoScreen(
                             "서비스 이용약관" to Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                             "개인정보 수집 및 이용 동의" to Modifier.padding(
                                 horizontal = 20.dp,
-                                vertical = 8.dp
-                            )
+                                vertical = 8.dp,
+                            ),
                         )
                         var checkedStates by remember { mutableStateOf(List(itemList.size) { false }) }
                         val isCheckedAll = checkedStates.all { it }
@@ -232,7 +229,7 @@ fun LoginMyInfoScreen(
                                 "회원가입을 위해\n약관 동의가 필요합니다",
                                 color = MediCareCallTheme.colors.black,
                                 style = MediCareCallTheme.typography.B_20,
-                                modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp)
+                                modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp),
                             )
                             var allAgreeCheckState by remember { mutableStateOf(false) }
                             Row(
@@ -247,9 +244,9 @@ fun LoginMyInfoScreen(
                                             checkedStates = checkedStates.map {
                                                 allAgreeCheckState
                                             }
-                                        }
+                                        },
                                     ),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
 
                                 Icon(
@@ -262,14 +259,14 @@ fun LoginMyInfoScreen(
                                 Text(
                                     "전체 동의하기",
                                     color = MediCareCallTheme.colors.black,
-                                    style = MediCareCallTheme.typography.SB_16
+                                    style = MediCareCallTheme.typography.SB_16,
                                 )
 
                             }
                         }
                         HorizontalDivider(
                             thickness = 1.4.dp,
-                            color = MediCareCallTheme.colors.gray2
+                            color = MediCareCallTheme.colors.gray2,
                         )
                         Spacer(Modifier.height(12.dp))
 
@@ -282,7 +279,7 @@ fun LoginMyInfoScreen(
                                         it[index] = !it[index]
                                     }
                                 },
-                                modifier = modifier
+                                modifier = modifier,
                             )
                         }
                         // 모달 내부 CTA(다음) 버튼
@@ -295,12 +292,12 @@ fun LoginMyInfoScreen(
                                     loginViewModel.dateOfBirth,
                                     if (loginViewModel.isMale
                                             ?: true
-                                    ) GenderType.MALE else GenderType.FEMALE
+                                    ) GenderType.MALE else GenderType.FEMALE,
                                 )
                             },
                             modifier
                                 .padding(horizontal = 20.dp)
-                                .padding(bottom = 30.dp, top = 20.dp)
+                                .padding(bottom = 30.dp, top = 20.dp),
                         )
                     }
 
@@ -311,7 +308,7 @@ fun LoginMyInfoScreen(
             snackBarState,
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 14.dp)
+                .padding(bottom = 14.dp),
         )
     }
 

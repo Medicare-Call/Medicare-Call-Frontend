@@ -31,9 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.navigation.Route
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.payment.component.PaymentPriceItem
@@ -46,8 +44,8 @@ import java.util.Locale
 @Composable
 fun PaymentScreen(
     onBack: () -> Unit,
-    navController: NavHostController,
     modifier: Modifier = Modifier,
+    navigateToNaverPay: () -> Unit = {},
     elderInfoViewModel: EldersInfoViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
@@ -162,7 +160,7 @@ fun PaymentScreen(
             CTAButton(
                 type = if (isClicked) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                 text = "결제하기",
-                onClick = { if (isClicked) navController.navigate(Route.NaverPay.route) })
+                onClick = { if (isClicked) navigateToNaverPay() })
         }
 
     }

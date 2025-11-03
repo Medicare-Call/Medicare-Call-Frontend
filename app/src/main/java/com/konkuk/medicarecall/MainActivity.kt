@@ -18,10 +18,6 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,13 +38,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.konkuk.medicarecall.navigation.BottomNavItem
-import com.konkuk.medicarecall.navigation.NavGraph
-import com.konkuk.medicarecall.navigation.navigateTopLevel
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.senior.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
+import com.konkuk.medicarecall.ui.navigation.NavGraph
+import com.konkuk.medicarecall.ui.navigation.component.MainBottomBar
+import com.konkuk.medicarecall.ui.navigation.component.MainTab
+import com.konkuk.medicarecall.ui.navigation.rememberMainNavigator
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,11 +60,14 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+
+                )
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             )
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
             )
         } else {
             @Suppress("DEPRECATION")
@@ -86,6 +84,8 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val navigator = rememberMainNavigator()
+
             MediCareCallTheme {
                 // 알림 권한 요청
                 RequestNotificationPermission()
@@ -124,6 +124,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.background(MediCareCallTheme.colors.bg),
                     contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
                     bottomBar = {
+                        MainBottomBar(
+                            visible = navigator.shouldShowBottomBar(),
+                            tabs = MainTab.entries.toList(),
+                            currentTab = navigator.currentTab,
+                            onTabSelected = {
+                                navigator.navigateToMainTab(it)
+                            },
+                        )
+                    },
                         if (currentRoute in bottomBarRoutes)
                             NavigationBar(
                                 modifier = Modifier.drawBehind {
@@ -175,11 +184,13 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
                     NavGraph(
-                        navController = navController,
+                        navigator = navigator,
                         loginViewModel = loginViewModel,
                         loginElderViewModel = loginElderViewModel,
+                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                         modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
                     )
+                }
                 }
             }
         }

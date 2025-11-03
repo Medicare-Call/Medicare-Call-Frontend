@@ -55,7 +55,7 @@ fun StateHealthDetailCard(
                 .padding(20.dp)
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             // (A) 건강징후 요약
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -66,7 +66,7 @@ fun StateHealthDetailCard(
                         color = MediCareCallTheme.colors.gray5
                     )
                 }
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(12.dp))
 
                 if (health.symptoms.isEmpty()) {
                     Text(
@@ -80,13 +80,13 @@ fun StateHealthDetailCard(
                             Row(verticalAlignment = Alignment.Top) {
                                 Text(
                                     text = "•",
-                                    style = MediCareCallTheme.typography.R_16,
+                                    style = MediCareCallTheme.typography.M_16,
                                     color = MediCareCallTheme.colors.gray8
                                 )
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(12.dp))
                                 Text(
                                     text = symptom.trim(),
-                                    style = MediCareCallTheme.typography.R_16,
+                                    style = MediCareCallTheme.typography.M_16,
                                     color = MediCareCallTheme.colors.gray8,
                                 )
                             }
@@ -104,7 +104,7 @@ fun StateHealthDetailCard(
                         color = MediCareCallTheme.colors.gray5
                     )
                 }
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(12.dp))
 
                 val analysis = health.symptomAnalysis.trim()
                 if (analysis.isBlank()) {
@@ -116,7 +116,7 @@ fun StateHealthDetailCard(
                 } else {
                     Text(
                         text = analysis,
-                        style = MediCareCallTheme.typography.R_16,
+                        style = MediCareCallTheme.typography.M_16,
                         color = MediCareCallTheme.colors.gray8,
                     )
                 }
@@ -190,7 +190,6 @@ fun PreviewStateHealthDetailCard() {
                 "거동 불편",
                 "몸이 느려짐"
             ),
-            //TODO: 병명 볼드처리
             symptomAnalysis = "주요 증상으로 보아 파킨슨 병이 의심돼요. 어르신과 함께 병원에 방문해 보세요.",
             isRecorded = true
 

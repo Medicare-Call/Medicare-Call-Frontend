@@ -17,7 +17,7 @@ class MyDataViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
     fun refresh() = getUserData()
-    var myDataInfo by mutableStateOf<MyInfoResponseDto?>(null)
+    var myDataInfo by mutableStateOf(MyInfoResponseDto())
         private set
 
     init {
@@ -41,7 +41,6 @@ class MyDataViewModel @Inject constructor(
                 }
                 .onFailure {
                     Log.e("MyDataViewModel", "사용자 정보 불러오기 실패: ${it.message}", it)
-                    myDataInfo = null
                     it.printStackTrace()
                     Log.e("MyDataViewModel", "사용자 정보 로딩 실패: ${it.message}", it)
                 }
