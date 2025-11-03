@@ -48,7 +48,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PersonalDetailScreen(
+fun ElderDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     eldersInfoResponseDto: EldersInfoResponseDto,

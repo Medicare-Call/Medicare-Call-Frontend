@@ -42,8 +42,8 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.PersonalDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.PersonalInfoScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
@@ -89,7 +89,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
@@ -211,7 +211,7 @@ fun NavGraph(
         }
 
         composable<Route.ElderPersonalInfo> {
-            PersonalInfoScreen(
+            ElderInfoScreen(
                 onBack = {
                     navController.popBackStack()
                 },
@@ -225,7 +225,7 @@ fun NavGraph(
             typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
         ) { navBackstackEntry ->
             val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
-            PersonalDetailScreen(
+            ElderDetailScreen(
                 onBack = { navController.popBackStack() },
                 eldersInfoResponseDto = elderInfo,
                 navController = navController,
@@ -378,7 +378,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
@@ -407,7 +407,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
