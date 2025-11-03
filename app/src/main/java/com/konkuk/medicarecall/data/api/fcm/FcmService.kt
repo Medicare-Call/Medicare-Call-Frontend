@@ -1,10 +1,11 @@
-package com.konkuk.medicarecall.data.api
+package com.konkuk.medicarecall.data.api.fcm
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -14,18 +15,27 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class FcmService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var appPreferences: AppPreferences
+    lateinit var dataStoreRepository: DataStoreRepository
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        appPreferences.saveFcmToken(token)
+
+        // FCM 토큰을 DataStore에 비동기적으로 저장
+        CoroutineScope(Dispatchers.IO).launch {
+            dataStoreRepository.saveFcmToken(token)
+            Log.d("FCM", "New FCM Token saved: $token")
+        }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -38,13 +48,13 @@ class FcmService : FirebaseMessagingService() {
         val channelName = "FCM Notifications"
 
         // 채널 삭제 후 재생성 (IMPORTANCE_HIGH + PUBLIC)
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             manager.deleteNotificationChannel(channelId)
             val channel = NotificationChannel(
                 channelId,
                 channelName,
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_HIGH,
             ).apply {
                 description = "FCM push notifications"
                 lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -58,7 +68,7 @@ class FcmService : FirebaseMessagingService() {
         }
         val contentPi = PendingIntent.getActivity(
             this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
         // 알림 빌더
@@ -76,8 +86,8 @@ class FcmService : FirebaseMessagingService() {
         // 알림 권한 체크 후 notify
         if (ActivityCompat.checkSelfPermission(
                 this,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                Manifest.permission.POST_NOTIFICATIONS,
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             val notificationId = (0..Int.MAX_VALUE).random()
             NotificationManagerCompat.from(this).notify(notificationId, builder.build())

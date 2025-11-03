@@ -14,7 +14,7 @@ import java.util.Base64
  */
 object TokenSerializer : Serializer<Token> {
     override val defaultValue: Token
-        get() = Token(null, null)
+        get() = Token(null, null, null, null)
 
     override suspend fun readFrom(input: InputStream): Token {
         val encryptedBytes = withContext(Dispatchers.IO) {
