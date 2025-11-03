@@ -8,9 +8,9 @@ interface DataStoreRepository {
     suspend fun getRefreshToken(): String?
     suspend fun clearTokens()
 
-    // fcm 관련
-    suspend fun saveFcmAccessToken(token: String)
-    suspend fun getFcmAccessToken(): String?
+    // fcm 관련 내용 추가
     suspend fun saveFcmToken(token: String)
     suspend fun getFcmToken(): String?
+    suspend fun saveFcmAccessToken(token: String)
+    suspend fun getFcmAccessToken(): String?
 }

@@ -13,9 +13,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.konkuk.medicarecall.App
 import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.FcmRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,14 +28,14 @@ import javax.inject.Inject
 class FcmService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var dataStoreRepository: DataStoreRepository
+    lateinit var fcmRepository: FcmRepository
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
         // FCM 토큰을 DataStore에 비동기적으로 저장
         CoroutineScope(Dispatchers.IO).launch {
-            dataStoreRepository.saveFcmToken(token)
+            fcmRepository.saveFcmToken(token)
             Log.d("FCM", "New FCM Token saved: $token")
         }
     }
@@ -44,7 +46,7 @@ class FcmService : FirebaseMessagingService() {
     }
 
     private fun showNotification(remoteMessage: RemoteMessage) {
-        val channelId = "fcm_alert"
+        val channelId = App.FCM_CHANNEL_ID
         val channelName = "FCM Notifications"
 
         // 채널 삭제 후 재생성 (IMPORTANCE_HIGH + PUBLIC)

@@ -7,7 +7,7 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
-import com.konkuk.medicarecall.data.api.AppPreferences
+import com.konkuk.medicarecall.data.repository.FcmRepository
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +16,8 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
-
     @Inject
-    lateinit var appPreferences: AppPreferences
+    lateinit var fcmRepository: FcmRepository
 
     override fun onCreate() {
         super.onCreate()
@@ -65,7 +64,7 @@ class App : Application() {
                 // FCM 토큰을 DataStore(AppPreferences)에 저장
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        appPreferences.saveFcmToken(token)
+                        fcmRepository.saveFcmToken(token)
                         Log.d(TAG, "FCM token saved to DataStore")
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to save FCM token", e)
