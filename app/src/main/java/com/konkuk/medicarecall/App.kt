@@ -11,6 +11,7 @@ import com.konkuk.medicarecall.data.repository.FcmRepository
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,19 +20,23 @@ class App : Application() {
     @Inject
     lateinit var fcmRepository: FcmRepository
 
+    // Application 전체에서 쑬 수 있는 스코프(앱이 살아있는 동안 유지돼야 하는 초기화/저장 작업 진행 - 여러 초기화 작업 한덩어리로 관리)
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        logFcmToken()
+        fetchAndStoreFcmToken()
     }
 
+    // Android 8.0 이상에서 FCM 알림 표시하기 위한 채널 생성
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val nm = getSystemService(NotificationManager::class.java) ?: return
 
         val channel = NotificationChannel(
             FCM_CHANNEL_ID,
-            "FCM 알림명",
+            "FCM 알림",
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             description = "Firebase Cloud Messaging으로부터 수신된 알림을 표시합니다."
@@ -44,7 +49,11 @@ class App : Application() {
         nm.createNotificationChannel(channel)
     }
 
-    private fun logFcmToken() {
+    /**
+     * 앱 시작 시점에 한 번 FCM 토큰을 가져와서 DataStore에 저장
+     * (실제로 토큰이 바뀌면 FirebaseMessagingService.onNewToken(...)에서도 다시 저장해야 함)
+     */
+    private fun fetchAndStoreFcmToken() {
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -55,17 +64,23 @@ class App : Application() {
                 }
 
                 val token = task.result
+                if (token.isNullOrBlank()) {
+                    if (BuildConfig.DEBUG) {
+                        Log.w(TAG, "FCM Token is empty")
+                    }
+                    return@addOnCompleteListener
+                }
                 if (BuildConfig.DEBUG) {
-                    val masked = token.take(8) + "…" + token.takeLast(4)
-                    Log.d(TAG, "FCM token(debug)=$masked")
                     Log.d(TAG, "FCM token(full)=$token")
                 }
 
                 // FCM 토큰을 DataStore(AppPreferences)에 저장
-                CoroutineScope(Dispatchers.IO).launch {
+                appScope.launch {
                     try {
                         fcmRepository.saveFcmToken(token)
-                        Log.d(TAG, "FCM token saved to DataStore")
+                        if (BuildConfig.DEBUG) {
+                            Log.d(TAG, "FCM token saved to DataStore")
+                        }
                     } catch (e: Exception) {
                         Log.e(TAG, "Failed to save FCM token", e)
                     }
