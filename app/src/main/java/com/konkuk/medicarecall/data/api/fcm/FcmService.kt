@@ -24,8 +24,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/*
-다른 파일에서 직접 호출 안해도 되는 함수들 => FCM이나 안드로이드 시스템이 필요시 호출
+/**
+ * 다른 파일에서 직접 호출 안해도 되는 함수들 => FCM이나 안드로이드 시스템이 필요시 호출
  */
 @AndroidEntryPoint
 class FcmService : FirebaseMessagingService() {
@@ -35,9 +35,11 @@ class FcmService : FirebaseMessagingService() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    /* FCM에서 해당 기기의 토큰 바꼈다고 알려줄 때 호출되는 콜백(앱 처음 설치, 앱데이터 삭제, FCM 내부 정책 변경 등)
-    FCM쪽에서 알아서 불러주는 콜백(개발자가 직접 호출 X,호출됐을 때 어떻게 저장할 지에 대한 코드)
-    * */
+    /**
+     * FCM에서 해당 기기의 토큰 바꼈다고 알려줄 때 호출되는 콜백(
+     * 앱 처음 설치, 앱 데이터 삭제, FCM 내부 정책 변경 등)
+     * FCM쪽에서 알아서 불러주는 콜백(개발자가 직접 호출 X, 호출됐을 때 어떻게 저장할 지에 대한 코드)
+     */
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken 호출됨, 새 FCM 토큰 : $token")

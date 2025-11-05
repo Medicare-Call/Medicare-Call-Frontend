@@ -72,7 +72,6 @@ fun MedicineDetail(
     )
 }
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedicineDetailLayout(
