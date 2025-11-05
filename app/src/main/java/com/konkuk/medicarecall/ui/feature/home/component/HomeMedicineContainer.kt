@@ -35,7 +35,6 @@ fun HomeMedicineContainer(
     medicines: List<MedicineUiState>,
     onClick: () -> Unit,
 ) {
-
     Card(
         modifier = Modifier
             .clickable { onClick() }
@@ -44,10 +43,8 @@ fun HomeMedicineContainer(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
                 cornerRadius = 14.dp,
             ),
-
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(10.dp),
-
         ) {
         Column(
             modifier = Modifier.padding(20.dp),
@@ -55,8 +52,7 @@ fun HomeMedicineContainer(
             // Title: 복약
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-
-                ) {
+            ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp),
@@ -70,7 +66,6 @@ fun HomeMedicineContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -78,7 +73,6 @@ fun HomeMedicineContainer(
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
-
                 ) {
                 // 전체 복약 상태
                 val totalTaken = medicines.sumOf { it.todayTakenCount }
@@ -136,7 +130,7 @@ fun HomeMedicineContainer(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
-                        //복약 아이콘 리스트
+                        // 복약 아이콘 리스트
                         val requiredCount = medicine.todayRequiredCount.coerceAtLeast(0)
                         val renderList = if (medicine.doseStatusList.isEmpty()) {
                             List(requiredCount) { null }
@@ -170,7 +164,6 @@ fun HomeMedicineContainer(
                         style = MediCareCallTheme.typography.R_14,
                         color = MediCareCallTheme.colors.gray5,
                     )
-
                 }
 
                 if (idx < medicines.lastIndex) {
@@ -180,7 +173,6 @@ fun HomeMedicineContainer(
         }
     }
 }
-
 
 @Preview(showBackground = true, name = "복약 기록 있음")
 @Composable
