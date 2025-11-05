@@ -36,7 +36,7 @@ fun HomeMedicineContainer(
     onClick: () -> Unit,
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
@@ -45,9 +45,10 @@ fun HomeMedicineContainer(
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(10.dp),
-        ) {
+    ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier
+                .padding(20.dp),
         ) {
             // Title: 복약
             Row(
@@ -73,7 +74,7 @@ fun HomeMedicineContainer(
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
-                ) {
+            ) {
                 // 전체 복약 상태
                 val totalTaken = medicines.sumOf { it.todayTakenCount }
                 val totalRequired = medicines.sumOf { it.todayRequiredCount }
@@ -115,7 +116,7 @@ fun HomeMedicineContainer(
                         // 다음 복약 시간
                         Text(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            text = "다음 복약 : ${medicine.nextDoseTime ?: "아침약"}",
+                            text = "다음 복약 : ${medicine.nextDoseTime}",
                             style = MediCareCallTheme.typography.R_14,
                             color = MediCareCallTheme.colors.main,
                         )
@@ -179,7 +180,10 @@ fun HomeMedicineContainer(
 private fun PreviewHomeMedicineContainer() {
     val sampleMedicines = listOf(
         MedicineUiState(
-            "당뇨약", 1, 3, "점심",
+            medicineName = "당뇨약",
+            todayTakenCount = 1,
+            todayRequiredCount = 3,
+            nextDoseTime = "점심",
             doseStatusList = listOf(
                 DoseStatusUiState("아침", true),
                 DoseStatusUiState("점심", false),
@@ -187,7 +191,10 @@ private fun PreviewHomeMedicineContainer() {
             ),
         ),
         MedicineUiState(
-            "혈압약", 2, 2, "아침",
+            medicineName = "혈압약",
+            todayTakenCount = 2,
+            todayRequiredCount = 2,
+            nextDoseTime = "아침",
             doseStatusList = listOf(
                 DoseStatusUiState("아침", true),
                 DoseStatusUiState("저녁", true),
@@ -200,14 +207,19 @@ private fun PreviewHomeMedicineContainer() {
 @Preview(showBackground = true, name = "복약 미기록")
 @Composable
 private fun PreviewHomeMedicineContainerUnrecorded() {
-
     val sampleMedicines = listOf(
         MedicineUiState(
-            "당뇨약", 0, 3, "아침",
+            "당뇨약",
+            0,
+            3,
+            "아침",
             doseStatusList = emptyList(),
         ),
         MedicineUiState(
-            "혈압약", 0, 2, "아침",
+            "혈압약",
+            0,
+            2,
+            "아침",
             doseStatusList = emptyList(),
         ),
     )
