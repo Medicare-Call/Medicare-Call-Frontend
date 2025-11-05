@@ -26,7 +26,6 @@ import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
 
-
 @Composable
 fun HomeMealContainer(
     modifier: Modifier = Modifier,
@@ -35,16 +34,13 @@ fun HomeMealContainer(
     dinnerEaten: Boolean?,
     onClick: () -> Unit,
 ) {
-
     fun getRiceBowlIcon(isEaten: Boolean?): Int {
         return when (isEaten) {
-            true -> R.drawable.ic_ricebowl_eat      // 밥 먹음
-            false -> R.drawable.ic_ricebowl_skip     // 밥 안먹음
-            null -> R.drawable.ic_ricebowl_uncheck   // 미기록
+            true -> R.drawable.ic_ricebowl_eat // 밥 먹음
+            false -> R.drawable.ic_ricebowl_skip // 밥 안먹음
+            null -> R.drawable.ic_ricebowl_uncheck // 미기록
         }
     }
-
-
 
     Card(
         modifier = modifier
@@ -56,25 +52,20 @@ fun HomeMealContainer(
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(10.dp),
-
-        ) {
-
+    ) {
         Column(
             modifier = Modifier.padding(20.dp),
         ) {
-
-            //1) Title: 식사
+            // 1) Title: 식사
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-
-                ) {
+            ) {
                 Image(
                     modifier = Modifier
                         .padding(3.dp, 5.dp),
                     painter = painterResource(id = R.drawable.ic_ricebowl),
                     contentDescription = "ricebowl icon",
-
-                    )
+                )
                 Spacer(Modifier.width(8.dp))
 
                 Text(
@@ -82,19 +73,17 @@ fun HomeMealContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //2) 아침 점심 저녁
-
+            // 2) 아침 점심 저녁
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                //아침
+                // 아침
                 Column(
                     modifier = Modifier.padding(horizontal = 7.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -113,7 +102,7 @@ fun HomeMealContainer(
                     )
                 }
 
-                //점심
+                // 점심
                 Column(
                     modifier = Modifier.padding(horizontal = 7.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -130,15 +119,12 @@ fun HomeMealContainer(
                         style = MediCareCallTheme.typography.R_16,
                         color = MediCareCallTheme.colors.gray6,
                     )
-
                 }
-
-                //저녁
+                // 저녁
                 Column(
                     modifier = Modifier.padding(horizontal = 7.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-
                     Image(
                         modifier = Modifier
                             .padding(7.dp, 10.dp),
@@ -157,17 +143,13 @@ fun HomeMealContainer(
     }
 }
 
-
 @Preview()
 @Composable
 fun PreviewHomeMealContainer() {
-
-
     HomeMealContainer(
         breakfastEaten = true,
         lunchEaten = false,
         dinnerEaten = null,
         onClick = {},
     )
-
 }

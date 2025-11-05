@@ -13,5 +13,5 @@ data class EldersInfoResponseDto(
     val gender: GenderType,
     val phone: String,
     val relationship: RelationshipType,
-    val residenceType: ElderResidenceType
+    val residenceType: ElderResidenceType,
 )

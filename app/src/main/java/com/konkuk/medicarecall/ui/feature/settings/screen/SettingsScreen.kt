@@ -91,8 +91,7 @@ fun SettingsScreen(
                     text = myInfo?.name ?: "이름이 등록되지 않았습니다.",
                     style = MediCareCallTheme.typography.SB_18,
                     color = MediCareCallTheme.colors.black,
-
-                    ) // 나중에 값 받아와서 이름 출력되도록 수정 필요
+                ) // 나중에 값 받아와서 이름 출력되도록 수정 필요
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = "님",
@@ -106,7 +105,6 @@ fun SettingsScreen(
                     modifier = Modifier.size(28.dp),
                     tint = MediCareCallTheme.colors.gray2,
                 )
-
             }
             Spacer(modifier = Modifier.height(20.dp))
             Column(
@@ -295,7 +293,6 @@ fun SettingsScreen(
                         )
                     }
                 }
-
             }
         }
     }

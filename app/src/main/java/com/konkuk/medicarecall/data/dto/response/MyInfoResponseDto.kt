@@ -3,7 +3,6 @@ package com.konkuk.medicarecall.data.dto.response
 import com.konkuk.medicarecall.ui.type.GenderType
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class MyInfoResponseDto(
     val name: String = "",
@@ -20,4 +19,3 @@ data class PushNotificationDto(
     val healthAlert: String,
     val carecallMissed: String,
 )
-

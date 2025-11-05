@@ -24,13 +24,13 @@ import javax.inject.Inject
 data class StatisticsUiState(
     val isLoading: Boolean = false,
     val summary: WeeklySummaryUiState? = null,
-    val error: String? = null
+    val error: String? = null,
 )
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val repository: StatisticsRepository,
-    private val eldersHealthInfoRepository: EldersHealthInfoRepository
+    private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StatisticsUiState())
@@ -50,6 +50,7 @@ class StatisticsViewModel @Inject constructor(
     // [수정 1] earliestDate의 초기값을 아주 먼 과거로 설정하여 초기 오류를 방지합니다.
     private var earliestDate: LocalDate = LocalDate.MIN
     private var lastFetchTime: Long = 0
+
     init {
         viewModelScope.launch {
             _selectedElderId
@@ -73,7 +74,6 @@ class StatisticsViewModel @Inject constructor(
     fun refresh() {
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastFetchTime < 60000) {
-
             return
         }
 
@@ -82,7 +82,7 @@ class StatisticsViewModel @Inject constructor(
         getWeeklyStatistics(
             elderId = id,
             startDate = start,
-            ignoreLoadingGate = true
+            ignoreLoadingGate = true,
         )
     }
 
@@ -116,10 +116,7 @@ class StatisticsViewModel @Inject constructor(
 
     // [삭제 1] updateWeekState 함수는 이제 init 블록의 로직으로 대체되었으므로 삭제합니다.
     // private fun updateWeekState(weekStart: LocalDate) { ... }
-
-
     /* ---------------- Week 계산 ---------------- */
-
     private fun getWeekRange(date: LocalDate): Pair<LocalDate, LocalDate> {
         val start = weekStartOf(date)
         return start to start.plusDays(6)
@@ -133,7 +130,7 @@ class StatisticsViewModel @Inject constructor(
     private fun getWeeklyStatistics(
         elderId: Int,
         startDate: LocalDate,
-        ignoreLoadingGate: Boolean = false
+        ignoreLoadingGate: Boolean = false,
     ) {
         if (_uiState.value.isLoading && !ignoreLoadingGate) return
 
@@ -172,9 +169,8 @@ class StatisticsViewModel @Inject constructor(
                 _uiState.value = StatisticsUiState(
                     isLoading = false,
                     summary = summary,
-                    error = null
+                    error = null,
                 )
-
             }.onFailure { e ->
                 Log.e("STATISTICS_DEBUG", "onFailure: 데이터 로딩 실패", e)
 
@@ -188,7 +184,7 @@ class StatisticsViewModel @Inject constructor(
                 _uiState.value = StatisticsUiState(
                     isLoading = false,
                     summary = summaryState,
-                    error = if(summaryState == null) "데이터 로딩 실패: ${e.message}" else null
+                    error = if (summaryState == null) "데이터 로딩 실패: ${e.message}" else null,
                 )
             }
         }
@@ -205,16 +201,17 @@ class StatisticsViewModel @Inject constructor(
         val orderedMedicines = medicationStats.entries
             .sortedWith(
                 compareBy<Map.Entry<String, MedicationStatDto>>(
-                    { indexOf(it.key) }, { it.key }
-                ))
+                    { indexOf(it.key) },
+                    { it.key },
+                ),
+            )
             .map { (name, stats) ->
                 WeeklyMedicineUiState(
                     medicineName = name,
                     takenCount = stats.takenCount,
-                    totalCount = stats.totalCount
+                    totalCount = stats.totalCount,
                 )
             }
-
 
         val sleepH = averageSleep.hours
         val sleepM = averageSleep.minutes
@@ -228,7 +225,7 @@ class StatisticsViewModel @Inject constructor(
             weeklyMeals = listOf(
                 WeeklyMealUiState("아침", mealStats.breakfast, 7),
                 WeeklyMealUiState("점심", mealStats.lunch, 7),
-                WeeklyMealUiState("저녁", mealStats.dinner, 7)
+                WeeklyMealUiState("저녁", mealStats.dinner, 7),
             ),
             weeklyMedicines = orderedMedicines,
             weeklyHealthNote = healthSummary,
@@ -237,7 +234,7 @@ class StatisticsViewModel @Inject constructor(
             weeklyMental = WeeklyMentalUiState(
                 good = psychSummary.good,
                 normal = psychSummary.normal,
-                bad = psychSummary.bad
+                bad = psychSummary.bad,
             ),
             weeklyGlucose = WeeklyGlucoseUiState(
                 beforeMealNormal = bloodSugar.beforeMeal.normal,
@@ -245,9 +242,8 @@ class StatisticsViewModel @Inject constructor(
                 beforeMealLow = bloodSugar.beforeMeal.low,
                 afterMealNormal = bloodSugar.afterMeal.normal,
                 afterMealHigh = bloodSugar.afterMeal.high,
-                afterMealLow = bloodSugar.afterMeal.low
-            )
-
+                afterMealLow = bloodSugar.afterMeal.low,
+            ),
         )
     }
 }

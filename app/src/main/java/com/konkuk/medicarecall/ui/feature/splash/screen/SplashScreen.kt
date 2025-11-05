@@ -30,7 +30,6 @@ fun SplashScreen(
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
 ) {
-
     val viewModel: SplashViewModel = hiltViewModel()
 
     val navigationDestination by viewModel.navigationDestination.collectAsState()
@@ -66,7 +65,6 @@ fun SplashScreen(
                 originalOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
-
 
     Box(
         Modifier

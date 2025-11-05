@@ -28,7 +28,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 fun SubscribeCard(
     elderInfo: EldersSubscriptionResponseDto,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -41,21 +41,21 @@ fun SubscribeCard(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = modifier.width(252.dp)
+            modifier = modifier.width(252.dp),
         ) {
             Row(
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = elderInfo.name,
                     style = MediCareCallTheme.typography.SB_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 ) // 나중에 값받아와서 바껴야 하는 부분
                 Spacer(modifier = modifier.width(5.dp))
                 Text(
                     text = "어르신",
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
             }
             Spacer(modifier = modifier.height(8.dp))
@@ -67,7 +67,7 @@ fun SubscribeCard(
                 text = "$planInfo 구독 중",
                 style = MediCareCallTheme.typography.SB_18,
                 color = MediCareCallTheme.colors.main,
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier.fillMaxWidth(),
             )
         }
         Spacer(modifier = modifier.weight(1f))
@@ -75,7 +75,7 @@ fun SubscribeCard(
             contentDescription = "구독관리 자세히 보기 아이콘",
             painter = painterResource(id = R.drawable.ic_arrow_right),
             modifier = modifier.size(28.dp),
-            tint = MediCareCallTheme.colors.gray2
+            tint = MediCareCallTheme.colors.gray2,
         )
     }
 }

@@ -9,5 +9,5 @@ data class VerificationResponseDto(
     val memberStatus: String,
     val token: String?,
     val accessToken: String?,
-    val refreshToken: String?
+    val refreshToken: String?,
 )

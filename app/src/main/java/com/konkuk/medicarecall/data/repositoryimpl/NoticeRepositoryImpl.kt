@@ -22,7 +22,7 @@ class NoticeRepositoryImpl @Inject constructor(
             } else {
                 val error = response.errorBody()?.string()
                 Log.e("NoticeRepository", "응답 실패: $error")
-                throw Exception("Error fetching notices: ${response.errorBody()?.string()}")
+                error("Error fetching notices: $error")
             }
         }.onFailure {
             Log.e("NoticeRepository", "공지사항 불러오기 실패", it)

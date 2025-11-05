@@ -33,7 +33,6 @@ fun WeeklyGlucoseCard(
     modifier: Modifier = Modifier,
     weeklyGlucose: WeeklyGlucoseUiState,
 ) {
-
     val hasBeforeMealData =
         weeklyGlucose.beforeMealNormal > 0 || weeklyGlucose.beforeMealHigh > 0 || weeklyGlucose.beforeMealLow > 0
     val hasAfterMealData =
@@ -69,15 +68,13 @@ fun WeeklyGlucoseCard(
                 // --- 공복 혈당 ---
                 Column(
                     modifier = Modifier.weight(1f),
-
-                    ) {
+                ) {
                     Text(
                         text = "공복",
                         style = MediCareCallTheme.typography.R_15,
                         color = MediCareCallTheme.colors.gray8,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-
 
                     Box(
                         modifier = Modifier,
@@ -126,8 +123,7 @@ fun WeeklyGlucoseCard(
                 // --- 식후 혈당 ---
                 Column(
                     modifier = Modifier.weight(1f),
-
-                    ) {
+                ) {
                     Text(
                         text = "식후",
                         style = MediCareCallTheme.typography.R_15,
@@ -190,7 +186,6 @@ private fun GlucoseStatusRow(
         )
     }
 }
-
 
 @Preview(name = "혈당 카드 - 기록 있음")
 @Composable

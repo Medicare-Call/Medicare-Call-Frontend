@@ -17,7 +17,7 @@ object ElderHealthMapper {
         return medicationToTimesMap.map { (medicationName, medicationTimeType) ->
             MedicationSchedule(
                 medicationName = medicationName,
-                scheduleTimes = medicationTimeType.map { it }
+                scheduleTimes = medicationTimeType.map { it },
             )
         }
     }

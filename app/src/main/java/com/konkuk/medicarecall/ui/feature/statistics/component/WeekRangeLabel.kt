@@ -36,12 +36,12 @@ fun WeekRangeLabel(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                //시작 날짜 (예: 월요일)
+                // 시작 날짜 (예: 월요일)
                 Text(startDate.format(formatter), style = textStyle, color = textColor)
                 Spacer(Modifier.width(8.dp))
                 Text("-", style = textStyle, color = textColor)
                 Spacer(Modifier.width(8.dp))
-                //종료 날짜 (예: 일요일)
+                // 종료 날짜 (예: 일요일)
                 Text(endDate.format(formatter), style = textStyle, color = textColor)
             }
         }

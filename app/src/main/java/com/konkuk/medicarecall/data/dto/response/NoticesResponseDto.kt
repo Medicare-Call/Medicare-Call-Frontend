@@ -8,5 +8,5 @@ data class NoticesResponseDto(
     val title: String,
     val author: String,
     val contents: String,
-    val publishedAt: String
+    val publishedAt: String,
 )

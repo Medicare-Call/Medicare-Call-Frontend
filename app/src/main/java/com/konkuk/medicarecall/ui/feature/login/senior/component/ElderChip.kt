@@ -69,9 +69,11 @@ fun ElderChip(
                         interactionSource = null,
                         onClick = { onRemove() },
                     ),
-                tint =
-                    if (selected) MediCareCallTheme.colors.main
-                    else MediCareCallTheme.colors.gray3,
+                tint = if (selected) {
+                    MediCareCallTheme.colors.main
+                } else {
+                    MediCareCallTheme.colors.gray3
+                },
             )
         }
     }

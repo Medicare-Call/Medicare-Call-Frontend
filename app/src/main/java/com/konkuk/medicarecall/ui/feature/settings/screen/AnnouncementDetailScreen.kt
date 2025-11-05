@@ -29,14 +29,14 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun AnnouncementDetailScreen(
     modifier: Modifier = Modifier,
     noticeInfo: NoticesResponseDto,
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .systemBarsPadding()
+            .systemBarsPadding(),
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -48,24 +48,24 @@ fun AnnouncementDetailScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
             },
         )
         Column(
-            modifier = modifier.verticalScroll(scrollState)
+            modifier = modifier.verticalScroll(scrollState),
         ) {
             Column(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .padding(top = 10.dp)
+                    .padding(top = 10.dp),
             ) {
                 Text(
                     text = noticeInfo.title,
                     style = MediCareCallTheme.typography.SB_16,
                     color = MediCareCallTheme.colors.black,
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = modifier.height(5.dp))
                 Spacer(modifier = modifier.height(5.dp))
@@ -73,24 +73,22 @@ fun AnnouncementDetailScreen(
                     text = noticeInfo.publishedAt.replace("-", "."),
                     style = MediCareCallTheme.typography.R_15,
                     color = MediCareCallTheme.colors.gray4,
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = modifier.height(10.dp))
                 Box(
                     modifier = modifier
                         .fillMaxWidth()
                         .height(1.dp)
-                        .background(MediCareCallTheme.colors.gray1)
+                        .background(MediCareCallTheme.colors.gray1),
                 )
                 Spacer(modifier = modifier.height(10.dp))
                 Text(
                     text = noticeInfo.contents,
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray6
+                    color = MediCareCallTheme.colors.gray6,
                 )
             }
         }
     }
-
 }
-

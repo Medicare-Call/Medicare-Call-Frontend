@@ -31,20 +31,18 @@ import com.konkuk.medicarecall.ui.common.component.MedInfoItem
 import com.konkuk.medicarecall.ui.common.component.SpecialNoteItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailHealthViewModel
+import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
-import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlin.collections.iterator
 
 @Composable
 fun HealthDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     healthInfoResponseDto: EldersHealthResponseDto,
-    detailViewModel: DetailHealthViewModel = hiltViewModel()
+    detailViewModel: DetailHealthViewModel = hiltViewModel(),
 ) {
-
     val scrollState = rememberScrollState()
     val diseaseList = remember(healthInfoResponseDto) {
         healthInfoResponseDto.diseases.toMutableStateList()
@@ -61,7 +59,7 @@ fun HealthDetailScreen(
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
             .systemBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         SettingsTopAppBar(
             modifier = modifier,
@@ -73,9 +71,9 @@ fun HealthDetailScreen(
                     modifier = modifier
                         .size(24.dp)
                         .clickable { onBack() },
-                    tint = Color.Black
+                    tint = Color.Black,
                 )
-            }
+            },
         )
         Column(
             modifier = modifier
@@ -94,8 +92,8 @@ fun HealthDetailScreen(
             // 복약정보
             MedInfoItem(
                 medications = medications,
-                onAddMedication = { medications.add(it) },
-                onRemoveMedication = { medications.remove(it) },
+//                onAddMedication = { medications.add(it) },
+//                onRemoveMedication = { medications.remove(it) },
             )
             Spacer(modifier = modifier.height(20.dp))
             // 특이사항
@@ -122,13 +120,13 @@ fun HealthDetailScreen(
                             name = healthInfoResponseDto.name,
                             diseases = diseaseList,
                             medications = medications.toTimeMap(),
-                            notes = noteEnums
-                        )
+                            notes = noteEnums,
+                        ),
                     ) {
                         onBack()
-
                     }
-                }, Modifier.padding(bottom = 20.dp)
+                },
+                modifier = Modifier.padding(bottom = 20.dp),
             )
         }
     }
@@ -146,7 +144,7 @@ fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<Medicati
     return timesByMed.map { (name, times) ->
         MedicationSchedule(
             medicationName = name,
-            scheduleTimes = times.sortedBy { it.ordinal }
+            scheduleTimes = times.sortedBy { it.ordinal },
         )
     }
 }

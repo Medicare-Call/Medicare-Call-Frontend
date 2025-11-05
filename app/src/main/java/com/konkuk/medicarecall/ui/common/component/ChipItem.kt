@@ -36,7 +36,7 @@ fun ChipItem(text: String, onRemove: () -> Unit) {
                 text,
                 color = MediCareCallTheme.colors.main,
                 style = MediCareCallTheme.typography.R_14,
-                modifier = Modifier.padding(start = 4.dp)
+                modifier = Modifier.padding(start = 4.dp),
             )
             Spacer(Modifier.width(8.dp))
             Icon(
@@ -45,7 +45,7 @@ fun ChipItem(text: String, onRemove: () -> Unit) {
                 modifier = Modifier
                     .size(16.dp)
                     .clickable { onRemove() },
-                tint = MediCareCallTheme.colors.main
+                tint = MediCareCallTheme.colors.main,
             )
         }
     }

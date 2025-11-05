@@ -1,5 +1,7 @@
 package com.konkuk.medicarecall.ui.common.util
 
+import android.util.Log
+import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -52,7 +54,11 @@ fun String.isValidDate(): Boolean {
 
         // 날짜 범위 확인
         !date.isBefore(minDate) && !date.isAfter(LocalDate.now())
-    } catch (e: Exception) {
+    } catch (e: NumberFormatException) {
+        Log.w("Extensions", "Invalid date format: number parsing failed", e)
+        false
+    } catch (e: DateTimeException) {
+        Log.w("Extensions", "Invalid date: date validation failed", e)
         false
     }
 }

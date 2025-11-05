@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.meal.component
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,38 +27,33 @@ fun MealDetailCard(
     description: String,
     isRecorded: Boolean,
     isEaten: Boolean?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-
+    isEaten // TODO: 현재 사용되지 않는 변수입니다. 추후 기능 추가 시 활용할 수 있습니다.
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
-            modifier = Modifier
-                .padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
-            //1) 아침 점심 저녁
+            // 1) 아침 점심 저녁
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 Text(
                     mealTime,
                     style = MediCareCallTheme.typography.SB_18,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -67,10 +61,9 @@ fun MealDetailCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                //2) 식사 내용 및 여부
+                // 2) 식사 내용 및 여부
                 if (isRecorded) {
                     Text(
                         text = description,
@@ -84,7 +77,6 @@ fun MealDetailCard(
                         style = MediCareCallTheme.typography.R_16,
                         color = MediCareCallTheme.colors.gray8,
                     )
-
                 }
             }
         }
@@ -98,7 +90,6 @@ fun PreviewMealDetailCard() {
         mealTime = "아침",
         description = "간단히 밥과 반찬을 드셨어요.",
         isRecorded = true,
-        isEaten = true
+        isEaten = true,
     )
 }
-

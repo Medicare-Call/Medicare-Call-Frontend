@@ -45,7 +45,7 @@ import kotlinx.coroutines.delay
 // 미사용, Legacy
 @Composable
 fun <T> SpecialNoteItem(
-    modifier: Modifier = Modifier,
+//    modifier: Modifier = Modifier,
     enumList: List<T>, // Enum.entries.map { it. displayName }.toList() 전달
     noteList: List<String>,
     onAddNote: (String) -> Unit,
@@ -54,7 +54,6 @@ fun <T> SpecialNoteItem(
     category: String? = null,
     scrollState: ScrollState,
 ) {
-
     Log.d("SpecialNoteItem", "noteList: $noteList")
     var showDropdown by remember { mutableStateOf(false) }
 
@@ -69,9 +68,8 @@ fun <T> SpecialNoteItem(
         Text(
             category,
             color = MediCareCallTheme.colors.gray7,
-            style = MediCareCallTheme.typography.M_17
+            style = MediCareCallTheme.typography.M_17,
         )
-
     }
 
     Spacer(modifier = Modifier.height(10.dp))
@@ -80,14 +78,14 @@ fun <T> SpecialNoteItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
+                .horizontalScroll(rememberScrollState()),
         ) {
             noteList.forEach { note ->
                 ChipItem(
                     text = note,
                     onRemove = {
                         onRemoveNote(note)
-                    }
+                    },
                 )
                 Spacer(Modifier.width(10.dp))
             }
@@ -107,7 +105,7 @@ fun <T> SpecialNoteItem(
                     indication = null,
                     onClick = {
                         showDropdown = !showDropdown
-                    }
+                    },
                 ),
             placeholder = {
                 Text(placeHolder, style = MediCareCallTheme.typography.M_16)
@@ -124,17 +122,15 @@ fun <T> SpecialNoteItem(
                 Icon(
                     painterResource(if (showDropdown) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down_small),
                     contentDescription = "드롭다운 화살표",
-                    tint = MediCareCallTheme.colors.black
+                    tint = MediCareCallTheme.colors.black,
                 )
             },
             singleLine = true,
-            textStyle = MediCareCallTheme.typography.M_17
+            textStyle = MediCareCallTheme.typography.M_17,
         )
-
 
         AnimatedVisibility(visible = showDropdown) {
             val dropdownScrollState = rememberScrollState()
-
 
             Box(
                 Modifier
@@ -142,25 +138,23 @@ fun <T> SpecialNoteItem(
                     .padding(top = 8.dp)
                     .figmaShadow(
                         group = MediCareCallTheme.shadow.shadow01,
-                        cornerRadius = 14.dp
+                        cornerRadius = 14.dp,
                     )
                     .clip(RoundedCornerShape(14.dp))
                     .background(MediCareCallTheme.colors.white)
                     .border(
                         1.2.dp,
                         shape = RoundedCornerShape(14.dp),
-                        color = MediCareCallTheme.colors.gray1
+                        color = MediCareCallTheme.colors.gray1,
                     )
                     .heightIn(max = 215.dp)
-                    .verticalScroll(dropdownScrollState)
+                    .verticalScroll(dropdownScrollState),
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MediCareCallTheme.colors.white)
+                        .background(MediCareCallTheme.colors.white),
                 ) {
-
-
                     enumList.forEach { item ->
                         val itemStr = item.toString()
                         Box(
@@ -177,48 +171,49 @@ fun <T> SpecialNoteItem(
                                         strokeWidth = strokeWidth,
                                     )
                                 }
-                                .clickable(onClick = {
-                                    showDropdown = false
-                                    if (!noteList.contains(itemStr)) {
-                                        onAddNote(itemStr)
-                                    }
-                                }),
+                                .clickable(
+                                    onClick = {
+                                        showDropdown = false
+                                        if (!noteList.contains(itemStr)) {
+                                            onAddNote(itemStr)
+                                        }
+                                    },
+                                ),
                         ) {
                             Text(
                                 item.toString(),
                                 color = MediCareCallTheme.colors.gray8,
                                 style = MediCareCallTheme.typography.M_16,
-                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
                             )
                         }
                     }
-
                 }
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//private fun SpecialNotePreview() {
-//    val scrollState = rememberScrollState()
-//    var noteList by remember { mutableStateOf(listOf<String>()) }
+// @Preview(showBackground = true)
+// @Composable
+// private fun SpecialNotePreview() {
+//     val scrollState = rememberScrollState()
+//     var noteList by remember { mutableStateOf(listOf<String>()) }
 //
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .verticalScroll(scrollState)
-//            .padding(16.dp)
-//    ) {
-//        SpecialNoteItem(
-//            enumList = SpecialNoteType.entries.map { it.displayName },
-//            noteList = noteList,
-//            onAddNote = { noteList = noteList + it },
-//            onRemoveNote = { noteList = noteList - it },
-//            placeHolder = "특이사항 선택하기",
-//            category = "특이사항",
-//            scrollState = scrollState
-//        )
-//    }
-//}
+//     Box(
+//         modifier = Modifier
+//             .fillMaxSize()
+//             .verticalScroll(scrollState)
+//             .padding(16.dp)
+//     ) {
+//         SpecialNoteItem(
+//             enumList = SpecialNoteType.entries.map { it.displayName },
+//             noteList = noteList,
+//             onAddNote = { noteList = noteList + it },
+//             onRemoveNote = { noteList = noteList - it },
+//             placeHolder = "특이사항 선택하기",
+//             category = "특이사항",
+//             scrollState = scrollState
+//         )
+//     }
+// }

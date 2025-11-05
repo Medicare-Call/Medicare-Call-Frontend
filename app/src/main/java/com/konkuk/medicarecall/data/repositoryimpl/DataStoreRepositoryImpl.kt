@@ -21,7 +21,6 @@ class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private va
 
     override suspend fun saveAccessToken(token: String) {
         context.tokenDataStore.updateData { it.copy(accessToken = token) }
-
     }
 
     override suspend fun getAccessToken(): String? {

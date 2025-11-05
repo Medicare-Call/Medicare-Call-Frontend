@@ -33,7 +33,6 @@ fun WeeklyMealCard(
     modifier: Modifier = Modifier,
     meal: List<WeeklyMealUiState>,
 ) {
-
     Card(
         modifier = modifier
             .figmaShadow(
@@ -43,27 +42,20 @@ fun WeeklyMealCard(
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(14.dp),
-
-        ) {
+    ) {
         Column(
-            modifier = Modifier
-                .padding(20.dp),
-
-            ) {
-
-            //1) Title: 식사 통계
-
+            modifier = Modifier.padding(20.dp),
+        ) {
+            // 1) Title: 식사 통계
             Text(
                 "식사통계",
                 style = MediCareCallTheme.typography.R_15,
                 color = MediCareCallTheme.colors.gray5,
             )
 
-
             Spacer(modifier = Modifier.height(8.dp))
 
-
-            //2) 아침+점심+저녁
+            // 2) 아침+점심+저녁
             Column(
                 Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceAround,
@@ -110,14 +102,12 @@ fun WeeklyMealCard(
                             style = MediCareCallTheme.typography.R_14,
                             color = MediCareCallTheme.colors.gray6,
                         )
-
                     }
                 }
             }
         }
     }
 }
-
 
 @Preview(name = "식사 카드 - 기록 있음")
 @Composable

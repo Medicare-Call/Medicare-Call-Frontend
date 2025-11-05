@@ -26,27 +26,22 @@ import java.time.LocalDate
 
 @Composable
 fun WeeklyCalendar(
-    calendarUiState: CalendarUiState,         // 현재 선택된 연/월/주차 날짜 상태
-    onDateSelected: (LocalDate) -> Unit,      // 날짜 클릭 시 동작할 콜백
+    calendarUiState: CalendarUiState, // 현재 선택된 연/월/주차 날짜 상태
+    onDateSelected: (LocalDate) -> Unit, // 날짜 클릭 시 동작할 콜백
 ) {
     val weekDays = listOf("일", "월", "화", "수", "목", "금", "토") // 요일 표시
 
     Column(modifier = Modifier.fillMaxWidth()) {
-
-
         // 요일 (일~토)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-
+        ) {
             weekDays.forEach { day ->
-
                 Box(
                     modifier = Modifier,
                     contentAlignment = Alignment.Center,
                 ) {
-
                     Text(
                         modifier = Modifier
                             .padding(horizontal = 6.5.dp),
@@ -75,8 +70,6 @@ fun WeeklyCalendar(
                         .clickable { onDateSelected(date) },
                     contentAlignment = Alignment.Center,
                 ) {
-
-
                     Text(
                         modifier = Modifier,
                         text = "${date.dayOfMonth}",
@@ -84,12 +77,10 @@ fun WeeklyCalendar(
                         color = if (isSelected) Color.White else MediCareCallTheme.colors.gray4,
                     )
                 }
-
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

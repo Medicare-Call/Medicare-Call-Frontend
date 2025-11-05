@@ -42,8 +42,8 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.PersonalDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.PersonalInfoScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
@@ -89,7 +89,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
@@ -127,7 +127,6 @@ fun NavGraph(
             )
         }
 
-
         // 홈 상세 화면_복용 화면
         composable<Route.MedicationDetail> {
             MedicineDetail(
@@ -135,37 +134,33 @@ fun NavGraph(
             )
         }
 
-
-        //홈 상세 화면_수면 화면
+        // 홈 상세 화면_수면 화면
         composable<Route.SleepDetail> {
             SleepDetail(
                 onBack = { navController.popBackStack() },
             )
         }
 
-
-        //홈 상세 화면_건강 징후 화면
+        // 홈 상세 화면_건강 징후 화면
         composable<Route.HealthAnalysisDetail> {
             StateHealthDetail(
                 onBack = { navController.popBackStack() },
             )
         }
 
-        //홈 상세 화면_심리 상태 화면
+        // 홈 상세 화면_심리 상태 화면
         composable<Route.MentalAnalysisDetail> {
             StateMentalDetail(
                 onBack = { navController.popBackStack() },
             )
         }
 
-
-        //홈 상세 화면_혈당 화면
+        // 홈 상세 화면_혈당 화면
         composable<Route.GlucoseDetail> {
             GlucoseDetail(
                 onBack = { navController.popBackStack() },
             )
         }
-
 
         // 통계
         composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
@@ -189,7 +184,7 @@ fun NavGraph(
 
         // 설정
         composable<MainTabRoute.Settings> {
-            //TopLevelBackHandler(navController)
+            // TopLevelBackHandler(navController)
             SettingsScreen(
                 navigateToUserInfo = {
                     navController.navigate(Route.UserInfo)
@@ -216,7 +211,7 @@ fun NavGraph(
         }
 
         composable<Route.ElderPersonalInfo> {
-            PersonalInfoScreen(
+            ElderInfoScreen(
                 onBack = {
                     navController.popBackStack()
                 },
@@ -230,7 +225,7 @@ fun NavGraph(
             typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
         ) { navBackstackEntry ->
             val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
-            PersonalDetailScreen(
+            ElderDetailScreen(
                 onBack = { navController.popBackStack() },
                 eldersInfoResponseDto = elderInfo,
                 navController = navController,
@@ -383,7 +378,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {
@@ -412,7 +407,7 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(Route.LoginPurchase) },
+                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
                     navController.navigate(MainTabRoute.Home) {
                         popUpTo(Route.LoginStart) {

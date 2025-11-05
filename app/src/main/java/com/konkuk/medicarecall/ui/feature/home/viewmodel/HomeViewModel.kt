@@ -55,10 +55,7 @@ class HomeViewModel @Inject constructor(
             homeRepository.requestImmediateCareCall(
                 elderId = selectedElderId.value!!,
                 careCallOption = careCallTimeOption,
-            ).onSuccess {
-
-            }
-                .onFailure { }
+            )
         }
     }
 
@@ -85,7 +82,6 @@ class HomeViewModel @Inject constructor(
         savedStateHandle.get<Int?>(KEY_SELECTED_ELDER_ID),
     )
     val selectedElderId: StateFlow<Int?> = _selectedElderId.asStateFlow()
-
 
     init {
         fetchElderList()
@@ -141,7 +137,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     /**
      * 특정 어르신 ID를 받아서 홈 화면 데이터를 서버에 요청합니다.
      */
@@ -175,9 +170,9 @@ class HomeViewModel @Inject constructor(
                     ?.map { (medName, group) ->
                         MedicineUiState(
                             medicineName = medName,
-                            todayTakenCount = 0,           // 요약이 없으니 기본 0
-                            todayRequiredCount = group.size,  // 같은 약이 여러 복용시간이면 개수 = 요구횟수
-                            nextDoseTime = "-",           // 시간표시 필요없으면 "-" 유지
+                            todayTakenCount = 0, // 요약이 없으니 기본 0
+                            todayRequiredCount = group.size, // 같은 약이 여러 복용시간이면 개수 = 요구횟수
+                            nextDoseTime = "-", // 시간표시 필요없으면 "-" 유지
                         )
                     }
                     ?: emptyList()
@@ -195,7 +190,6 @@ class HomeViewModel @Inject constructor(
                     medicines = mergedMedicines,
                     isLoading = false,
                 )
-
             } catch (e: Exception) {
                 // 기존 로직 유지(404면 완전 폴백)
                 if (e is HttpException && e.code() == 404) {
@@ -210,7 +204,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
     private suspend fun createFallbackHomeUiState(elderId: Int): HomeUiState {
         val healthInfo = eldersHealthInfoRepository.getEldersHealthInfo()
@@ -239,8 +232,8 @@ class HomeViewModel @Inject constructor(
                     medicineName = "복약 정보 없음",
                     todayTakenCount = 0,
                     todayRequiredCount = 0,
-                    nextDoseTime = defaultNextDose // "다음복약: -"
-                )
+                    nextDoseTime = defaultNextDose, // "다음복약: -"
+                ),
             )
         } else {
             healthInfo!!.medications
@@ -251,7 +244,7 @@ class HomeViewModel @Inject constructor(
                         medicineName = medName,
                         todayTakenCount = 0,
                         todayRequiredCount = group.size,
-                        nextDoseTime = defaultNextDose
+                        nextDoseTime = defaultNextDose,
                     )
                 }
         }
@@ -341,7 +334,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
     // StateFlow 변환용 확장 함수
     fun <T, R> StateFlow<T>.mapState(

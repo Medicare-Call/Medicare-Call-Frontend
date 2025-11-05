@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.repository
 
-
 interface DataStoreRepository {
     suspend fun saveAccessToken(token: String)
     suspend fun getAccessToken(): String?

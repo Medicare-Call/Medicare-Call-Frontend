@@ -14,6 +14,5 @@ data class ElderHealthRegisterRequestDto(
 @Serializable
 data class MedicationSchedule(
     val medicationName: String,
-    val scheduleTimes: List<MedicationTimeType>
+    val scheduleTimes: List<MedicationTimeType>,
 )
-

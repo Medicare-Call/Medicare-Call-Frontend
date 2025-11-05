@@ -29,7 +29,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun StateHealthDetailCard(
     health: HealthUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     // 1) 전체 미기록은 전용 카드로 일찍 리턴
     if (!health.isRecorded) {
@@ -45,17 +45,17 @@ fun StateHealthDetailCard(
             .wrapContentHeight()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             // (A) 건강징후 요약
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -63,7 +63,7 @@ fun StateHealthDetailCard(
                     Text(
                         text = "건강징후 요약",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray5
+                        color = MediCareCallTheme.colors.gray5,
                     )
                 }
                 Spacer(Modifier.height(12.dp))
@@ -72,7 +72,7 @@ fun StateHealthDetailCard(
                     Text(
                         text = "건강징후 기록 전이에요.",
                         style = MediCareCallTheme.typography.R_16,
-                        color = MediCareCallTheme.colors.gray4
+                        color = MediCareCallTheme.colors.gray4,
                     )
                 } else {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -81,7 +81,7 @@ fun StateHealthDetailCard(
                                 Text(
                                     text = "•",
                                     style = MediCareCallTheme.typography.M_16,
-                                    color = MediCareCallTheme.colors.gray8
+                                    color = MediCareCallTheme.colors.gray8,
                                 )
                                 Spacer(Modifier.width(12.dp))
                                 Text(
@@ -101,7 +101,7 @@ fun StateHealthDetailCard(
                     Text(
                         text = "증상 분석",
                         style = MediCareCallTheme.typography.R_15,
-                        color = MediCareCallTheme.colors.gray5
+                        color = MediCareCallTheme.colors.gray5,
                     )
                 }
                 Spacer(Modifier.height(12.dp))
@@ -111,7 +111,7 @@ fun StateHealthDetailCard(
                     Text(
                         text = "증상분석 전이에요.",
                         style = MediCareCallTheme.typography.R_16,
-                        color = MediCareCallTheme.colors.gray4
+                        color = MediCareCallTheme.colors.gray4,
                     )
                 } else {
                     Text(
@@ -131,7 +131,7 @@ fun StateHealthDetailCard(
  */
 @Composable
 fun StateHealthUnrecordedCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
@@ -140,10 +140,10 @@ fun StateHealthUnrecordedCard(
             .wrapContentHeight()
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
             modifier = Modifier
@@ -151,17 +151,17 @@ fun StateHealthUnrecordedCard(
                 .fillMaxWidth()
                 .wrapContentHeight(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             Text(
                 text = "건강징후 요약",
                 style = MediCareCallTheme.typography.R_15,
-                color = MediCareCallTheme.colors.gray5
+                color = MediCareCallTheme.colors.gray5,
             )
             Text(
                 text = "건강징후 기록 전이에요.",
                 style = MediCareCallTheme.typography.R_16,
-                color = MediCareCallTheme.colors.gray4
+                color = MediCareCallTheme.colors.gray4,
             )
 
             Spacer(Modifier.height(8.dp))
@@ -169,12 +169,12 @@ fun StateHealthUnrecordedCard(
             Text(
                 text = "증상 분석",
                 style = MediCareCallTheme.typography.R_15,
-                color = MediCareCallTheme.colors.gray5
+                color = MediCareCallTheme.colors.gray5,
             )
             Text(
                 text = "증상분석 전이에요.",
                 style = MediCareCallTheme.typography.R_16,
-                color = MediCareCallTheme.colors.gray4
+                color = MediCareCallTheme.colors.gray4,
             )
         }
     }
@@ -188,12 +188,10 @@ fun PreviewStateHealthDetailCard() {
             symptoms = listOf(
                 "손 떨림 증상",
                 "거동 불편",
-                "몸이 느려짐"
+                "몸이 느려짐",
             ),
             symptomAnalysis = "주요 증상으로 보아 파킨슨 병이 의심돼요. 어르신과 함께 병원에 방문해 보세요.",
-            isRecorded = true
-
-        )
+            isRecorded = true,
+        ),
     )
 }
-

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.SleepRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,12 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SleepViewModel @Inject constructor(
-    private val sleepRepository: SleepRepository
+    private val sleepRepository: SleepRepository,
 ) : ViewModel() {
 
     private companion object {
         const val TAG = "SLEEP_API"
-
     }
 
     private val _sleepState = MutableStateFlow(SleepUiState.Companion.EMPTY)
@@ -35,7 +33,7 @@ class SleepViewModel @Inject constructor(
             try {
                 _sleepState.value = sleepRepository.getSleepUiState(
                     elderId = elderId,
-                    date = date
+                    date = date,
                 )
                 Log.i(TAG, "Success elderId=$elderId, date=$formatted")
             } catch (e: Exception) {
@@ -51,7 +49,7 @@ class SleepViewModel @Inject constructor(
                             400 -> {
                                 Log.w(
                                     TAG,
-                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}"
+                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}",
                                 )
                                 _sleepState.value = SleepUiState.Companion.EMPTY
                             }
@@ -65,7 +63,7 @@ class SleepViewModel @Inject constructor(
                                 Log.e(
                                     TAG,
                                     "API error code=${e.code()} elderId=$elderId, date=$formatted",
-                                    e
+                                    e,
                                 )
                                 _sleepState.value = SleepUiState.Companion.EMPTY
                             }

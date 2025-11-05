@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EldersInfoViewModel @Inject constructor(
     private val eldersInfoRepository: EldersInfoRepository,
-    private val elderIdRepository: ElderIdRepository
+    private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
 
     var eldersInfoList by mutableStateOf<List<EldersInfoResponseDto>>(emptyList())

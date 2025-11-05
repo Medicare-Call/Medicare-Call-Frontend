@@ -8,5 +8,5 @@ data class GlucoseUiState(
     val selectedTiming: GlucoseTiming = GlucoseTiming.BEFORE_MEAL,
     val hasNext: Boolean = true,
     val isLoading: Boolean = false,
-    val selectedIndex: Int = -1
+    val selectedIndex: Int = -1,
 )

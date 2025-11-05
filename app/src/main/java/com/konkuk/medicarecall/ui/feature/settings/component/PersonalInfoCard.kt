@@ -33,7 +33,7 @@ fun PersonalInfoCard(name: String, modifier: Modifier = Modifier, onClick: () ->
             .fillMaxWidth()
             .figmaShadow(
                 group = MediCareCallTheme.shadow.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             )
             .clip(RoundedCornerShape(14.dp))
             .background(MediCareCallTheme.colors.white)
@@ -44,38 +44,35 @@ fun PersonalInfoCard(name: String, modifier: Modifier = Modifier, onClick: () ->
                 .fillMaxWidth()
                 .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row() {
+            Row {
                 Text(
                     text = name,
                     style = MediCareCallTheme.typography.SB_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = "어르신",
                     style = MediCareCallTheme.typography.R_16,
-                    color = MediCareCallTheme.colors.gray8
+                    color = MediCareCallTheme.colors.gray8,
                 )
             }
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = "화살표 아이콘",
                 modifier = Modifier.size(28.dp),
-                tint = MediCareCallTheme.colors.gray2
+                tint = MediCareCallTheme.colors.gray2,
             )
-
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
-fun personalInfoCardPrev() {
+fun PersonalInfoCardPrev() {
     Column(Modifier.fillMaxSize()) {
 //        PersonalInfoCard("김옥자")
     }
-
 }

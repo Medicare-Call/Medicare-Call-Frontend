@@ -26,19 +26,17 @@ class EldersHealthInfoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getEldersHealthInfo(): Result<List<EldersHealthResponseDto>> {
-
         cachedHealthInfo?.let {
             Log.d("Cache", "Returning cached health info")
             return Result.success(it)
         }
-
 
         return runCatching {
             Log.d("Cache", "Fetching new health info from server")
             val response = elderInfoService.getElderHealthInfo()
             if (response.isSuccessful) {
                 val body = response.body()
-                    ?: throw IllegalStateException("Response body is null(eldersHealthInfo)")
+                    ?: error("Response body is null(eldersHealthInfo)")
                 cachedHealthInfo = body // 캐시에 저장
                 body
             } else {
@@ -62,7 +60,6 @@ class EldersHealthInfoRepositoryImpl @Inject constructor(
                 elder,
             )
             if (response.isSuccessful) {
-
                 refresh()
                 Log.d(
                     "EldersHealthInfoRepository",

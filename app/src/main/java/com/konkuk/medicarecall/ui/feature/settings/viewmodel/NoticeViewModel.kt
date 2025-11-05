@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoticeViewModel @Inject constructor(
-    private val repository: NoticeRepository
+    private val repository: NoticeRepository,
 ) : ViewModel() {
 
     var noticeList by mutableStateOf<List<NoticesResponseDto>>(emptyList())

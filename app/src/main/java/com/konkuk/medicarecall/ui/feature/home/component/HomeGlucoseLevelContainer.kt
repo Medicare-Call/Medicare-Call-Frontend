@@ -29,7 +29,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 fun HomeGlucoseLevelContainer(
     modifier: Modifier = Modifier,
     glucoseLevelAverageToday: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -37,32 +37,30 @@ fun HomeGlucoseLevelContainer(
             .clickable { onClick() }
             .figmaShadow(
                 group = LocalMediCareCallShadowProvider.current.shadow03,
-                cornerRadius = 14.dp
+                cornerRadius = 14.dp,
             ),
 
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(10.dp)
-
+        shape = RoundedCornerShape(10.dp),
     ) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
-            //1) Title: 혈당
+            // 1) Title: 혈당
             Row(
-                verticalAlignment = Alignment.CenterVertically
-
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
                     modifier = Modifier.padding(
                         start = 7.dp,
                         top = 3.dp,
                         end = 6.dp,
-                        bottom = 3.dp
+                        bottom = 3.dp,
                     ),
                     painter = painterResource(id = R.drawable.ic_glucose),
                     contentDescription = "glucose icon",
-                    )
+                )
 
                 Spacer(modifier = Modifier.width(2.dp))
 
@@ -71,27 +69,25 @@ fun HomeGlucoseLevelContainer(
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray8,
                 )
-
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //2) 상태
+            // 2) 상태
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-
-                ) {
-
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 val isRecorded = glucoseLevelAverageToday > 0
                 val glucoseText = if (isRecorded) "$glucoseLevelAverageToday" else "--"
-                val textColor =
-                    if (isRecorded) MediCareCallTheme.colors.gray8
-                    else MediCareCallTheme.colors.gray4
+                val textColor = if (isRecorded) {
+                    MediCareCallTheme.colors.gray8
+                } else {
+                    MediCareCallTheme.colors.gray4
+                }
 
                 Row(
                     modifier = Modifier,
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
                         text = glucoseText,
@@ -104,26 +100,20 @@ fun HomeGlucoseLevelContainer(
                     Text(
                         text = "mg/dL",
                         style = MediCareCallTheme.typography.M_16,
-                        color = MediCareCallTheme.colors.gray8
+                        color = MediCareCallTheme.colors.gray8,
                     )
-
-
                 }
             }
-
-
         }
-
     }
 }
-
 
 @Preview(showBackground = true, name = "혈당 기록 있음")
 @Composable
 private fun PreviewHomeGlucoseLevelContainerRecorded() {
     HomeGlucoseLevelContainer(
         glucoseLevelAverageToday = 120,
-        onClick = {}
+        onClick = {},
     )
 }
 
@@ -132,6 +122,6 @@ private fun PreviewHomeGlucoseLevelContainerRecorded() {
 private fun PreviewHomeGlucoseLevelContainerNoRecord() {
     HomeGlucoseLevelContainer(
         glucoseLevelAverageToday = 0,
-        onClick = {}
+        onClick = {},
     )
 }

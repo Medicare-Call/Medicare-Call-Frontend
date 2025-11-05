@@ -26,7 +26,7 @@ import java.time.ZoneOffset
 fun DatePickerModal(
     initialDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val dpColors = DatePickerDefaults.colors(
         containerColor = Color.White,
@@ -43,10 +43,10 @@ fun DatePickerModal(
         selectedDayContentColor = Color.White,
         todayContentColor = MediCareCallTheme.colors.black,
         todayDateBorderColor = MediCareCallTheme.colors.main,
-        selectedYearContentColor = MediCareCallTheme.colors.white
+        selectedYearContentColor = MediCareCallTheme.colors.white,
     )
 
-    //세계 표준시
+    // 세계 표준시
     val utc = ZoneOffset.UTC
 
     val initialMillis = remember(initialDate) {
@@ -60,7 +60,7 @@ fun DatePickerModal(
     key(initialMillis) {
         val datePickerState = rememberDatePickerState(
             initialSelectedDateMillis = initialMillis,
-            initialDisplayedMonthMillis = initialMonthMillis
+            initialDisplayedMonthMillis = initialMonthMillis,
         )
 
         val confirmDate = datePickerState.selectedDateMillis?.let {
@@ -70,27 +70,27 @@ fun DatePickerModal(
         DatePickerDialog(
             onDismissRequest = onDismiss,
             colors = DatePickerDefaults.colors(
-                containerColor = MediCareCallTheme.colors.white
+                containerColor = MediCareCallTheme.colors.white,
             ),
             confirmButton = {
                 TextButton(
                     colors = ButtonDefaults.textButtonColors(
-                        contentColor = MediCareCallTheme.colors.black
+                        contentColor = MediCareCallTheme.colors.black,
                     ),
                     onClick = {
                         confirmDate?.let(onDateSelected)
                         onDismiss()
-                    }
+                    },
                 ) { Text("확인") }
             },
             dismissButton = {
                 TextButton(
                     colors = ButtonDefaults.textButtonColors(
-                        contentColor = MediCareCallTheme.colors.black
+                        contentColor = MediCareCallTheme.colors.black,
                     ),
-                    onClick = onDismiss
+                    onClick = onDismiss,
                 ) { Text("취소") }
-            }
+            },
         ) {
             Surface(shape = RoundedCornerShape(16.dp), color = Color.White) {
                 DatePicker(state = datePickerState, colors = dpColors)
@@ -99,13 +99,12 @@ fun DatePickerModal(
     }
 }
 
-
 @Preview
 @Composable
 fun PreviewDatePickerModal() {
     DatePickerModal(
         initialDate = LocalDate.now(),
         onDateSelected = {},
-        onDismiss = {}
+        onDismiss = {},
     )
 }

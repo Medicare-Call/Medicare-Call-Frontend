@@ -20,29 +20,24 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 fun WeeklyGlucoseStatusChip(
     statusText: String,
 ) {
-
-
     val statusColor = when (statusText) {
         "높음" -> MediCareCallTheme.colors.negative
         "낮음" -> MediCareCallTheme.colors.active
         else -> MediCareCallTheme.colors.positive
     }
 
-
     Card(
         modifier = Modifier
             .height(25.dp),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = statusColor),
-
-        ) {
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(horizontal = 10.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
-
-            ) {
+        ) {
             Text(
                 text = statusText,
                 style = MediCareCallTheme.typography.R_14,

@@ -40,8 +40,7 @@ fun StateMentalDetail(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mentalViewModel: MentalViewModel = hiltViewModel(),
-
-    ) {
+) {
     val homeViewModel: HomeViewModel = hiltViewModel()
 
     // 재진입 시 오늘로 초기화
@@ -62,7 +61,6 @@ fun StateMentalDetail(
         }
     }
 
-
     StateMentalDetailLayout(
         onBack = onBack,
         selectedDate = selectedDate,
@@ -72,7 +70,6 @@ fun StateMentalDetail(
         onMonthClick = { /* 모달 열기 */ },
     )
 }
-
 
 @Composable
 fun StateMentalDetailLayout(
@@ -127,7 +124,6 @@ fun StateMentalDetailLayout(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

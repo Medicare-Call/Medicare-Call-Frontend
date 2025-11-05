@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.common.component.NameBar
@@ -141,7 +140,6 @@ fun HomeScreen(
         },
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -258,8 +256,7 @@ fun HomeScreenLayout(
             SnackbarHost(
                 hostState = snackbarHostState,
                 modifier = Modifier.offset(y = -(10).dp),
-
-                ) { data ->
+            ) { data ->
                 CareCallSnackBar(snackBarData = data)
             }
         },
@@ -318,7 +315,6 @@ fun HomeScreenLayout(
                             )
                         }
 
-
                         false -> Column(
                             modifier = Modifier
                                 .verticalScroll(rememberScrollState())
@@ -366,7 +362,7 @@ fun HomeScreenLayout(
                                 }
                             }
 
-                            //건강 항목별 상세 카드
+                            // 건강 항목별 상세 카드
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
@@ -427,7 +423,6 @@ fun HomeScreenLayout(
 @Preview(showBackground = true, heightDp = 1500)
 @Composable
 fun PreviewHomeScreen() {
-
     val previewUiState = HomeUiState(
         elderName = "김옥자",
         balloonMessage = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요.",

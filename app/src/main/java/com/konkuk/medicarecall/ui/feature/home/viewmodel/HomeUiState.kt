@@ -15,7 +15,7 @@ data class HomeUiState(
     val sleep: HomeResponseDto.SleepDto = HomeResponseDto.SleepDto(0, 0),
     val healthStatus: String = "",
     val mentalStatus: String = "",
-    val glucoseLevelAverageToday: Int = 0
+    val glucoseLevelAverageToday: Int = 0,
 ) {
     companion object {
         val EMPTY = HomeUiState()
@@ -28,20 +28,19 @@ data class HomeUiState(
             isRecorded = listOf(
                 dto.mealStatus.breakfast,
                 dto.mealStatus.lunch,
-                dto.mealStatus.dinner
+                dto.mealStatus.dinner,
             ).any { it != null },
 
             // 오늘 한 끼라도 먹었는지(선택적)
             isEaten = listOf(
                 dto.mealStatus.breakfast,
                 dto.mealStatus.lunch,
-                dto.mealStatus.dinner
+                dto.mealStatus.dinner,
             ).any { it == true },
 
             breakfastEaten = dto.mealStatus.breakfast,
             lunchEaten = dto.mealStatus.lunch,
             dinnerEaten = dto.mealStatus.dinner,
-
 
             medicines = dto.medicationStatus.medicationList
                 .orEmpty()
@@ -65,18 +64,15 @@ data class HomeUiState(
                                         "DINNER" -> "저녁"
                                         else -> dose.time
                                     },
-                                    taken = dose.taken
+                                    taken = dose.taken,
                                 )
-                            } ?: emptyList()
+                            } ?: emptyList(),
                     )
                 },
-
-
-
             sleep = dto.sleep ?: HomeResponseDto.SleepDto(0, 0),
             healthStatus = dto.healthStatus ?: "",
             mentalStatus = dto.mentalStatus ?: "",
-            glucoseLevelAverageToday = dto.bloodSugar?.meanValue ?: 0
+            glucoseLevelAverageToday = dto.bloodSugar?.meanValue ?: 0,
         )
     }
 }
@@ -86,9 +82,10 @@ data class MedicineUiState(
     val todayTakenCount: Int,
     val todayRequiredCount: Int,
     val nextDoseTime: String,
-    val doseStatusList: List<DoseStatusUiState> = emptyList()
+    val doseStatusList: List<DoseStatusUiState> = emptyList(),
 )
+
 data class DoseStatusUiState(
     val time: String,
-    val taken: Boolean? = null
+    val taken: Boolean? = null,
 )
