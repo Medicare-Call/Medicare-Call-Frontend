@@ -66,8 +66,6 @@ fun MedicineDetail(
     val uiState by medicineViewModel.state.collectAsState()
     Log.d("MED_UI", "render medicines=${uiState.items.size}")
 
-
-
     MedicineDetailLayout(
         onBack = onBack,
         selectedDate = selectedDate,
