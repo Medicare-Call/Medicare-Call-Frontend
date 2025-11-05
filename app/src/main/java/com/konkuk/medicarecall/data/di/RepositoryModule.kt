@@ -5,6 +5,7 @@ import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
+import com.konkuk.medicarecall.data.repository.FcmRepository
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
 import com.konkuk.medicarecall.data.repository.NoticeRepository
@@ -41,6 +42,7 @@ import com.konkuk.medicarecall.data.repositoryimpl.HealthRepositoryImpl
 import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.data.repositoryimpl.MentalRepositoryImpl
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
+import com.konkuk.medicarecall.data.repositoryimpl.FcmRepositoryImpl
 import com.konkuk.medicarecall.data.repositoryimpl.StatisticsRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -135,4 +137,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindStatisticsRepository(statisticsRepositoryImpl: StatisticsRepositoryImpl): StatisticsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFcmRepository(fcmRepositoryImpl: FcmRepositoryImpl): FcmRepository
 }
