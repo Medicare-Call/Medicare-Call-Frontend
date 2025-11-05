@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -74,15 +73,15 @@ class FcmService : FirebaseMessagingService() {
         // 채널 없으면 생성(보통은 한 번만 생성하고 재사용하는 쪽이 자연스러움)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (manager.getNotificationChannel(channelId) == null) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH,
-            ).apply {
-                description = "FCM push notifications"
-                lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            }
-            manager.createNotificationChannel(channel)
+                val channel = NotificationChannel(
+                    channelId,
+                    channelName,
+                    NotificationManager.IMPORTANCE_HIGH,
+                ).apply {
+                    description = "FCM push notifications"
+                    lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                }
+                manager.createNotificationChannel(channel)
             }
         }
 

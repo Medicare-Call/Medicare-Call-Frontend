@@ -3,7 +3,6 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import android.content.Context
 import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.FcmToken
-import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import com.konkuk.medicarecall.data.util.FcmTokenSerializer
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,7 +17,7 @@ val Context.fcmDataStore by dataStore(
 
 @Singleton
 class FcmRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) : FcmRepository {
     override suspend fun saveFcmToken(token: String) { // fcm 토큰 저장
         context.fcmDataStore.updateData { it.copy(fcmToken = token) }
