@@ -18,7 +18,7 @@ import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
@@ -38,12 +38,12 @@ import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
@@ -108,7 +108,7 @@ fun NavGraph(
 //                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
 //                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
 //                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
-//                navigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail) },
+//                navigateToGlucoseDetailScreen = { navController.navigate(Route.GlucoseDetailScreen) },
 //            )
 //        }
         homeNavGraph(
@@ -117,7 +117,7 @@ fun NavGraph(
             navigateToSleepDetail = navigator::navigateToSleepDetail,
             navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
             navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
-            navigateToGlucoseDetail = navigator::navigateToGlucoseDetail,
+            navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
         )
 
         // 홈 상세 화면_식사 화면
@@ -156,8 +156,8 @@ fun NavGraph(
         }
 
         // 홈 상세 화면_혈당 화면
-        composable<Route.GlucoseDetail> {
-            GlucoseDetail(
+        composable<Route.GlucoseDetailScreen> {
+            GlucoseDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }

@@ -53,7 +53,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GlucoseDetail(
+fun GlucoseDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
 ) {
@@ -126,7 +126,7 @@ fun GlucoseDetail(
         }
     }
 
-    GlucoseDetailLayout(
+    GlucoseDetailScreenLayout(
         modifier = modifier,
         uiState = uiState,
         selectedTiming = uiState.selectedTiming,
@@ -148,7 +148,7 @@ fun GlucoseDetail(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GlucoseDetailLayout(
+fun GlucoseDetailScreenLayout(
     modifier: Modifier = Modifier,
     uiState: GlucoseUiState,
     selectedTiming: GlucoseTiming,
@@ -272,7 +272,7 @@ fun GlucoseDetailLayout(
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true, name = "데이터 있을 때")
 @Composable
-fun PreviewGlucoseDetail_DataAvailable() {
+fun PreviewGlucoseDetailScreen_DataAvailable() {
     // 더미 데이터 프리뷰
     val today = LocalDate.now()
     val sampleData = (0..6).map { i ->
@@ -285,7 +285,7 @@ fun PreviewGlucoseDetail_DataAvailable() {
     val scrollState = rememberScrollState()
 
     MediCareCallTheme {
-        GlucoseDetailLayout(
+        GlucoseDetailScreenLayout(
             uiState = dummyUiState,
             selectedTiming = GlucoseTiming.BEFORE_MEAL,
             selectedIndex = sampleData.lastIndex,
@@ -300,13 +300,13 @@ fun PreviewGlucoseDetail_DataAvailable() {
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true, name = "데이터 없을 때 (Empty View)")
 @Composable
-fun PreviewGlucoseDetail_Empty() {
+fun PreviewGlucoseDetailScreen_Empty() {
     // Empty View 프리뷰
     val dummyUiState = GlucoseUiState(graphDataPoints = emptyList())
     val scrollState = rememberScrollState()
 
     MediCareCallTheme {
-        GlucoseDetailLayout(
+        GlucoseDetailScreenLayout(
             uiState = dummyUiState,
             selectedTiming = GlucoseTiming.AFTER_MEAL,
             selectedIndex = -1,

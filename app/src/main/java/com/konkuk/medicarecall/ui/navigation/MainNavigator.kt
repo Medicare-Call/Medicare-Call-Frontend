@@ -16,7 +16,7 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToHealthAnalysisDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicationDetail
@@ -159,8 +159,8 @@ class MainNavigator(
         navController.navigateToMentalAnalysisDetail()
     }
 
-    fun navigateToGlucoseDetail() {
-        navController.navigateToGlucoseDetail()
+    fun navigateToGlucoseDetailScreen() {
+        navController.navigateToGlucoseDetailScreen()
     }
 
     /* 설정 화면 */

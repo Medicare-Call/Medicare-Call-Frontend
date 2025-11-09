@@ -60,7 +60,7 @@ sealed interface Route {
     data object MentalAnalysisDetail : Route
 
     @Serializable
-    data object GlucoseDetail : Route
+    data object GlucoseDetailScreen : Route
 
     // 설정
     @Serializable

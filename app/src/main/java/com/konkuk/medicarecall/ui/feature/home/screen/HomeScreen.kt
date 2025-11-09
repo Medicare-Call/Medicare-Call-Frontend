@@ -79,7 +79,7 @@ fun HomeScreen(
     navigateToSleepDetail: () -> Unit,
     navigateToHealthAnalysisDetail: () -> Unit,
     navigateToMentalAnalysisDetail: () -> Unit,
-    navigateToGlucoseDetail: () -> Unit,
+    navigateToGlucoseDetailScreen: () -> Unit,
     mainBackStackEntry: NavBackStackEntry,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsState()
@@ -122,7 +122,7 @@ fun HomeScreen(
         navigateToSleepDetail = navigateToSleepDetail,
         navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
         navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
-        navigateToGlucoseDetail = navigateToGlucoseDetail,
+        navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,
         onFabClick = {
@@ -158,7 +158,7 @@ fun HomeScreenLayout(
     navigateToSleepDetail: () -> Unit,
     navigateToStateHealthDetail: () -> Unit,
     navigateToStateMentalDetail: () -> Unit,
-    navigateToGlucoseDetail: () -> Unit,
+    navigateToGlucoseDetailScreen: () -> Unit,
     navigateToAlarm: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
     isLoading: Boolean,
@@ -399,7 +399,7 @@ fun HomeScreenLayout(
                                 Spacer(Modifier.height(12.dp))
                                 HomeGlucoseLevelContainer(
                                     glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday,
-                                    onClick = navigateToGlucoseDetail,
+                                    onClick = navigateToGlucoseDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                             }
@@ -461,7 +461,7 @@ fun PreviewHomeScreen() {
             navigateToSleepDetail = {},
             navigateToStateHealthDetail = {},
             navigateToStateMentalDetail = {},
-            navigateToGlucoseDetail = {},
+            navigateToGlucoseDetailScreen = {},
             snackbarHostState = SnackbarHostState(),
             isLoading = false,
             immediateCall = {},
@@ -514,7 +514,7 @@ fun PreviewHomeScreen_Unrecorded() {
             navigateToSleepDetail = { },
             navigateToStateHealthDetail = { },
             navigateToStateMentalDetail = { },
-            navigateToGlucoseDetail = { },
+            navigateToGlucoseDetailScreen = { },
             navigateToAlarm = { },
         )
     }
