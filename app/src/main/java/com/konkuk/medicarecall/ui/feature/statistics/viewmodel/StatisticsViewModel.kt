@@ -228,7 +228,7 @@ class StatisticsViewModel @Inject constructor(
                 WeeklyMealUiState("저녁", mealStats.dinner, 7),
             ),
             weeklyMedicines = orderedMedicines,
-            weeklyHealthNote = healthSummary,
+            weeklyHealthNote = healthSummary ?: "",
             weeklySleepHours = sleepH,
             weeklySleepMinutes = sleepM,
             weeklyMental = WeeklyMentalUiState(
