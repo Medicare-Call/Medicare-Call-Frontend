@@ -21,7 +21,7 @@ import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
@@ -105,7 +105,7 @@ fun NavGraph(
 //            HomeScreen(
 //                navigateToMealDetailScreen = { navController.navigate(Route.MealDetailScreen) },
 //                navigateToMedicineDetailScreen = { navController.navigate(Route.MedicineDetailScreen) },
-//                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
+//                navigateToSleepDetailScreen = { navController.navigate(Route.SleepDetailScreen) },
 //                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
 //                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
 //                navigateToGlucoseDetailScreen = { navController.navigate(Route.GlucoseDetailScreen) },
@@ -114,7 +114,7 @@ fun NavGraph(
         homeNavGraph(
             navigateToMealDetailScreen = navigator::navigateToMealDetailScreen,
             navigateToMedicineDetailScreen = navigator::navigateToMedicineDetailScreen,
-            navigateToSleepDetail = navigator::navigateToSleepDetail,
+            navigateToSleepDetailScreen = navigator::navigateToSleepDetailScreen,
             navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
             navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
             navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
@@ -135,8 +135,8 @@ fun NavGraph(
         }
 
         // 홈 상세 화면_수면 화면
-        composable<Route.SleepDetail> {
-            SleepDetail(
+        composable<Route.SleepDetailScreen> {
+            SleepDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }

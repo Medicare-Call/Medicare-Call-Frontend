@@ -14,7 +14,7 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 fun NavGraphBuilder.homeNavGraph(
     navigateToMealDetailScreen: () -> Unit,
     navigateToMedicineDetailScreen: () -> Unit,
-    navigateToSleepDetail: () -> Unit,
+    navigateToSleepDetailScreen: () -> Unit,
     navigateToHealthAnalysisDetail: () -> Unit,
     navigateToMentalAnalysisDetail: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
@@ -23,7 +23,7 @@ fun NavGraphBuilder.homeNavGraph(
         HomeScreen(
             navigateToMealDetailScreen = navigateToMealDetailScreen,
             navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
-            navigateToSleepDetail = navigateToSleepDetail,
+            navigateToSleepDetailScreen = navigateToSleepDetailScreen,
             navigateToHealthAnalysisDetail = navigateToHealthAnalysisDetail,
             navigateToMentalAnalysisDetail = navigateToMentalAnalysisDetail,
             navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,

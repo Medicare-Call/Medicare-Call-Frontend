@@ -35,7 +35,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SleepDetail(
+fun SleepDetailScreen(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     sleepViewModel: SleepViewModel = hiltViewModel(),
@@ -60,7 +60,7 @@ fun SleepDetail(
         }
     }
 
-    SleepDetailLayout(
+    SleepDetailScreenLayout(
         modifier = Modifier,
         onBack = onBack,
         selectedDate = selectedDate,
@@ -72,7 +72,7 @@ fun SleepDetail(
 }
 
 @Composable
-fun SleepDetailLayout(
+fun SleepDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
@@ -124,9 +124,9 @@ fun SleepDetailLayout(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewSleepDetail() {
+fun PreviewSleepDetailScreen() {
     MediCareCallTheme {
-        SleepDetailLayout(
+        SleepDetailScreenLayout(
             onBack = {},
             selectedDate = LocalDate.now(),
             sleep = SleepUiState.Companion.EMPTY,

@@ -21,7 +21,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToHealth
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicineDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetailScreen
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginCareCallSetting
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginFinish
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginNaverPayView
@@ -147,8 +147,8 @@ class MainNavigator(
         navController.navigateToMedicineDetailScreen()
     }
 
-    fun navigateToSleepDetail() {
-        navController.navigateToSleepDetail()
+    fun navigateToSleepDetailScreen() {
+        navController.navigateToSleepDetailScreen()
     }
 
     fun navigateToHealthAnalysisDetail() {
