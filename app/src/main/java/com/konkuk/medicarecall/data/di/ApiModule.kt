@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.data.di
 
 import com.konkuk.medicarecall.data.api.auth.AuthService
+import com.konkuk.medicarecall.data.api.auth.RefreshService
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.api.elders.GlucoseService
@@ -22,11 +23,17 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
+
+    @Provides
+    @Singleton
+    fun provideRefreshService(@Named("AuthRetrofit") retrofit: Retrofit): RefreshService =
+        retrofit.create(RefreshService::class.java)
 
     @Provides
     @Singleton
