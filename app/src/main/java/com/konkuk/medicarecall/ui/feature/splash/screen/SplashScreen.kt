@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
@@ -32,7 +32,7 @@ fun SplashScreen(
 ) {
     val viewModel: SplashViewModel = hiltViewModel()
 
-    val navigationDestination by viewModel.navigationDestination.collectAsState()
+    val navigationDestination by viewModel.navigationDestination.collectAsStateWithLifecycle()
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->

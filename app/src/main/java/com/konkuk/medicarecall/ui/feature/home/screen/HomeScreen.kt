@@ -35,7 +35,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,10 +81,10 @@ fun HomeScreen(
     navigateToGlucoseDetailScreen: () -> Unit,
     mainBackStackEntry: NavBackStackEntry,
 ) {
-    val homeUiState by homeViewModel.homeUiState.collectAsState()
-    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
-    val elderNameList by homeViewModel.elderNameList.collectAsState()
-    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+    val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
+    val elderNameList by homeViewModel.elderNameList.collectAsStateWithLifecycle()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }

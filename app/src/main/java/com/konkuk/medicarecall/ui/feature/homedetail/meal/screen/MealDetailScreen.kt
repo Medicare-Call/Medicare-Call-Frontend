@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
@@ -48,8 +48,8 @@ fun MealDetailScreen(
         calendarViewModel.resetToToday()
     }
 
-    val selectedDate by calendarViewModel.selectedDate.collectAsState()
-    val elderId by homeViewModel.selectedElderId.collectAsState()
+    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
+    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
@@ -57,7 +57,7 @@ fun MealDetailScreen(
         elderId?.let { mealViewModel.loadMealsForDate(it, selectedDate) }
     }
 
-    val meals by mealViewModel.meals.collectAsState()
+    val meals by mealViewModel.meals.collectAsStateWithLifecycle()
 
     MealDetailScreenLayout(
         onBack = onBack,

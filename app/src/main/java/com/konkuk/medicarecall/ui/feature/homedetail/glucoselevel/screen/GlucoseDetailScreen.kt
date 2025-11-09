@@ -21,7 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -63,10 +63,10 @@ fun GlucoseDetailScreen(
     val homeViewModel: HomeViewModel = hiltViewModel()
     val viewModel: GlucoseViewModel = hiltViewModel()
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     // 선택된 어르신 ID를 구독 (null 가능)
-    val elderId by homeViewModel.selectedElderId.collectAsState()
+    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     val counter = remember {
         mutableStateMapOf(

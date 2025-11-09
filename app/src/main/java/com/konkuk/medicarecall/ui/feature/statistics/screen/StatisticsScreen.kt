@@ -19,7 +19,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
@@ -80,17 +80,17 @@ fun StatisticsScreen(
     }
 
     // ① HomeVM에서 어르신 전체 목록과 이름 목록을 가져옵니다.
-    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
     val elderNameList = elderInfoList.map { it.name }
 
     // ② 선택된 어르신의 ID를 가져옵니다.
-    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // ③ 통계 VM의 상태를 구독합니다.
-    val uiState by statisticsViewModel.uiState.collectAsState()
-    val currentWeek by statisticsViewModel.currentWeek.collectAsState()
-    val isLatestWeek by statisticsViewModel.isLatestWeek.collectAsState()
-    val isEarliestWeek by statisticsViewModel.isEarliestWeek.collectAsState()
+    val uiState by statisticsViewModel.uiState.collectAsStateWithLifecycle()
+    val currentWeek by statisticsViewModel.currentWeek.collectAsStateWithLifecycle()
+    val isLatestWeek by statisticsViewModel.isLatestWeek.collectAsStateWithLifecycle()
+    val isEarliestWeek by statisticsViewModel.isEarliestWeek.collectAsStateWithLifecycle()
 
     // ④ 표시할 이름을 결정합니다.
     // 우선순위 1: 통계 데이터에 포함된 이름 (가장 정확함)
@@ -111,7 +111,7 @@ fun StatisticsScreen(
     val medsChanged by (savedStateHandle?.getStateFlow("medsChanged", false) ?: MutableStateFlow(
         false,
     ))
-        .collectAsState()
+        .collectAsStateWithLifecycle()
 
     LaunchedEffect(medsChanged) {
         if (medsChanged) {
