@@ -19,7 +19,7 @@ import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
@@ -103,7 +103,7 @@ fun NavGraph(
         // 홈
 //        composable<MainTabRoute.Home> { backStackEntry ->
 //            HomeScreen(
-//                navigateToMealDetail = { navController.navigate(Route.MealDetail) },
+//                navigateToMealDetailScreen = { navController.navigate(Route.MealDetailScreen) },
 //                navigateToMedicationDetail = { navController.navigate(Route.MedicationDetail) },
 //                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
 //                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
@@ -112,7 +112,7 @@ fun NavGraph(
 //            )
 //        }
         homeNavGraph(
-            navigateToMealDetail = navigator::navigateToMealDetail,
+            navigateToMealDetailScreen = navigator::navigateToMealDetailScreen,
             navigateToMedicationDetail = navigator::navigateToMedicationDetail,
             navigateToSleepDetail = navigator::navigateToSleepDetail,
             navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
@@ -121,8 +121,8 @@ fun NavGraph(
         )
 
         // 홈 상세 화면_식사 화면
-        composable<Route.MealDetail> {
-            MealDetail(
+        composable<Route.MealDetailScreen> {
+            MealDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }

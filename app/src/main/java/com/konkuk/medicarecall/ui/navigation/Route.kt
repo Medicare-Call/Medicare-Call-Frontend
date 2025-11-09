@@ -45,7 +45,7 @@ sealed interface Route {
 
     // 홈 (하루 요약)
     @Serializable
-    data object MealDetail : Route
+    data object MealDetailScreen : Route
 
     @Serializable
     data object MedicationDetail : Route

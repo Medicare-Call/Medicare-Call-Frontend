@@ -74,7 +74,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    navigateToMealDetail: () -> Unit,
+    navigateToMealDetailScreen: () -> Unit,
     navigateToMedicationDetail: () -> Unit,
     navigateToSleepDetail: () -> Unit,
     navigateToHealthAnalysisDetail: () -> Unit,
@@ -117,7 +117,7 @@ fun HomeScreen(
             homeViewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetail = navigateToMealDetail,
+        navigateToMealDetailScreen = navigateToMealDetailScreen,
         navigateToMedicineDetail = navigateToMedicationDetail,
         navigateToSleepDetail = navigateToSleepDetail,
         navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
@@ -153,7 +153,7 @@ fun HomeScreenLayout(
     onDropdownClick: () -> Unit,
     onDropdownDismiss: () -> Unit,
     onDropdownItemSelected: (String) -> Unit,
-    navigateToMealDetail: () -> Unit,
+    navigateToMealDetailScreen: () -> Unit,
     navigateToMedicineDetail: () -> Unit,
     navigateToSleepDetail: () -> Unit,
     navigateToStateHealthDetail: () -> Unit,
@@ -371,7 +371,7 @@ fun HomeScreenLayout(
                                     breakfastEaten = homeUiState.breakfastEaten,
                                     lunchEaten = homeUiState.lunchEaten,
                                     dinnerEaten = homeUiState.dinnerEaten,
-                                    onClick = navigateToMealDetail,
+                                    onClick = navigateToMealDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeMedicineContainer(
@@ -456,7 +456,7 @@ fun PreviewHomeScreen() {
             onDropdownClick = {},
             onDropdownDismiss = {},
             onDropdownItemSelected = {},
-            navigateToMealDetail = {},
+            navigateToMealDetailScreen = {},
             navigateToMedicineDetail = {},
             navigateToSleepDetail = {},
             navigateToStateHealthDetail = {},
@@ -509,7 +509,7 @@ fun PreviewHomeScreen_Unrecorded() {
             immediateCall = {},
             onRefresh = {},
             onFabClick = {},
-            navigateToMealDetail = { },
+            navigateToMealDetailScreen = { },
             navigateToMedicineDetail = { },
             navigateToSleepDetail = { },
             navigateToStateHealthDetail = { },

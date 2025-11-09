@@ -37,7 +37,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MealDetail(
+fun MealDetailScreen(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mealViewModel: MealViewModel = hiltViewModel(),
@@ -59,7 +59,7 @@ fun MealDetail(
 
     val meals by mealViewModel.meals.collectAsState()
 
-    MealDetailLayout(
+    MealDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         meals = meals,
@@ -71,7 +71,7 @@ fun MealDetail(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MealDetailLayout(
+fun MealDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
@@ -137,7 +137,7 @@ fun MealDetailLayout(
 
 @Preview(name = "식사 - 기록 있음", showBackground = true)
 @Composable
-fun PreviewMealDetail_Recorded() {
+fun PreviewMealDetailScreen_Recorded() {
     val dummyMeals = listOf(
         MealUiState(
             mealTime = "아침",
@@ -163,7 +163,7 @@ fun PreviewMealDetail_Recorded() {
         (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
 
     MediCareCallTheme {
-        MealDetailLayout(
+        MealDetailScreenLayout(
             onBack = {},
             selectedDate = selectedDate,
             meals = dummyMeals,
@@ -176,7 +176,7 @@ fun PreviewMealDetail_Recorded() {
 
 @Preview(name = "식사 - 미기록 화면", showBackground = true)
 @Composable
-fun PreviewMealDetail_Unrecorded() {
+fun PreviewMealDetailScreen_Unrecorded() {
     val dummyMeals = listOf(
         MealUiState(
             mealTime = "아침",
@@ -202,7 +202,7 @@ fun PreviewMealDetail_Unrecorded() {
         (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
 
     MediCareCallTheme {
-        MealDetailLayout(
+        MealDetailScreenLayout(
             onBack = {},
             selectedDate = selectedDate,
             meals = dummyMeals,
