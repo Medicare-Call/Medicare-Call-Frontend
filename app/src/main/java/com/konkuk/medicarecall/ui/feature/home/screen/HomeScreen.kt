@@ -121,7 +121,7 @@ fun HomeScreen(
         navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
         navigateToSleepDetailScreen = navigateToSleepDetailScreen,
         navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
-        navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
+        navigateToStateMentalDetailScreen = navigateToMentalAnalysisDetail,
         navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,
@@ -157,7 +157,7 @@ fun HomeScreenLayout(
     navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetailScreen: () -> Unit,
     navigateToStateHealthDetailScreen: () -> Unit,
-    navigateToStateMentalDetail: () -> Unit,
+    navigateToStateMentalDetailScreen: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
     navigateToAlarm: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
@@ -394,7 +394,7 @@ fun HomeScreenLayout(
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateMentalContainer(
                                     mentalStatus = homeUiState.mentalStatus,
-                                    onClick = navigateToStateMentalDetail,
+                                    onClick = navigateToStateMentalDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeGlucoseLevelContainer(
@@ -460,7 +460,7 @@ fun PreviewHomeScreen() {
             navigateToMedicineDetailScreen = {},
             navigateToSleepDetailScreen = {},
             navigateToStateHealthDetailScreen = {},
-            navigateToStateMentalDetail = {},
+            navigateToStateMentalDetailScreen = {},
             navigateToGlucoseDetailScreen = {},
             snackbarHostState = SnackbarHostState(),
             isLoading = false,
@@ -513,7 +513,7 @@ fun PreviewHomeScreen_Unrecorded() {
             navigateToMedicineDetailScreen = { },
             navigateToSleepDetailScreen = { },
             navigateToStateHealthDetailScreen = { },
-            navigateToStateMentalDetail = { },
+            navigateToStateMentalDetailScreen = { },
             navigateToGlucoseDetailScreen = { },
             navigateToAlarm = { },
         )

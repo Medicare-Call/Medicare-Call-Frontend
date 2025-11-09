@@ -36,7 +36,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun StateMentalDetail(
+fun StateMentalDetailScreen(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mentalViewModel: MentalViewModel = hiltViewModel(),
@@ -61,7 +61,7 @@ fun StateMentalDetail(
         }
     }
 
-    StateMentalDetailLayout(
+    StateMentalDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         mental = mental,
@@ -72,7 +72,7 @@ fun StateMentalDetail(
 }
 
 @Composable
-fun StateMentalDetailLayout(
+fun StateMentalDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
@@ -127,8 +127,8 @@ fun StateMentalDetailLayout(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewStateMentalDetail() {
-    StateMentalDetailLayout(
+fun PreviewStateMentalDetailScreen() {
+    StateMentalDetailScreenLayout(
         onBack = {},
         selectedDate = LocalDate.now(),
         mental = MentalUiState.Companion.EMPTY,

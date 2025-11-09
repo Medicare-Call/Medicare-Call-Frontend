@@ -23,7 +23,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScree
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetailScreen
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
@@ -150,7 +150,7 @@ fun NavGraph(
 
         // 홈 상세 화면_심리 상태 화면
         composable<Route.MentalAnalysisDetail> {
-            StateMentalDetail(
+            StateMentalDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
