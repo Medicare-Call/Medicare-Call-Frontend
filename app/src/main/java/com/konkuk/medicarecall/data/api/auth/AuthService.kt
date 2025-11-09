@@ -12,9 +12,6 @@ import retrofit2.http.POST
 /** 인증과 관련된 API 모음 (토큰 갱신, 본인인증, 로그아웃) */
 
 interface AuthService {
-    @POST("auth/refresh")
-    suspend fun refreshToken(@Header("Refresh-Token") header: String): Response<MemberTokenResponseDto>
-
     @POST("verifications")
     suspend fun requestCertificationCode(@Body req: CertificationCodeRequestDto): Response<Unit>
 
