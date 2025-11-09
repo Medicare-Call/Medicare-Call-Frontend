@@ -27,8 +27,8 @@ fun NavController.navigateToStateHealthDetailScreen() {
     navigate(Route.StateHealthDetailScreen)
 }
 
-fun NavController.navigateToMentalAnalysisDetail() {
-    navigate(Route.MentalAnalysisDetail)
+fun NavController.navigateToStateMentalDetailScreen() {
+    navigate(Route.StateMentalDetailScreen)
 }
 
 fun NavController.navigateToGlucoseDetailScreen() {
@@ -61,7 +61,7 @@ fun NavGraphBuilder.homeDetailNavGraph(
     }
 
     // 홈 상세 화면_심리 상태 화면
-    composable<Route.MentalAnalysisDetail> {
+    composable<Route.StateMentalDetailScreen> {
         StateMentalDetailScreen(onBack = popBackStack)
     }
 

@@ -20,7 +20,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucos
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToStateHealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicineDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToStateMentalDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetailScreen
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginCareCallSetting
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginFinish
@@ -155,8 +155,8 @@ class MainNavigator(
         navController.navigateToStateHealthDetailScreen()
     }
 
-    fun navigateToMentalAnalysisDetail() {
-        navController.navigateToMentalAnalysisDetail()
+    fun navigateToStateMentalDetailScreen() {
+        navController.navigateToStateMentalDetailScreen()
     }
 
     fun navigateToGlucoseDetailScreen() {

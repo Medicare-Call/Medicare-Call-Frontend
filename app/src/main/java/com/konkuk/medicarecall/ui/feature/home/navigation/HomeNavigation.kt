@@ -16,7 +16,7 @@ fun NavGraphBuilder.homeNavGraph(
     navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetailScreen: () -> Unit,
     navigateToStateHealthDetailScreen: () -> Unit,
-    navigateToMentalAnalysisDetail: () -> Unit,
+    navigateToStateMentalDetailScreen: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
 ) {
     composable<MainTabRoute.Home> { backStackEntry ->
@@ -25,7 +25,7 @@ fun NavGraphBuilder.homeNavGraph(
             navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
             navigateToSleepDetailScreen = navigateToSleepDetailScreen,
             navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
-            navigateToMentalAnalysisDetail = navigateToMentalAnalysisDetail,
+            navigateToStateMentalDetailScreen = navigateToStateMentalDetailScreen,
             navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
             mainBackStackEntry = backStackEntry,
         )

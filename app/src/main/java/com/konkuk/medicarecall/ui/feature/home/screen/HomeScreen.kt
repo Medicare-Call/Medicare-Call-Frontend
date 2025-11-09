@@ -78,7 +78,7 @@ fun HomeScreen(
     navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetailScreen: () -> Unit,
     navigateToStateHealthDetailScreen: () -> Unit,
-    navigateToMentalAnalysisDetail: () -> Unit,
+    navigateToStateMentalDetailScreen: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
     mainBackStackEntry: NavBackStackEntry,
 ) {
@@ -121,7 +121,7 @@ fun HomeScreen(
         navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
         navigateToSleepDetailScreen = navigateToSleepDetailScreen,
         navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
-        navigateToStateMentalDetailScreen = navigateToMentalAnalysisDetail,
+        navigateToStateMentalDetailScreen = navigateToStateMentalDetailScreen,
         navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,

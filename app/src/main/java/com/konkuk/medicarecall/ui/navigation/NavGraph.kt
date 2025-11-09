@@ -107,7 +107,7 @@ fun NavGraph(
 //                navigateToMedicineDetailScreen = { navController.navigate(Route.MedicineDetailScreen) },
 //                navigateToSleepDetailScreen = { navController.navigate(Route.SleepDetailScreen) },
 //                navigateToStateHealthDetailScreen = { navController.navigate(Route.StateHealthDetailScreen) },
-//                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
+//                navigateToStateMentalDetailScreen = { navController.navigate(Route.StateMentalDetailScreen) },
 //                navigateToGlucoseDetailScreen = { navController.navigate(Route.GlucoseDetailScreen) },
 //            )
 //        }
@@ -116,7 +116,7 @@ fun NavGraph(
             navigateToMedicineDetailScreen = navigator::navigateToMedicineDetailScreen,
             navigateToSleepDetailScreen = navigator::navigateToSleepDetailScreen,
             navigateToStateHealthDetailScreen = navigator::navigateToStateHealthDetailScreen,
-            navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
+            navigateToStateMentalDetailScreen = navigator::navigateToStateMentalDetailScreen,
             navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
         )
 
@@ -149,7 +149,7 @@ fun NavGraph(
         }
 
         // 홈 상세 화면_심리 상태 화면
-        composable<Route.MentalAnalysisDetail> {
+        composable<Route.StateMentalDetailScreen> {
             StateMentalDetailScreen(
                 onBack = { navController.popBackStack() },
             )

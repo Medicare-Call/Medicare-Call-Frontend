@@ -57,7 +57,7 @@ sealed interface Route {
     data object StateHealthDetailScreen : Route
 
     @Serializable
-    data object MentalAnalysisDetail : Route
+    data object StateMentalDetailScreen : Route
 
     @Serializable
     data object GlucoseDetailScreen : Route
