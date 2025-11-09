@@ -15,8 +15,8 @@ fun NavController.navigateToMealDetailScreen() {
     navigate(Route.MealDetailScreen)
 }
 
-fun NavController.navigateToMedicationDetail() {
-    navigate(Route.MedicationDetail)
+fun NavController.navigateToMedicineDetailScreen() {
+    navigate(Route.MedicineDetailScreen)
 }
 
 fun NavController.navigateToSleepDetail() {
@@ -46,7 +46,7 @@ fun NavGraphBuilder.homeDetailNavGraph(
     }
 
     // 홈 상세 화면_복용 화면
-    composable<Route.MedicationDetail> {
+    composable<Route.MedicineDetailScreen> {
         MedicineDetailScreen(onBack = popBackStack)
     }
 

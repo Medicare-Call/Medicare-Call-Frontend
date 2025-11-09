@@ -75,7 +75,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
     navigateToMealDetailScreen: () -> Unit,
-    navigateToMedicationDetail: () -> Unit,
+    navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetail: () -> Unit,
     navigateToHealthAnalysisDetail: () -> Unit,
     navigateToMentalAnalysisDetail: () -> Unit,
@@ -118,7 +118,7 @@ fun HomeScreen(
             dropdownOpened = false
         },
         navigateToMealDetailScreen = navigateToMealDetailScreen,
-        navigateToMedicineDetailScreen = navigateToMedicationDetail,
+        navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
         navigateToSleepDetail = navigateToSleepDetail,
         navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
         navigateToStateMentalDetail = navigateToMentalAnalysisDetail,

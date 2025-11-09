@@ -104,7 +104,7 @@ fun NavGraph(
 //        composable<MainTabRoute.Home> { backStackEntry ->
 //            HomeScreen(
 //                navigateToMealDetailScreen = { navController.navigate(Route.MealDetailScreen) },
-//                navigateToMedicationDetail = { navController.navigate(Route.MedicationDetail) },
+//                navigateToMedicineDetailScreen = { navController.navigate(Route.MedicineDetailScreen) },
 //                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
 //                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
 //                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
@@ -113,7 +113,7 @@ fun NavGraph(
 //        }
         homeNavGraph(
             navigateToMealDetailScreen = navigator::navigateToMealDetailScreen,
-            navigateToMedicationDetail = navigator::navigateToMedicationDetail,
+            navigateToMedicineDetailScreen = navigator::navigateToMedicineDetailScreen,
             navigateToSleepDetail = navigator::navigateToSleepDetail,
             navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
             navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
@@ -128,7 +128,7 @@ fun NavGraph(
         }
 
         // 홈 상세 화면_복용 화면
-        composable<Route.MedicationDetail> {
+        composable<Route.MedicineDetailScreen> {
             MedicineDetailScreen(
                 onBack = { navController.popBackStack() },
             )
