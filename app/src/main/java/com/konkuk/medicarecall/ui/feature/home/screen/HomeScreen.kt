@@ -77,7 +77,7 @@ fun HomeScreen(
     navigateToMealDetailScreen: () -> Unit,
     navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetailScreen: () -> Unit,
-    navigateToHealthAnalysisDetail: () -> Unit,
+    navigateToStateHealthDetailScreen: () -> Unit,
     navigateToMentalAnalysisDetail: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
     mainBackStackEntry: NavBackStackEntry,
@@ -120,7 +120,7 @@ fun HomeScreen(
         navigateToMealDetailScreen = navigateToMealDetailScreen,
         navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
         navigateToSleepDetailScreen = navigateToSleepDetailScreen,
-        navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
+        navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
         navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
         navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
         snackbarHostState = snackbarHostState,
@@ -156,7 +156,7 @@ fun HomeScreenLayout(
     navigateToMealDetailScreen: () -> Unit,
     navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetailScreen: () -> Unit,
-    navigateToStateHealthDetail: () -> Unit,
+    navigateToStateHealthDetailScreen: () -> Unit,
     navigateToStateMentalDetail: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
     navigateToAlarm: () -> Unit = {},
@@ -389,7 +389,7 @@ fun HomeScreenLayout(
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateHealthContainer(
                                     healthStatus = homeUiState.healthStatus,
-                                    onClick = navigateToStateHealthDetail,
+                                    onClick = navigateToStateHealthDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateMentalContainer(
@@ -459,7 +459,7 @@ fun PreviewHomeScreen() {
             navigateToMealDetailScreen = {},
             navigateToMedicineDetailScreen = {},
             navigateToSleepDetailScreen = {},
-            navigateToStateHealthDetail = {},
+            navigateToStateHealthDetailScreen = {},
             navigateToStateMentalDetail = {},
             navigateToGlucoseDetailScreen = {},
             snackbarHostState = SnackbarHostState(),
@@ -512,7 +512,7 @@ fun PreviewHomeScreen_Unrecorded() {
             navigateToMealDetailScreen = { },
             navigateToMedicineDetailScreen = { },
             navigateToSleepDetailScreen = { },
-            navigateToStateHealthDetail = { },
+            navigateToStateHealthDetailScreen = { },
             navigateToStateMentalDetail = { },
             navigateToGlucoseDetailScreen = { },
             navigateToAlarm = { },

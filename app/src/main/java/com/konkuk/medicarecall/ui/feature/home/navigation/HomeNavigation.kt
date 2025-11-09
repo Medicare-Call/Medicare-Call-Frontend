@@ -15,7 +15,7 @@ fun NavGraphBuilder.homeNavGraph(
     navigateToMealDetailScreen: () -> Unit,
     navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetailScreen: () -> Unit,
-    navigateToHealthAnalysisDetail: () -> Unit,
+    navigateToStateHealthDetailScreen: () -> Unit,
     navigateToMentalAnalysisDetail: () -> Unit,
     navigateToGlucoseDetailScreen: () -> Unit,
 ) {
@@ -24,7 +24,7 @@ fun NavGraphBuilder.homeNavGraph(
             navigateToMealDetailScreen = navigateToMealDetailScreen,
             navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
             navigateToSleepDetailScreen = navigateToSleepDetailScreen,
-            navigateToHealthAnalysisDetail = navigateToHealthAnalysisDetail,
+            navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
             navigateToMentalAnalysisDetail = navigateToMentalAnalysisDetail,
             navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
             mainBackStackEntry = backStackEntry,

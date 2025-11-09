@@ -36,7 +36,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @Composable
-fun StateHealthDetail(
+fun StateHealthDetailScreen(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     healthViewModel: HealthViewModel = hiltViewModel(),
@@ -64,7 +64,7 @@ fun StateHealthDetail(
     }
 
     if (!isLoading.value)
-        StateHealthDetailLayout(
+        StateHealthDetailScreenLayout(
             modifier = Modifier,
             onBack = onBack,
             selectedDate = selectedDate,
@@ -87,7 +87,7 @@ fun StateHealthDetail(
 }
 
 @Composable
-fun StateHealthDetailLayout(
+fun StateHealthDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
@@ -139,9 +139,9 @@ fun StateHealthDetailLayout(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewStateHealthDetail() {
+fun PreviewStateHealthDetailScreen() {
     MediCareCallTheme {
-        StateHealthDetailLayout(
+        StateHealthDetailScreenLayout(
             onBack = {},
             selectedDate = LocalDate.now(),
             health = HealthUiState.Companion.EMPTY,

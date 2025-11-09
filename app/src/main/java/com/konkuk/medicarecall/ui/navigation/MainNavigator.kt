@@ -17,7 +17,7 @@ import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToHealthAnalysisDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToStateHealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicineDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
@@ -151,8 +151,8 @@ class MainNavigator(
         navController.navigateToSleepDetailScreen()
     }
 
-    fun navigateToHealthAnalysisDetail() {
-        navController.navigateToHealthAnalysisDetail()
+    fun navigateToStateHealthDetailScreen() {
+        navController.navigateToStateHealthDetailScreen()
     }
 
     fun navigateToMentalAnalysisDetail() {

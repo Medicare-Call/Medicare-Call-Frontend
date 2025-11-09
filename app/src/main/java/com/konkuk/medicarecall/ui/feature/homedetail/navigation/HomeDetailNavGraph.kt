@@ -7,7 +7,7 @@ import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.Glucose
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
 import com.konkuk.medicarecall.ui.navigation.Route
 
@@ -23,8 +23,8 @@ fun NavController.navigateToSleepDetailScreen() {
     navigate(Route.SleepDetailScreen)
 }
 
-fun NavController.navigateToHealthAnalysisDetail() {
-    navigate(Route.HealthAnalysisDetail)
+fun NavController.navigateToStateHealthDetailScreen() {
+    navigate(Route.StateHealthDetailScreen)
 }
 
 fun NavController.navigateToMentalAnalysisDetail() {
@@ -56,8 +56,8 @@ fun NavGraphBuilder.homeDetailNavGraph(
     }
 
     // 홈 상세 화면_건강 징후 화면
-    composable<Route.HealthAnalysisDetail> {
-        StateHealthDetail(onBack = popBackStack)
+    composable<Route.StateHealthDetailScreen> {
+        StateHealthDetailScreen(onBack = popBackStack)
     }
 
     // 홈 상세 화면_심리 상태 화면
