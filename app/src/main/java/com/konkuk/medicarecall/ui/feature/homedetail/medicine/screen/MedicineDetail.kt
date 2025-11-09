@@ -39,7 +39,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MedicineDetail(
+fun MedicineDetailScreen(
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     medicineViewModel: MedicineViewModel = hiltViewModel(),
@@ -62,7 +62,7 @@ fun MedicineDetail(
     val uiState by medicineViewModel.state.collectAsState()
     Log.d("MED_UI", "render medicines=${uiState.items.size}")
 
-    MedicineDetailLayout(
+    MedicineDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         medicines = uiState.items,
@@ -74,7 +74,7 @@ fun MedicineDetail(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MedicineDetailLayout(
+fun MedicineDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
@@ -135,7 +135,7 @@ fun MedicineDetailLayout(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewMedicineDetail() {
+fun PreviewMedicineDetailScreen() {
     val dummyMedicines = listOf(
         MedicineUiState(
             medicineName = "당뇨약",
@@ -155,7 +155,7 @@ fun PreviewMedicineDetail() {
     )
 
     MediCareCallTheme {
-        MedicineDetailLayout(
+        MedicineDetailScreenLayout(
             onBack = {},
             selectedDate = LocalDate.now(),
             medicines = dummyMedicines,

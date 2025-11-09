@@ -20,7 +20,7 @@ import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
@@ -129,7 +129,7 @@ fun NavGraph(
 
         // 홈 상세 화면_복용 화면
         composable<Route.MedicationDetail> {
-            MedicineDetail(
+            MedicineDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }

@@ -118,7 +118,7 @@ fun HomeScreen(
             dropdownOpened = false
         },
         navigateToMealDetailScreen = navigateToMealDetailScreen,
-        navigateToMedicineDetail = navigateToMedicationDetail,
+        navigateToMedicineDetailScreen = navigateToMedicationDetail,
         navigateToSleepDetail = navigateToSleepDetail,
         navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
         navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
@@ -154,7 +154,7 @@ fun HomeScreenLayout(
     onDropdownDismiss: () -> Unit,
     onDropdownItemSelected: (String) -> Unit,
     navigateToMealDetailScreen: () -> Unit,
-    navigateToMedicineDetail: () -> Unit,
+    navigateToMedicineDetailScreen: () -> Unit,
     navigateToSleepDetail: () -> Unit,
     navigateToStateHealthDetail: () -> Unit,
     navigateToStateMentalDetail: () -> Unit,
@@ -376,7 +376,7 @@ fun HomeScreenLayout(
                                 Spacer(Modifier.height(12.dp))
                                 HomeMedicineContainer(
                                     medicines = homeUiState.medicines,
-                                    onClick = navigateToMedicineDetail,
+                                    onClick = navigateToMedicineDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
@@ -457,7 +457,7 @@ fun PreviewHomeScreen() {
             onDropdownDismiss = {},
             onDropdownItemSelected = {},
             navigateToMealDetailScreen = {},
-            navigateToMedicineDetail = {},
+            navigateToMedicineDetailScreen = {},
             navigateToSleepDetail = {},
             navigateToStateHealthDetail = {},
             navigateToStateMentalDetail = {},
@@ -510,7 +510,7 @@ fun PreviewHomeScreen_Unrecorded() {
             onRefresh = {},
             onFabClick = {},
             navigateToMealDetailScreen = { },
-            navigateToMedicineDetail = { },
+            navigateToMedicineDetailScreen = { },
             navigateToSleepDetail = { },
             navigateToStateHealthDetail = { },
             navigateToStateMentalDetail = { },

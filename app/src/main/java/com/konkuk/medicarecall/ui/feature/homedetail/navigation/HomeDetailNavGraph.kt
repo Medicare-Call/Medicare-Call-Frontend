@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
@@ -47,7 +47,7 @@ fun NavGraphBuilder.homeDetailNavGraph(
 
     // 홈 상세 화면_복용 화면
     composable<Route.MedicationDetail> {
-        MedicineDetail(onBack = popBackStack)
+        MedicineDetailScreen(onBack = popBackStack)
     }
 
     // 홈 상세 화면_수면 화면
