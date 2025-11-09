@@ -95,7 +95,7 @@ fun WeeklyMedicineCard(
                         Text(
                             text = weeklyMedicine.medicineName,
                             style = MediCareCallTheme.typography.R_15,
-                            color = MediCareCallTheme.colors.gray4,
+                            color = MediCareCallTheme.colors.gray8,
                         )
                         Spacer(modifier = Modifier.width(10.dp))
 
@@ -110,7 +110,7 @@ fun WeeklyMedicineCard(
                         Text(
                             text = takenText,
                             style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray6,
+                            color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray6,
                         )
                     }
                 }

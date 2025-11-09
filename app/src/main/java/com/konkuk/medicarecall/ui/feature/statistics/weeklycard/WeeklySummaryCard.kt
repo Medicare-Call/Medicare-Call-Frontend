@@ -87,7 +87,6 @@ private fun WeeklySummaryItem(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             modifier = Modifier
@@ -96,7 +95,6 @@ private fun WeeklySummaryItem(
             style = MediCareCallTheme.typography.R_14,
             color = MediCareCallTheme.colors.gray8,
         )
-        Spacer(modifier = Modifier.height(4.dp))
 
         Row(
             verticalAlignment = Alignment.Bottom,
@@ -110,7 +108,7 @@ private fun WeeklySummaryItem(
                 text = unit,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp),
                 style = MediCareCallTheme.typography.M_16,
-                color = if (isUnrecorded) MediCareCallTheme.colors.black else MediCareCallTheme.colors.black,
+                color = MediCareCallTheme.colors.black,
             )
         }
     }
