@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.data.di
 
 import com.konkuk.medicarecall.BuildConfig
-import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.auth.RefreshService
 import com.konkuk.medicarecall.data.network.AuthAuthenticator
 import com.konkuk.medicarecall.data.network.AuthInterceptor

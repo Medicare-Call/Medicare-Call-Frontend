@@ -2,7 +2,6 @@ package com.konkuk.medicarecall.data.api.auth
 
 import com.konkuk.medicarecall.data.dto.request.CertificationCodeRequestDto
 import com.konkuk.medicarecall.data.dto.request.PhoneNumberConfirmRequestDto
-import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.data.dto.response.VerificationResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
