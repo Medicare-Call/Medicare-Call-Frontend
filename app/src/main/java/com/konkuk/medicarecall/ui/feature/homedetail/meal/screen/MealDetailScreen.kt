@@ -39,10 +39,10 @@ import java.time.LocalDate
 @Composable
 fun MealDetailScreen(
     onBack: () -> Unit,
+    homeViewModel: HomeViewModel = hiltViewModel(),
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mealViewModel: MealViewModel = hiltViewModel(),
 ) {
-    val homeViewModel: HomeViewModel = hiltViewModel()
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
