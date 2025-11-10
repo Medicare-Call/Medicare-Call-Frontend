@@ -34,13 +34,7 @@ android {
             load(project.rootProject.file("local.properties").inputStream())
         }
 
-        buildConfigField("String", "BASE_URL", "\"${properties["baseUrl"] ?: ""}\"")
-        buildConfigField("String", "CARE_CALL_URL", "\"${properties["careCallUrl"] ?: ""}\"")
-        buildConfigField("String", "NAVERPAY_SERVICE_URL", "\"${properties["nPayServiceUrl"] ?: ""}\"")
-        buildConfigField("String", "NAVERPAY_API_URL", "\"${properties["nPayApiUrl"] ?: ""}\"")
-        buildConfigField("String", "NAVERPAY_CLIENT_ID", "\"${properties["nPayClientId"] ?: ""}\"")
-        buildConfigField("String", "NAVERPAY_CHAIN_ID", "\"${properties["nPayChainId"] ?: ""}\"")
-        buildConfigField("String", "NAVERPAY_PARTNER_ID", "\"${properties["nPayPartnerId"] ?: ""}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties["base.url"] ?: ""}\"")
     }
 
     buildTypes {
