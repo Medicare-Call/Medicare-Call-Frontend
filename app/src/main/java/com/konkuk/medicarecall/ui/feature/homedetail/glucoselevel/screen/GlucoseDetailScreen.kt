@@ -301,7 +301,7 @@ fun PreviewGlucoseDetailScreenDataAvailable() {
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true, name = "데이터 없을 때 (Empty View)")
 @Composable
-fun PreviewGlucoseDetailScreen_Empty() {
+fun PreviewGlucoseDetailScreenEmpty() {
     // Empty View 프리뷰
     val dummyUiState = GlucoseUiState(graphDataPoints = emptyList())
     val scrollState = rememberScrollState()
