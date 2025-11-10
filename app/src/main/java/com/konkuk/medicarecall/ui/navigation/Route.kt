@@ -45,22 +45,22 @@ sealed interface Route {
 
     // 홈 (하루 요약)
     @Serializable
-    data object MealDetailScreen : Route
+    data object MealDetail : Route
 
     @Serializable
-    data object MedicineDetailScreen : Route
+    data object MedicineDetail : Route
 
     @Serializable
-    data object SleepDetailScreen : Route
+    data object SleepDetail : Route
 
     @Serializable
-    data object StateHealthDetailScreen : Route
+    data object StateHealthDetail : Route
 
     @Serializable
-    data object StateMentalDetailScreen : Route
+    data object StateMentalDetail : Route
 
     @Serializable
-    data object GlucoseDetailScreen : Route
+    data object GlucoseDetail : Route
 
     // 설정
     @Serializable

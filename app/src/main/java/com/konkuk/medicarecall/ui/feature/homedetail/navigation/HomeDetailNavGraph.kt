@@ -12,61 +12,61 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMen
 import com.konkuk.medicarecall.ui.navigation.Route
 
 fun NavController.navigateToMealDetailScreen() {
-    navigate(Route.MealDetailScreen)
+    navigate(Route.MealDetail)
 }
 
 fun NavController.navigateToMedicineDetailScreen() {
-    navigate(Route.MedicineDetailScreen)
+    navigate(Route.MedicineDetail)
 }
 
 fun NavController.navigateToSleepDetailScreen() {
-    navigate(Route.SleepDetailScreen)
+    navigate(Route.SleepDetail)
 }
 
 fun NavController.navigateToStateHealthDetailScreen() {
-    navigate(Route.StateHealthDetailScreen)
+    navigate(Route.StateHealthDetail)
 }
 
 fun NavController.navigateToStateMentalDetailScreen() {
-    navigate(Route.StateMentalDetailScreen)
+    navigate(Route.StateMentalDetail)
 }
 
 fun NavController.navigateToGlucoseDetailScreen() {
-    navigate(Route.GlucoseDetailScreen)
+    navigate(Route.GlucoseDetail)
 }
 
 fun NavGraphBuilder.homeDetailNavGraph(
     popBackStack: () -> Unit,
 ) {
     // 홈 상세 화면_식사 화면
-    composable<Route.MealDetailScreen> {
+    composable<Route.MealDetail> {
         MealDetailScreen(
             onBack = popBackStack,
         )
     }
 
     // 홈 상세 화면_복용 화면
-    composable<Route.MedicineDetailScreen> {
+    composable<Route.MedicineDetail> {
         MedicineDetailScreen(onBack = popBackStack)
     }
 
     // 홈 상세 화면_수면 화면
-    composable<Route.SleepDetailScreen> {
+    composable<Route.SleepDetail> {
         SleepDetailScreen(onBack = popBackStack)
     }
 
     // 홈 상세 화면_건강 징후 화면
-    composable<Route.StateHealthDetailScreen> {
+    composable<Route.StateHealthDetail> {
         StateHealthDetailScreen(onBack = popBackStack)
     }
 
     // 홈 상세 화면_심리 상태 화면
-    composable<Route.StateMentalDetailScreen> {
+    composable<Route.StateMentalDetail> {
         StateMentalDetailScreen(onBack = popBackStack)
     }
 
     // 홈 상세 화면_혈당 화면
-    composable<Route.GlucoseDetailScreen> {
+    composable<Route.GlucoseDetail> {
         GlucoseDetailScreen(onBack = popBackStack)
     }
 }

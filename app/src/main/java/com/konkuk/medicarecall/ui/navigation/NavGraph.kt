@@ -121,42 +121,42 @@ fun NavGraph(
         )
 
         // 홈 상세 화면_식사 화면
-        composable<Route.MealDetailScreen> {
+        composable<Route.MealDetail> {
             MealDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_복용 화면
-        composable<Route.MedicineDetailScreen> {
+        composable<Route.MedicineDetail> {
             MedicineDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_수면 화면
-        composable<Route.SleepDetailScreen> {
+        composable<Route.SleepDetail> {
             SleepDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_건강 징후 화면
-        composable<Route.StateHealthDetailScreen> {
+        composable<Route.StateHealthDetail> {
             StateHealthDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_심리 상태 화면
-        composable<Route.StateMentalDetailScreen> {
+        composable<Route.StateMentalDetail> {
             StateMentalDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_혈당 화면
-        composable<Route.GlucoseDetailScreen> {
+        composable<Route.GlucoseDetail> {
             GlucoseDetailScreen(
                 onBack = { navController.popBackStack() },
             )
