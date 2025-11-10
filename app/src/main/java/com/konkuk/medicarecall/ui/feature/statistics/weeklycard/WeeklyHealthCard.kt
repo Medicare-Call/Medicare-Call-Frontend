@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.statistics.weeklycard
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +25,9 @@ fun WeeklyHealthCard(
     modifier: Modifier = Modifier,
     healthNote: String,
 ) {
-    val isUnrecorded = healthNote.isEmpty()
-    val displayText = if (isUnrecorded) "아직 충분한 기록이 쌓이지 않았어요." else healthNote
+    Log.d("WeeklyHealthCard", "note=[$healthNote], isBlank=${healthNote.isBlank()}, length=${healthNote.length}")
+
+    val isUnrecorded = healthNote.isBlank()
 
     Card(
         modifier = modifier
@@ -51,7 +53,7 @@ fun WeeklyHealthCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = displayText,
+                text = if (isUnrecorded) "아직 충분한 기록이 쌓이지 않았어요." else healthNote,
                 style = MediCareCallTheme.typography.R_16,
 
                 color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray8,

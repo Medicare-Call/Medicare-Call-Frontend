@@ -14,7 +14,7 @@ data class StatisticsResponseDto(
     @SerialName("medicationStats")
     val medicationStats: Map<String, MedicationStatDto>,
     @SerialName("healthSummary")
-    val healthSummary: String,
+    val healthSummary: String? = null,
     @SerialName("averageSleep")
     val averageSleep: AverageSleepDto,
     @SerialName("psychSummary")

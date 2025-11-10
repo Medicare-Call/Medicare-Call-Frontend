@@ -172,6 +172,8 @@ class StatisticsViewModel @Inject constructor(
                     error = null,
                 )
             }.onFailure { e ->
+                Log.d("STATISTICS_DEBUG", "404 EMPTY 적용됨: ${WeeklySummaryUiState.EMPTY.weeklyHealthNote}")
+
                 Log.e("STATISTICS_DEBUG", "onFailure: 데이터 로딩 실패", e)
 
                 val summaryState = if (e is HttpException && e.code() == 404) {
@@ -216,6 +218,9 @@ class StatisticsViewModel @Inject constructor(
         val sleepH = averageSleep.hours
         val sleepM = averageSleep.minutes
 
+        // UI 색상 문제 대응 TODO: 서버에서 null로 변경시 해당 로직 제거
+        val noteText = healthSummary.takeIf { it != EMPTY_HEALTH_MESSAGE && it != null } ?: ""
+
         return WeeklySummaryUiState(
             elderName = elderName,
             weeklyMealRate = summaryStats.mealRate,
@@ -228,7 +233,7 @@ class StatisticsViewModel @Inject constructor(
                 WeeklyMealUiState("저녁", mealStats.dinner, 7),
             ),
             weeklyMedicines = orderedMedicines,
-            weeklyHealthNote = healthSummary,
+            weeklyHealthNote = noteText,
             weeklySleepHours = sleepH,
             weeklySleepMinutes = sleepM,
             weeklyMental = WeeklyMentalUiState(
@@ -245,5 +250,8 @@ class StatisticsViewModel @Inject constructor(
                 afterMealLow = bloodSugar.afterMeal.low,
             ),
         )
+    }
+    companion object {
+        private const val EMPTY_HEALTH_MESSAGE = "아직 충분한 기록이 쌓이지 않았어요."
     }
 }

@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.network
 
 import android.util.Log
-import com.konkuk.medicarecall.data.api.auth.AuthService
+import com.konkuk.medicarecall.data.api.auth.RefreshService
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
-    private val authService: dagger.Lazy<AuthService>, // 순환 참조 방지
+    private val refreshService: RefreshService,
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -44,7 +44,7 @@ class AuthAuthenticator @Inject constructor(
 
             // 6. 토큰 갱신 API 호출 (runBlocking 사용)
             val refreshResponse = runBlocking {
-                authService.get().refreshToken(refreshToken)
+                refreshService.refreshToken(refreshToken)
             }
 
             return if (refreshResponse.isSuccessful && refreshResponse.body() != null) {

@@ -100,7 +100,7 @@ fun WeeklyMealCard(
                         Text(
                             text = countText,
                             style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray6,
+                            color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray6,
                         )
                     }
                 }

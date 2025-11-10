@@ -247,10 +247,10 @@ fun GlucoseDetailScreenLayout(
             // EMPTY VIEW
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 177.dp),
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(186.dp))
                 Image(
                     painter = painterResource(id = R.drawable.ic_no_record),
                     contentDescription = null,
@@ -264,6 +264,7 @@ fun GlucoseDetailScreenLayout(
                     style = MediCareCallTheme.typography.R_18,
                     color = MediCareCallTheme.colors.gray6,
                 )
+                Spacer(modifier = Modifier.height(248.dp))
             }
         }
     }

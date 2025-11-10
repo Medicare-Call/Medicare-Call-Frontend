@@ -67,7 +67,7 @@ fun HomeMedicineContainer(
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp,
             ),
 

@@ -1,8 +1,7 @@
 package com.konkuk.medicarecall.data.di
 
-import android.util.Log
 import com.konkuk.medicarecall.BuildConfig
-import com.konkuk.medicarecall.data.api.auth.AuthService
+import com.konkuk.medicarecall.data.api.auth.RefreshService
 import com.konkuk.medicarecall.data.network.AuthAuthenticator
 import com.konkuk.medicarecall.data.network.AuthInterceptor
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
@@ -18,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -34,9 +34,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthAuthenticator(
         dataStoreRepository: DataStoreRepository,
-        authService: dagger.Lazy<AuthService>,
+        refreshService: RefreshService,
     ): AuthAuthenticator {
-        return AuthAuthenticator(dataStoreRepository, authService)
+        return AuthAuthenticator(dataStoreRepository, refreshService)
     }
 
     @Provides
@@ -64,8 +64,28 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("AuthRetrofit")
+    fun provideAuthRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit {
+        val json = Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            isLenient = true
+        }
+        val authOkHttpClient = OkHttpClient.Builder()
+            .readTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .client(authOkHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        Log.d("Retrofit", "Base URL: ${BuildConfig.BASE_URL}")
         val json = Json {
             encodeDefaults = true
             ignoreUnknownKeys = true
