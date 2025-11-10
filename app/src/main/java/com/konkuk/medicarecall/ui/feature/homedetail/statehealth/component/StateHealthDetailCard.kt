@@ -44,7 +44,7 @@ fun StateHealthDetailCard(
             .heightIn(min = 166.dp)
             .wrapContentHeight()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),

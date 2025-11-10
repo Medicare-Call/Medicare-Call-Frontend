@@ -47,7 +47,7 @@ fun HomeMealContainer(
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -61,8 +61,7 @@ fun HomeMealContainer(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
-                    modifier = Modifier
-                        .padding(3.dp, 5.dp),
+                    modifier = Modifier,
                     painter = painterResource(id = R.drawable.ic_ricebowl),
                     contentDescription = "ricebowl icon",
                 )
@@ -85,12 +84,12 @@ fun HomeMealContainer(
             ) {
                 // 아침
                 Column(
-                    modifier = Modifier.padding(horizontal = 7.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 7.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
-                        modifier = Modifier
-                            .padding(7.dp, 10.dp),
+                        modifier = Modifier,
                         painter = painterResource(id = getRiceBowlIcon(breakfastEaten)),
                         contentDescription = "아침 식사 기록",
                     )
@@ -108,8 +107,7 @@ fun HomeMealContainer(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
-                        modifier = Modifier
-                            .padding(7.dp, 10.dp),
+                        modifier = Modifier,
                         painter = painterResource(id = getRiceBowlIcon(lunchEaten)),
                         contentDescription = "점심 식사 기록",
                     )
@@ -126,8 +124,7 @@ fun HomeMealContainer(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
-                        modifier = Modifier
-                            .padding(7.dp, 10.dp),
+                        modifier = Modifier,
                         painter = painterResource(id = getRiceBowlIcon(dinnerEaten)),
                         contentDescription = "저녁 식사 기록",
                     )

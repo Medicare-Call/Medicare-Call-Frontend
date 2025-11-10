@@ -40,7 +40,7 @@ data class WeeklySummaryUiState(
                 WeeklyMealUiState("저녁", -1, 7),
             ),
             weeklyMedicines = emptyList(),
-            weeklyHealthNote = "아직 충분한 기록이 쌓이지 않았어요.",
+            weeklyHealthNote = "",
             weeklySleepHours = null,
             weeklySleepMinutes = null,
             weeklyMental = WeeklyMentalUiState.EMPTY,

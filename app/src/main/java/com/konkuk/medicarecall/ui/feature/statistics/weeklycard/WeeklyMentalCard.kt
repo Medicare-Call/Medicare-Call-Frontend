@@ -97,7 +97,7 @@ private fun MentalStatusRow(
         Text(
             text = label,
             style = MediCareCallTheme.typography.R_15,
-            color = MediCareCallTheme.colors.gray4,
+            color = MediCareCallTheme.colors.gray8,
         )
         Spacer(modifier = Modifier.width(10.dp))
         Icon(
