@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.ChipItem
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
@@ -55,9 +55,9 @@ fun LoginElderMedInfoScreen(
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-    val elderUiState by loginElderViewModel.elderUiState.collectAsState()
+    val elderUiState by loginElderViewModel.elderUiState.collectAsStateWithLifecycle()
 
-    val uiState by loginElderViewModel.elderHealthUiState.collectAsState()
+    val uiState by loginElderViewModel.elderHealthUiState.collectAsStateWithLifecycle()
     val selectedIndex = uiState.selectedIndex
 
     Box(

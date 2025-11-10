@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.meal.screen
+package com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,46 +22,50 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.component.MedicineDetailCard
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MealDetail(
+fun MedicineDetailScreen(
     onBack: () -> Unit,
+    homeViewModel: HomeViewModel = hiltViewModel(),
     calendarViewModel: CalendarViewModel = hiltViewModel(),
-    mealViewModel: MealViewModel = hiltViewModel(),
+    medicineViewModel: MedicineViewModel = hiltViewModel(),
 ) {
-    val homeViewModel: HomeViewModel = hiltViewModel()
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
     }
 
-    val selectedDate by calendarViewModel.selectedDate.collectAsState()
-    val elderId by homeViewModel.selectedElderId.collectAsState()
+    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
+    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         Log.d("MED_UI", "LaunchedEffect: elderId=$elderId, date=$selectedDate")
-        elderId?.let { mealViewModel.loadMealsForDate(it, selectedDate) }
+        elderId?.let { medicineViewModel.loadMedicinesForDate(it, selectedDate) }
     }
 
-    val meals by mealViewModel.meals.collectAsState()
+    val uiState by medicineViewModel.state.collectAsStateWithLifecycle()
+    Log.d("MED_UI", "render medicines=${uiState.items.size}")
 
-    MealDetailLayout(
+    MedicineDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
-        meals = meals,
+        medicines = uiState.items,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
@@ -71,11 +74,11 @@ fun MealDetail(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MealDetailLayout(
+fun MedicineDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
-    meals: List<MealUiState>,
+    medicines: List<MedicineUiState>,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
     onMonthClick: () -> Unit,
@@ -91,10 +94,10 @@ fun MealDetailLayout(
                 .statusBarsPadding(),
         ) {
             TopAppBar(
-                title = "식사",
+                title = "복약",
                 onBack = onBack,
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -106,9 +109,7 @@ fun MealDetailLayout(
                     onMonthClick = onMonthClick,
                     onDateSelected = onDateSelected,
                 )
-
                 Spacer(Modifier.height(12.dp))
-
                 WeeklyCalendar(
                     calendarUiState = CalendarUiState(
                         currentYear = selectedDate.year,
@@ -118,15 +119,12 @@ fun MealDetailLayout(
                     ),
                     onDateSelected = onDateSelected,
                 )
-
                 Spacer(modifier = Modifier.height(32.dp))
-
-                meals.forEach { meal ->
-                    MealDetailCard(
-                        mealTime = meal.mealTime, // 아침 점심 저녁
-                        description = meal.description, // 식사 내용
-                        isRecorded = meal.isRecorded, // 식사 기록 여부
-                        isEaten = meal.isEaten, // 식사 유무
+                medicines.forEach { medicine ->
+                    MedicineDetailCard(
+                        medicineName = medicine.medicineName,
+                        todayRequiredCount = medicine.todayRequiredCount,
+                        doseStatusList = medicine.doseStatusList,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -135,78 +133,33 @@ fun MealDetailLayout(
     }
 }
 
-@Preview(name = "식사 - 기록 있음", showBackground = true)
+@Preview(showBackground = true)
 @Composable
-fun PreviewMealDetail_Recorded() {
-    val dummyMeals = listOf(
-        MealUiState(
-            mealTime = "아침",
-            description = "간단히 밥과 반찬을 드셨어요.",
-            isRecorded = true,
-            isEaten = true,
+fun PreviewMedicineDetailScreen() {
+    val dummyMedicines = listOf(
+        MedicineUiState(
+            medicineName = "당뇨약",
+            todayRequiredCount = 3,
+            doseStatusList = listOf(
+                DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
+                DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED),
+            ),
         ),
-        MealUiState(
-            mealTime = "점심",
-            description = "식사하지 않으셨어요.",
-            isRecorded = true,
-            isEaten = false,
-        ),
-        MealUiState(
-            mealTime = "저녁",
-            description = "죽을 드셨어요.",
-            isRecorded = true,
-            isEaten = true,
+        MedicineUiState(
+            medicineName = "혈압약",
+            todayRequiredCount = 2,
+            doseStatusList = listOf(
+                DoseStatusItem(time = "아침", doseStatus = DoseStatus.TAKEN),
+            ),
         ),
     )
-    val selectedDate = LocalDate.of(2025, 5, 7)
-    val weekDates =
-        (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
 
     MediCareCallTheme {
-        MealDetailLayout(
+        MedicineDetailScreenLayout(
             onBack = {},
-            selectedDate = selectedDate,
-            meals = dummyMeals,
-            weekDates = weekDates,
-            onDateSelected = {},
-            onMonthClick = {},
-        )
-    }
-}
-
-@Preview(name = "식사 - 미기록 화면", showBackground = true)
-@Composable
-fun PreviewMealDetail_Unrecorded() {
-    val dummyMeals = listOf(
-        MealUiState(
-            mealTime = "아침",
-            description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
-        ),
-        MealUiState(
-            mealTime = "점심",
-            description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
-        ),
-        MealUiState(
-            mealTime = "저녁",
-            description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
-        ),
-    )
-    val selectedDate = LocalDate.of(2025, 5, 7)
-    val weekDates =
-        (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
-
-    MediCareCallTheme {
-        MealDetailLayout(
-            onBack = {},
-            selectedDate = selectedDate,
-            meals = dummyMeals,
-            weekDates = weekDates,
+            selectedDate = LocalDate.now(),
+            medicines = dummyMedicines,
+            weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
             onMonthClick = {},
         )

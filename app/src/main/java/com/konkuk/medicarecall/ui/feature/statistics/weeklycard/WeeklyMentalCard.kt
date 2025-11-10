@@ -119,7 +119,7 @@ private fun MentalStatusRow(
 
 @Preview(name = "심리상태 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyMentalCard_Recorded() {
+fun PreviewWeeklyMentalCardRecorded() {
     WeeklyMentalCard(
         modifier = Modifier.size(155.dp),
         mental = WeeklyMentalUiState(
@@ -132,7 +132,7 @@ fun PreviewWeeklyMentalCard_Recorded() {
 
 @Preview(name = "심리상태 카드 - 미기록")
 @Composable
-fun PreviewWeeklyMentalCard_Unrecorded() {
+fun PreviewWeeklyMentalCardUnrecorded() {
     WeeklyMentalCard(
         modifier = Modifier.size(155.dp),
         mental = WeeklyMentalUiState.EMPTY,

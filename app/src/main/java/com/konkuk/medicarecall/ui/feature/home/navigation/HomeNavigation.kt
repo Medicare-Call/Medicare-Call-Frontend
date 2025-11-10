@@ -12,21 +12,21 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    navigateToMealDetail: () -> Unit,
-    navigateToMedicationDetail: () -> Unit,
-    navigateToSleepDetail: () -> Unit,
-    navigateToHealthAnalysisDetail: () -> Unit,
-    navigateToMentalAnalysisDetail: () -> Unit,
-    navigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetailScreen: () -> Unit,
+    navigateToMedicineDetailScreen: () -> Unit,
+    navigateToSleepDetailScreen: () -> Unit,
+    navigateToStateHealthDetailScreen: () -> Unit,
+    navigateToStateMentalDetailScreen: () -> Unit,
+    navigateToGlucoseDetailScreen: () -> Unit,
 ) {
     composable<MainTabRoute.Home> { backStackEntry ->
         HomeScreen(
-            navigateToMealDetail = navigateToMealDetail,
-            navigateToMedicationDetail = navigateToMedicationDetail,
-            navigateToSleepDetail = navigateToSleepDetail,
-            navigateToHealthAnalysisDetail = navigateToHealthAnalysisDetail,
-            navigateToMentalAnalysisDetail = navigateToMentalAnalysisDetail,
-            navigateToGlucoseDetail = navigateToGlucoseDetail,
+            navigateToMealDetailScreen = navigateToMealDetailScreen,
+            navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
+            navigateToSleepDetailScreen = navigateToSleepDetailScreen,
+            navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
+            navigateToStateMentalDetailScreen = navigateToStateMentalDetailScreen,
+            navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
             mainBackStackEntry = backStackEntry,
         )
     }

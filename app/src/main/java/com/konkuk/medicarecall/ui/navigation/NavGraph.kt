@@ -18,12 +18,12 @@ import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetailScreen
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
@@ -38,12 +38,12 @@ import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
@@ -103,61 +103,61 @@ fun NavGraph(
         // 홈
 //        composable<MainTabRoute.Home> { backStackEntry ->
 //            HomeScreen(
-//                navigateToMealDetail = { navController.navigate(Route.MealDetail) },
-//                navigateToMedicationDetail = { navController.navigate(Route.MedicationDetail) },
-//                navigateToSleepDetail = { navController.navigate(Route.SleepDetail) },
-//                navigateToHealthAnalysisDetail = { navController.navigate(Route.HealthAnalysisDetail) },
-//                navigateToMentalAnalysisDetail = { navController.navigate(Route.MentalAnalysisDetail) },
-//                navigateToGlucoseDetail = { navController.navigate(Route.GlucoseDetail) },
+//                navigateToMealDetailScreen = { navController.navigate(Route.MealDetailScreen) },
+//                navigateToMedicineDetailScreen = { navController.navigate(Route.MedicineDetailScreen) },
+//                navigateToSleepDetailScreen = { navController.navigate(Route.SleepDetailScreen) },
+//                navigateToStateHealthDetailScreen = { navController.navigate(Route.StateHealthDetailScreen) },
+//                navigateToStateMentalDetailScreen = { navController.navigate(Route.StateMentalDetailScreen) },
+//                navigateToGlucoseDetailScreen = { navController.navigate(Route.GlucoseDetailScreen) },
 //            )
 //        }
         homeNavGraph(
-            navigateToMealDetail = navigator::navigateToMealDetail,
-            navigateToMedicationDetail = navigator::navigateToMedicationDetail,
-            navigateToSleepDetail = navigator::navigateToSleepDetail,
-            navigateToHealthAnalysisDetail = navigator::navigateToHealthAnalysisDetail,
-            navigateToMentalAnalysisDetail = navigator::navigateToMentalAnalysisDetail,
-            navigateToGlucoseDetail = navigator::navigateToGlucoseDetail,
+            navigateToMealDetailScreen = navigator::navigateToMealDetailScreen,
+            navigateToMedicineDetailScreen = navigator::navigateToMedicineDetailScreen,
+            navigateToSleepDetailScreen = navigator::navigateToSleepDetailScreen,
+            navigateToStateHealthDetailScreen = navigator::navigateToStateHealthDetailScreen,
+            navigateToStateMentalDetailScreen = navigator::navigateToStateMentalDetailScreen,
+            navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
         )
 
         // 홈 상세 화면_식사 화면
         composable<Route.MealDetail> {
-            MealDetail(
+            MealDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_복용 화면
-        composable<Route.MedicationDetail> {
-            MedicineDetail(
+        composable<Route.MedicineDetail> {
+            MedicineDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_수면 화면
         composable<Route.SleepDetail> {
-            SleepDetail(
+            SleepDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_건강 징후 화면
-        composable<Route.HealthAnalysisDetail> {
-            StateHealthDetail(
+        composable<Route.StateHealthDetail> {
+            StateHealthDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_심리 상태 화면
-        composable<Route.MentalAnalysisDetail> {
-            StateMentalDetail(
+        composable<Route.StateMentalDetail> {
+            StateMentalDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }
 
         // 홈 상세 화면_혈당 화면
         composable<Route.GlucoseDetail> {
-            GlucoseDetail(
+            GlucoseDetailScreen(
                 onBack = { navController.popBackStack() },
             )
         }

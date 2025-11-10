@@ -116,7 +116,7 @@ private fun WeeklySummaryItem(
 
 @Preview(name = "요약 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklySummaryCard_Recorded() {
+fun PreviewWeeklySummaryCardRecorded() {
     WeeklySummaryCard(
         summary = WeeklySummaryUiState(
             weeklyMealRate = 65,
@@ -129,6 +129,6 @@ fun PreviewWeeklySummaryCard_Recorded() {
 
 @Preview(name = "요약 카드 - 미기록")
 @Composable
-fun PreviewWeeklySummaryCard_Unrecorded() {
+fun PreviewWeeklySummaryCardUnrecorded() {
     WeeklySummaryCard(summary = WeeklySummaryUiState.EMPTY)
 }

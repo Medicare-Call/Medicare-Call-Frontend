@@ -64,7 +64,7 @@ fun WeeklyHealthCard(
 
 @Preview(name = "건강징후 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyHealthCard_Recorded() {
+fun PreviewWeeklyHealthCardRecorded() {
     WeeklyHealthCard(
         healthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 호흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요.",
     )
@@ -72,7 +72,7 @@ fun PreviewWeeklyHealthCard_Recorded() {
 
 @Preview(name = "건강징후 카드 - 미기록")
 @Composable
-fun PreviewWeeklyHealthCard_Unrecorded() {
+fun PreviewWeeklyHealthCardUnrecorded() {
     WeeklyHealthCard(
         healthNote = "",
     )

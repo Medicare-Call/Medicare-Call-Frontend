@@ -48,16 +48,16 @@ sealed interface Route {
     data object MealDetail : Route
 
     @Serializable
-    data object MedicationDetail : Route
+    data object MedicineDetail : Route
 
     @Serializable
     data object SleepDetail : Route
 
     @Serializable
-    data object HealthAnalysisDetail : Route
+    data object StateHealthDetail : Route
 
     @Serializable
-    data object MentalAnalysisDetail : Route
+    data object StateMentalDetail : Route
 
     @Serializable
     data object GlucoseDetail : Route

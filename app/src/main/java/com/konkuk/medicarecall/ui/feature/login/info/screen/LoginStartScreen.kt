@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
@@ -43,7 +43,7 @@ fun LoginStartScreen(
     navigateToHome: () -> Unit = {},
     loginViewModel: LoginViewModel = hiltViewModel(),
 ) {
-    val navigationDestination by loginViewModel.navigationDestination.collectAsState()
+    val navigationDestination by loginViewModel.navigationDestination.collectAsStateWithLifecycle()
 
     LaunchedEffect(navigationDestination) {
         navigationDestination?.let { destination ->
