@@ -34,7 +34,7 @@ object NetworkModule {
     @Singleton
     fun provideAuthAuthenticator(
         dataStoreRepository: DataStoreRepository,
-        refreshService: dagger.Lazy<RefreshService>,
+        refreshService: RefreshService,
     ): AuthAuthenticator {
         return AuthAuthenticator(dataStoreRepository, refreshService)
     }
