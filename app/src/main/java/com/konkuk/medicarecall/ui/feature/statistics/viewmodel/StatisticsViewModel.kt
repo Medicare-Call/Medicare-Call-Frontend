@@ -219,11 +219,7 @@ class StatisticsViewModel @Inject constructor(
         val sleepM = averageSleep.minutes
 
         // UI 색상 문제 대응 TODO: 서버에서 null로 변경시 해당 로직 제거
-        val noteText = if (healthSummary == "아직 충분한 기록이 쌓이지 않았어요.") {
-            ""
-        } else {
-            healthSummary ?: ""
-        }
+        val noteText = healthSummary.takeIf { it != EMPTY_HEALTH_MESSAGE && it != null } ?: ""
 
         return WeeklySummaryUiState(
             elderName = elderName,
@@ -254,5 +250,8 @@ class StatisticsViewModel @Inject constructor(
                 afterMealLow = bloodSugar.afterMeal.low,
             ),
         )
+    }
+    companion object {
+        private const val EMPTY_HEALTH_MESSAGE = "아직 충분한 기록이 쌓이지 않았어요."
     }
 }
