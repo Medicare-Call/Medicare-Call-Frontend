@@ -111,7 +111,7 @@ fun WeeklyMealCard(
 
 @Preview(name = "식사 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyMealCard_Recorded() {
+fun PreviewWeeklyMealCardRecorded() {
     WeeklyMealCard(
         modifier = Modifier
             .width(150.dp),
@@ -125,7 +125,7 @@ fun PreviewWeeklyMealCard_Recorded() {
 
 @Preview(name = "식사 카드 - 미기록")
 @Composable
-fun PreviewWeeklyMealCard_Unrecorded() {
+fun PreviewWeeklyMealCardUnrecorded() {
     WeeklyMealCard(
         modifier = Modifier
             .width(150.dp),

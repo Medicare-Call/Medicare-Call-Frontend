@@ -272,7 +272,7 @@ private fun StatisticsContent(
 
 @Preview(name = "주간 통계 - 기록 있음", showBackground = true, heightDp = 1200)
 @Composable
-fun PreviewStatisticsScreen_Recorded() {
+fun PreviewStatisticsScreenRecorded() {
     val dummySummary = WeeklySummaryUiState(
         elderName = "김옥자",
         weeklyMealRate = 65,
@@ -331,7 +331,7 @@ fun PreviewStatisticsScreen_Recorded() {
 
 @Preview(name = "주간 통계 - 미기록", showBackground = true, heightDp = 1200)
 @Composable
-fun PreviewStatisticsScreen_Unrecorded() {
+fun PreviewStatisticsScreenUnrecorded() {
     MediCareCallTheme {
         StatisticsScreenLayout(
             uiState = StatisticsUiState(

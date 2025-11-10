@@ -121,7 +121,7 @@ fun WeeklyMedicineCard(
 
 @Preview(name = "복약 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyMedicineCard_Recorded() {
+fun PreviewWeeklyMedicineCardRecorded() {
     WeeklyMedicineCard(
         modifier = Modifier
             .size(150.dp, 140.dp),
@@ -135,7 +135,7 @@ fun PreviewWeeklyMedicineCard_Recorded() {
 
 @Preview(name = "복약 카드 - 미기록")
 @Composable
-fun PreviewWeeklyMedicineCard_UnRecorded() {
+fun PreviewWeeklyMedicineCardUnRecorded() {
     WeeklyMedicineCard(
         modifier = Modifier
             .size(150.dp, 140.dp),

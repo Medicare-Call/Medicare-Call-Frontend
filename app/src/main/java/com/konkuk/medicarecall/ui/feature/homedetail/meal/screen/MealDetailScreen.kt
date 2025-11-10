@@ -137,7 +137,7 @@ fun MealDetailScreenLayout(
 
 @Preview(name = "식사 - 기록 있음", showBackground = true)
 @Composable
-fun PreviewMealDetailScreen_Recorded() {
+fun PreviewMealDetailScreenRecorded() {
     val dummyMeals = listOf(
         MealUiState(
             mealTime = "아침",
@@ -176,7 +176,7 @@ fun PreviewMealDetailScreen_Recorded() {
 
 @Preview(name = "식사 - 미기록 화면", showBackground = true)
 @Composable
-fun PreviewMealDetailScreen_Unrecorded() {
+fun PreviewMealDetailScreenUnrecorded() {
     val dummyMeals = listOf(
         MealUiState(
             mealTime = "아침",

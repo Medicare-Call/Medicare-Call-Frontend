@@ -189,7 +189,7 @@ private fun GlucoseStatusRow(
 
 @Preview(name = "혈당 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyGlucoseCard_Recorded() {
+fun PreviewWeeklyGlucoseCardRecorded() {
     WeeklyGlucoseCard(
         weeklyGlucose = WeeklyGlucoseUiState(
             beforeMealNormal = 5,
@@ -204,7 +204,7 @@ fun PreviewWeeklyGlucoseCard_Recorded() {
 
 @Preview(name = "혈당 카드 - 미기록")
 @Composable
-fun PreviewWeeklyGlucoseCard_Unrecorded() {
+fun PreviewWeeklyGlucoseCardUnrecorded() {
     WeeklyGlucoseCard(
         weeklyGlucose = WeeklyGlucoseUiState.EMPTY,
     )

@@ -472,7 +472,7 @@ fun PreviewHomeScreen() {
 
 @Preview(showBackground = true, name = "홈 화면 (미기록 상태)", heightDp = 1500)
 @Composable
-fun PreviewHomeScreen_Unrecorded() {
+fun PreviewHomeScreenUnrecorded() {
     val unrecordedUiState = HomeUiState(
         isLoading = false,
         elderName = "김옥자",

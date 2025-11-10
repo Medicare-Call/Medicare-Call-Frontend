@@ -272,7 +272,7 @@ fun GlucoseDetailScreenLayout(
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true, name = "데이터 있을 때")
 @Composable
-fun PreviewGlucoseDetailScreen_DataAvailable() {
+fun PreviewGlucoseDetailScreenDataAvailable() {
     // 더미 데이터 프리뷰
     val today = LocalDate.now()
     val sampleData = (0..6).map { i ->
