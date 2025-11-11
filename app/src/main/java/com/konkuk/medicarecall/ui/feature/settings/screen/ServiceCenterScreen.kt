@@ -71,11 +71,3 @@ fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun ServiceCenterScreenPreview() {
-    MediCareCallTheme {
-        ServiceCenterScreen(onBack = {})
-    }
-}

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
@@ -31,6 +32,7 @@ fun AnnouncementDetailScreen(
     noticeInfo: NoticesResponseDto,
     onBack: () -> Unit = {},
 ) {
+    val contents = noticeInfo.contents.replace("\\n","\n")
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
@@ -84,7 +86,7 @@ fun AnnouncementDetailScreen(
                 )
                 Spacer(modifier = modifier.height(10.dp))
                 Text(
-                    text = noticeInfo.contents,
+                    text = contents,
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray6,
                 )
