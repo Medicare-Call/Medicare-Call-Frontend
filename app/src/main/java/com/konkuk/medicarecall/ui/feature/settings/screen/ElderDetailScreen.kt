@@ -225,8 +225,7 @@ fun ElderDetailScreen(
                                 residenceType = residenceType,
                             ),
                         ) {
-                            navController.getBackStackEntry("main")
-                                .savedStateHandle["ELDER_NAME_UPDATED"] = name
+                            navController.previousBackStackEntry?.savedStateHandle?.set("ELDER_NAME_UPDATED", name)
                             navController.popBackStack()
                         }
                     },
