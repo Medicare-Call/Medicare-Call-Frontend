@@ -1,7 +1,9 @@
 package com.konkuk.medicarecall.ui.feature.settings.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
@@ -43,19 +46,36 @@ fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 )
             },
         )
-        Spacer(modifier = modifier.height(30.dp))
-        Column {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_settings_center),
+                modifier = modifier.size(80.dp),
+                contentDescription = "service_center",
+            )
+            Spacer(modifier = modifier.height(20.dp)
+            )
             Text(
                 text = "도움이 필요하신가요?",
-                style = MediCareCallTheme.typography.SB_16,
-                color = Color.Black,
+                style = MediCareCallTheme.typography.R_18,
+                color = MediCareCallTheme.colors.gray6,
             )
-            Spacer(modifier = modifier.height(7.dp))
             Text(
                 text = "상담시간 평일 09:00 - 18:00",
                 style = MediCareCallTheme.typography.R_14,
-                color = Color.Black,
+                color = MediCareCallTheme.colors.gray4,
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ServiceCenterScreenPreview() {
+    MediCareCallTheme {
+        ServiceCenterScreen(onBack = {})
     }
 }
