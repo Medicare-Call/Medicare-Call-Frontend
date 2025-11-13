@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import java.time.LocalDate
 import javax.inject.Inject
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
@@ -142,7 +141,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchHomeSummaryForToday(elderId: Int) {
         viewModelScope.launch {
             _homeUiState.update { it.copy(isLoading = false) }
-            val today = LocalDate.now()
+            //val today = LocalDate.now()
             try {
                 // ① 요약 API 호출 (DTO를 받음)
                 val dto = homeRepository.getHomeSummary(elderId)
