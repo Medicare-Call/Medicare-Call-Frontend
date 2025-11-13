@@ -211,22 +211,48 @@ class HomeViewModel @Inject constructor(
             ?.firstOrNull { it.elderId == elderId }
         val elderName =
             healthInfo?.name ?: _elderInfoList.value.find { it.id == elderId }?.name ?: ""
-        val fallbackMedicines = healthInfo?.medications
-            ?.flatMap { (time, medNames) ->
-                medNames.map { medName -> medName to time }
-            }
-            ?.groupBy { it.first }
-            ?.map { (medName, group) ->
+        // 설정 정보에서 첫 복용 시간 추출
+        val firstTimeCode: String? = healthInfo
+            ?.medications
+            ?.keys
+            ?.firstOrNull()
+            ?.toString()
+            ?.uppercase()
+        // 복용 시간 → 텍스트 변환
+        val defaultNextDose = when (firstTimeCode) {
+            "MORNING" -> "아침약"
+            "LUNCH" -> "점심약"
+            "DINNER" -> "저녁약"
+            else -> "-"
+        }
+
+        val fallbackMedicines = if (healthInfo?.medications.isNullOrEmpty()) {
+            listOf(
                 MedicineUiState(
-                    medicineName = medName,
+                    medicineName = "복약 정보 없음",
                     todayTakenCount = 0,
-                    todayRequiredCount = group.size,
-                    nextDoseTime = "-",
-                )
-            } ?: emptyList()
+                    todayRequiredCount = 0,
+                    nextDoseTime = defaultNextDose, // "다음복약: -"
+                ),
+            )
+        } else {
+            healthInfo!!.medications
+                .flatMap { (time, medNames) -> medNames.map { medName -> medName to time } }
+                .groupBy { it.first }
+                .map { (medName, group) ->
+                    MedicineUiState(
+                        medicineName = medName,
+                        todayTakenCount = 0,
+                        todayRequiredCount = group.size,
+                        nextDoseTime = defaultNextDose,
+                    )
+                }
+        }
         val correctMedicationOrder = healthInfo?.medications
             ?.flatMap { it.value }
-            ?.distinct() ?: emptyList()
+            ?.distinct()
+            ?: emptyList()
+
         val sortedFallbackMedicines = fallbackMedicines.sortedBy { medUiState ->
             correctMedicationOrder.indexOf(medUiState.medicineName)
                 .let { if (it == -1) Int.MAX_VALUE else it }
