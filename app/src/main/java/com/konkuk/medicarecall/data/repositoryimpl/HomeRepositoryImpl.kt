@@ -3,10 +3,8 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
-import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.LocalDate
@@ -60,27 +58,8 @@ class HomeRepositoryImpl @Inject constructor(
                     },
             )
 
-            HomeUiState(
-                elderName = res.elderName,
-                balloonMessage = res.aiSummary,
-                breakfastEaten = res.mealStatus.breakfast,
-                lunchEaten = res.mealStatus.lunch,
-                dinnerEaten = res.mealStatus.dinner,
+            HomeUiState.from(res)
 
-                medicines = res.medicationStatus.medicationList.orEmpty().map {
-                    MedicineUiState(
-                        medicineName = it.type,
-                        todayTakenCount = it.taken,
-                        todayRequiredCount = it.goal,
-                        nextDoseTime = mapNextTimeToKor(it.nextTime),
-                    )
-                },
-
-                sleep = res.sleep ?: HomeResponseDto.SleepDto(0, 0),
-                healthStatus = res.healthStatus ?: "",
-                mentalStatus = res.mentalStatus ?: "",
-                glucoseLevelAverageToday = res.bloodSugar?.meanValue ?: 0,
-            )
         } catch (e: HttpException) {
             Log.e("HomeRepo", "HTTP error fetching home data: ${e.code()}", e)
             HomeUiState.Companion.EMPTY
@@ -89,11 +68,4 @@ class HomeRepositoryImpl @Inject constructor(
             HomeUiState.Companion.EMPTY
         }
     }
-}
-
-private fun mapNextTimeToKor(nextTime: String?): String = when (nextTime) {
-    "MORNING" -> "아침"
-    "LUNCH" -> "점심"
-    "DINNER" -> "저녁"
-    else -> "-"
 }
