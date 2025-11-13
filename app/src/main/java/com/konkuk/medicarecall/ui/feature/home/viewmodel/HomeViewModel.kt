@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 import retrofit2.HttpException
 import java.time.LocalDate
 import javax.inject.Inject
@@ -43,7 +42,7 @@ class HomeViewModel @Inject constructor(
         _homeUiState.value = _homeUiState.value.copy(elderName = newName)
 
         _homeUiState.update { it.copy(isLoading = false) }
-        softRefreshCurrentElder()
+//        softRefreshCurrentElder()
     }
 
     var isLoading by mutableStateOf(true)
@@ -145,10 +144,13 @@ class HomeViewModel @Inject constructor(
             _homeUiState.update { it.copy(isLoading = false) }
             val today = LocalDate.now()
             try {
-                // ① 요약 API 호출
-                val uiFromServer = homeRepository.getHomeUiState(elderId, today)
+                // ① 요약 API 호출 (DTO를 받음)
+                val dto = homeRepository.getHomeSummary(elderId)
 
-                // ② 설정/건강정보 최신화(중요)
+                // ② DTO를 UiState로 변환 (ViewModel이 직접 함)
+                val uiFromServer = HomeUiState.from(dto)
+
+                // ③ 설정/건강정보 최신화(중요)
                 eldersHealthInfoRepository.refresh()
                 val healthInfo = eldersHealthInfoRepository.getEldersHealthInfo()
                     .getOrNull()
@@ -173,6 +175,7 @@ class HomeViewModel @Inject constructor(
                             todayTakenCount = 0, // 요약이 없으니 기본 0
                             todayRequiredCount = group.size, // 같은 약이 여러 복용시간이면 개수 = 요구횟수
                             nextDoseTime = "-", // 시간표시 필요없으면 "-" 유지
+                            doseStatusList = emptyList(),
                         )
                     }
                     ?: emptyList()
@@ -286,56 +289,58 @@ class HomeViewModel @Inject constructor(
             list.associate { it.name to it.id }
         }
 
-    private fun softRefreshCurrentElder(timeoutMs: Long = 1200L) {
-        val id = selectedElderId.value ?: return
-        viewModelScope.launch {
-            val keepName = _homeUiState.value.elderName
-
-            runCatching {
-                withTimeout(timeoutMs) {
-                    val today = java.time.LocalDate.now()
-                    val uiFromServer = homeRepository.getHomeUiState(id, today)
-
-                    val healthInfo = runCatching {
-                        eldersHealthInfoRepository.refresh()
-                        eldersHealthInfoRepository.getEldersHealthInfo().getOrNull()
-                            ?.firstOrNull { it.elderId == id }
-                    }.getOrNull()
-
-                    val correctMedicationOrder = healthInfo?.medications
-                        ?.flatMap { it.value }
-                        ?.distinct().orEmpty()
-
-                    val mergedMedicines = if (uiFromServer.medicines.isNotEmpty()) {
-                        uiFromServer.medicines
-                    } else {
-                        healthInfo?.medications
-                            ?.flatMap { (time, meds) -> meds.map { it to time } }
-                            ?.groupBy { it.first }
-                            ?.map { (name, group) ->
-                                MedicineUiState(
-                                    medicineName = name,
-                                    todayTakenCount = 0,
-                                    todayRequiredCount = group.size,
-                                    nextDoseTime = "-",
-                                )
-                            }.orEmpty()
-                    }.sortedBy { med ->
-                        correctMedicationOrder.indexOf(med.medicineName)
-                            .let { if (it == -1) Int.MAX_VALUE else it }
-                    }
-
-                    _homeUiState.value = uiFromServer.copy(
-                        elderName = keepName,
-                        medicines = mergedMedicines,
-                        isLoading = false,
-                    )
-                }
-            }.onFailure {
-                _homeUiState.update { it.copy(isLoading = false) }
-            }
-        }
-    }
+//    private fun softRefreshCurrentElder(timeoutMs: Long = 1200L) {
+//        val id = selectedElderId.value ?: return
+//        viewModelScope.launch {
+//            val keepName = _homeUiState.value.elderName
+//
+//            runCatching {
+//                withTimeout(timeoutMs) {
+//                    val today = LocalDate.now()
+//                    val dto = homeRepository.getHomeSummary(id, today)
+//                    val uiFromServer = HomeUiState.from(dto)
+//
+//                    val healthInfo = runCatching {
+//                        eldersHealthInfoRepository.refresh()
+//                        eldersHealthInfoRepository.getEldersHealthInfo().getOrNull()
+//                            ?.firstOrNull { it.elderId == id }
+//                    }.getOrNull()
+//
+//                    val correctMedicationOrder = healthInfo?.medications
+//                        ?.flatMap { it.value }
+//                        ?.distinct().orEmpty()
+//
+//                    val mergedMedicines = if (uiFromServer.medicines.isNotEmpty()) {
+//                        uiFromServer.medicines
+//                    } else {
+//                        healthInfo?.medications
+//                            ?.flatMap { (time, meds) -> meds.map { it to time } }
+//                            ?.groupBy { it.first }
+//                            ?.map { (name, group) ->
+//                                MedicineUiState(
+//                                    medicineName = name,
+//                                    todayTakenCount = 0,
+//                                    todayRequiredCount = group.size,
+//                                    nextDoseTime = "-",
+//                                    doseStatusList = emptyList(),
+//                                )
+//                            }.orEmpty()
+//                    }.sortedBy { med ->
+//                        correctMedicationOrder.indexOf(med.medicineName)
+//                            .let { if (it == -1) Int.MAX_VALUE else it }
+//                    }
+//
+//                    _homeUiState.value = uiFromServer.copy(
+//                        elderName = keepName,
+//                        medicines = mergedMedicines,
+//                        isLoading = false,
+//                    )
+//                }
+//            }.onFailure {
+//                _homeUiState.update { it.copy(isLoading = false) }
+//            }
+//        }
+//    }
 
     // StateFlow 변환용 확장 함수
     fun <T, R> StateFlow<T>.mapState(
