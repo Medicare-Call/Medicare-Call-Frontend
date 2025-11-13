@@ -167,9 +167,7 @@ fun HomeMedicineContainer(
                         style = MediCareCallTheme.typography.R_14,
                         color = MediCareCallTheme.colors.gray5,
                     )
-
                 }
-
 
                 if (idx < medicines.lastIndex) {
                     Spacer(modifier = Modifier.height(22.dp))
