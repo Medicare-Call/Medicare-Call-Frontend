@@ -189,8 +189,4 @@ class StatisticsViewModel @Inject constructor(
             }
         }
     }
-
-    companion object {
-        private const val EMPTY_HEALTH_MESSAGE = "아직 충분한 기록이 쌓이지 않았어요."
-    }
 }
