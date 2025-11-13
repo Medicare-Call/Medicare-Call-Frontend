@@ -277,7 +277,7 @@ fun HomeScreenLayout(
                     name = selectedElderName,
                     modifier = Modifier.statusBarsPadding(),
                     onDropdownClick = onDropdownClick,
-                    notificationCount = homeUiState.unreadNotification,
+                    notificationCount = homeUiState.unreadNotification ?: 0,
                     navigateToAlarm = navigateToAlarm,
                 )
                 val scope = rememberCoroutineScope()
@@ -382,9 +382,9 @@ fun HomeScreenLayout(
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
                                 HomeSleepContainer(
-                                    totalSleepHours = sleepData.meanHours ?: 0,
-                                    totalSleepMinutes = sleepData.meanMinutes ?: 0,
-                                    isRecorded = (sleepData.meanHours ?: 0) > 0 || (sleepData.meanMinutes ?: 0) > 0,
+                                    totalSleepHours = sleepData?.meanHours ?: 0,
+                                    totalSleepMinutes = sleepData?.meanMinutes ?: 0,
+                                    isRecorded = (sleepData?.meanHours ?: 0) > 0 || (sleepData?.meanMinutes ?: 0) > 0,
                                     onClick = navigateToSleepDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
