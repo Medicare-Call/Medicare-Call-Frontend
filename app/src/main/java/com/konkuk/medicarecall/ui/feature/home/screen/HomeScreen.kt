@@ -276,10 +276,9 @@ fun HomeScreenLayout(
                 NameBar(
                     name = selectedElderName,
                     modifier = Modifier.statusBarsPadding(),
-                    navigateToAlarm = navigateToAlarm,
                     onDropdownClick = onDropdownClick,
-                    // TODO: 실제 알림 개수 데이터 연동 필요
-                    notificationCount = 4,
+                    notificationCount = homeUiState.unreadNotification,
+                    navigateToAlarm = navigateToAlarm,
                 )
                 val scope = rememberCoroutineScope()
 
@@ -379,13 +378,13 @@ fun HomeScreenLayout(
                                 HomeMedicineContainer(
                                     medicines = homeUiState.medicines,
                                     onClick = navigateToMedicineDetailScreen,
-                                )
+                                    )
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
                                 HomeSleepContainer(
-                                    totalSleepHours = sleepData.meanHours,
-                                    totalSleepMinutes = sleepData.meanMinutes,
-                                    isRecorded = sleepData.meanHours > 0 || sleepData.meanMinutes > 0,
+                                    totalSleepHours = sleepData.meanHours ?: 0,
+                                    totalSleepMinutes = sleepData.meanMinutes ?: 0,
+                                    isRecorded = (sleepData.meanHours ?: 0) > 0 || (sleepData.meanMinutes ?: 0) > 0,
                                     onClick = navigateToSleepDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
