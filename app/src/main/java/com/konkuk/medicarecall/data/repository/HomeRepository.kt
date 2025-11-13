@@ -1,9 +1,8 @@
 package com.konkuk.medicarecall.data.repository
 
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
-import java.time.LocalDate
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 
 interface HomeRepository {
     suspend fun requestImmediateCareCall(elderId: Int, careCallOption: String): Result<Unit>
-    suspend fun getHomeUiState(elderId: Int, date: LocalDate): HomeUiState
+    suspend fun getHomeSummary(elderId: Int): HomeResponseDto
 }
