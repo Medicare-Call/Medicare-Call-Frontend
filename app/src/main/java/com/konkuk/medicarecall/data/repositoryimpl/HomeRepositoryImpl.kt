@@ -3,11 +3,9 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
+import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import retrofit2.HttpException
-import java.io.IOException
-import java.time.LocalDate
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
@@ -35,28 +33,18 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getHomeUiState(elderId: Int, date: LocalDate): HomeUiState {
-        return try {
-            Log.d("HomeRepo", "[REQ] elderId=$elderId")
+    override suspend fun getHomeSummary(elderId: Int): HomeResponseDto {
+        // DTO만 반환
+        Log.d("HomeRepo", "[REQ] elderId=$elderId")
+        val res = homeService.getHomeSummary(elderId) // DTO를 받음
 
-            val res = homeService.getHomeSummary(elderId)
+        val meds = res.medicationStatus.medicationList.orEmpty()
+        Log.d(
+            "HomeRepo",
+            "[RES] elderName=${res.elderName}, medsCount=${meds.size}, " +
+                "totalTaken=${res.medicationStatus.totalTaken}, totalGoal=${res.medicationStatus.totalGoal}",
+        )
 
-            val meds = res.medicationStatus.medicationList.orEmpty()
-            Log.d(
-                "HomeRepo",
-                "[RES] elderName=${res.elderName}, medsCount=${meds.size}, " +
-                    "totalTaken=${res.medicationStatus.totalTaken}, totalGoal=${res.medicationStatus.totalGoal}, " +
-                    meds.joinToString(prefix = "items=[", postfix = "]") {
-                        "type=${it.type}, taken=${it.taken}, goal=${it.goal}, next=${it.nextTime}"
-                    },
-            )
-            HomeUiState.from(res)
-        } catch (e: HttpException) {
-            Log.e("HomeRepo", "HTTP error fetching home data: ${e.code()}", e)
-            HomeUiState.Companion.EMPTY
-        } catch (e: IOException) {
-            Log.e("HomeRepo", "Network error fetching home data", e)
-            HomeUiState.Companion.EMPTY
-        }
+        return res
     }
 }
