@@ -38,13 +38,13 @@ class HomeRepositoryImpl @Inject constructor(
         Log.d("HomeRepo", "[REQ] elderId=$elderId")
         val res = homeService.getHomeSummary(elderId) // DTO를 받음
 
-        val meds = res.medicationStatus.medicationList.orEmpty()
+        val medicationStatus = res.medicationStatus
+        val meds = medicationStatus?.medicationList.orEmpty()
         Log.d(
             "HomeRepo",
             "[RES] elderName=${res.elderName}, medsCount=${meds.size}, " +
-                "totalTaken=${res.medicationStatus.totalTaken}, totalGoal=${res.medicationStatus.totalGoal}",
+                "totalTaken=${medicationStatus?.totalTaken}, totalGoal=${medicationStatus?.totalGoal}",
         )
-
         return res
     }
 }
