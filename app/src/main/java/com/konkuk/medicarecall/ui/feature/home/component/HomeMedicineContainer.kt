@@ -183,7 +183,7 @@ private fun PreviewHomeMedicineContainer() {
             medicineName = "당뇨약",
             todayTakenCount = 1,
             todayRequiredCount = 3,
-            nextDoseTime = "점심",
+            nextDoseTime = "저녁",
             doseStatusList = listOf(
                 DoseStatusUiState("아침", true),
                 DoseStatusUiState("점심", false),
