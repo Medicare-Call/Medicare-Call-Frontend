@@ -61,6 +61,12 @@ data class HomeUiState(
                             "DINNER" -> "저녁"
                             else -> it.nextTime
                         },
+                        doseStatusList = it.doseStatusList?.map { dtoDose ->
+                            DoseStatusUiState(
+                                time = dtoDose.time.orEmpty(),
+                                taken = dtoDose.taken,
+                            )
+                        },
                     )
                 },
             sleep = dto.sleep,
@@ -77,4 +83,11 @@ data class MedicineUiState(
     val todayTakenCount: Int?,
     val todayRequiredCount: Int?,
     val nextDoseTime: String?,
+    val doseStatusList: List<DoseStatusUiState>? = null,
+)
+
+// 아이콘 상태를 위한 UI State
+data class DoseStatusUiState(
+    val time: String, // "아침", "점심", "저녁"
+    val taken: Boolean?, // true: 먹음, false: 안 먹음, null: 미기록
 )
