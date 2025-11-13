@@ -1,12 +1,12 @@
 package com.konkuk.medicarecall.ui.common.util
 
 import androidx.compose.ui.graphics.Color
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallColors
 
 object WeeklySummaryUtil {
-    fun getMealIconColor(meal: WeeklyMealUiState, colors: MediCareCallColors): Color {
+    fun getMealIconColor(meal: WeeklySummaryUiState.WeeklyMealUiState, colors: MediCareCallColors): Color {
+        val count = meal.eatenCount ?: 0
         return when {
             meal.eatenCount == meal.totalCount -> colors.positive
             meal.eatenCount in 1 until meal.totalCount -> colors.warning2
@@ -15,7 +15,7 @@ object WeeklySummaryUtil {
         }
     }
 
-    fun getMedicineIconColor(medicine: WeeklyMedicineUiState, colors: MediCareCallColors): Color {
+    fun getMedicineIconColor(medicine: WeeklySummaryUiState.WeeklyMedicineUiState, colors: MediCareCallColors): Color {
         return when {
             medicine.takenCount == medicine.totalCount -> colors.positive
             medicine.takenCount in 1 until medicine.totalCount -> colors.warning2
