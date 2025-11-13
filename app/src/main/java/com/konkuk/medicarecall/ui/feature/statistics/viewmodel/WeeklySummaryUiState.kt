@@ -28,8 +28,7 @@ data class WeeklySummaryUiState(
     val weeklyMental: WeeklyMentalUiState = WeeklyMentalUiState.EMPTY,
     val weeklyGlucose: WeeklyGlucoseUiState = WeeklyGlucoseUiState.EMPTY,
     val unreadNotification: Int? = null,
-
-    ) {
+) {
     companion object {
         val EMPTY = WeeklySummaryUiState() // 전부 null/빈값
         fun from(dto: StatisticsResponseDto, medicineNames: List<String>): WeeklySummaryUiState {

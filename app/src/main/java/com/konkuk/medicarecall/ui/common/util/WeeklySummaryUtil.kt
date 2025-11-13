@@ -6,7 +6,6 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallColors
 
 object WeeklySummaryUtil {
     fun getMealIconColor(meal: WeeklySummaryUiState.WeeklyMealUiState, colors: MediCareCallColors): Color {
-        val count = meal.eatenCount ?: 0
         return when {
             meal.eatenCount == meal.totalCount -> colors.positive
             meal.eatenCount in 1 until meal.totalCount -> colors.warning2

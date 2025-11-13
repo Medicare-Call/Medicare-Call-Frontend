@@ -378,7 +378,7 @@ fun HomeScreenLayout(
                                 HomeMedicineContainer(
                                     medicines = homeUiState.medicines,
                                     onClick = navigateToMedicineDetailScreen,
-                                    )
+                                )
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
                                 HomeSleepContainer(

@@ -32,7 +32,7 @@ fun NotificationIconWithBadge(
     onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         // 1. 알림 아이콘
         Icon(
@@ -43,7 +43,7 @@ fun NotificationIconWithBadge(
                 .size(28.dp)
                 .clickable {
                     onClick()
-                }
+                },
         )
 
         // 2. 알림 개수가 0보다 클 때만 배지를 표시

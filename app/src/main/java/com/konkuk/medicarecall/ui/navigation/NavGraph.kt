@@ -102,9 +102,8 @@ fun NavGraph(
 
         // 알림 네비게이션
         alarmNavGraph(
-            popBackStack = { navController.popBackStack() }
+            popBackStack = { navController.popBackStack() },
         )
-
 
         // 홈
 //        composable<MainTabRoute.Home> { backStackEntry ->

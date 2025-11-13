@@ -74,8 +74,8 @@ fun HomeMedicineContainer(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 // 전체 복약 상태
-                val totalTaken = medicines.sumOf { it.todayTakenCount ?: 0}
-                val totalRequired = medicines.sumOf { it.todayRequiredCount ?: 0}
+                val totalTaken = medicines.sumOf { it.todayTakenCount ?: 0 }
+                val totalRequired = medicines.sumOf { it.todayRequiredCount ?: 0 }
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.Bottom,

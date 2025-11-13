@@ -22,19 +22,19 @@ data class StatisticsResponseDto(
     @SerialName("bloodSugar")
     val bloodSugar: BloodSugarDto? = null,
     val subscriptionStartDate: String? = null,
-    val unreadNotification: Int?= null,
+    val unreadNotification: Int? = null,
 )
 
 @Serializable
 data class SummaryStatsDto(
     @SerialName("mealRate")
-    val mealRate: Int?= null,
+    val mealRate: Int? = null,
     @SerialName("medicationRate")
-    val medicationRate: Int?= null,
+    val medicationRate: Int? = null,
     @SerialName("healthSignals")
-    val healthSignals: Int?= null,
+    val healthSignals: Int? = null,
     @SerialName("missedCalls")
-    val missedCalls: Int?= null,
+    val missedCalls: Int? = null,
 )
 
 @Serializable
@@ -50,27 +50,27 @@ data class MealStatsDto(
 @Serializable
 data class MedicationStatDto(
     @SerialName("totalCount")
-    val totalCount: Int?= null,
+    val totalCount: Int? = null,
     @SerialName("takenCount")
-    val takenCount: Int?= null,
+    val takenCount: Int? = null,
 )
 
 @Serializable
 data class AverageSleepDto(
     @SerialName("hours")
-    val hours: Int?= null,
+    val hours: Int? = null,
     @SerialName("minutes")
-    val minutes: Int?= null,
+    val minutes: Int? = null,
 )
 
 @Serializable
 data class PsychSummaryDto(
     @SerialName("good")
-    val good: Int?= null,
+    val good: Int? = null,
     @SerialName("normal")
-    val normal: Int?= null,
+    val normal: Int? = null,
     @SerialName("bad")
-    val bad: Int?= null,
+    val bad: Int? = null,
 )
 
 @Serializable
@@ -84,9 +84,9 @@ data class BloodSugarDto(
 @Serializable
 data class BloodSugarDetailDto(
     @SerialName("normal")
-    val normal: Int?= null,
+    val normal: Int? = null,
     @SerialName("high")
-    val high: Int?= null,
+    val high: Int? = null,
     @SerialName("low")
-    val low: Int?= null,
+    val low: Int? = null,
 )

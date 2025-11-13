@@ -35,13 +35,6 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun mapNextTimeToKor(nextTime: String?): String = when (nextTime) {
-        "MORNING" -> "아침"
-        "LUNCH" -> "점심"
-        "DINNER" -> "저녁"
-        else -> "-"
-    }
-
     override suspend fun getHomeUiState(elderId: Int, date: LocalDate): HomeUiState {
         return try {
             Log.d("HomeRepo", "[REQ] elderId=$elderId")
@@ -57,9 +50,7 @@ class HomeRepositoryImpl @Inject constructor(
                         "type=${it.type}, taken=${it.taken}, goal=${it.goal}, next=${it.nextTime}"
                     },
             )
-
             HomeUiState.from(res)
-
         } catch (e: HttpException) {
             Log.e("HomeRepo", "HTTP error fetching home data: ${e.code()}", e)
             HomeUiState.Companion.EMPTY

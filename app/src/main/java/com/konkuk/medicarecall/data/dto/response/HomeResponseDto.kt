@@ -46,7 +46,6 @@ data class HomeResponseDto(
         val taken: Boolean?,
     )
 
-
     @Serializable
     data class SleepDto(
         val meanHours: Int?,
