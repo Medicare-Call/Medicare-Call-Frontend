@@ -39,11 +39,8 @@ import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyGlucoseCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyHealthCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMealCard
@@ -159,9 +156,9 @@ fun StatisticsScreenLayout(
         NameBar(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
-            navigateToAlarm = navigateToAlarm,
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
-            notificationCount = 4, //  TODO: 실제 알림 개수 데이터 연동 필요
+            notificationCount = uiState.summary?.unreadNotification ?: 0,
+            navigateToAlarm = navigateToAlarm,
         )
 
         when {
@@ -282,9 +279,9 @@ fun PreviewStatisticsScreenRecorded() {
         weeklyHealthIssueCount = 3,
         weeklyUnansweredCount = 8,
         weeklyMeals = listOf(
-            WeeklyMealUiState("아침", 7, 7),
-            WeeklyMealUiState("점심", 5, 7),
-            WeeklyMealUiState("저녁", 1, 7),
+            WeeklySummaryUiState.WeeklyMealUiState("아침", 7, 7),
+            WeeklySummaryUiState.WeeklyMealUiState("점심", 5, 7),
+            WeeklySummaryUiState.WeeklyMealUiState("저녁", 1, 7),
         ),
         weeklyMedicines = listOf(
             WeeklyMedicineUiState("혈압약", 0, 14),
@@ -301,8 +298,8 @@ fun PreviewStatisticsScreenRecorded() {
         weeklyHealthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 후흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요.",
         weeklySleepHours = 7,
         weeklySleepMinutes = 12,
-        weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
-        weeklyGlucose = WeeklyGlucoseUiState(
+        weeklyMental = WeeklySummaryUiState.WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
+        weeklyGlucose = WeeklySummaryUiState.WeeklyGlucoseUiState(
             beforeMealNormal = 5,
             beforeMealHigh = 2,
             beforeMealLow = 1,
