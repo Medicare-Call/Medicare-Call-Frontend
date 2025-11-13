@@ -3,8 +3,6 @@ package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.dto.response.MedicationStatDto
-import com.konkuk.medicarecall.data.dto.response.StatisticsResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -163,8 +161,8 @@ class StatisticsViewModel @Inject constructor(
                 }
 
                 Log.d("STATISTICS_DEBUG", "onSuccess: DTO 수신 완료\n$dto")
-                val summary = dto.toWeeklySummaryUiState(order)
-                Log.d("STATISTICS_DEBUG", "onSuccess: UI State로 변환 완료\n$summary")
+                val summary = WeeklySummaryUiState.from(dto, order)
+                Log.d("STATISTICS_DEBUG", "onSuccess: UI State 변환 완료\n$summary")
 
                 _uiState.value = StatisticsUiState(
                     isLoading = false,
@@ -192,65 +190,6 @@ class StatisticsViewModel @Inject constructor(
         }
     }
 
-    // toWeeklySummaryUiState 함수는 변경 없음 (생략)
-    private fun StatisticsResponseDto.toWeeklySummaryUiState(correctOrder: List<String>): WeeklySummaryUiState {
-        // ... (이전 코드와 동일)
-        val indexOf: (String) -> Int = { key ->
-            val idx = correctOrder.indexOf(key)
-            if (idx == -1) Int.MAX_VALUE else idx
-        }
-
-        val orderedMedicines = medicationStats.entries
-            .sortedWith(
-                compareBy<Map.Entry<String, MedicationStatDto>>(
-                    { indexOf(it.key) },
-                    { it.key },
-                ),
-            )
-            .map { (name, stats) ->
-                WeeklyMedicineUiState(
-                    medicineName = name,
-                    takenCount = stats.takenCount,
-                    totalCount = stats.totalCount,
-                )
-            }
-
-        val sleepH = averageSleep.hours
-        val sleepM = averageSleep.minutes
-
-        // UI 색상 문제 대응 TODO: 서버에서 null로 변경시 해당 로직 제거
-        val noteText = healthSummary.takeIf { it != EMPTY_HEALTH_MESSAGE && it != null } ?: ""
-
-        return WeeklySummaryUiState(
-            elderName = elderName,
-            weeklyMealRate = summaryStats.mealRate,
-            weeklyMedicineRate = summaryStats.medicationRate,
-            weeklyHealthIssueCount = summaryStats.healthSignals,
-            weeklyUnansweredCount = summaryStats.missedCalls,
-            weeklyMeals = listOf(
-                WeeklyMealUiState("아침", mealStats.breakfast, 7),
-                WeeklyMealUiState("점심", mealStats.lunch, 7),
-                WeeklyMealUiState("저녁", mealStats.dinner, 7),
-            ),
-            weeklyMedicines = orderedMedicines,
-            weeklyHealthNote = noteText,
-            weeklySleepHours = sleepH,
-            weeklySleepMinutes = sleepM,
-            weeklyMental = WeeklyMentalUiState(
-                good = psychSummary.good,
-                normal = psychSummary.normal,
-                bad = psychSummary.bad,
-            ),
-            weeklyGlucose = WeeklyGlucoseUiState(
-                beforeMealNormal = bloodSugar.beforeMeal.normal,
-                beforeMealHigh = bloodSugar.beforeMeal.high,
-                beforeMealLow = bloodSugar.beforeMeal.low,
-                afterMealNormal = bloodSugar.afterMeal.normal,
-                afterMealHigh = bloodSugar.afterMeal.high,
-                afterMealLow = bloodSugar.afterMeal.low,
-            ),
-        )
-    }
     companion object {
         private const val EMPTY_HEALTH_MESSAGE = "아직 충분한 기록이 쌓이지 않았어요."
     }
