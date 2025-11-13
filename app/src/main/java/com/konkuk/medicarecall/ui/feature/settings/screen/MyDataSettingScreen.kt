@@ -166,7 +166,6 @@ fun MyDataSettingScreen(
                         .fillMaxWidth()
                         .clickable {
                             showLogoutDialog = true
-                            navigateToLoginAfterLogout()
                         },
                 )
 
@@ -187,15 +186,10 @@ fun MyDataSettingScreen(
                 myDataViewModel.logout(
                     onSuccess = {
                         Log.d("MyDataSettingScreen", "Logout successful")
-                        // 로그아웃 성공 후 동작
                         showLogoutDialog = false
-                        val intent = Intent(context, MainActivity::class.java).apply {
-                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        }
-                        context.startActivity(intent)
+                        navigateToLoginAfterLogout() // 로그아웃 후 로그인 화면으로 이동
                     },
                     onError = { error ->
-                        // 로그아웃 실패 처리 (예: 에러 메시지 표시)
                         Log.e("MyDataSettingScreen", "Logout failed: $error")
                     },
                 )
