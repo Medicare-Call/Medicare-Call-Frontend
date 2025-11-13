@@ -21,7 +21,9 @@ data class StatisticsResponseDto(
     val psychSummary: PsychSummaryDto? = null,
     @SerialName("bloodSugar")
     val bloodSugar: BloodSugarDto? = null,
+    @SerialName("subscriptionStartDate")
     val subscriptionStartDate: String? = null,
+    @SerialName("unreadNotification")
     val unreadNotification: Int? = null,
 )
 
