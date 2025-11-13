@@ -33,35 +33,7 @@ fun HomeMedicineContainer(
     modifier: Modifier = Modifier,
     medicines: List<MedicineUiState>,
     onClick: () -> Unit,
-) { // TODO: 복약 상태 아이콘 리스트
-//    // 이상치 방어
-//    val safeRequired = remember(todayRequiredCount) { todayRequiredCount.coerceAtLeast(0) }
-//
-//
-//    val renderList = remember(doseStatusList, safeRequired) {
-//        if (safeRequired == 0) {
-//            emptyList()
-//        } else {
-//            val normalized = doseStatusList.map {
-//                when (it.doseStatus) {
-//                    DoseStatus.TAKEN -> it.copy(doseStatus = DoseStatus.TAKEN)
-//                    DoseStatus.SKIPPED -> it.copy(doseStatus = DoseStatus.SKIPPED)
-//                    DoseStatus.NOT_RECORDED -> it.copy(doseStatus = DoseStatus.NOT_RECORDED)
-//                }
-//            }
-//            when {
-//                normalized.isEmpty() -> List(safeRequired) {
-//                    DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
-//                }
-//
-//                normalized.size < safeRequired -> normalized + List(safeRequired - normalized.size) {
-//                    DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
-//                }
-//
-//                else -> normalized.take(safeRequired)
-//            }
-//        }
-//    }
+) {
     Card(
         modifier = modifier
             .clickable { onClick() }
@@ -102,8 +74,8 @@ fun HomeMedicineContainer(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 // 전체 복약 상태
-                val totalTaken = medicines.sumOf { it.todayTakenCount }
-                val totalRequired = medicines.sumOf { it.todayRequiredCount }
+                val totalTaken = medicines.sumOf { it.todayTakenCount ?: 0}
+                val totalRequired = medicines.sumOf { it.todayRequiredCount ?: 0}
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.Bottom,
@@ -177,7 +149,7 @@ fun HomeMedicineContainer(
 //                            }
 
                             Text(
-                                text = "${medicine.todayTakenCount}/${medicine.todayRequiredCount}회 복용",
+                                text = "${medicine.todayTakenCount ?: 0}/${medicine.todayRequiredCount ?: 0}회 복용",
                                 style = MediCareCallTheme.typography.R_14,
                                 color = MediCareCallTheme.colors.gray5,
                             )

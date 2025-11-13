@@ -29,7 +29,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun HomeStateHealthContainer(
     modifier: Modifier = Modifier,
-    healthStatus: String,
+    healthStatus: String?,
     onClick: () -> Unit,
 ) {
     Card(
@@ -76,14 +76,14 @@ fun HomeStateHealthContainer(
                     modifier = Modifier,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    val textColor = if (healthStatus.isBlank()) {
+                    val textColor = if (healthStatus.isNullOrBlank()) {
                         MediCareCallTheme.colors.gray4
                     } else {
                         MediCareCallTheme.colors.gray8
                     }
 
                     Text(
-                        text = healthStatus.ifBlank { "미기록" },
+                        text = if (healthStatus.isNullOrBlank()) "미기록" else healthStatus,
                         style = MediCareCallTheme.typography.SB_22,
                         color = textColor,
                     )
