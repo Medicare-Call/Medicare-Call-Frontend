@@ -15,7 +15,7 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
-import com.konkuk.medicarecall.ui.feature.alarm.screen.AlarmScreen
+import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
@@ -100,6 +100,12 @@ fun NavGraph(
             )
         }
 
+        // 알림 네비게이션
+        alarmNavGraph(
+            popBackStack = { navController.popBackStack() }
+        )
+
+
         // 홈
 //        composable<MainTabRoute.Home> { backStackEntry ->
 //            HomeScreen(
@@ -118,6 +124,7 @@ fun NavGraph(
             navigateToStateHealthDetailScreen = navigator::navigateToStateHealthDetailScreen,
             navigateToStateMentalDetailScreen = navigator::navigateToStateMentalDetailScreen,
             navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
+            navigateToAlarmScreen = { navigator.navigateToAlarm() },
         )
 
         // 홈 상세 화면_식사 화면
@@ -172,6 +179,7 @@ fun NavGraph(
             StatisticsScreen(
                 navController = navController,
                 homeViewModel = homeViewModel,
+                navigateToAlarm = { navController.navigate(Route.Alarm) },
             )
         }
 
@@ -363,14 +371,6 @@ fun NavGraph(
 //            navigateToUserInfoSetting = navigator::navigateToUserInfoSetting,
 //            navigateToLoginAfterLogout = navigator::navigateToLoginAfterLogout
 //        )
-
-        composable<Route.Alarm> {
-            AlarmScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-            )
-        }
 
         // 로그인 내비게이션
         composable<Route.LoginStart> {

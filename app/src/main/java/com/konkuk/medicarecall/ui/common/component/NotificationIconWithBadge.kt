@@ -32,13 +32,18 @@ fun NotificationIconWithBadge(
     onClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier
     ) {
         // 1. 알림 아이콘
         Icon(
             painter = painterResource(id = R.drawable.ic_notification),
             contentDescription = "알림",
             tint = Color.Unspecified,
+            modifier = Modifier
+                .size(28.dp)
+                .clickable {
+                    onClick()
+                }
         )
 
         // 2. 알림 개수가 0보다 클 때만 배지를 표시

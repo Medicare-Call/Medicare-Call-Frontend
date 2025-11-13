@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
+import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
@@ -58,7 +59,7 @@ import java.time.LocalDate
 fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-//    navigateToAlarm: () -> Unit = {},
+    navigateToAlarm: () -> Unit = {},
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
 ) {
@@ -130,6 +131,7 @@ fun StatisticsScreen(
         onNextWeek = { statisticsViewModel.showNextWeek() },
         onDropdownItemSelected = { name -> homeViewModel.selectElder(name) },
         currentElderName = currentElderName,
+        navigateToAlarm = { navController.navigateToAlarm() },
     )
 }
 
