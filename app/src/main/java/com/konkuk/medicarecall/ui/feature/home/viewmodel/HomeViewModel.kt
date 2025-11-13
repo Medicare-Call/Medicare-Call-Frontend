@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
         _homeUiState.value = _homeUiState.value.copy(elderName = newName)
 
         _homeUiState.update { it.copy(isLoading = false) }
-//        softRefreshCurrentElder()
+    //  softRefreshCurrentElder()
     }
 
     var isLoading by mutableStateOf(true)
