@@ -79,10 +79,13 @@ fun WeeklySummaryCard(
 private fun WeeklySummaryItem(
     modifier: Modifier = Modifier,
     title: String,
-    value: Int,
+    value: Int?,
     unit: String,
 ) {
-    val isUnrecorded = if (title != "건강징후") value <= 0 else value < 0
+    val isUnrecorded = when (value) {
+        null -> true
+        else -> if (title != "건강징후") value <= 0 else value < 0
+    }
     val valueText = if (isUnrecorded) "-" else value.toString()
 
     Column(
