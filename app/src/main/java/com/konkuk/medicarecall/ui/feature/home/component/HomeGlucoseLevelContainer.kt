@@ -28,7 +28,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun HomeGlucoseLevelContainer(
     modifier: Modifier = Modifier,
-    glucoseLevelAverageToday: Int,
+    glucoseLevelAverageToday: Int?,
     onClick: () -> Unit,
 ) {
     Card(
@@ -77,7 +77,7 @@ fun HomeGlucoseLevelContainer(
             Column(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                val isRecorded = glucoseLevelAverageToday > 0
+                val isRecorded = (glucoseLevelAverageToday ?: 0) > 0
                 val glucoseText = if (isRecorded) "$glucoseLevelAverageToday" else "--"
                 val textColor = if (isRecorded) {
                     MediCareCallTheme.colors.gray8

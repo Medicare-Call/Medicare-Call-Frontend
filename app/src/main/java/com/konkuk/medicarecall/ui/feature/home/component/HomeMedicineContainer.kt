@@ -76,8 +76,8 @@ fun HomeMedicineContainer(
                     .fillMaxWidth(),
             ) {
                 // 전체 복약 상태
-                val totalTaken = medicines.sumOf { it.todayTakenCount }
-                val totalRequired = medicines.sumOf { it.todayRequiredCount }
+                val totalTaken = medicines.sumOf { it.todayTakenCount ?: 0 }
+                val totalRequired = medicines.sumOf { it.todayRequiredCount ?: 0 }
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.Bottom,
@@ -114,12 +114,14 @@ fun HomeMedicineContainer(
                             color = MediCareCallTheme.colors.gray6,
                         )
                         // 다음 복약 시간
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            text = "다음 복약 : ${medicine.nextDoseTime}",
-                            style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.main,
-                        )
+                        if (!medicine.nextDoseTime.isNullOrBlank()) { // 널이 아닐 때만 표시
+                            Text(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                text = "다음 복약 : ${medicine.nextDoseTime}",
+                                style = MediCareCallTheme.typography.R_14,
+                                color = MediCareCallTheme.colors.main,
+                            )
+                        }
                     }
                 }
 
@@ -132,8 +134,8 @@ fun HomeMedicineContainer(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         // 복약 아이콘 리스트
-                        val requiredCount = medicine.todayRequiredCount.coerceAtLeast(0)
-                        val renderList = if (medicine.doseStatusList.isEmpty()) {
+                        val requiredCount = (medicine.todayRequiredCount ?: 0).coerceAtLeast(0)
+                        val renderList = if (medicine.doseStatusList.isNullOrEmpty()) {
                             List(requiredCount) { null }
                         } else {
                             val filled = medicine.doseStatusList.map { it.taken }
@@ -161,7 +163,7 @@ fun HomeMedicineContainer(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "${medicine.todayTakenCount}/${medicine.todayRequiredCount}회 복용",
+                        text = "${medicine.todayTakenCount ?: 0}/${medicine.todayRequiredCount ?: 0}회 복용",
                         style = MediCareCallTheme.typography.R_14,
                         color = MediCareCallTheme.colors.gray5,
                     )
@@ -213,7 +215,7 @@ private fun PreviewHomeMedicineContainerUnrecorded() {
             0,
             3,
             "아침",
-            doseStatusList = emptyList(),
+            doseStatusList = null,
         ),
         MedicineUiState(
             "혈압약",

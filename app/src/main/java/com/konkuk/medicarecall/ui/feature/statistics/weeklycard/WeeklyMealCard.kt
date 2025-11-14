@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.util.WeeklySummaryUtil
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
