@@ -114,7 +114,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .figmaShadow(
-                            group = MediCareCallTheme.shadow.shadow03,
+                            group = MediCareCallTheme.shadow.shadow01,
                             cornerRadius = 14.dp,
                         )
                         .clip(RoundedCornerShape(14.dp))
@@ -207,7 +207,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .figmaShadow(
-                            group = MediCareCallTheme.shadow.shadow03,
+                            group = MediCareCallTheme.shadow.shadow01,
                             cornerRadius = 14.dp,
                         )
                         .clip(RoundedCornerShape(14.dp))
