@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.screen
 
-import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,14 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.LogoutConfirmDialog
@@ -62,7 +59,6 @@ fun MyDataSettingScreen(
         else -> "남성"
     }
     val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
 
     DisposableEffect(lifecycleOwner) {
         val obs = LifecycleEventObserver { _, event ->
@@ -73,6 +69,7 @@ fun MyDataSettingScreen(
         lifecycleOwner.lifecycle.addObserver(obs)
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -93,6 +90,7 @@ fun MyDataSettingScreen(
                 )
             },
         )
+
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -127,12 +125,13 @@ fun MyDataSettingScreen(
                         color = MediCareCallTheme.colors.active,
                         modifier = modifier.clickable(
                             onClick = {
-                                // 네비게이션을 통해 MyDetail 화면으로 이동
-                                navigateToUserInfoSetting(myDataInfo)
+                                // myDataInfo가 null 아닌 경우에만 네비게이션
+                                myDataInfo?.let { navigateToUserInfoSetting(it) }
                             },
                         ),
                     )
                 }
+
                 SettingInfoItem("이름", myDataInfo?.name ?: "이름 없음")
                 SettingInfoItem("생일", formatDateToKorean((myDataInfo?.birthDate ?: "날짜 정보가 없습니다")))
                 SettingInfoItem("성별", gender)

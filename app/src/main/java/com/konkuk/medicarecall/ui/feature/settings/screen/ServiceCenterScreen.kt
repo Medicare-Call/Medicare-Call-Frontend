@@ -17,14 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
+fun ServiceCenterScreen(
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -46,17 +48,19 @@ fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 )
             },
         )
+
         Column(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_settings_center),
                 modifier = modifier.size(80.dp),
                 contentDescription = "service_center",
             )
-            Spacer(modifier = modifier.height(20.dp)
+            Spacer(
+                modifier = modifier.height(20.dp),
             )
             Text(
                 text = "도움이 필요하신가요?",
