@@ -86,7 +86,7 @@ fun NavGraph(
                         launchSingleTop = true
                     }
                 },
-                navigateToPhone = { navController.navigate(Route.LoginPhone) },
+                navigateToStart = { navController.navigate(Route.LoginStart) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
                 navigateToPurchase = { navController.navigate(MainTabRoute.Home) },

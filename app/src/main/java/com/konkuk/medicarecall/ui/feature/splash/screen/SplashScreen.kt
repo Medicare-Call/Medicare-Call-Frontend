@@ -24,7 +24,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 @Composable
 fun SplashScreen(
     navigateToLogin: () -> Unit = {},
-    navigateToPhone: () -> Unit = {},
+    navigateToStart: () -> Unit = {},
     navigateToRegisterElder: () -> Unit = {},
     navigateToCareCallSetting: () -> Unit = {},
     navigateToPurchase: () -> Unit = {},
@@ -38,7 +38,7 @@ fun SplashScreen(
         navigationDestination?.let { destination ->
             navigateToLogin()
             when (destination) {
-                is NavigationDestination.GoToLogin -> navigateToPhone()
+                is NavigationDestination.GoToLogin -> navigateToStart()
                 is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
                 is NavigationDestination.GoToTimeSetting -> navigateToCareCallSetting()
                 is NavigationDestination.GoToPayment -> navigateToPurchase()
