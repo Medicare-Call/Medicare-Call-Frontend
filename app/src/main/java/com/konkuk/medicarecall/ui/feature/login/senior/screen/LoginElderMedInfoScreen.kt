@@ -73,6 +73,7 @@ fun LoginElderMedInfoScreen(
             LoginBackButton(onBack)
             Column(
                 Modifier
+                    .weight(1f)
                     .verticalScroll(scrollState),
             ) {
                 Spacer(Modifier.height(30.dp))
@@ -179,18 +180,19 @@ fun LoginElderMedInfoScreen(
                         loginElderViewModel.addHealthNote(it)
                     },
                 )
-                CTAButton(
-                    CTAButtonType.GREEN,
-                    "다음",
-                    {
-                        coroutineScope.launch {
-                            loginElderViewModel.postElderHealthInfoBulk()
-                            navigateToCareCallSetting()
-                        }
-                    },
-                    Modifier.padding(top = 30.dp, bottom = 20.dp),
-                )
+
             }
+            CTAButton(
+                CTAButtonType.GREEN,
+                "다음",
+                {
+                    coroutineScope.launch {
+                        loginElderViewModel.postElderHealthInfoBulk()
+                        navigateToCareCallSetting()
+                    }
+                },
+                Modifier.padding(top = 20.dp, bottom = 20.dp),
+            )
         }
         DefaultSnackBar(
             snackBarState,

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -85,6 +86,7 @@ fun LoginElderScreen(
             LoginBackButton(onClick = onBack)
             Column(
                 modifier
+                    .weight(1f)
                     .verticalScroll(scrollState),
             ) {
                 Spacer(Modifier.height(20.dp))
@@ -186,50 +188,53 @@ fun LoginElderScreen(
                 }
 
                 Spacer(Modifier.height(30.dp))
-                CTAButton(
-                    if (loginElderViewModel.isInputComplete())
-                        CTAButtonType.GREEN
-                    else CTAButtonType.DISABLED,
-                    "다음",
-                    {
-                        if (!uiState.eldersList.filter { it.name.isNotEmpty() }
-                                .all {
-                                    it.name.matches(Regex("^[가-힣a-zA-Z]*$"))
-                                }
-                        )
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(
-                                    "이름을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short,
-                                )
-                            }
-                        else if (!uiState.eldersList.filter { it.birthDate.isNotEmpty() }
-                                .all {
-                                    it.birthDate.isValidDate()
-                                })
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(
-                                    "생년월일을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short,
-                                )
-                            }
-                        else if (!uiState.eldersList.filter { it.phoneNumber.isNotEmpty() }
-                                .all { it.phoneNumber.startsWith("010") })
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(
-                                    "휴대폰 번호를 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short,
-                                )
-                            }
-                        else {
-                            loginElderViewModel.initElderHealthData()
-                            loginElderViewModel.postElderBulk()
-                            navigateToRegisterElderHealth()
-                        }
-                    },
-                    modifier.padding(bottom = 20.dp),
-                )
+
             }
+
+
+            CTAButton(
+                if (loginElderViewModel.isInputComplete())
+                    CTAButtonType.GREEN
+                else CTAButtonType.DISABLED,
+                "다음",
+                {
+                    if (!uiState.eldersList.filter { it.name.isNotEmpty() }
+                            .all {
+                                it.name.matches(Regex("^[가-힣a-zA-Z]*$"))
+                            }
+                    )
+                        coroutineScope.launch {
+                            snackBarState.showSnackbar(
+                                "이름을 다시 확인해주세요",
+                                duration = SnackbarDuration.Short,
+                            )
+                        }
+                    else if (!uiState.eldersList.filter { it.birthDate.isNotEmpty() }
+                            .all {
+                                it.birthDate.isValidDate()
+                            })
+                        coroutineScope.launch {
+                            snackBarState.showSnackbar(
+                                "생년월일을 다시 확인해주세요",
+                                duration = SnackbarDuration.Short,
+                            )
+                        }
+                    else if (!uiState.eldersList.filter { it.phoneNumber.isNotEmpty() }
+                            .all { it.phoneNumber.startsWith("010") })
+                        coroutineScope.launch {
+                            snackBarState.showSnackbar(
+                                "휴대폰 번호를 다시 확인해주세요",
+                                duration = SnackbarDuration.Short,
+                            )
+                        }
+                    else {
+                        loginElderViewModel.initElderHealthData()
+                        loginElderViewModel.postElderBulk()
+                        navigateToRegisterElderHealth()
+                    }
+                },
+                Modifier.padding(top = 20.dp, bottom = 20.dp),
+            )
         }
 
         DefaultSnackBar(
