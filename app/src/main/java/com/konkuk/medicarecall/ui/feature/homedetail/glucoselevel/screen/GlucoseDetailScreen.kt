@@ -55,13 +55,12 @@ import java.time.LocalDate
 @Composable
 fun GlucoseDetailScreen(
     modifier: Modifier = Modifier,
+    elderId: Int,
     onBack: () -> Unit,
+    glucoseViewModel: GlucoseViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
-
-    // 어르신 선택 상태(selectedElderId) 관리
-    val homeViewModel: HomeViewModel = hiltViewModel()
-    val viewModel: GlucoseViewModel = hiltViewModel()
+    val uiState by glucoseViewModel.uiState.collectAsStateWithLifecycle()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -81,7 +80,7 @@ fun GlucoseDetailScreen(
     val isRequestingMore = remember { mutableStateOf(false) }
 
     // 데이터 새로고침 로직
-    val refreshData = remember(viewModel) {
+    val refreshData = remember(glucoseViewModel) {
         {
             elderId?.let { id ->
                 counter[GlucoseTiming.BEFORE_MEAL] = 0
@@ -134,13 +133,11 @@ fun GlucoseDetailScreen(
 
         // '공복'/'식후' 버튼
         onTimingChange = { newTiming ->
-            viewModel.updateTiming(newTiming)
-            coroutineScope.launch {
-                scrollState.scrollTo(0)
-            }
+            glucoseViewModel.updateTiming(newTiming)
+            coroutineScope.launch { scrollState.scrollTo(0) }
         },
         // 그래프 점
-        onPointClick = { newIndex -> viewModel.onClickDots(newIndex) },
+        onPointClick = glucoseViewModel::onClickDots,
         scrollState = scrollState,
         onBack = onBack,
     )
