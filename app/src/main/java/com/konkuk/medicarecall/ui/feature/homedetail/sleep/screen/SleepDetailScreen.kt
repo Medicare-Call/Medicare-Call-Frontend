@@ -26,7 +26,6 @@ import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
@@ -36,8 +35,8 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SleepDetailScreen(
+    elderId: Int,
     onBack: () -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     sleepViewModel: SleepViewModel = hiltViewModel(),
 ) {
@@ -48,9 +47,6 @@ fun SleepDetailScreen(
 
     val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
     val sleep by sleepViewModel.sleep.collectAsStateWithLifecycle()
-
-    // 네임드롭에서 선택된 어르신
-    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {

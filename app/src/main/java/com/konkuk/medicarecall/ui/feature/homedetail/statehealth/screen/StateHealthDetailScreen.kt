@@ -28,7 +28,6 @@ import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
@@ -37,8 +36,8 @@ import java.time.LocalDate
 
 @Composable
 fun StateHealthDetailScreen(
+    elderId: Int,
     onBack: () -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     healthViewModel: HealthViewModel = hiltViewModel(),
 ) {
@@ -51,9 +50,6 @@ fun StateHealthDetailScreen(
 
     val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
     val health by healthViewModel.health.collectAsStateWithLifecycle()
-
-    // 네임드롭에서 선택된 어르신
-    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {

@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.meal.screen
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
 import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
 import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
@@ -38,8 +36,8 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MealDetailScreen(
+    elderId: Int,
     onBack: () -> Unit,
-    homeViewModel: HomeViewModel = hiltViewModel(),
     calendarViewModel: CalendarViewModel = hiltViewModel(),
     mealViewModel: MealViewModel = hiltViewModel(),
 ) {
@@ -47,24 +45,21 @@ fun MealDetailScreen(
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
     }
-
+    // 날짜만 Observe
     val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
-    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
+    val meals by mealViewModel.meals.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
-        Log.d("MED_UI", "LaunchedEffect: elderId=$elderId, date=$selectedDate")
-        elderId?.let { mealViewModel.loadMealsForDate(it, selectedDate) }
+        mealViewModel.loadMealsForDate(elderId, selectedDate)
     }
-
-    val meals by mealViewModel.meals.collectAsStateWithLifecycle()
 
     MealDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         meals = meals,
         weekDates = calendarViewModel.getCurrentWeekDates(),
-        onDateSelected = { calendarViewModel.selectDate(it) },
+        onDateSelected = calendarViewModel::selectDate,
         onMonthClick = { /* 모달 열기 */ },
     )
 }
