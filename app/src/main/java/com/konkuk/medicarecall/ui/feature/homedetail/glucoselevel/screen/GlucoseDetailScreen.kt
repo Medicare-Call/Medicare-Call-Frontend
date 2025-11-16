@@ -38,7 +38,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseStatusItem
@@ -108,16 +107,25 @@ fun GlucoseDetailScreen(
     // 무한 스크롤 (더 빠른 트리거와 중복 요청 방지)
     LaunchedEffect(scrollState.value, scrollState.maxValue) {
         Log.d("scroll", "value: ${scrollState.value}, max: ${scrollState.maxValue}, isLoading: ${uiState.isLoading}, hasNext: ${uiState.hasNext}")
-
-        // 더 일찍 트리거 (500dp 전에 미리 로딩)
+        // 스크롤이 거의 끝까지 왔을 때만 다음 페이지 불러오기
         val shouldLoad = scrollState.value > scrollState.maxValue - 500 || scrollState.maxValue <= 100
 
-        if (shouldLoad && elderId != null && !uiState.isLoading && uiState.hasNext && !isRequestingMore.value) {
+        if (shouldLoad &&
+            !uiState.isLoading &&
+            uiState.hasNext &&
+            !isRequestingMore.value
+        ) {
             isRequestingMore.value = true
             val currentTiming = uiState.selectedTiming
             val currentPage = counter.getValue(currentTiming)
-            Log.d("scroll", "Loading page ${currentPage + 1} for $currentTiming")
-            viewModel.getGlucoseData(elderId!!, currentPage + 1, currentTiming, false)
+
+            glucoseViewModel.getGlucoseData(
+                elderId = elderId,
+                counter = currentPage + 1,    // 다음 페이지 요청
+                type = currentTiming,
+                isRefresh = false,
+            )
+
             counter[currentTiming] = currentPage + 1
         }
     }
