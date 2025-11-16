@@ -19,7 +19,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,18 +30,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
+import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.statistics.component.WeekendBar
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyGlucoseUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyGlucoseCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyHealthCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMealCard
@@ -58,7 +56,7 @@ import java.time.LocalDate
 fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-//    navigateToAlarm: () -> Unit = {},
+    navigateToAlarm: () -> Unit = {},
     homeViewModel: HomeViewModel,
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
 ) {
@@ -80,17 +78,17 @@ fun StatisticsScreen(
     }
 
     // ① HomeVM에서 어르신 전체 목록과 이름 목록을 가져옵니다.
-    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
     val elderNameList = elderInfoList.map { it.name }
 
     // ② 선택된 어르신의 ID를 가져옵니다.
-    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // ③ 통계 VM의 상태를 구독합니다.
-    val uiState by statisticsViewModel.uiState.collectAsState()
-    val currentWeek by statisticsViewModel.currentWeek.collectAsState()
-    val isLatestWeek by statisticsViewModel.isLatestWeek.collectAsState()
-    val isEarliestWeek by statisticsViewModel.isEarliestWeek.collectAsState()
+    val uiState by statisticsViewModel.uiState.collectAsStateWithLifecycle()
+    val currentWeek by statisticsViewModel.currentWeek.collectAsStateWithLifecycle()
+    val isLatestWeek by statisticsViewModel.isLatestWeek.collectAsStateWithLifecycle()
+    val isEarliestWeek by statisticsViewModel.isEarliestWeek.collectAsStateWithLifecycle()
 
     // ④ 표시할 이름을 결정합니다.
     // 우선순위 1: 통계 데이터에 포함된 이름 (가장 정확함)
@@ -111,7 +109,7 @@ fun StatisticsScreen(
     val medsChanged by (savedStateHandle?.getStateFlow("medsChanged", false) ?: MutableStateFlow(
         false,
     ))
-        .collectAsState()
+        .collectAsStateWithLifecycle()
 
     LaunchedEffect(medsChanged) {
         if (medsChanged) {
@@ -130,6 +128,7 @@ fun StatisticsScreen(
         onNextWeek = { statisticsViewModel.showNextWeek() },
         onDropdownItemSelected = { name -> homeViewModel.selectElder(name) },
         currentElderName = currentElderName,
+        navigateToAlarm = { navController.navigateToAlarm() },
     )
 }
 
@@ -157,9 +156,9 @@ fun StatisticsScreenLayout(
         NameBar(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
-            navigateToAlarm = navigateToAlarm,
             onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
-            notificationCount = 4, //  TODO: 실제 알림 개수 데이터 연동 필요
+            notificationCount = uiState.summary?.unreadNotification ?: 0,
+            navigateToAlarm = navigateToAlarm,
         )
 
         when {
@@ -272,7 +271,7 @@ private fun StatisticsContent(
 
 @Preview(name = "주간 통계 - 기록 있음", showBackground = true, heightDp = 1200)
 @Composable
-fun PreviewStatisticsScreen_Recorded() {
+fun PreviewStatisticsScreenRecorded() {
     val dummySummary = WeeklySummaryUiState(
         elderName = "김옥자",
         weeklyMealRate = 65,
@@ -280,9 +279,9 @@ fun PreviewStatisticsScreen_Recorded() {
         weeklyHealthIssueCount = 3,
         weeklyUnansweredCount = 8,
         weeklyMeals = listOf(
-            WeeklyMealUiState("아침", 7, 7),
-            WeeklyMealUiState("점심", 5, 7),
-            WeeklyMealUiState("저녁", 1, 7),
+            WeeklySummaryUiState.WeeklyMealUiState("아침", 7, 7),
+            WeeklySummaryUiState.WeeklyMealUiState("점심", 5, 7),
+            WeeklySummaryUiState.WeeklyMealUiState("저녁", 1, 7),
         ),
         weeklyMedicines = listOf(
             WeeklyMedicineUiState("혈압약", 0, 14),
@@ -299,8 +298,8 @@ fun PreviewStatisticsScreen_Recorded() {
         weeklyHealthNote = "아침·점심 복약과 식사는 문제 없으나, 저녁 약 복용이 늦어질 우려가 있어요. 전반적으로 양호하나 피곤과 후흡곤란을 호소하셨으므로 휴식과 보호자 확인이 필요해요.",
         weeklySleepHours = 7,
         weeklySleepMinutes = 12,
-        weeklyMental = WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
-        weeklyGlucose = WeeklyGlucoseUiState(
+        weeklyMental = WeeklySummaryUiState.WeeklyMentalUiState(good = 4, normal = 4, bad = 1),
+        weeklyGlucose = WeeklySummaryUiState.WeeklyGlucoseUiState(
             beforeMealNormal = 5,
             beforeMealHigh = 2,
             beforeMealLow = 1,
@@ -331,7 +330,7 @@ fun PreviewStatisticsScreen_Recorded() {
 
 @Preview(name = "주간 통계 - 미기록", showBackground = true, heightDp = 1200)
 @Composable
-fun PreviewStatisticsScreen_Unrecorded() {
+fun PreviewStatisticsScreenUnrecorded() {
     MediCareCallTheme {
         StatisticsScreenLayout(
             uiState = StatisticsUiState(

@@ -29,7 +29,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun HomeStateMentalContainer(
     modifier: Modifier = Modifier,
-    mentalStatus: String,
+    mentalStatus: String?,
     onClick: () -> Unit,
 ) {
     Card(
@@ -37,7 +37,7 @@ fun HomeStateMentalContainer(
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp,
             ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -76,14 +76,14 @@ fun HomeStateMentalContainer(
                     modifier = Modifier,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    val textColor = if (mentalStatus.isBlank()) {
+                    val textColor = if (mentalStatus.isNullOrBlank()) {
                         MediCareCallTheme.colors.gray4
                     } else {
                         MediCareCallTheme.colors.gray8
                     }
 
                     Text(
-                        text = mentalStatus.ifBlank { "미기록" },
+                        text = if (mentalStatus.isNullOrBlank()) "미기록" else mentalStatus,
                         style = MediCareCallTheme.typography.SB_22,
                         color = textColor,
                     )

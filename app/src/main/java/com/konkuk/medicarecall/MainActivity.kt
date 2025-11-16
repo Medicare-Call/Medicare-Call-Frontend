@@ -85,6 +85,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.background(MediCareCallTheme.colors.bg),
+                    containerColor = MediCareCallTheme.colors.bg,
                     contentWindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal),
                     bottomBar = {
                         MainBottomBar(

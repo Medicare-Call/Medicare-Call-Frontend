@@ -79,15 +79,17 @@ fun WeeklySummaryCard(
 private fun WeeklySummaryItem(
     modifier: Modifier = Modifier,
     title: String,
-    value: Int,
+    value: Int?,
     unit: String,
 ) {
-    val isUnrecorded = if (title != "건강징후") value <= 0 else value < 0
+    val isUnrecorded = when (value) {
+        null -> true
+        else -> if (title != "건강징후") value <= 0 else value < 0
+    }
     val valueText = if (isUnrecorded) "-" else value.toString()
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             modifier = Modifier
@@ -96,7 +98,6 @@ private fun WeeklySummaryItem(
             style = MediCareCallTheme.typography.R_14,
             color = MediCareCallTheme.colors.gray8,
         )
-        Spacer(modifier = Modifier.height(4.dp))
 
         Row(
             verticalAlignment = Alignment.Bottom,
@@ -110,7 +111,7 @@ private fun WeeklySummaryItem(
                 text = unit,
                 modifier = Modifier.padding(start = 2.dp, bottom = 2.dp),
                 style = MediCareCallTheme.typography.M_16,
-                color = if (isUnrecorded) MediCareCallTheme.colors.black else MediCareCallTheme.colors.black,
+                color = MediCareCallTheme.colors.black,
             )
         }
     }
@@ -118,7 +119,7 @@ private fun WeeklySummaryItem(
 
 @Preview(name = "요약 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklySummaryCard_Recorded() {
+fun PreviewWeeklySummaryCardRecorded() {
     WeeklySummaryCard(
         summary = WeeklySummaryUiState(
             weeklyMealRate = 65,
@@ -131,6 +132,6 @@ fun PreviewWeeklySummaryCard_Recorded() {
 
 @Preview(name = "요약 카드 - 미기록")
 @Composable
-fun PreviewWeeklySummaryCard_Unrecorded() {
+fun PreviewWeeklySummaryCardUnrecorded() {
     WeeklySummaryCard(summary = WeeklySummaryUiState.EMPTY)
 }

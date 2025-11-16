@@ -1,7 +1,9 @@
 package com.konkuk.medicarecall.ui.feature.settings.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +23,10 @@ import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
+fun ServiceCenterScreen(
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -43,18 +48,29 @@ fun ServiceCenterScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                 )
             },
         )
-        Spacer(modifier = modifier.height(30.dp))
-        Column {
+
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.img_settings_center),
+                modifier = modifier.size(80.dp),
+                contentDescription = "service_center",
+            )
+            Spacer(
+                modifier = modifier.height(20.dp),
+            )
             Text(
                 text = "도움이 필요하신가요?",
-                style = MediCareCallTheme.typography.SB_16,
-                color = Color.Black,
+                style = MediCareCallTheme.typography.R_18,
+                color = MediCareCallTheme.colors.gray6,
             )
-            Spacer(modifier = modifier.height(7.dp))
             Text(
                 text = "상담시간 평일 09:00 - 18:00",
                 style = MediCareCallTheme.typography.R_14,
-                color = Color.Black,
+                color = MediCareCallTheme.colors.gray4,
             )
         }
     }

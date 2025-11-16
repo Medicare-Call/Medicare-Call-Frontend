@@ -34,8 +34,8 @@ fun WeeklySleepCard(
     summary: WeeklySummaryUiState,
 ) {
     val isUnrecorded = summary.weeklySleepHours == null
-    val hoursText = if (isUnrecorded) "--" else summary.weeklySleepHours.toString()
-    val minutesText = if (isUnrecorded) "--" else summary.weeklySleepMinutes.toString()
+    val hoursText = if (isUnrecorded) "-" else summary.weeklySleepHours.toString()
+    val minutesText = if (isUnrecorded) "-" else summary.weeklySleepMinutes.toString()
     val textColor = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray8
 
     Card(
@@ -108,7 +108,7 @@ fun WeeklySleepCard(
 
 @Preview(name = "수면 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklySleepCard_Recorded() {
+fun PreviewWeeklySleepCardRecorded() {
     WeeklySleepCard(
         modifier = Modifier.width(155.dp),
         summary = WeeklySummaryUiState(
@@ -124,7 +124,7 @@ fun PreviewWeeklySleepCard_Recorded() {
 
 @Preview(name = "수면 카드 - 미기록")
 @Composable
-fun PreviewWeeklySleepCard_Unrecorded() {
+fun PreviewWeeklySleepCardUnrecorded() {
     WeeklySleepCard(
         modifier = Modifier.width(155.dp),
         summary = WeeklySummaryUiState.EMPTY,

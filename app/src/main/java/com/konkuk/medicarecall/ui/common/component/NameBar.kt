@@ -40,7 +40,7 @@ fun NameBar(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
-                Modifier.clickable(
+                modifier = Modifier.clickable(
                     indication = null,
                     interactionSource = null,
                 ) { onDropdownClick() },

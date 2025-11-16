@@ -73,6 +73,7 @@ fun MyDataSettingScreen(
         lifecycleOwner.lifecycle.addObserver(obs)
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -93,6 +94,7 @@ fun MyDataSettingScreen(
                 )
             },
         )
+
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -127,12 +129,13 @@ fun MyDataSettingScreen(
                         color = MediCareCallTheme.colors.active,
                         modifier = modifier.clickable(
                             onClick = {
-                                // 네비게이션을 통해 MyDetail 화면으로 이동
-                                navigateToUserInfoSetting(myDataInfo)
+                                // myDataInfo가 null 아닌 경우에만 네비게이션
+                                myDataInfo?.let { navigateToUserInfoSetting(it) }
                             },
                         ),
                     )
                 }
+
                 SettingInfoItem("이름", myDataInfo?.name ?: "이름 없음")
                 SettingInfoItem("생일", formatDateToKorean((myDataInfo?.birthDate ?: "날짜 정보가 없습니다")))
                 SettingInfoItem("성별", gender)
@@ -166,7 +169,6 @@ fun MyDataSettingScreen(
                         .fillMaxWidth()
                         .clickable {
                             showLogoutDialog = true
-                            navigateToLoginAfterLogout()
                         },
                 )
 
@@ -187,15 +189,14 @@ fun MyDataSettingScreen(
                 myDataViewModel.logout(
                     onSuccess = {
                         Log.d("MyDataSettingScreen", "Logout successful")
-                        // 로그아웃 성공 후 동작
                         showLogoutDialog = false
                         val intent = Intent(context, MainActivity::class.java).apply {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         }
                         context.startActivity(intent)
+                        navigateToLoginAfterLogout() // 로그아웃 후 로그인 화면으로 이동
                     },
                     onError = { error ->
-                        // 로그아웃 실패 처리 (예: 에러 메시지 표시)
                         Log.e("MyDataSettingScreen", "Logout failed: $error")
                     },
                 )

@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.DoseStatusUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -33,49 +34,21 @@ fun HomeMedicineContainer(
     modifier: Modifier = Modifier,
     medicines: List<MedicineUiState>,
     onClick: () -> Unit,
-) { // TODO: 복약 상태 아이콘 리스트
-//    // 이상치 방어
-//    val safeRequired = remember(todayRequiredCount) { todayRequiredCount.coerceAtLeast(0) }
-//
-//
-//    val renderList = remember(doseStatusList, safeRequired) {
-//        if (safeRequired == 0) {
-//            emptyList()
-//        } else {
-//            val normalized = doseStatusList.map {
-//                when (it.doseStatus) {
-//                    DoseStatus.TAKEN -> it.copy(doseStatus = DoseStatus.TAKEN)
-//                    DoseStatus.SKIPPED -> it.copy(doseStatus = DoseStatus.SKIPPED)
-//                    DoseStatus.NOT_RECORDED -> it.copy(doseStatus = DoseStatus.NOT_RECORDED)
-//                }
-//            }
-//            when {
-//                normalized.isEmpty() -> List(safeRequired) {
-//                    DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
-//                }
-//
-//                normalized.size < safeRequired -> normalized + List(safeRequired - normalized.size) {
-//                    DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
-//                }
-//
-//                else -> normalized.take(safeRequired)
-//            }
-//        }
-//    }
+) {
     Card(
         modifier = modifier
             .clickable { onClick() }
             .fillMaxWidth()
             .figmaShadow(
-                group = LocalMediCareCallShadowProvider.current.shadow03,
+                group = LocalMediCareCallShadowProvider.current.shadow01,
                 cornerRadius = 14.dp,
             ),
-
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(10.dp),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier
+                .padding(20.dp),
         ) {
             // Title: 복약
             Row(
@@ -99,11 +72,12 @@ fun HomeMedicineContainer(
             Spacer(modifier = Modifier.height(20.dp))
 
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
             ) {
                 // 전체 복약 상태
-                val totalTaken = medicines.sumOf { it.todayTakenCount }
-                val totalRequired = medicines.sumOf { it.todayRequiredCount }
+                val totalTaken = medicines.sumOf { it.todayTakenCount ?: 0 }
+                val totalRequired = medicines.sumOf { it.todayRequiredCount ?: 0 }
                 Row(
                     modifier = Modifier,
                     verticalAlignment = Alignment.Bottom,
@@ -125,14 +99,13 @@ fun HomeMedicineContainer(
 
             Spacer(modifier = Modifier.height(22.dp))
 
-            medicines.forEachIndexed { index, medicine ->
+            medicines.forEachIndexed { idx, medicine ->
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween, // 양 끝 배치
-                        verticalAlignment = Alignment.CenterVertically, // 텍스트 높이 다를 경우 대비
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         // 복약 이름
                         Text(
@@ -141,50 +114,62 @@ fun HomeMedicineContainer(
                             color = MediCareCallTheme.colors.gray6,
                         )
                         // 다음 복약 시간
-                        if (!medicine.nextDoseTime.isNullOrBlank() && medicine.nextDoseTime != "-") {
+                        if (!medicine.nextDoseTime.isNullOrBlank()) { // 널이 아닐 때만 표시
                             Text(
-                                text = "다음 복약 : ${medicine.nextDoseTime}약",
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                text = "다음 복약 : ${medicine.nextDoseTime}",
                                 style = MediCareCallTheme.typography.R_14,
                                 color = MediCareCallTheme.colors.main,
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier,
-                        verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        Column {
-                            // TODO: 복약 상태 아이콘 리스트
-//                            //복약 아이콘 리스트
-//                            Row {
-//                                renderList.forEach { item ->
-//                                    val tintColor = when (item.doseStatus) {
-//                                        DoseStatus.TAKEN -> MediCareCallTheme.colors.positive
-//                                        DoseStatus.SKIPPED -> MediCareCallTheme.colors.negative
-//                                        DoseStatus.NOT_RECORDED -> MediCareCallTheme.colors.gray2
-//                                    }
-//                                    Image(
-//                                        painter = painterResource(R.drawable.ic_pills_basic),
-//                                        contentDescription = "복약 상태 아이콘",
-//                                        modifier = Modifier
-//                                            .size(32.dp)
-//                                            .padding(end = 8.dp),
-//                                        colorFilter = ColorFilter.tint(tintColor)
-//                                    )
-//                                }
-//                            }
+                }
 
-                            Text(
-                                text = "${medicine.todayTakenCount}/${medicine.todayRequiredCount}회 복용",
-                                style = MediCareCallTheme.typography.R_14,
-                                color = MediCareCallTheme.colors.gray5,
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Column(
+                    modifier = Modifier,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        // 복약 아이콘 리스트
+                        val requiredCount = (medicine.todayRequiredCount ?: 0).coerceAtLeast(0)
+                        val renderList = if (medicine.doseStatusList.isNullOrEmpty()) {
+                            List(requiredCount) { null }
+                        } else {
+                            val filled = medicine.doseStatusList.map { it.taken }
+                            if (filled.size < requiredCount) {
+                                filled + List(requiredCount - filled.size) { null }
+                            } else {
+                                filled.take(requiredCount)
+                            }
+                        }
+
+                        renderList.forEach { taken ->
+                            val iconRes = when (taken) {
+                                true -> R.drawable.ic_pill_taken
+                                false -> R.drawable.ic_pill_untaken
+                                null -> R.drawable.ic_pill_uncheck
+                            }
+
+                            Image(
+                                painter = painterResource(iconRes),
+                                contentDescription = "복약 상태 아이콘",
+                                modifier = Modifier.size(22.dp),
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "${medicine.todayTakenCount ?: 0}/${medicine.todayRequiredCount ?: 0}회 복용",
+                        style = MediCareCallTheme.typography.R_14,
+                        color = MediCareCallTheme.colors.gray5,
+                    )
                 }
-                if (index < medicines.lastIndex) {
+
+                if (idx < medicines.lastIndex) {
                     Spacer(modifier = Modifier.height(22.dp))
                 }
             }
@@ -196,8 +181,27 @@ fun HomeMedicineContainer(
 @Composable
 private fun PreviewHomeMedicineContainer() {
     val sampleMedicines = listOf(
-        MedicineUiState("당뇨약", 1, 3, "점심"),
-        MedicineUiState("혈압약", 2, 2, "아침"),
+        MedicineUiState(
+            medicineName = "당뇨약",
+            todayTakenCount = 1,
+            todayRequiredCount = 3,
+            nextDoseTime = "저녁",
+            doseStatusList = listOf(
+                DoseStatusUiState("아침", true),
+                DoseStatusUiState("점심", false),
+                DoseStatusUiState("저녁", null),
+            ),
+        ),
+        MedicineUiState(
+            medicineName = "혈압약",
+            todayTakenCount = 2,
+            todayRequiredCount = 2,
+            nextDoseTime = "아침",
+            doseStatusList = listOf(
+                DoseStatusUiState("아침", true),
+                DoseStatusUiState("저녁", true),
+            ),
+        ),
     )
     HomeMedicineContainer(medicines = sampleMedicines, onClick = {})
 }
@@ -206,8 +210,20 @@ private fun PreviewHomeMedicineContainer() {
 @Composable
 private fun PreviewHomeMedicineContainerUnrecorded() {
     val sampleMedicines = listOf(
-        MedicineUiState("당뇨약", 0, 3, "아침"),
-        MedicineUiState("혈압약", 0, 2, "아침"),
+        MedicineUiState(
+            "당뇨약",
+            0,
+            3,
+            "아침",
+            doseStatusList = null,
+        ),
+        MedicineUiState(
+            "혈압약",
+            0,
+            2,
+            "아침",
+            doseStatusList = emptyList(),
+        ),
     )
     HomeMedicineContainer(medicines = sampleMedicines, onClick = {})
 }

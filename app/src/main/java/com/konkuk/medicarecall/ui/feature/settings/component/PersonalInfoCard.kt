@@ -32,7 +32,7 @@ fun PersonalInfoCard(name: String, modifier: Modifier = Modifier, onClick: () ->
         modifier = modifier
             .fillMaxWidth()
             .figmaShadow(
-                group = MediCareCallTheme.shadow.shadow03,
+                group = MediCareCallTheme.shadow.shadow01,
                 cornerRadius = 14.dp,
             )
             .clip(RoundedCornerShape(14.dp))

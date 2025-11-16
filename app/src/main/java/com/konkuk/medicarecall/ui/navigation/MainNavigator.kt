@@ -16,12 +16,12 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToHealthAnalysisDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicationDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMentalAnalysisDetail
-import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetail
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToGlucoseDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMealDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToMedicineDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToSleepDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToStateHealthDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.navigateToStateMentalDetailScreen
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginCareCallSetting
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginFinish
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginNaverPayView
@@ -139,28 +139,28 @@ class MainNavigator(
         this.navigateToMainTab(MainTab.HOME)
     }
 
-    fun navigateToMealDetail() {
-        navController.navigateToMealDetail()
+    fun navigateToMealDetailScreen() {
+        navController.navigateToMealDetailScreen()
     }
 
-    fun navigateToMedicationDetail() {
-        navController.navigateToMedicationDetail()
+    fun navigateToMedicineDetailScreen() {
+        navController.navigateToMedicineDetailScreen()
     }
 
-    fun navigateToSleepDetail() {
-        navController.navigateToSleepDetail()
+    fun navigateToSleepDetailScreen() {
+        navController.navigateToSleepDetailScreen()
     }
 
-    fun navigateToHealthAnalysisDetail() {
-        navController.navigateToHealthAnalysisDetail()
+    fun navigateToStateHealthDetailScreen() {
+        navController.navigateToStateHealthDetailScreen()
     }
 
-    fun navigateToMentalAnalysisDetail() {
-        navController.navigateToMentalAnalysisDetail()
+    fun navigateToStateMentalDetailScreen() {
+        navController.navigateToStateMentalDetailScreen()
     }
 
-    fun navigateToGlucoseDetail() {
-        navController.navigateToGlucoseDetail()
+    fun navigateToGlucoseDetailScreen() {
+        navController.navigateToGlucoseDetailScreen()
     }
 
     /* 설정 화면 */

@@ -35,7 +35,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,18 +73,19 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    navigateToMealDetail: () -> Unit,
-    navigateToMedicationDetail: () -> Unit,
-    navigateToSleepDetail: () -> Unit,
-    navigateToHealthAnalysisDetail: () -> Unit,
-    navigateToMentalAnalysisDetail: () -> Unit,
-    navigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetailScreen: () -> Unit,
+    navigateToMedicineDetailScreen: () -> Unit,
+    navigateToSleepDetailScreen: () -> Unit,
+    navigateToStateHealthDetailScreen: () -> Unit,
+    navigateToStateMentalDetailScreen: () -> Unit,
+    navigateToGlucoseDetailScreen: () -> Unit,
     mainBackStackEntry: NavBackStackEntry,
+    navigateToAlarm: () -> Unit,
 ) {
-    val homeUiState by homeViewModel.homeUiState.collectAsState()
-    val elderInfoList by homeViewModel.elderInfoList.collectAsState()
-    val elderNameList by homeViewModel.elderNameList.collectAsState()
-    val selectedElderId by homeViewModel.selectedElderId.collectAsState()
+    val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
+    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
+    val elderNameList by homeViewModel.elderNameList.collectAsStateWithLifecycle()
+    val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -117,12 +117,14 @@ fun HomeScreen(
             homeViewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetail = navigateToMealDetail,
-        navigateToMedicineDetail = navigateToMedicationDetail,
-        navigateToSleepDetail = navigateToSleepDetail,
-        navigateToStateHealthDetail = navigateToHealthAnalysisDetail,
-        navigateToStateMentalDetail = navigateToMentalAnalysisDetail,
-        navigateToGlucoseDetail = navigateToGlucoseDetail,
+        navigateToMealDetailScreen = navigateToMealDetailScreen,
+        navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
+        navigateToSleepDetailScreen = navigateToSleepDetailScreen,
+        navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
+        navigateToStateMentalDetailScreen = navigateToStateMentalDetailScreen,
+        navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
+        navigateToAlarm = navigateToAlarm,
+
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,
         onFabClick = {
@@ -153,12 +155,12 @@ fun HomeScreenLayout(
     onDropdownClick: () -> Unit,
     onDropdownDismiss: () -> Unit,
     onDropdownItemSelected: (String) -> Unit,
-    navigateToMealDetail: () -> Unit,
-    navigateToMedicineDetail: () -> Unit,
-    navigateToSleepDetail: () -> Unit,
-    navigateToStateHealthDetail: () -> Unit,
-    navigateToStateMentalDetail: () -> Unit,
-    navigateToGlucoseDetail: () -> Unit,
+    navigateToMealDetailScreen: () -> Unit,
+    navigateToMedicineDetailScreen: () -> Unit,
+    navigateToSleepDetailScreen: () -> Unit,
+    navigateToStateHealthDetailScreen: () -> Unit,
+    navigateToStateMentalDetailScreen: () -> Unit,
+    navigateToGlucoseDetailScreen: () -> Unit,
     navigateToAlarm: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
     isLoading: Boolean,
@@ -274,10 +276,9 @@ fun HomeScreenLayout(
                 NameBar(
                     name = selectedElderName,
                     modifier = Modifier.statusBarsPadding(),
-                    navigateToAlarm = navigateToAlarm,
                     onDropdownClick = onDropdownClick,
-                    // TODO: 실제 알림 개수 데이터 연동 필요
-                    notificationCount = 4,
+                    notificationCount = homeUiState.unreadNotification ?: 0,
+                    navigateToAlarm = navigateToAlarm,
                 )
                 val scope = rememberCoroutineScope()
 
@@ -371,35 +372,35 @@ fun HomeScreenLayout(
                                     breakfastEaten = homeUiState.breakfastEaten,
                                     lunchEaten = homeUiState.lunchEaten,
                                     dinnerEaten = homeUiState.dinnerEaten,
-                                    onClick = navigateToMealDetail,
+                                    onClick = navigateToMealDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeMedicineContainer(
                                     medicines = homeUiState.medicines,
-                                    onClick = navigateToMedicineDetail,
+                                    onClick = navigateToMedicineDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
                                 HomeSleepContainer(
-                                    totalSleepHours = sleepData.meanHours,
-                                    totalSleepMinutes = sleepData.meanMinutes,
-                                    isRecorded = sleepData.meanHours > 0 || sleepData.meanMinutes > 0,
-                                    onClick = navigateToSleepDetail,
+                                    totalSleepHours = sleepData?.meanHours ?: 0,
+                                    totalSleepMinutes = sleepData?.meanMinutes ?: 0,
+                                    isRecorded = (sleepData?.meanHours ?: 0) > 0 || (sleepData?.meanMinutes ?: 0) > 0,
+                                    onClick = navigateToSleepDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateHealthContainer(
                                     healthStatus = homeUiState.healthStatus,
-                                    onClick = navigateToStateHealthDetail,
+                                    onClick = navigateToStateHealthDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateMentalContainer(
                                     mentalStatus = homeUiState.mentalStatus,
-                                    onClick = navigateToStateMentalDetail,
+                                    onClick = navigateToStateMentalDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeGlucoseLevelContainer(
                                     glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday,
-                                    onClick = navigateToGlucoseDetail,
+                                    onClick = navigateToGlucoseDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                             }
@@ -456,12 +457,12 @@ fun PreviewHomeScreen() {
             onDropdownClick = {},
             onDropdownDismiss = {},
             onDropdownItemSelected = {},
-            navigateToMealDetail = {},
-            navigateToMedicineDetail = {},
-            navigateToSleepDetail = {},
-            navigateToStateHealthDetail = {},
-            navigateToStateMentalDetail = {},
-            navigateToGlucoseDetail = {},
+            navigateToMealDetailScreen = {},
+            navigateToMedicineDetailScreen = {},
+            navigateToSleepDetailScreen = {},
+            navigateToStateHealthDetailScreen = {},
+            navigateToStateMentalDetailScreen = {},
+            navigateToGlucoseDetailScreen = {},
             snackbarHostState = SnackbarHostState(),
             isLoading = false,
             immediateCall = {},
@@ -473,7 +474,7 @@ fun PreviewHomeScreen() {
 
 @Preview(showBackground = true, name = "홈 화면 (미기록 상태)", heightDp = 1500)
 @Composable
-fun PreviewHomeScreen_Unrecorded() {
+fun PreviewHomeScreenUnrecorded() {
     val unrecordedUiState = HomeUiState(
         isLoading = false,
         elderName = "김옥자",
@@ -509,12 +510,12 @@ fun PreviewHomeScreen_Unrecorded() {
             immediateCall = {},
             onRefresh = {},
             onFabClick = {},
-            navigateToMealDetail = { },
-            navigateToMedicineDetail = { },
-            navigateToSleepDetail = { },
-            navigateToStateHealthDetail = { },
-            navigateToStateMentalDetail = { },
-            navigateToGlucoseDetail = { },
+            navigateToMealDetailScreen = { },
+            navigateToMedicineDetailScreen = { },
+            navigateToSleepDetailScreen = { },
+            navigateToStateHealthDetailScreen = { },
+            navigateToStateMentalDetailScreen = { },
+            navigateToGlucoseDetailScreen = { },
             navigateToAlarm = { },
         )
     }

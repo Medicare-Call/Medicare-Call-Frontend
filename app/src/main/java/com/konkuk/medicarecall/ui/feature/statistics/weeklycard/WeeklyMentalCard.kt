@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMentalUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
@@ -31,7 +31,7 @@ import com.konkuk.medicarecall.ui.theme.figmaShadow
 @Composable
 fun WeeklyMentalCard(
     modifier: Modifier = Modifier,
-    mental: WeeklyMentalUiState,
+    mental: WeeklySummaryUiState.WeeklyMentalUiState,
 ) {
     Card(
         modifier = modifier
@@ -97,7 +97,7 @@ private fun MentalStatusRow(
         Text(
             text = label,
             style = MediCareCallTheme.typography.R_15,
-            color = MediCareCallTheme.colors.gray4,
+            color = MediCareCallTheme.colors.gray8,
         )
         Spacer(modifier = Modifier.width(10.dp))
         Icon(
@@ -119,10 +119,10 @@ private fun MentalStatusRow(
 
 @Preview(name = "심리상태 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyMentalCard_Recorded() {
+fun PreviewWeeklyMentalCardRecorded() {
     WeeklyMentalCard(
         modifier = Modifier.size(155.dp),
-        mental = WeeklyMentalUiState(
+        mental = WeeklySummaryUiState.WeeklyMentalUiState(
             good = 4,
             normal = 2,
             bad = 1,
@@ -132,9 +132,9 @@ fun PreviewWeeklyMentalCard_Recorded() {
 
 @Preview(name = "심리상태 카드 - 미기록")
 @Composable
-fun PreviewWeeklyMentalCard_Unrecorded() {
+fun PreviewWeeklyMentalCardUnrecorded() {
     WeeklyMentalCard(
         modifier = Modifier.size(155.dp),
-        mental = WeeklyMentalUiState.EMPTY,
+        mental = WeeklySummaryUiState.WeeklyMentalUiState.EMPTY,
     )
 }

@@ -31,7 +31,9 @@ fun AnnouncementDetailScreen(
     noticeInfo: NoticesResponseDto,
     onBack: () -> Unit = {},
 ) {
+    val contents = noticeInfo.contents.replace("\\n", "\n")
     val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,6 +54,7 @@ fun AnnouncementDetailScreen(
                 )
             },
         )
+
         Column(
             modifier = modifier.verticalScroll(scrollState),
         ) {
@@ -84,7 +87,7 @@ fun AnnouncementDetailScreen(
                 )
                 Spacer(modifier = modifier.height(10.dp))
                 Text(
-                    text = noticeInfo.contents,
+                    text = contents,
                     style = MediCareCallTheme.typography.R_16,
                     color = MediCareCallTheme.colors.gray6,
                 )

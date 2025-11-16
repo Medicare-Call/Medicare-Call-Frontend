@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.util.WeeklySummaryUtil
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMedicineUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState.WeeklyMedicineUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
@@ -95,7 +95,7 @@ fun WeeklyMedicineCard(
                         Text(
                             text = weeklyMedicine.medicineName,
                             style = MediCareCallTheme.typography.R_15,
-                            color = MediCareCallTheme.colors.gray4,
+                            color = MediCareCallTheme.colors.gray8,
                         )
                         Spacer(modifier = Modifier.width(10.dp))
 
@@ -110,7 +110,7 @@ fun WeeklyMedicineCard(
                         Text(
                             text = takenText,
                             style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray6,
+                            color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray6,
                         )
                     }
                 }
@@ -121,7 +121,7 @@ fun WeeklyMedicineCard(
 
 @Preview(name = "복약 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyMedicineCard_Recorded() {
+fun PreviewWeeklyMedicineCardRecorded() {
     WeeklyMedicineCard(
         modifier = Modifier
             .size(150.dp, 140.dp),
@@ -135,7 +135,7 @@ fun PreviewWeeklyMedicineCard_Recorded() {
 
 @Preview(name = "복약 카드 - 미기록")
 @Composable
-fun PreviewWeeklyMedicineCard_UnRecorded() {
+fun PreviewWeeklyMedicineCardUnRecorded() {
     WeeklyMedicineCard(
         modifier = Modifier
             .size(150.dp, 140.dp),

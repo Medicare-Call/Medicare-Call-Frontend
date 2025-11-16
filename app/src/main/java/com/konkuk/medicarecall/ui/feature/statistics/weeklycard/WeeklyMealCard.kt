@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.util.WeeklySummaryUtil
-import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklyMealUiState
+import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.WeeklySummaryUiState.WeeklyMealUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
@@ -100,7 +100,7 @@ fun WeeklyMealCard(
                         Text(
                             text = countText,
                             style = MediCareCallTheme.typography.R_14,
-                            color = MediCareCallTheme.colors.gray6,
+                            color = if (isUnrecorded) MediCareCallTheme.colors.gray4 else MediCareCallTheme.colors.gray6,
                         )
                     }
                 }
@@ -111,7 +111,7 @@ fun WeeklyMealCard(
 
 @Preview(name = "식사 카드 - 기록 있음")
 @Composable
-fun PreviewWeeklyMealCard_Recorded() {
+fun PreviewWeeklyMealCardRecorded() {
     WeeklyMealCard(
         modifier = Modifier
             .width(150.dp),
@@ -125,7 +125,7 @@ fun PreviewWeeklyMealCard_Recorded() {
 
 @Preview(name = "식사 카드 - 미기록")
 @Composable
-fun PreviewWeeklyMealCard_Unrecorded() {
+fun PreviewWeeklyMealCardUnrecorded() {
     WeeklyMealCard(
         modifier = Modifier
             .width(150.dp),
