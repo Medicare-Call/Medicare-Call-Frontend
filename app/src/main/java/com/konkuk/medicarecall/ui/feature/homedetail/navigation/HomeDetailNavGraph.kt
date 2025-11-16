@@ -67,7 +67,7 @@ fun NavGraphBuilder.homeDetailNavGraph(
     }
 
     // 홈 상세 화면_건강 징후 화면
-    composable<Route.StateHealthDetail> {backStackEntry ->
+    composable<Route.StateHealthDetail> { backStackEntry ->
         val route = backStackEntry.toRoute<Route.StateHealthDetail>()
         StateHealthDetailScreen(
             elderId = route.elderId,
@@ -76,7 +76,7 @@ fun NavGraphBuilder.homeDetailNavGraph(
     }
 
     // 홈 상세 화면_심리 상태 화면
-    composable<Route.StateMentalDetail> {backStackEntry ->
+    composable<Route.StateMentalDetail> { backStackEntry ->
         val route = backStackEntry.toRoute<Route.StateMentalDetail>()
         StateMentalDetailScreen(
             elderId = route.elderId,

@@ -121,7 +121,7 @@ fun GlucoseDetailScreen(
 
             glucoseViewModel.getGlucoseData(
                 elderId = elderId,
-                counter = currentPage + 1,    // 다음 페이지 요청
+                counter = currentPage + 1, // 다음 페이지 요청
                 type = currentTiming,
                 isRefresh = false,
             )
