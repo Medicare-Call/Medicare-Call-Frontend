@@ -62,11 +62,7 @@ fun GlucoseDetailScreen(
     val scrollState = rememberScrollState()
     val uiState by glucoseViewModel.uiState.collectAsStateWithLifecycle()
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    // 선택된 어르신 ID를 구독 (null 가능)
-    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
-
+    // 페이지 카운터
     val counter = remember {
         mutableStateMapOf(
             GlucoseTiming.BEFORE_MEAL to 0,
@@ -74,20 +70,28 @@ fun GlucoseDetailScreen(
         )
     }
 
-    val coroutineScope = rememberCoroutineScope()
-
     // 로딩 요청 중복 방지를 위한 플래그
     val isRequestingMore = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     // 데이터 새로고침 로직
     val refreshData = remember(glucoseViewModel) {
         {
-            elderId?.let { id ->
-                counter[GlucoseTiming.BEFORE_MEAL] = 0
-                counter[GlucoseTiming.AFTER_MEAL] = 0
-                viewModel.getGlucoseData(id, 0, GlucoseTiming.BEFORE_MEAL, true)
-                viewModel.getGlucoseData(id, 0, GlucoseTiming.AFTER_MEAL, true)
-            }
+            counter[GlucoseTiming.BEFORE_MEAL] = 0
+            counter[GlucoseTiming.AFTER_MEAL] = 0
+
+            glucoseViewModel.getGlucoseData(
+                elderId = elderId,
+                counter = 0,
+                type = GlucoseTiming.BEFORE_MEAL,
+                isRefresh = true,
+            )
+            glucoseViewModel.getGlucoseData(
+                elderId = elderId,
+                counter = 0,
+                type = GlucoseTiming.AFTER_MEAL,
+                isRefresh = true,
+            )
         }
     }
 
