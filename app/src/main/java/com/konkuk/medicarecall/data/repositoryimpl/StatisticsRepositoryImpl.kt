@@ -48,8 +48,7 @@ class StatisticsRepositoryImpl @Inject constructor(
                     takenCount = -1,
                     totalCount = 0,
                 )
-            }
-            ?: emptyMap()
+            } ?: emptyMap()
 
         return StatisticsResponseDto(
             elderName = elderName,
