@@ -12,22 +12,34 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    navigateToMealDetailScreen: () -> Unit,
-    navigateToMedicineDetailScreen: () -> Unit,
-    navigateToSleepDetailScreen: () -> Unit,
-    navigateToStateHealthDetailScreen: () -> Unit,
-    navigateToStateMentalDetailScreen: () -> Unit,
-    navigateToGlucoseDetailScreen: () -> Unit,
+    navigateToMealDetailScreen: (Int) -> Unit,
+    navigateToMedicineDetailScreen: (Int) -> Unit,
+    navigateToSleepDetailScreen: (Int) -> Unit,
+    navigateToStateHealthDetailScreen: (Int) -> Unit,
+    navigateToStateMentalDetailScreen: (Int) -> Unit,
+    navigateToGlucoseDetailScreen: (Int) -> Unit,
     navigateToAlarmScreen: () -> Unit,
 ) {
     composable<MainTabRoute.Home> { backStackEntry ->
         HomeScreen(
-            navigateToMealDetailScreen = navigateToMealDetailScreen,
-            navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
-            navigateToSleepDetailScreen = navigateToSleepDetailScreen,
-            navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
-            navigateToStateMentalDetailScreen = navigateToStateMentalDetailScreen,
-            navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
+            navigateToMealDetailScreen = { elderId ->
+                navigateToMealDetailScreen(elderId)
+            },
+            navigateToMedicineDetailScreen = { elderId ->
+                navigateToMedicineDetailScreen(elderId)
+            },
+            navigateToSleepDetailScreen = { elderId ->
+                navigateToSleepDetailScreen(elderId)
+            },
+            navigateToStateHealthDetailScreen = { elderId ->
+                navigateToStateHealthDetailScreen(elderId)
+            },
+            navigateToStateMentalDetailScreen = { elderId ->
+                navigateToStateMentalDetailScreen(elderId)
+            },
+            navigateToGlucoseDetailScreen = { elderId ->
+                navigateToGlucoseDetailScreen(elderId)
+            },
             mainBackStackEntry = backStackEntry,
             navigateToAlarm = navigateToAlarmScreen,
         )

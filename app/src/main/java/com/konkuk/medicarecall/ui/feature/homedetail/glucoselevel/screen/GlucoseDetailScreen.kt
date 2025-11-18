@@ -38,7 +38,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseStatusItem
@@ -55,19 +54,14 @@ import java.time.LocalDate
 @Composable
 fun GlucoseDetailScreen(
     modifier: Modifier = Modifier,
+    elderId: Int,
     onBack: () -> Unit,
+    glucoseViewModel: GlucoseViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
+    val uiState by glucoseViewModel.uiState.collectAsStateWithLifecycle()
 
-    // 어르신 선택 상태(selectedElderId) 관리
-    val homeViewModel: HomeViewModel = hiltViewModel()
-    val viewModel: GlucoseViewModel = hiltViewModel()
-
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    // 선택된 어르신 ID를 구독 (null 가능)
-    val elderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
-
+    // 페이지 카운터
     val counter = remember {
         mutableStateMapOf(
             GlucoseTiming.BEFORE_MEAL to 0,
@@ -75,20 +69,28 @@ fun GlucoseDetailScreen(
         )
     }
 
-    val coroutineScope = rememberCoroutineScope()
-
     // 로딩 요청 중복 방지를 위한 플래그
     val isRequestingMore = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     // 데이터 새로고침 로직
-    val refreshData = remember(viewModel) {
+    val refreshData = remember(glucoseViewModel) {
         {
-            elderId?.let { id ->
-                counter[GlucoseTiming.BEFORE_MEAL] = 0
-                counter[GlucoseTiming.AFTER_MEAL] = 0
-                viewModel.getGlucoseData(id, 0, GlucoseTiming.BEFORE_MEAL, true)
-                viewModel.getGlucoseData(id, 0, GlucoseTiming.AFTER_MEAL, true)
-            }
+            counter[GlucoseTiming.BEFORE_MEAL] = 0
+            counter[GlucoseTiming.AFTER_MEAL] = 0
+
+            glucoseViewModel.getGlucoseData(
+                elderId = elderId,
+                counter = 0,
+                type = GlucoseTiming.BEFORE_MEAL,
+                isRefresh = true,
+            )
+            glucoseViewModel.getGlucoseData(
+                elderId = elderId,
+                counter = 0,
+                type = GlucoseTiming.AFTER_MEAL,
+                isRefresh = true,
+            )
         }
     }
 
@@ -105,16 +107,25 @@ fun GlucoseDetailScreen(
     // 무한 스크롤 (더 빠른 트리거와 중복 요청 방지)
     LaunchedEffect(scrollState.value, scrollState.maxValue) {
         Log.d("scroll", "value: ${scrollState.value}, max: ${scrollState.maxValue}, isLoading: ${uiState.isLoading}, hasNext: ${uiState.hasNext}")
-
-        // 더 일찍 트리거 (500dp 전에 미리 로딩)
+        // 스크롤이 거의 끝까지 왔을 때만 다음 페이지 불러오기
         val shouldLoad = scrollState.value > scrollState.maxValue - 500 || scrollState.maxValue <= 100
 
-        if (shouldLoad && elderId != null && !uiState.isLoading && uiState.hasNext && !isRequestingMore.value) {
+        if (shouldLoad &&
+            !uiState.isLoading &&
+            uiState.hasNext &&
+            !isRequestingMore.value
+        ) {
             isRequestingMore.value = true
             val currentTiming = uiState.selectedTiming
             val currentPage = counter.getValue(currentTiming)
-            Log.d("scroll", "Loading page ${currentPage + 1} for $currentTiming")
-            viewModel.getGlucoseData(elderId!!, currentPage + 1, currentTiming, false)
+
+            glucoseViewModel.getGlucoseData(
+                elderId = elderId,
+                counter = currentPage + 1, // 다음 페이지 요청
+                type = currentTiming,
+                isRefresh = false,
+            )
+
             counter[currentTiming] = currentPage + 1
         }
     }
@@ -134,13 +145,11 @@ fun GlucoseDetailScreen(
 
         // '공복'/'식후' 버튼
         onTimingChange = { newTiming ->
-            viewModel.updateTiming(newTiming)
-            coroutineScope.launch {
-                scrollState.scrollTo(0)
-            }
+            glucoseViewModel.updateTiming(newTiming)
+            coroutineScope.launch { scrollState.scrollTo(0) }
         },
         // 그래프 점
-        onPointClick = { newIndex -> viewModel.onClickDots(newIndex) },
+        onPointClick = glucoseViewModel::onClickDots,
         scrollState = scrollState,
         onBack = onBack,
     )

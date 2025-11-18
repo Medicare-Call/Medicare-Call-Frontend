@@ -45,22 +45,22 @@ sealed interface Route {
 
     // 홈 (하루 요약)
     @Serializable
-    data object MealDetail : Route
+    data class MealDetail(val elderId: Int) : Route
 
     @Serializable
-    data object MedicineDetail : Route
+    data class MedicineDetail(val elderId: Int) : Route
 
     @Serializable
-    data object SleepDetail : Route
+    data class SleepDetail(val elderId: Int) : Route
 
     @Serializable
-    data object StateHealthDetail : Route
+    data class StateHealthDetail(val elderId: Int) : Route
 
     @Serializable
-    data object StateMentalDetail : Route
+    data class StateMentalDetail(val elderId: Int) : Route
 
     @Serializable
-    data object GlucoseDetail : Route
+    data class GlucoseDetail(val elderId: Int) : Route
 
     // 설정
     @Serializable

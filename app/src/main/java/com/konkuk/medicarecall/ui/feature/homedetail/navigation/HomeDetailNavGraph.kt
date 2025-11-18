@@ -3,6 +3,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
@@ -11,62 +12,84 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHea
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetailScreen
 import com.konkuk.medicarecall.ui.navigation.Route
 
-fun NavController.navigateToMealDetailScreen() {
-    navigate(Route.MealDetail)
+fun NavController.navigateToMealDetailScreen(elderId: Int) {
+    navigate(Route.MealDetail(elderId))
 }
 
-fun NavController.navigateToMedicineDetailScreen() {
-    navigate(Route.MedicineDetail)
+fun NavController.navigateToMedicineDetailScreen(elderId: Int) {
+    navigate(Route.MedicineDetail(elderId))
 }
 
-fun NavController.navigateToSleepDetailScreen() {
-    navigate(Route.SleepDetail)
+fun NavController.navigateToSleepDetailScreen(elderId: Int) {
+    navigate(Route.SleepDetail(elderId))
 }
 
-fun NavController.navigateToStateHealthDetailScreen() {
-    navigate(Route.StateHealthDetail)
+fun NavController.navigateToStateHealthDetailScreen(elderId: Int) {
+    navigate(Route.StateHealthDetail(elderId))
 }
 
-fun NavController.navigateToStateMentalDetailScreen() {
-    navigate(Route.StateMentalDetail)
+fun NavController.navigateToStateMentalDetailScreen(elderId: Int) {
+    navigate(Route.StateMentalDetail(elderId))
 }
 
-fun NavController.navigateToGlucoseDetailScreen() {
-    navigate(Route.GlucoseDetail)
+fun NavController.navigateToGlucoseDetailScreen(elderId: Int) {
+    navigate(Route.GlucoseDetail(elderId))
 }
 
 fun NavGraphBuilder.homeDetailNavGraph(
     popBackStack: () -> Unit,
 ) {
     // 홈 상세 화면_식사 화면
-    composable<Route.MealDetail> {
+    composable<Route.MealDetail> { backStackEntry ->
+        val route = backStackEntry.toRoute<Route.MealDetail>()
         MealDetailScreen(
+            elderId = route.elderId,
             onBack = popBackStack,
         )
     }
 
     // 홈 상세 화면_복용 화면
-    composable<Route.MedicineDetail> {
-        MedicineDetailScreen(onBack = popBackStack)
+    composable<Route.MedicineDetail> { backStackEntry ->
+        val route = backStackEntry.toRoute<Route.MedicineDetail>()
+        MedicineDetailScreen(
+            elderId = route.elderId,
+            onBack = popBackStack,
+        )
     }
 
     // 홈 상세 화면_수면 화면
-    composable<Route.SleepDetail> {
-        SleepDetailScreen(onBack = popBackStack)
+    composable<Route.SleepDetail> { backStackEntry ->
+        val route = backStackEntry.toRoute<Route.SleepDetail>()
+        SleepDetailScreen(
+            elderId = route.elderId,
+            onBack = popBackStack,
+        )
     }
 
     // 홈 상세 화면_건강 징후 화면
-    composable<Route.StateHealthDetail> {
-        StateHealthDetailScreen(onBack = popBackStack)
+    composable<Route.StateHealthDetail> { backStackEntry ->
+        val route = backStackEntry.toRoute<Route.StateHealthDetail>()
+        StateHealthDetailScreen(
+            elderId = route.elderId,
+            onBack = popBackStack,
+        )
     }
 
     // 홈 상세 화면_심리 상태 화면
-    composable<Route.StateMentalDetail> {
-        StateMentalDetailScreen(onBack = popBackStack)
+    composable<Route.StateMentalDetail> { backStackEntry ->
+        val route = backStackEntry.toRoute<Route.StateMentalDetail>()
+        StateMentalDetailScreen(
+            elderId = route.elderId,
+            onBack = popBackStack,
+        )
     }
 
     // 홈 상세 화면_혈당 화면
-    composable<Route.GlucoseDetail> {
-        GlucoseDetailScreen(onBack = popBackStack)
+    composable<Route.GlucoseDetail> { backStackEntry ->
+        val route = backStackEntry.toRoute<Route.GlucoseDetail>()
+        GlucoseDetailScreen(
+            elderId = route.elderId,
+            onBack = popBackStack,
+        )
     }
 }
