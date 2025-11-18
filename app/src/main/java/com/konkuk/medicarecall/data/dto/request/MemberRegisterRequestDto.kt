@@ -8,4 +8,5 @@ data class MemberRegisterRequestDto(
     val name: String,
     val birthDate: String,
     val gender: GenderType, // MALE, FEMALE
+    val fcmToken: String,
 )

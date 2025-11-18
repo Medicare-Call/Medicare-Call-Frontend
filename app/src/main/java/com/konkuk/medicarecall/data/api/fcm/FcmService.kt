@@ -16,7 +16,9 @@ import com.google.firebase.messaging.RemoteMessage
 import com.konkuk.medicarecall.App
 import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.FcmRepository
+import com.konkuk.medicarecall.data.repositoryimpl.FcmRepositoryImpl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +34,9 @@ class FcmService : FirebaseMessagingService() {
 
     @Inject
     lateinit var fcmRepository: FcmRepository
+
+    @Inject
+    lateinit var dataStoreRepository: DataStoreRepository
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -52,7 +57,9 @@ class FcmService : FirebaseMessagingService() {
                 fcmRepository.saveFcmToken(token)
                 Log.d(TAG, "새 FCM 토큰 DataStore에 저장 완료")
 
-                // 서버에도 새 토큰 알려주기(api.updateFcmToken(token) 이런 형식...?)
+                // 서버 갱신 (jwtToken은 DataStore에서 가져오거나, 로그인 시 저장된 값을 사용)
+                val jwtToken = dataStoreRepository.getAccessToken() ?: return@launch
+                (fcmRepository as? FcmRepositoryImpl)?.validateAndRefreshTokenIfNeeded(jwtToken)
             } catch (e: Exception) {
                 Log.e(TAG, "새 FCM 토큰 저장 중 오류 발생", e)
             }

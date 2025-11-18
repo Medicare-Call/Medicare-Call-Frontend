@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.FcmRepository
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.domain.usecase.CheckLoginStatusUseCase
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,62 +30,43 @@ class LoginViewModel @Inject constructor(
     private val memberRegisterRepository: MemberRegisterRepository,
     private val dataStoreRepository: DataStoreRepository,
     private val checkLoginStatusUseCase: CheckLoginStatusUseCase,
+    private val fcmRepository: FcmRepository
 ) : ViewModel() {
+
     private val _navigationDestination = MutableStateFlow<NavigationDestination?>(null)
     val navigationDestination = _navigationDestination.asStateFlow()
 
     private val _events = MutableSharedFlow<LoginEvent>()
     val events = _events.asSharedFlow()
 
-    // 휴대폰 번호 입력 value
+    // 입력 상태값
     var phoneNumber by mutableStateOf("")
         private set
-
-    // 인증번호 입력 value
     var verificationCode by mutableStateOf("")
         private set
-
     var name by mutableStateOf("")
         private set
     var dateOfBirth by mutableStateOf("")
         private set
-    var isMale by mutableStateOf<Boolean>(true)
+    var isMale by mutableStateOf(true)
         private set
 
-    // 상태 변경 함수
-    fun onPhoneNumberChanged(new: String) {
-        phoneNumber = new
-    }
+    // 상태 변경
+    fun onPhoneNumberChanged(new: String) { phoneNumber = new }
+    fun onVerificationCodeChanged(new: String) { verificationCode = new }
+    fun onNameChanged(new: String) { name = new }
+    fun onDOBChanged(new: String) { dateOfBirth = new }
+    fun onGenderChanged(new: Boolean) { isMale = new }
 
-    fun onVerificationCodeChanged(new: String) {
-        verificationCode = new
-    }
-
-    fun onNameChanged(new: String) {
-        name = new
-    }
-
-    fun onDOBChanged(new: String) {
-        dateOfBirth = new
-    }
-
-    fun onGenderChanged(new: Boolean) {
-        isMale = new
-    }
-
-    // 서버 통신 함수
     private val debug = false
+
+    /** 인증번호 요청 */
     fun postPhoneNumber(phone: String) {
         if (!debug) {
             viewModelScope.launch {
-                verificationRepository.requestCertificationCode(phone).fold(
-                    onSuccess = {
-                        Log.d("httplog", "성공, ${it.message()}")
-                    },
-                    onFailure = { error ->
-                        Log.d("httplog", "실패, ${error.message}")
-                    },
-                )
+                verificationRepository.requestCertificationCode(phone)
+                    .onSuccess { Log.d("httplog", "인증번호 요청 성공, ${it.message()}") }
+                    .onFailure { Log.e("httplog", "인증번호 요청 실패: ${it.message}") }
             }
         }
     }
@@ -91,28 +75,34 @@ class LoginViewModel @Inject constructor(
     var token = ""
         private set
 
+    /** 인증번호 확인 및 로그인 처리 */
     fun confirmPhoneNumber(phone: String, code: String) {
         viewModelScope.launch {
             if (!debug) {
                 verificationRepository.confirmPhoneNumber(phone, code)
                     .onSuccess {
-                        Log.d(
-                            "httplog",
-                            "${it.message} ${it.memberStatus} 액세스토큰: ${it.accessToken} 리프레시 토큰: ${it.refreshToken} ${it.verified} ${it.token} ",
-                        )
+                        Log.d("httplog", "로그인 성공, 액세스토큰: ${it.accessToken}")
+
                         isVerified = it.verified
                         if (isVerified) {
                             token = it.token ?: ""
                             dataStoreRepository.saveAccessToken(it.accessToken ?: "")
                             dataStoreRepository.saveRefreshToken(it.refreshToken ?: "")
+
+                            // 로그인 후 FCM 토큰 유효성 검사
+                            it.accessToken?.let { jwt ->
+                                fcmRepository.validateAndRefreshTokenIfNeeded(jwt)
+                                Log.d("httplog", "FCM 토큰 유효성 검사 및 갱신 완료")
+                            }
                         }
+
                         if (it.memberStatus == "EXISTING_MEMBER")
                             _events.emit(LoginEvent.VerificationSuccessExisting)
                         else
                             _events.emit(LoginEvent.VerificationSuccessNew)
                     }
                     .onFailure { error ->
-                        Log.d("httplog", "실패, ${error.message}")
+                        Log.e("httplog", "로그인 실패: ${error.message}")
                         _events.emit(LoginEvent.VerificationFailure)
                     }
             } else {
@@ -121,37 +111,43 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    /** 회원가입 */
     fun memberRegister(name: String, birthDate: String, gender: GenderType) {
         viewModelScope.launch {
-            if (!debug) {
+            try {
+                if (debug) {
+                    _events.emit(LoginEvent.MemberRegisterSuccess)
+                    return@launch
+                }
+
+                // 🔹 이미 로그인 단계에서 FCM 토큰은 유효성 검증 완료됨
+                val fcmToken = FirebaseMessaging.getInstance().token.await()
+                Log.d("httplog", "회원가입 시 FCM 토큰 사용: $fcmToken")
+
                 memberRegisterRepository.registerMember(
-                    token,
-                    name,
-                    birthDate.formatAsDate(),
-                    gender,
-                )
-                    .onSuccess {
-                        // 성공 로직
-                        // responseDto에는 MemberRegisterResponseDto 객체가 들어있음
-                        // 예: 성공 메시지 표시, 다음 화면으로 이동
-                        Log.d("httplog", "성공, ${it.accessToken} ${it.refreshToken}")
-                        dataStoreRepository.saveAccessToken(it.accessToken)
-                        dataStoreRepository.saveRefreshToken(it.refreshToken)
-                        _events.emit(LoginEvent.MemberRegisterSuccess)
-                    }
-                    .onFailure { exception ->
-                        // 실패 로직
-                        // exception에는 API 호출 중 발생한 예외가 들어있음
-                        // 예: 에러 메시지 표시
-                        Log.e("httplog", "회원가입 실패: ${exception.message}")
-                        _events.emit(LoginEvent.MemberRegisterFailure)
-                    }
-            } else {
-                _events.emit(LoginEvent.MemberRegisterSuccess)
+                    token = token,
+                    name = name,
+                    birthDate = birthDate.formatAsDate(),
+                    gender = gender,
+                    fcmToken = fcmToken,
+                ).onSuccess {
+                    Log.d("httplog", "회원가입 성공: ${it.accessToken} ${it.refreshToken}")
+                    dataStoreRepository.saveAccessToken(it.accessToken)
+                    dataStoreRepository.saveRefreshToken(it.refreshToken)
+                    _events.emit(LoginEvent.MemberRegisterSuccess)
+                }.onFailure { e ->
+                    Log.e("httplog", "회원가입 실패: ${e.message}")
+                    _events.emit(LoginEvent.MemberRegisterFailure)
+                }
+
+            } catch (e: Exception) {
+                Log.e("httplog", "회원가입 중 예외 발생: ${e.message}")
+                _events.emit(LoginEvent.MemberRegisterFailure)
             }
         }
     }
 
+    /** 로그인 상태 확인 */
     fun checkStatus() {
         viewModelScope.launch {
             val destination = checkLoginStatusUseCase()

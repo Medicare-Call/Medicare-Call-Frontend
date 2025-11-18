@@ -5,4 +5,5 @@ interface FcmRepository {
     suspend fun getFcmToken(): String?
 
     suspend fun clearToken()
+    suspend fun validateAndRefreshTokenIfNeeded(jwtToken: String)
 }
