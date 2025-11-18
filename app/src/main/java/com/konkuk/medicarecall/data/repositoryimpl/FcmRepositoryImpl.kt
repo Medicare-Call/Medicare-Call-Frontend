@@ -25,7 +25,7 @@ val Context.fcmDataStore by dataStore(
 class FcmRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fcmValidationService: FcmValidationService,
-    private val fcmUpdateService: FcmUpdateService
+    private val fcmUpdateService: FcmUpdateService,
 ) : FcmRepository {
     override suspend fun saveFcmToken(token: String) { // fcm 토큰 저장
         context.fcmDataStore.updateData { it.copy(fcmToken = token) }
