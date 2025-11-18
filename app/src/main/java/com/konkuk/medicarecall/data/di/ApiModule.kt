@@ -14,6 +14,8 @@ import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.api.elders.SleepService
 import com.konkuk.medicarecall.data.api.elders.StatisticsService
 import com.konkuk.medicarecall.data.api.elders.SubscribeService
+import com.konkuk.medicarecall.data.api.fcm.FcmUpdateService
+import com.konkuk.medicarecall.data.api.fcm.FcmValidationService
 import com.konkuk.medicarecall.data.api.member.MemberRegisterService
 import com.konkuk.medicarecall.data.api.member.SettingService
 import com.konkuk.medicarecall.data.api.notice.NoticeService
@@ -135,4 +137,17 @@ object ApiModule {
     fun provideStatisticsService(retrofit: Retrofit): StatisticsService {
         return retrofit.create(StatisticsService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideFcmValidationService(retrofit: Retrofit): FcmValidationService {
+        return retrofit.create(FcmValidationService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFcmUpdateService(retrofit: Retrofit): FcmUpdateService {
+        return retrofit.create(FcmUpdateService::class.java)
+    }
+
 }
