@@ -149,5 +149,4 @@ object ApiModule {
     fun provideFcmUpdateService(retrofit: Retrofit): FcmUpdateService {
         return retrofit.create(FcmUpdateService::class.java)
     }
-
 }

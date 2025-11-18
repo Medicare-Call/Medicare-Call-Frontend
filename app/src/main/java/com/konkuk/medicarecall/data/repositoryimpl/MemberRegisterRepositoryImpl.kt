@@ -3,7 +3,6 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import com.konkuk.medicarecall.data.api.member.MemberRegisterService
 import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
-import com.konkuk.medicarecall.data.repository.FcmRepository
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.ui.type.GenderType
 import retrofit2.HttpException
@@ -18,7 +17,7 @@ class MemberRegisterRepositoryImpl @Inject constructor(
         name: String,
         birthDate: String,
         gender: GenderType,
-        fcmToken: String
+        fcmToken: String,
     ): Result<MemberTokenResponseDto> =
         runCatching {
             val response = memberRegisterService.postMemberRegister(
@@ -27,7 +26,7 @@ class MemberRegisterRepositoryImpl @Inject constructor(
                     name,
                     birthDate,
                     gender,
-                    fcmToken
+                    fcmToken,
                 ),
             )
 

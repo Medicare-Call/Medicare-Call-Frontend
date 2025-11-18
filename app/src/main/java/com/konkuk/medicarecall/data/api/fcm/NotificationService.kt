@@ -10,6 +10,6 @@ interface NotificationService { // 알림 관련
     @POST("notifications/{notificationId}")
     suspend fun changeStatus(
         @Path("notificationId") notificationId: String,
-        @Body status : NotificationStatusRequestDto
-        ) : Response<Unit>
+        @Body status: NotificationStatusRequestDto,
+    ): Response<Unit>
 }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.mapOf
 
 val Context.fcmDataStore by dataStore(
     fileName = "fcm_tokens",
@@ -25,23 +24,20 @@ val Context.fcmDataStore by dataStore(
 class FcmRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fcmValidationService: FcmValidationService,
-    private val fcmUpdateService: FcmUpdateService
+    private val fcmUpdateService: FcmUpdateService,
 ) : FcmRepository {
     override suspend fun saveFcmToken(token: String) { // fcm 토큰 저장
         context.fcmDataStore.updateData { it.copy(fcmToken = token) }
     }
-
     override suspend fun getFcmToken(): String? { // fcm 토큰 불러오기
         val preferences = context.fcmDataStore.data.first()
         return preferences.fcmToken
     }
-
     override suspend fun clearToken() {
         context.fcmDataStore.updateData {
             FcmToken(null)
         }
     }
-
     override suspend fun validateAndRefreshTokenIfNeeded(jwtToken: String) {
         try {
             val currentToken = getFcmToken()
@@ -51,12 +47,10 @@ class FcmRepositoryImpl @Inject constructor(
             val isValid = runCatching {
                 fcmValidationService.validateToken().isSuccessful
             }.getOrDefault(false)
-
             if (isValid) {
                 Log.d("FcmRepositoryImpl", "FCM 토큰 유효함, 갱신 불필요")
                 return
             }
-
             // 유효하지 않으면 Firebase로 새 토큰 발급
             val newToken = FirebaseMessaging.getInstance().token.await()
             saveFcmToken(newToken)
@@ -69,16 +63,13 @@ class FcmRepositoryImpl @Inject constructor(
                     body = mapOf("fcmToken" to newToken),
                 )
             }
-
             response.onSuccess {
                 Log.d("FcmRepositoryImpl", "서버에 FCM 토큰 갱신 성공")
             }.onFailure {
                 Log.e("FcmRepositoryImpl", "서버에 토큰 갱신 실패: ${it.message}")
             }
-
         } catch (e: Exception) {
             Log.e("FcmRepositoryImpl", "validateAndRefreshTokenIfNeeded 실패: ${e.message}")
         }
     }
-
 }
