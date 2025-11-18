@@ -180,7 +180,6 @@ fun LoginElderMedInfoScreen(
                         loginElderViewModel.addHealthNote(it)
                     },
                 )
-
             }
             CTAButton(
                 CTAButtonType.GREEN,

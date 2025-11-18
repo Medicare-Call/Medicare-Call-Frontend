@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -186,12 +185,8 @@ fun LoginElderScreen(
                         )
                     }
                 }
-
                 Spacer(Modifier.height(30.dp))
-
             }
-
-
             CTAButton(
                 if (loginElderViewModel.isInputComplete())
                     CTAButtonType.GREEN
@@ -236,7 +231,6 @@ fun LoginElderScreen(
                 Modifier.padding(top = 20.dp, bottom = 20.dp),
             )
         }
-
         DefaultSnackBar(
             snackBarState,
             Modifier
