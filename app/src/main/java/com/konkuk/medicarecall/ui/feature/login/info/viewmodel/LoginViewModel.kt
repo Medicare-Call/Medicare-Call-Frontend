@@ -153,7 +153,6 @@ class LoginViewModel @Inject constructor(
                     Log.e("httplog", "회원가입 실패: ${e.message}")
                     _events.emit(LoginEvent.MemberRegisterFailure)
                 }
-
             } catch (e: Exception) {
                 Log.e("httplog", "회원가입 중 예외 발생: ${e.message}")
                 _events.emit(LoginEvent.MemberRegisterFailure)
