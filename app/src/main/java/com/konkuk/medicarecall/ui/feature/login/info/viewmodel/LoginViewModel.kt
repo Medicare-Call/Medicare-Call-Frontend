@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
     private val memberRegisterRepository: MemberRegisterRepository,
     private val dataStoreRepository: DataStoreRepository,
     private val checkLoginStatusUseCase: CheckLoginStatusUseCase,
-    private val fcmRepository: FcmRepository
+    private val fcmRepository: FcmRepository,
 ) : ViewModel() {
 
     private val _navigationDestination = MutableStateFlow<NavigationDestination?>(null)
@@ -52,11 +52,25 @@ class LoginViewModel @Inject constructor(
         private set
 
     // 상태 변경
-    fun onPhoneNumberChanged(new: String) { phoneNumber = new }
-    fun onVerificationCodeChanged(new: String) { verificationCode = new }
-    fun onNameChanged(new: String) { name = new }
-    fun onDOBChanged(new: String) { dateOfBirth = new }
-    fun onGenderChanged(new: Boolean) { isMale = new }
+    fun onPhoneNumberChanged(new: String) {
+        phoneNumber = new
+    }
+
+    fun onVerificationCodeChanged(new: String) {
+        verificationCode = new
+    }
+
+    fun onNameChanged(new: String) {
+        name = new
+    }
+
+    fun onDOBChanged(new: String) {
+        dateOfBirth = new
+    }
+
+    fun onGenderChanged(new: Boolean) {
+        isMale = new
+    }
 
     private val debug = false
 
