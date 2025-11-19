@@ -467,7 +467,10 @@ fun NavGraph(
                     navController.popBackStack()
                 },
                 navigateToPayment = {
-                    navController.navigate(Route.LoginPurchase)
+                    //navController.navigate(Route.LoginPurchase)
+                    navController.navigate(Route.LoginFinish) {
+                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
+                    }
                 },
             )
         }
