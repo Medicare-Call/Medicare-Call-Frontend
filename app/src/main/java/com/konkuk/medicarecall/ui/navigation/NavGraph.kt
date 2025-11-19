@@ -56,9 +56,7 @@ import kotlin.reflect.typeOf
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
     navigate(MainTabRoute.Home) {
-        popUpTo(Route.LoginStart) { inclusive = true }
-        launchSingleTop = true
-        restoreState = true
+        popUpTo(0) { inclusive = true }
     }
 }
 
@@ -91,11 +89,7 @@ fun NavGraph(
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
                 navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
-                    navController.navigate(MainTabRoute.Home) {
-                        popUpTo(Route.LoginStart) {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigateToMainAfterLogin()
                 },
             )
         }
@@ -391,11 +385,7 @@ fun NavGraph(
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
                 navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
-                    navController.navigate(MainTabRoute.Home) {
-                        popUpTo(Route.LoginStart) {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigateToMainAfterLogin()
                 },
                 loginViewModel = loginViewModel,
             )
@@ -420,11 +410,7 @@ fun NavGraph(
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
                 navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
                 navigateToHome = {
-                    navController.navigate(MainTabRoute.Home) {
-                        popUpTo(Route.LoginStart) {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigateToMainAfterLogin()
                 },
                 loginViewModel = loginViewModel,
             )
