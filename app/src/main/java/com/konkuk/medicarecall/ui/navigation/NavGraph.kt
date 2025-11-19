@@ -433,7 +433,9 @@ fun NavGraph(
             LoginMyInfoScreen(
                 onBack = { navController.popBackStack() },
                 navigateToRegisterElder = {
-                    navController.navigate(Route.LoginRegisterElder)
+                    navController.navigate(Route.LoginRegisterElder) {
+                        popUpTo(Route.LoginStart)
+                    }
                 },
                 loginViewModel = loginViewModel,
             )
