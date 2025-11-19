@@ -73,12 +73,12 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    navigateToMealDetailScreen: () -> Unit,
-    navigateToMedicineDetailScreen: () -> Unit,
-    navigateToSleepDetailScreen: () -> Unit,
-    navigateToStateHealthDetailScreen: () -> Unit,
-    navigateToStateMentalDetailScreen: () -> Unit,
-    navigateToGlucoseDetailScreen: () -> Unit,
+    navigateToMealDetailScreen: (Int) -> Unit,
+    navigateToMedicineDetailScreen: (Int) -> Unit,
+    navigateToSleepDetailScreen: (Int) -> Unit,
+    navigateToStateHealthDetailScreen: (Int) -> Unit,
+    navigateToStateMentalDetailScreen: (Int) -> Unit,
+    navigateToGlucoseDetailScreen: (Int) -> Unit,
     mainBackStackEntry: NavBackStackEntry,
     navigateToAlarm: () -> Unit,
 ) {
@@ -117,12 +117,13 @@ fun HomeScreen(
             homeViewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetailScreen = navigateToMealDetailScreen,
-        navigateToMedicineDetailScreen = navigateToMedicineDetailScreen,
-        navigateToSleepDetailScreen = navigateToSleepDetailScreen,
-        navigateToStateHealthDetailScreen = navigateToStateHealthDetailScreen,
-        navigateToStateMentalDetailScreen = navigateToStateMentalDetailScreen,
-        navigateToGlucoseDetailScreen = navigateToGlucoseDetailScreen,
+        navigateToMealDetailScreen = { selectedElderId?.let(navigateToMealDetailScreen) },
+        navigateToMedicineDetailScreen = { selectedElderId?.let(navigateToMedicineDetailScreen) },
+        navigateToSleepDetailScreen = { selectedElderId?.let(navigateToSleepDetailScreen) },
+        navigateToStateHealthDetailScreen = { selectedElderId?.let(navigateToStateHealthDetailScreen) },
+        navigateToStateMentalDetailScreen = { selectedElderId?.let(navigateToStateMentalDetailScreen) },
+        navigateToGlucoseDetailScreen = { selectedElderId?.let(navigateToGlucoseDetailScreen) },
+
         navigateToAlarm = navigateToAlarm,
 
         snackbarHostState = snackbarHostState,

@@ -9,6 +9,6 @@ interface FcmUpdateService {
     @POST("member/fcm-token")
     suspend fun updateFcmToken(
         @Header("Authorization") header: String? = null, // Optional header
-        @Body body: Map<String, String> // {"fcmToken": "string"}
+        @Body body: Map<String, String>, // {"fcmToken": "string"}
     ): Response<Unit>
 }
