@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.content.Context
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.Token
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
@@ -13,6 +14,10 @@ import javax.inject.Singleton
 val Context.tokenDataStore by dataStore(
     fileName = "tokens",
     serializer = TokenSerializer,
+    corruptionHandler = ReplaceFileCorruptionHandler {
+        // 기존 암호문이 깨졌을 때 기본값으로 복원
+        Token(null, null)
+    }
 )
 
 @Singleton
