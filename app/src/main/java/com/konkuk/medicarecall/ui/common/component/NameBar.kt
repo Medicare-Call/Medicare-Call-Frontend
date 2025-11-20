@@ -62,7 +62,7 @@ fun NameBar(
 
             NotificationIconWithBadge(
                 notificationCount = notificationCount,
-                onClick = {},
+                onClick = navigateToAlarm,
             )
         }
     }
