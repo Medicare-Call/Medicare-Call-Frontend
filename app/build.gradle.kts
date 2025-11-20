@@ -25,8 +25,8 @@ android {
         applicationId = "com.konkuk.medicarecall"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.1.6"
+        versionCode = 10
+        versionName = "0.1.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
