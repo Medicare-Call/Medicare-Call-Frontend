@@ -56,9 +56,7 @@ import kotlin.reflect.typeOf
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
     navigate(MainTabRoute.Home) {
-        popUpTo(Route.LoginStart) { inclusive = true }
-        launchSingleTop = true
-        restoreState = true
+        popUpTo(0) { inclusive = true }
     }
 }
 
@@ -89,13 +87,9 @@ fun NavGraph(
                 navigateToStart = { navController.navigate(Route.LoginStart) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
+                navigateToPurchase = { navController.navigateToMainAfterLogin() },
                 navigateToHome = {
-                    navController.navigate(MainTabRoute.Home) {
-                        popUpTo(Route.LoginStart) {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigateToMainAfterLogin()
                 },
             )
         }
@@ -389,13 +383,9 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
+                navigateToPurchase = { navController.navigateToMainAfterLogin() },
                 navigateToHome = {
-                    navController.navigate(MainTabRoute.Home) {
-                        popUpTo(Route.LoginStart) {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigateToMainAfterLogin()
                 },
                 loginViewModel = loginViewModel,
             )
@@ -418,13 +408,9 @@ fun NavGraph(
                 navigateToPhone = { navController.navigate(Route.LoginPhone) },
                 navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
                 navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigate(MainTabRoute.Home) },
+                navigateToPurchase = { navController.navigateToMainAfterLogin() },
                 navigateToHome = {
-                    navController.navigate(MainTabRoute.Home) {
-                        popUpTo(Route.LoginStart) {
-                            inclusive = true
-                        }
-                    }
+                    navController.navigateToMainAfterLogin()
                 },
                 loginViewModel = loginViewModel,
             )
