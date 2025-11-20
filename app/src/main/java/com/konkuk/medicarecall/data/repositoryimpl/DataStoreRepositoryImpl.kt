@@ -17,7 +17,7 @@ val Context.tokenDataStore by dataStore(
     corruptionHandler = ReplaceFileCorruptionHandler {
         // 기존 암호문이 깨졌을 때 기본값으로 복원
         Token(null, null)
-    }
+    },
 )
 
 @Singleton
