@@ -57,10 +57,14 @@ object TokenEncryptor {
     }
 
     fun decrypt(bytes: ByteArray): ByteArray {
-        val cipher = Cipher.getInstance(TRANSFORMATION)
-        val iv = bytes.copyOfRange(0, cipher.blockSize)
-        val data = bytes.copyOfRange(cipher.blockSize, bytes.size)
-        cipher.init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))
-        return cipher.doFinal(data)
+        return try {
+            val cipher = Cipher.getInstance(TRANSFORMATION)
+            val iv = bytes.copyOfRange(0, cipher.blockSize)
+            val data = bytes.copyOfRange(cipher.blockSize, bytes.size)
+            cipher.init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))
+            cipher.doFinal(data)
+        } catch (e: Exception) {
+            ByteArray(0)
+        }
     }
 }

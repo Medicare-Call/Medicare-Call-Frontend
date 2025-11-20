@@ -1,5 +1,6 @@
 package com.konkuk.medicarecall.data.util
 
+import android.util.Log
 import androidx.datastore.core.Serializer
 import com.konkuk.medicarecall.data.model.Token
 import kotlinx.coroutines.Dispatchers
@@ -17,13 +18,24 @@ object TokenSerializer : Serializer<Token> {
         get() = Token(null, null)
 
     override suspend fun readFrom(input: InputStream): Token {
-        val encryptedBytes = withContext(Dispatchers.IO) {
-            input.use { it.readBytes() }
+        return try {
+            val encryptedBytes = withContext(Dispatchers.IO) {
+                input.use { it.readBytes() }
+            }
+
+            // 빈 파일인 경우 기본값 반환
+            if (encryptedBytes.isEmpty()) {
+                return defaultValue
+            }
+
+            val encryptedBytesDecoded = Base64.getDecoder().decode(encryptedBytes)
+            val decryptedBytes = TokenEncryptor.decrypt(encryptedBytesDecoded)
+            val decodedJsonString = decryptedBytes.decodeToString()
+            Json.decodeFromString(decodedJsonString)
+        } catch (e: Exception) {
+            Log.d("TokenSerializer", "Failed to read Token: ${e.message}")
+            defaultValue
         }
-        val encryptedBytesDecoded = Base64.getDecoder().decode(encryptedBytes)
-        val decryptedBytes = TokenEncryptor.decrypt(encryptedBytesDecoded)
-        val decodedJsonString = decryptedBytes.decodeToString()
-        return Json.decodeFromString(decodedJsonString)
     }
 
     override suspend fun writeTo(t: Token, output: OutputStream) {
