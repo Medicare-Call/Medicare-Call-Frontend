@@ -117,7 +117,6 @@ fun NavGraph(
             navigateToStateHealthDetailScreen = navigator::navigateToStateHealthDetailScreen,
             navigateToStateMentalDetailScreen = navigator::navigateToStateMentalDetailScreen,
             navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
-            navigateToAlarmScreen = { navigator.navigateToAlarm() },
         )
 
         // 홈 상세 화면_식사 화면
