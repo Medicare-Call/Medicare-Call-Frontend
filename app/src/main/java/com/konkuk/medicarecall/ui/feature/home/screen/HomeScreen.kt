@@ -124,7 +124,7 @@ fun HomeScreen(
         navigateToStateMentalDetailScreen = { selectedElderId?.let(navigateToStateMentalDetailScreen) },
         navigateToGlucoseDetailScreen = { selectedElderId?.let(navigateToGlucoseDetailScreen) },
 
-        navigateToAlarm = {},
+        navigateToAlarm = navigateToAlarm,
 
         snackbarHostState = snackbarHostState,
         isLoading = homeUiState.isLoading,
