@@ -29,8 +29,8 @@ class AuthAuthenticator @Inject constructor(
 
             // 4. 이전 요청의 AccessToken이 현재 저장된 AccessToken과 다르다면,
             //    다른 스레드에서 이미 토큰 갱신에 성공한 경우이므로 새로운 토큰으로 재요청
-            val oldAccessToken = response.request.header("Authorization")?.removePrefix("Bearer ")
-            if (oldAccessToken != null && oldAccessToken != accessToken) {
+            val oldAccessToken = response.request.header("Authorization")?.removePrefix("Bearer")
+            if (!oldAccessToken.isNullOrBlank() && oldAccessToken != accessToken) {
                 return response.request.newBuilder()
                     .header("Authorization", "Bearer $accessToken")
                     .build()
