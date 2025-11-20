@@ -80,7 +80,6 @@ fun HomeScreen(
     navigateToStateMentalDetailScreen: (Int) -> Unit,
     navigateToGlucoseDetailScreen: (Int) -> Unit,
     mainBackStackEntry: NavBackStackEntry,
-    navigateToAlarm: () -> Unit,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
     val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
