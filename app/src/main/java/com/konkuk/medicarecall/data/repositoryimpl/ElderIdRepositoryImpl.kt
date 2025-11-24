@@ -1,28 +1,44 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
+import android.content.Context
+import androidx.datastore.dataStore
+import com.konkuk.medicarecall.data.model.ElderIds
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.util.ElderIdsSerializer
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
+val Context.elderIdsDataStore by dataStore(
+    fileName = "elderIds",
+    serializer = ElderIdsSerializer,
+)
+
 @Singleton
-class ElderIdRepositoryImpl @Inject constructor() : ElderIdRepository {
+class ElderIdRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) : ElderIdRepository {
 
-    private val elderIds: MutableList<Map<String, Int>> = mutableListOf()
-
-    override fun addElderId(name: String, id: Int) {
-        this.elderIds.add(mapOf(name to id))
+    override suspend fun updateElderIds(elderIdMap: Map<Int, String>) {
+        context.elderIdsDataStore.updateData { it.copy(elderIds = elderIdMap) }
     }
 
-    override fun clearElderId() {
-        elderIds.clear()
+    override suspend fun updateElderId(elderId: Int, name: String) {
+        val elderIds = getElderIds().first().toMutableMap()
+        elderIds[elderId] = name
+        context.elderIdsDataStore.updateData { it.copy(elderIds = elderIds) }
     }
 
-    override fun getElderIds(): List<Map<String, Int>> {
-        return elderIds
+    override suspend fun getElderIds(): Flow<Map<Int, String>> {
+        val preferences = context.elderIdsDataStore.data.map { it.elderIds }
+        return preferences
     }
 
-    override fun replaceAll(items: List<Map<String, Int>>) {
-        elderIds.clear()
-        elderIds.addAll(items)
+    override suspend fun clearElderIds() {
+        context.elderIdsDataStore.updateData {
+            ElderIds(elderIds = emptyMap())
+        }
     }
+
 }
