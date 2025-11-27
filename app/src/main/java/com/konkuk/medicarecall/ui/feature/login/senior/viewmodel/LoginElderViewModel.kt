@@ -21,8 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginElderViewModel @Inject constructor(
     private val elderRegisterRepository: ElderRegisterRepository,
-    private val elderIdRepository: ElderIdRepository,
-    private val eldersInfoRepository: EldersInfoRepository,
 ) : ViewModel() {
     // 어르신 정보 화면
 
@@ -305,39 +303,4 @@ class LoginElderViewModel @Inject constructor(
             }
     }
 
-    fun updateAllElders() { // getElderIds.isNotEmpty == true
-        viewModelScope.launch {
-            val elderIds = elderIdRepository.getElderIds()
-            elderIds.filterIndexed { index, data ->
-                data.values.first() == elderUiState.value.eldersList[index].id
-            }.forEachIndexed { index, data ->
-                eldersInfoRepository.updateElder(
-                    data.values.first(),
-                    elderUiState.value.eldersList[index],
-                ).onSuccess {
-                    Log.d("httplog", "어르신 재등록(수정) 성공")
-                }.onFailure { exception ->
-                    Log.e("httplog", "어르신 정보 등록 실패: ${exception.message}")
-                }
-            }
-        }
-    }
-
-    fun updateAllEldersHealthInfo() {
-        viewModelScope.launch {
-            val elderIds = elderIdRepository.getElderIds()
-            elderIds.filterIndexed { index, data ->
-                data.values.first() == elderHealthUiState.value.elderHealthList[index].id
-            }.forEachIndexed { index, data ->
-                runCatching {
-                    elderRegisterRepository.postElderHealthInfo(
-                        data.values.first(),
-                        elderHealthUiState.value.elderHealthList[index],
-                    )
-                }.onSuccess {
-                    Log.d("httplog", "어르신 건강정보 재등록(수정) 성공")
-                }
-            }
-        }
-    }
 }
