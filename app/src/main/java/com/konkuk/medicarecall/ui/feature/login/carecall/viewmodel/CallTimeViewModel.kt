@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +17,36 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CallTimeViewModel @Inject constructor(
-    private val setCallRepo: SetCallRepository,
+    private val setCallRepository: SetCallRepository,
+    private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
     val timeMap = mutableStateMapOf<Int, CallTimes>()
     val isLoading = mutableStateOf(false)
     val lastError = mutableStateOf<Throwable?>(null)
+
+    // Flow -> State 로 뱐환해서 보관
+    private val _elderIds = mutableStateOf<Map<Int, String>>(emptyMap())
+    val elderIds get() = _elderIds.value // UI에서 접근할 값
+
+    init {
+        observeElderIds()
+    }
+
+    // suspend + Flow 안전하게 처리하는 함수
+    private fun observeElderIds() {
+        viewModelScope.launch {
+            try {
+                elderIdRepository.getElderIds()
+                    .collect { result ->
+                        _elderIds.value = result
+                        Log.d("CallTimeViewModel", "elderIds 업데이트: $result")
+                    }
+            } catch (e: Exception) {
+                Log.e("CallTimeViewModel", "elderIds 수집 실패", e)
+                lastError.value = e
+            }
+        }
+    }
 
     fun setTimes(id: Int, times: CallTimes) {
         timeMap[id] = times
@@ -46,7 +73,7 @@ class CallTimeViewModel @Inject constructor(
                 val jobs = elderIds.map { id ->
                     val times = timeMap[id] ?: error("'$id'의 시간이 비어있습니다.")
                     async {
-                        setCallRepo.saveForElder(id, times).getOrThrow()
+                        setCallRepository.saveForElder(id, times).getOrThrow()
                         Log.d("CallTimeViewModel", "Saved call times for id:$id")
                     }
                 }
