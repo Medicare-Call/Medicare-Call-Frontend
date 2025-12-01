@@ -12,6 +12,10 @@ import com.konkuk.medicarecall.ui.model.CallTimes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +26,16 @@ class CallTimeViewModel @Inject constructor(
 ) : ViewModel() {
     val timeMap = mutableStateMapOf<Int, CallTimes>()
     val isLoading = mutableStateOf(false)
-    val lastError = mutableStateOf<Throwable?>(null)
+    val error = mutableStateOf<Throwable?>(null)
+    private val _elderIdMap = MutableStateFlow(emptyMap<Int, String>())
+    val elderIdMap = _elderIdMap.asStateFlow();
+
+
+    init {
+        viewModelScope.launch {
+            _elderIdMap.update { elderIdRepository.getElderIds().first(); }
+        }
+    }
 
     // Flow -> State 로 뱐환해서 보관
     private val _elderIds = mutableStateOf<Map<Int, String>>(emptyMap())
@@ -57,7 +70,7 @@ class CallTimeViewModel @Inject constructor(
         return t.first != null && t.second != null && t.third != null
     }
 
-    fun isAllComplete(ids: List<Int>): Boolean =
+    fun isAllComplete(ids: Set<Int>): Boolean =
         ids.isNotEmpty() && ids.all { isCompleteFor(it) }
 
     fun submitAllByIds(
@@ -67,7 +80,7 @@ class CallTimeViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             isLoading.value = true
-            lastError.value = null
+            error.value = null
             try {
                 require(elderIds.isNotEmpty()) { "어르신 목록이 비어 있습니다." }
                 val jobs = elderIds.map { id ->
@@ -81,7 +94,7 @@ class CallTimeViewModel @Inject constructor(
                 onSuccess()
             } catch (t: Throwable) {
                 Log.e("CallTimeViewModel", "submitAllByName failed", t)
-                lastError.value = t
+                error.value = t
                 onError(t)
             } finally {
                 isLoading.value = false

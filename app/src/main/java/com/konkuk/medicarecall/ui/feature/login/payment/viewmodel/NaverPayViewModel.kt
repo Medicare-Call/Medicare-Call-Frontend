@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +20,7 @@ import javax.inject.Inject
 class NaverPayViewModel @Inject constructor(
     private val naverPayRepo: NaverPayRepository,
     private val elderInfoRepo: EldersInfoRepository,
+    private val elderIdRepository: ElderIdRepository,
     private val dataStoreRepo: DataStoreRepository,
 ) : ViewModel() {
 
@@ -36,16 +39,8 @@ class NaverPayViewModel @Inject constructor(
 
     fun postNaverPayInfo() {
         viewModelScope.launch {
-            elderInfoRepo.getElders()
-                .onSuccess {
-                    Log.d("EldersInfoViewModel", "노인 개인 정보 불러오기 성공: ${it.size}개")
-                    eldersIdList = it.map { elder -> elder.elderId }
-                    Log.d("EldersInfoViewModel", "노인 아이디 정보: $eldersIdList")
-                }
-                .onFailure {
-                    it.printStackTrace()
-                    Log.e("EldersInfoViewModel", "노인 개인 정보 로딩 실패: ${it.message}", it)
-                }
+            val elderIdMap = elderIdRepository.getElderIds().first()
+            eldersIdList = elderIdMap.map { it.key }
 
             val payInfo = ReservePayRequestDto(
                 productName = "메디케어콜 프리미엄 플랜",

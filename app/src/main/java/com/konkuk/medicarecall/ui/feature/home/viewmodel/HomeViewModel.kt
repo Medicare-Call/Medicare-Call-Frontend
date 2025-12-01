@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -31,6 +33,7 @@ class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val savedStateHandle: SavedStateHandle,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
+    private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
     fun overrideName(newName: String) {
         val id = selectedElderId.value ?: return
@@ -110,28 +113,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    // 서버에서 어르신 전체 목록을 불러옴
+    // 로컬에서 어르신 전체 목록을 불러옴
     fun fetchElderList() {
         viewModelScope.launch {
             if (_elderInfoList.value.isEmpty()) {
                 _homeUiState.update { it.copy(isLoading = true) }
             }
-            eldersInfoRepository.getElders()
-                .onSuccess { elders ->
-                    _elderInfoList.value = elders.map {
-                        ElderInfo(id = it.elderId, name = it.name, phone = it.phone)
-                    }
-                    val restoredId = savedStateHandle.get<Int?>(KEY_SELECTED_ELDER_ID)
-                    if (restoredId != null && _elderInfoList.value.any { it.id == restoredId }) {
-                        _selectedElderId.value = restoredId
-                    } else if (_selectedElderId.value == null && _elderInfoList.value.isNotEmpty()) {
-                        _selectedElderId.value = _elderInfoList.value.first().id
-                    }
-                }
-                .onFailure { error ->
-                    Log.e(TAG, "어르신 목록 로딩 실패", error)
-                    _homeUiState.update { it.copy(isLoading = false) }
-                }
+            val elderIdMap = elderIdRepository.getElderIds().first()
+            _elderInfoList.value = elderIdMap.map {
+                ElderInfo(id = it.key, name = it.value, phone = null)
+            }
+            val restoredId = savedStateHandle.get<Int?>(KEY_SELECTED_ELDER_ID)
+            if (restoredId != null && _elderInfoList.value.any { it.id == restoredId }) {
+                _selectedElderId.value = restoredId
+            } else if (_selectedElderId.value == null && _elderInfoList.value.isNotEmpty()) {
+                _selectedElderId.value = _elderInfoList.value.first().id
+            }
+
         }
     }
 
