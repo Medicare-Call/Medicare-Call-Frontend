@@ -35,7 +35,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.payment.component.PaymentPriceItem
-import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
+import com.konkuk.medicarecall.ui.feature.login.payment.viewmodel.PaymentViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import java.text.NumberFormat
@@ -46,11 +46,14 @@ fun PaymentScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     navigateToNaverPay: () -> Unit = {},
-    elderInfoViewModel: EldersInfoViewModel = hiltViewModel(),
+    paymentViewModel: PaymentViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
+    val elderMap = paymentViewModel.elderMap
+    val elders = elderMap.values.toList()
     var isClicked by remember { mutableStateOf(false) }
-    val elders = elderInfoViewModel.eldersInfoList.map { it.name }
+    val totalAmount = paymentViewModel.getTotalPrice()  // Assuming 29,000 is the monthly fee per elder
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -124,8 +127,6 @@ fun PaymentScreen(
                     color = MediCareCallTheme.colors.black,
                 )
                 Spacer(modifier = modifier.weight(1f))
-                val totalAmount =
-                    elders.size * 29000 // Assuming 29,000 is the monthly fee per elder
                 val formatted = NumberFormat.getNumberInstance(Locale.KOREA).format(totalAmount)
                 val displayText = "₩$formatted/월"
                 Text(
@@ -139,7 +140,7 @@ fun PaymentScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(vertical = 18.dp),
-                onClick = { if (isClicked) isClicked = false else isClicked = true },
+                onClick = { paymentViewModel.togglePaymentSelect() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MediCareCallTheme.colors.bg,
                 ),

@@ -26,7 +26,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +45,6 @@ import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBot
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel.CallTimeViewModel
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
@@ -65,61 +63,30 @@ fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToPayment: () -> Unit = {},
-    eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
     callTimeViewModel: CallTimeViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
+    val elderMap = callTimeViewModel.elderIds
+    // Map<Int, String> -> viewmodel에서 직접 가져옴
+    val isLoading = callTimeViewModel.isLoading.value
 
-    val isLoading = eldersInfoViewModel.isLoading.value
-    val error = eldersInfoViewModel.error.value
-    val nameIdList = eldersInfoViewModel.elderNameIdMapList
-
-    when {
-        isLoading -> {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(MediCareCallTheme.colors.bg)
-                    .systemBarsPadding(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    color = MediCareCallTheme.colors.main,
-                    modifier = Modifier.align(Alignment.Center),
-                )
-            }
-            return
+    if (isLoading) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator(
+                color = MediCareCallTheme.colors.main,
+            )
         }
-
-        error != null -> {
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text("어르신 정보를 불러오지 못했어요.\n잠시 후 다시 시도해 주세요.")
-                Spacer(Modifier.height(12.dp))
-                CTAButton(
-                    type = CTAButtonType.GREEN,
-                    text = "다시 시도",
-                    onClick = { eldersInfoViewModel.refresh() },
-                )
-            }
-            return
-        }
-
-        nameIdList.isEmpty() -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("등록된 어르신이 없습니다.")
-            }
-            return
-        }
+        return
     }
 
     val scrollState = rememberScrollState() // 스크롤 상태
     var showBottomSheet by remember { mutableStateOf(false) } // 하단 시트 제어
-    val elderNames = nameIdList.map { it.keys.first() } // 어르신 이름 리스트
-    val elderIds = nameIdList.map { it.values.first() } // 어르신 아이디 리스트
+    val elderNames = elderMap.values.toList()
+    val elderIds = elderMap.keys.toList()
 
     var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
     val selectedId = elderIds.getOrNull(selectedIndex) ?: 0 // 선택된 어르신 아이디
