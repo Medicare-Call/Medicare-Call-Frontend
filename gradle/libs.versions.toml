@@ -21,11 +21,13 @@ googleService = "4.4.3"
 hilt = "2.52"
 hiltNavigationCompose = "1.2.0"
 hiltManager = "1.0.0"
-ksp = "2.0.21-1.0.25"
+ksp = "2.0.21-1.0.28"
 datastore = "1.1.7"
 datastorePreferences = "1.1.7"
 coreSplashscreen = "1.2.0-rc01"
 media3CommonKtx = "1.8.0"
+koin = "4.0.0"
+koinAnnotations = "2.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,6 +67,10 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 kotlinx-metadata-jvm = { module = "org.jetbrains.kotlinx:kotlinx-metadata-jvm", version.ref = "kotlinxMetadataJvm" }
 play-services-vision-common = { group = "com.google.android.gms", name = "play-services-vision-common", version.ref = "playServicesVisionCommon" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
+koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinAnnotations" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

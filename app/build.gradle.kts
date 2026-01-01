@@ -1,3 +1,4 @@
+import java.lang.module.ModuleFinder.compose
 import java.util.Properties
 
 plugins {
@@ -111,6 +112,11 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
