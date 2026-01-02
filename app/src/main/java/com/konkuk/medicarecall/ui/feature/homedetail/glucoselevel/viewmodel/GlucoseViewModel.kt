@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
-
 class GlucoseViewModel @Inject constructor(
     private val glucoseRepository: GlucoseRepository,
 ) : ViewModel() {

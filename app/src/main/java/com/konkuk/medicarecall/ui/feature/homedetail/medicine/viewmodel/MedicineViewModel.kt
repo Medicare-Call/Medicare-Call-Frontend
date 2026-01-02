@@ -13,7 +13,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-
 class MedicineViewModel @Inject constructor(
     private val medicineRepository: MedicineRepository,
 ) : ViewModel() {

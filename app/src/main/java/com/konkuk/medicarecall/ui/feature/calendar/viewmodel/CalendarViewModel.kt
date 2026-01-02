@@ -9,7 +9,6 @@ import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
-
 class CalendarViewModel @Inject constructor() : ViewModel() {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())

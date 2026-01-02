@@ -13,37 +13,37 @@ val homeDetailModule = module {
 
     viewModel {
         GlucoseViewModel(
-            get()
+            get(),
         )
     }
 
     viewModel {
         MealViewModel(
-            get()
+            get(),
         )
     }
 
     viewModel {
         MedicineViewModel(
-            get()
+            get(),
         )
     }
 
     viewModel {
         SleepViewModel(
-            get()
+            get(),
         )
     }
 
     viewModel {
         HealthViewModel(
-            get()
+            get(),
         )
     }
 
     viewModel {
         MentalViewModel(
-            get()
+            get(),
         )
     }
 }

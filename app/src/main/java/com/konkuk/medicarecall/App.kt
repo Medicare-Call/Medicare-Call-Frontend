@@ -19,7 +19,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 
-
 class App : Application(), KoinComponent {
 
     private val fcmRepository: FcmRepository by inject()
@@ -33,7 +32,7 @@ class App : Application(), KoinComponent {
             androidContext(this@App)
             modules(
                 homeModule,
-                homeDetailModule
+                homeDetailModule,
             )
         }
         createNotificationChannel()
