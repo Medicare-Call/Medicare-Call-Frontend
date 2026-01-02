@@ -28,8 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.ChipItem
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
@@ -48,7 +48,7 @@ fun LoginElderMedInfoScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToCareCallSetting: () -> Unit = {},
-    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
+    loginElderViewModel: LoginElderViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
 

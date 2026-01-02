@@ -9,17 +9,16 @@ import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 import retrofit2.HttpException
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginElderViewModel @Inject constructor(
+@KoinViewModel
+class LoginElderViewModel(
     private val elderRegisterRepository: ElderRegisterRepository,
     private val elderIdRepository: ElderIdRepository,
     private val eldersInfoRepository: EldersInfoRepository,

@@ -4,10 +4,11 @@ import android.util.Log
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.NavigationDestination
+import org.koin.core.annotation.Factory
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class CheckLoginStatusUseCase @Inject constructor(
+@Factory
+class CheckLoginStatusUseCase(
     private val eldersInfoRepository: EldersInfoRepository,
     private val elderIdRepository: ElderIdRepository,
 ) {

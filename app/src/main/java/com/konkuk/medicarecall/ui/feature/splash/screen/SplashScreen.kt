@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
@@ -30,7 +30,7 @@ fun SplashScreen(
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
 ) {
-    val viewModel: SplashViewModel = hiltViewModel()
+    val viewModel: SplashViewModel = koinViewModel()
 
     val navigationDestination by viewModel.navigationDestination.collectAsStateWithLifecycle()
 

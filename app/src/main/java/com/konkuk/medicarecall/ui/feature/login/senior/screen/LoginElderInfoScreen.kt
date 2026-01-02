@@ -37,8 +37,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
@@ -57,7 +57,7 @@ fun LoginElderScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToRegisterElderHealth: () -> Unit = {},
-    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
+    loginElderViewModel: LoginElderViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }

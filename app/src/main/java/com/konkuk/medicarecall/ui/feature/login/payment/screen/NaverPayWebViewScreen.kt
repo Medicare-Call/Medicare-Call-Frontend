@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.feature.login.payment.viewmodel.NaverPayViewModel
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.model.PaymentResult
@@ -55,7 +55,7 @@ fun NaverPayWebViewScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     navigateToFinish: () -> Unit = {},
-    naverPayViewModel: NaverPayViewModel = hiltViewModel(),
+    naverPayViewModel: NaverPayViewModel = koinViewModel(),
 ) {
     Column(
         modifier = modifier

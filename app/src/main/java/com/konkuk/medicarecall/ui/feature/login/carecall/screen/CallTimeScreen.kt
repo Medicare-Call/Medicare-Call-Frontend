@@ -39,8 +39,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
@@ -65,8 +65,8 @@ fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToPayment: () -> Unit = {},
-    eldersInfoViewModel: EldersInfoViewModel = hiltViewModel(),
-    callTimeViewModel: CallTimeViewModel = hiltViewModel(),
+    eldersInfoViewModel: EldersInfoViewModel = koinViewModel(),
+    callTimeViewModel: CallTimeViewModel = koinViewModel(),
 ) {
     LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
 

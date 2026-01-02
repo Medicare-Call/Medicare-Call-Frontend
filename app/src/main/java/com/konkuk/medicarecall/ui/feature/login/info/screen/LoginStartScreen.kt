@@ -23,9 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
@@ -41,7 +41,7 @@ fun LoginStartScreen(
     navigateToCareCallSetting: () -> Unit = {},
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    loginViewModel: LoginViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel = koinViewModel(),
 ) {
     val navigationDestination by loginViewModel.navigationDestination.collectAsStateWithLifecycle()
 

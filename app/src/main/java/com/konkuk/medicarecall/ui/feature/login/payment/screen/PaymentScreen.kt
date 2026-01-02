@@ -30,8 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.payment.component.PaymentPriceItem
@@ -46,7 +46,7 @@ fun PaymentScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     navigateToNaverPay: () -> Unit = {},
-    elderInfoViewModel: EldersInfoViewModel = hiltViewModel(),
+    elderInfoViewModel: EldersInfoViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     var isClicked by remember { mutableStateOf(false) }
