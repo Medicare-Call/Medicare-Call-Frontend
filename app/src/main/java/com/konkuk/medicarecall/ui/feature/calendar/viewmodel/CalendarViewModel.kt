@@ -7,9 +7,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
-import javax.inject.Inject
 
-class CalendarViewModel @Inject constructor() : ViewModel() {
+class CalendarViewModel : ViewModel() {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
     val selectedDate: StateFlow<LocalDate> = _selectedDate.asStateFlow()

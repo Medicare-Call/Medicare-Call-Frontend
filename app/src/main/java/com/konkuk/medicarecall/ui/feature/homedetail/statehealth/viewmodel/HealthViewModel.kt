@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class HealthViewModel @Inject constructor(
+class HealthViewModel (
     private val healthRepository: HealthRepository,
 ) : ViewModel() {
 
