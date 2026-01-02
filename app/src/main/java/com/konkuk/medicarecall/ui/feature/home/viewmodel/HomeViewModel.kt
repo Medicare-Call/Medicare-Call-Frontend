@@ -20,11 +20,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import javax.inject.Inject
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
-class HomeViewModel (
+class HomeViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val homeRepository: HomeRepository,
     private val savedStateHandle: SavedStateHandle,

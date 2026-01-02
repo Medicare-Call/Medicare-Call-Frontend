@@ -13,9 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import javax.inject.Inject
 
-class GlucoseViewModel (
+class GlucoseViewModel(
     private val glucoseRepository: GlucoseRepository,
 ) : ViewModel() {
 

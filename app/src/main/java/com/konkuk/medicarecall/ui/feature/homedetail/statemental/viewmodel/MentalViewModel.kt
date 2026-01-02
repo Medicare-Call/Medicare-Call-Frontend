@@ -11,7 +11,7 @@ import retrofit2.HttpException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class MentalViewModel (
+class MentalViewModel(
     private val mentalRepository: MentalRepository,
 ) : ViewModel() {
 

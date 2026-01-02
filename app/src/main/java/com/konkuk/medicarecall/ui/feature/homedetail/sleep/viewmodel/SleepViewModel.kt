@@ -10,9 +10,8 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 
-class SleepViewModel (
+class SleepViewModel(
     private val sleepRepository: SleepRepository,
 ) : ViewModel() {
 
