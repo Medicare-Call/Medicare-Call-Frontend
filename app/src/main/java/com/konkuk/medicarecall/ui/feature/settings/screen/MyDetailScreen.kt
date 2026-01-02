@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -35,13 +34,14 @@ import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailMyDataViewMod
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.GenderType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MyDetailScreen(
     myDataInfo: MyInfoResponseDto,
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    detailMyDataViewModel: DetailMyDataViewModel = hiltViewModel(),
+    detailMyDataViewModel: DetailMyDataViewModel = koinViewModel(),
 ) {
     var isMale by remember { mutableStateOf<Boolean>(myDataInfo.gender == GenderType.MALE) }
     var name by remember { mutableStateOf(myDataInfo.name) }
