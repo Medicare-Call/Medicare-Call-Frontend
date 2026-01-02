@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,12 +20,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import javax.inject.Inject
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+
+class HomeViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val homeRepository: HomeRepository,
     private val savedStateHandle: SavedStateHandle,

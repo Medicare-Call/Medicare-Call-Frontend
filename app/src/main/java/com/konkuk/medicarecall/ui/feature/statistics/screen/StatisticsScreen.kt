@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -50,6 +49,7 @@ import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
 @Composable
@@ -57,8 +57,8 @@ fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     navigateToAlarm: () -> Unit = {},
-    homeViewModel: HomeViewModel,
-    statisticsViewModel: StatisticsViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = koinViewModel(),
+    statisticsViewModel: StatisticsViewModel = koinViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
         homeViewModel.fetchElderList() // 어르신 목록 호출
