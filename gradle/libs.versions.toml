@@ -69,6 +69,7 @@ play-services-vision-common = { group = "com.google.android.gms", name = "play-s
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinAnnotations" }
 
