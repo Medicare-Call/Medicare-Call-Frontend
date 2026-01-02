@@ -7,24 +7,35 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
+import com.konkuk.medicarecall.data.di.settingsApiModule
+import com.konkuk.medicarecall.data.di.settingsModules
+import com.konkuk.medicarecall.data.di.settingsRepositoryModule
+import com.konkuk.medicarecall.data.di.settingsViewModelModule
 import com.konkuk.medicarecall.data.repository.FcmRepository
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
 
-@HiltAndroidApp
+
 class App : Application() {
-    @Inject
-    lateinit var fcmRepository: FcmRepository
+
+    private val fcmRepository: FcmRepository by inject()
 
     // Application 전체에서 쑬 수 있는 스코프(앱이 살아있는 동안 유지돼야 하는 초기화/저장 작업 진행 - 여러 초기화 작업 한덩어리로 관리)
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onCreate() {
         super.onCreate()
+        startKoin {
+            androidContext(this@App)
+            modules(
+                settingsModules
+            )
+        }
         createNotificationChannel()
         fetchAndStoreFcmToken()
     }
