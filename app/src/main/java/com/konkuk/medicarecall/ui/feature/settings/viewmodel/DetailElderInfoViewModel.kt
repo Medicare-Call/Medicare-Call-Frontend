@@ -6,12 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class DetailElderInfoViewModel @Inject constructor(
+class DetailElderInfoViewModel(
     private val eldersInfoRepository: UpdateElderInfoRepository,
 ) : ViewModel() {
 
