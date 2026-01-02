@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +24,6 @@ import javax.inject.Inject
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
-@HiltViewModel
 class HomeViewModel @Inject constructor(
     private val eldersInfoRepository: EldersInfoRepository,
     private val homeRepository: HomeRepository,

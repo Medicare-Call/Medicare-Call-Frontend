@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.calendar.viewmodel
 
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,7 +9,7 @@ import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
-@HiltViewModel
+
 class CalendarViewModel @Inject constructor() : ViewModel() {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
