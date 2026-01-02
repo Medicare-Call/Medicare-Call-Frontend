@@ -13,9 +13,8 @@ import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import retrofit2.HttpException
 import java.time.LocalDate
-import javax.inject.Inject
 
-class StatisticsRepositoryImpl @Inject constructor(
+class StatisticsRepositoryImpl(
     private val statisticsService: StatisticsService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : StatisticsRepository {
