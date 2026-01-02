@@ -1,11 +1,10 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ElderIdRepositoryImpl @Inject constructor() : ElderIdRepository {
+class ElderIdRepositoryImpl : ElderIdRepository {
 
     private val elderIds: MutableList<Map<String, Int>> = mutableListOf()
 
