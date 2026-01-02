@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,6 +47,7 @@ import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -56,7 +56,7 @@ fun GlucoseDetailScreen(
     modifier: Modifier = Modifier,
     elderId: Int,
     onBack: () -> Unit,
-    glucoseViewModel: GlucoseViewModel = hiltViewModel(),
+    glucoseViewModel: GlucoseViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val uiState by glucoseViewModel.uiState.collectAsStateWithLifecycle()
