@@ -13,6 +13,6 @@ val homeModule = module {
             homeRepository = get(),
             eldersHealthInfoRepository = get(),
             savedStateHandle = savedStateHandle,
-           )
+        )
     }
 }

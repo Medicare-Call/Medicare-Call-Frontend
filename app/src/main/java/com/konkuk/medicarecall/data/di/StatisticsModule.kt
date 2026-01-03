@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.data.di
 
 import com.konkuk.medicarecall.data.api.elders.StatisticsService
-import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import com.konkuk.medicarecall.data.repositoryimpl.StatisticsRepositoryImpl
 import com.konkuk.medicarecall.ui.feature.statistics.viewmodel.StatisticsViewModel
