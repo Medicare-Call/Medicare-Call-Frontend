@@ -49,7 +49,7 @@ class NetworkModule {
     ) = OkHttpClient.Builder().apply {
         readTimeout(20, TimeUnit.SECONDS)
         addInterceptor(authInterceptor)
-        addInterceptor(loggingInterceptor)
+        if (BuildConfig.DEBUG) addInterceptor(loggingInterceptor)
         authenticator(authAuthenticator)
     }.build()
 
