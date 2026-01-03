@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
-import javax.inject.Singleton
 
 class ElderIdRepositoryImpl : ElderIdRepository {
 

@@ -10,8 +10,6 @@ import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import kotlinx.coroutines.launch
-
-
 class EldersInfoViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val elderIdRepository: ElderIdRepository,

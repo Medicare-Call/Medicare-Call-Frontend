@@ -9,8 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import kotlinx.coroutines.launch
-
-
 class EldersHealthViewModel(
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {

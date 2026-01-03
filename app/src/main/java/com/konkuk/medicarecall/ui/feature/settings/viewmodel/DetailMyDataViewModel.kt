@@ -7,8 +7,6 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
-
-
 class DetailMyDataViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {

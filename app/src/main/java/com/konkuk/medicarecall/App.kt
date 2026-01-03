@@ -16,8 +16,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
-
-
 class App : Application() {
 
     private val fcmRepository: FcmRepository by inject()
