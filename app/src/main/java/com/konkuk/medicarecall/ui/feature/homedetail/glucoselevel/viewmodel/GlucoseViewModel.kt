@@ -7,17 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import javax.inject.Inject
 
-@HiltViewModel
-class GlucoseViewModel @Inject constructor(
+class GlucoseViewModel(
     private val glucoseRepository: GlucoseRepository,
 ) : ViewModel() {
 

@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     kotlin("plugin.serialization") version "2.0.21"
     alias(libs.plugins.detekt)
@@ -107,10 +106,11 @@ dependencies {
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
 
-    // Hilt
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
+    // Koin
+    implementation("io.insert-koin:koin-core:3.5.3")
+    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
 
     // Firebase
     implementation(platform(libs.firebase.bom))
@@ -119,7 +119,6 @@ dependencies {
 
     // Detekt formatting plugin
     detektPlugins(libs.detekt.formatting)
-    ksp(libs.hilt.manager)
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
