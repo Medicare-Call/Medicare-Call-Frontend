@@ -6,9 +6,8 @@ import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class HomeRepositoryImpl @Inject constructor(
+class HomeRepositoryImpl(
     private val homeService: HomeService,
 ) : HomeRepository {
     override suspend fun requestImmediateCareCall(

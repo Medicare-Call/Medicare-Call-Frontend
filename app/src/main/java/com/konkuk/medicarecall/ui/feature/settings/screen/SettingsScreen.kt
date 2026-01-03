@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -36,6 +35,7 @@ import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsScreen(
@@ -46,7 +46,7 @@ fun SettingsScreen(
     navigateToElderPersonalInfo: () -> Unit = {},
     navigateToElderHealthInfo: () -> Unit = {},
     navigateToNotificationSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
-    myDataViewModel: MyDataViewModel = hiltViewModel(),
+    myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {

@@ -4,9 +4,8 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.data.repository.NoticeRepository
-import javax.inject.Inject
 
-class NoticeRepositoryImpl @Inject constructor(
+class NoticeRepositoryImpl(
     private val noticeService: NoticeService,
 ) : NoticeRepository {
     override suspend fun getNotices(): Result<List<NoticesResponseDto>> {

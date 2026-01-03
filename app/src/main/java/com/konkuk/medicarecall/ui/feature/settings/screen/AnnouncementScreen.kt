@@ -15,20 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.AnnouncementCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.NoticeViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AnnouncementScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToNoticeDetail: (notice: NoticesResponseDto) -> Unit = {},
-    viewModel: NoticeViewModel = hiltViewModel(),
+    viewModel: NoticeViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val notices = viewModel.noticeList

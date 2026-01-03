@@ -4,9 +4,8 @@ import com.konkuk.medicarecall.data.api.elders.HealthService
 import com.konkuk.medicarecall.data.repository.HealthRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import java.time.LocalDate
-import javax.inject.Inject
 
-class HealthRepositoryImpl @Inject constructor(
+class HealthRepositoryImpl(
     private val healthService: HealthService,
 ) : HealthRepository {
     override suspend fun getHealthUiState(elderId: Int, date: LocalDate): Result<HealthUiState> =

@@ -4,9 +4,8 @@ import com.konkuk.medicarecall.data.api.elders.GlucoseService
 import com.konkuk.medicarecall.data.dto.response.GlucoseResponseDto
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class GlucoseRepositoryImpl @Inject constructor(
+class GlucoseRepositoryImpl(
     private val glucoseService: GlucoseService,
 ) : GlucoseRepository {
     override suspend fun getGlucoseGraph(

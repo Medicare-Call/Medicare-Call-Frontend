@@ -5,9 +5,8 @@ import com.konkuk.medicarecall.data.api.elders.SubscribeService
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class SubscribeRepositoryImpl @Inject constructor(
+class SubscribeRepositoryImpl(
     private val subscribeService: SubscribeService,
 ) : SubscribeRepository {
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> {
