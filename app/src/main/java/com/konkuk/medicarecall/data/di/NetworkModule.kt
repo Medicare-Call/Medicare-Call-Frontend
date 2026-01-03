@@ -6,7 +6,6 @@ import com.konkuk.medicarecall.data.network.AuthAuthenticator
 import com.konkuk.medicarecall.data.network.AuthInterceptor
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,7 +38,6 @@ class NetworkModule {
         refreshService: RefreshService,
     ) = AuthAuthenticator(dataStoreRepository, refreshService)
 
-
     @Single
     fun httpLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -47,7 +45,7 @@ class NetworkModule {
 
     @Single
     fun okHttpClient(
-        authInterceptor: Interceptor,
+        authInterceptor: AuthInterceptor,
         loggingInterceptor: HttpLoggingInterceptor,
         authAuthenticator: AuthAuthenticator,
     ) = OkHttpClient.Builder().apply {
