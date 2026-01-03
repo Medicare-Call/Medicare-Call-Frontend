@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 import retrofit2.HttpException
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -23,6 +24,7 @@ data class StatisticsUiState(
     val error: String? = null,
 )
 
+@KoinViewModel
 class StatisticsViewModel(
     private val repository: StatisticsRepository,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,

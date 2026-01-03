@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.data.repository.NoticeRepository
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class NoticeViewModel(
     private val repository: NoticeRepository,
 ) : ViewModel() {

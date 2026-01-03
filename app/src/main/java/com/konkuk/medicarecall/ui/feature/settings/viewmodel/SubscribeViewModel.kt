@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class SubscribeViewModel(
     private val repository: SubscribeRepository,
 ) : ViewModel() {
