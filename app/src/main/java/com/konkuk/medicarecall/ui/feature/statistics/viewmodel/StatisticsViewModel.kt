@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +16,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
-import javax.inject.Inject
 
 data class StatisticsUiState(
     val isLoading: Boolean = false,
@@ -25,8 +23,7 @@ data class StatisticsUiState(
     val error: String? = null,
 )
 
-@HiltViewModel
-class StatisticsViewModel @Inject constructor(
+class StatisticsViewModel(
     private val repository: StatisticsRepository,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
