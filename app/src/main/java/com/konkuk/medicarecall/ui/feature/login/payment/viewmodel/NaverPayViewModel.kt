@@ -10,12 +10,11 @@ import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class NaverPayViewModel @Inject constructor(
+@KoinViewModel
+class NaverPayViewModel(
     private val naverPayRepo: NaverPayRepository,
     private val elderInfoRepo: EldersInfoRepository,
     private val dataStoreRepo: DataStoreRepository,

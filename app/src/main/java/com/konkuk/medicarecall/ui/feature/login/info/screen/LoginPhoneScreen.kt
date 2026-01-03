@@ -24,8 +24,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
@@ -40,7 +40,7 @@ fun LoginPhoneScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToVerification: () -> Unit = {},
-    loginViewModel: LoginViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }

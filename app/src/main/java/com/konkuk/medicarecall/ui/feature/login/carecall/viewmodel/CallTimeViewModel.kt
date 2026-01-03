@@ -7,14 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class CallTimeViewModel @Inject constructor(
+@KoinViewModel
+class CallTimeViewModel(
     private val setCallRepo: SetCallRepository,
 ) : ViewModel() {
     val timeMap = mutableStateMapOf<Int, CallTimes>()

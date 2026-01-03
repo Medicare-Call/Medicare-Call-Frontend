@@ -1,3 +1,4 @@
+import java.lang.module.ModuleFinder.compose
 import java.util.Properties
 
 plugins {
@@ -110,6 +111,12 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.5.3")
     implementation("io.insert-koin:koin-android:3.5.3")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

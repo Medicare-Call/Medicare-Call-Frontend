@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
+import com.konkuk.medicarecall.data.di.appModules
 import com.konkuk.medicarecall.data.di.statisticsModule
 import com.konkuk.medicarecall.data.di.settingsModules
 import com.konkuk.medicarecall.data.di.calendarModule
@@ -18,9 +19,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
+import org.koin.ksp.generated.defaultModule
 
 class App : Application(), KoinComponent {
 
@@ -31,16 +34,17 @@ class App : Application(), KoinComponent {
 
     override fun onCreate() {
         super.onCreate()
-        
         startKoin {
-          androidLogger()
+            androidLogger()
             androidContext(this@App)
             modules(
-                settingsModules,
-                calendarModule,
-                homeModule,
-                homeDetailModule,
-              statisticsModule,
+                settingsModules +
+                    calendarModule +
+                    homeModule +
+                    homeDetailModule +
+                    statisticsModule +
+                    appModules +
+                    defaultModule,
             )
         }
         createNotificationChannel()
