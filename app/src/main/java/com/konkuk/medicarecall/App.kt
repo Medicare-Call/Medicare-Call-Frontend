@@ -17,7 +17,6 @@ import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
-import javax.inject.Inject
 
 class App : Application() {
 
@@ -33,7 +32,7 @@ class App : Application() {
             androidLogger() // 로그캣에서 Koin 로그 확인 가능
             androidContext(this@App)
             modules(
-                statisticsModule
+                statisticsModule,
             )
         }
 

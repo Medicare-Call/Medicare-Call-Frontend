@@ -14,9 +14,8 @@ val statisticsModule = module {
     single { get<Retrofit>().create(StatisticsService::class.java) }
 
     // Repository
-    single<StatisticsRepository> { StatisticsRepositoryImpl(get<StatisticsService>(), get<EldersHealthInfoRepository>()) }
+    single<StatisticsRepository> { StatisticsRepositoryImpl(get<StatisticsService>(), get()) }
 
     // ViewModel
     viewModel { StatisticsViewModel(get(), get()) }
 }
-
