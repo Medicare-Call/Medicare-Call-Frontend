@@ -5,7 +5,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -178,11 +177,9 @@ fun NavGraph(
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(MainTabRoute.Home)
             }
-            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
 
             StatisticsScreen(
                 navController = navController,
-                homeViewModel = homeViewModel,
                 navigateToAlarm = { navController.navigate(Route.Alarm) },
             )
         }
