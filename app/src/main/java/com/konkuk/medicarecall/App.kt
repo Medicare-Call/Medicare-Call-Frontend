@@ -7,10 +7,7 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
-import com.konkuk.medicarecall.data.di.settingsApiModule
 import com.konkuk.medicarecall.data.di.settingsModules
-import com.konkuk.medicarecall.data.di.settingsRepositoryModule
-import com.konkuk.medicarecall.data.di.settingsViewModelModule
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +30,7 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(
-                settingsModules
+                settingsModules,
             )
         }
         createNotificationChannel()
