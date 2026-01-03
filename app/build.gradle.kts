@@ -1,4 +1,3 @@
-import java.lang.module.ModuleFinder.compose
 import java.util.Properties
 
 plugins {
@@ -129,4 +128,8 @@ dependencies {
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     jvmTarget = "11"
+}
+
+ksp {
+    arg("KOIN_DEFAULT_MODULE", "true")
 }
