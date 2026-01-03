@@ -8,12 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.data.repository.NoticeRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class NoticeViewModel @Inject constructor(
+class NoticeViewModel(
     private val repository: NoticeRepository,
 ) : ViewModel() {
 

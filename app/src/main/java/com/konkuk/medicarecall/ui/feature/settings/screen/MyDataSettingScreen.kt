@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -46,6 +45,7 @@ import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
 import com.konkuk.medicarecall.ui.type.GenderType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MyDataSettingScreen(
@@ -53,7 +53,7 @@ fun MyDataSettingScreen(
     modifier: Modifier = Modifier,
     navigateToUserInfoSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
     navigateToLoginAfterLogout: () -> Unit = {},
-    myDataViewModel: MyDataViewModel = hiltViewModel(),
+    myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
     val myDataInfo = myDataViewModel.myDataInfo
     var showLogoutDialog by remember { mutableStateOf(false) }

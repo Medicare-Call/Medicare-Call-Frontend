@@ -111,7 +111,6 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.5.3")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
 
-
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.google.firebase.analytics)

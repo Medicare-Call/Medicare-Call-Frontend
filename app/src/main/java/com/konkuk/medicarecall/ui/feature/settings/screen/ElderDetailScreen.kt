@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
@@ -44,6 +43,7 @@ import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -53,7 +53,7 @@ fun ElderDetailScreen(
     onBack: () -> Unit = {},
     eldersInfoResponseDto: EldersInfoResponseDto,
     navController: NavHostController,
-    detailViewModel: DetailElderInfoViewModel = hiltViewModel(),
+    detailViewModel: DetailElderInfoViewModel = koinViewModel(),
 ) {
     val gender = when (eldersInfoResponseDto.gender) {
         GenderType.MALE -> true
