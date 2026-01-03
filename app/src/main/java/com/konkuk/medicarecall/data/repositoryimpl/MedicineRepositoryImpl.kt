@@ -7,9 +7,8 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStat
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import java.time.LocalDate
-import javax.inject.Inject
 
-class MedicineRepositoryImpl @Inject constructor(
+class MedicineRepositoryImpl(
     private val medicineService: MedicineService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {

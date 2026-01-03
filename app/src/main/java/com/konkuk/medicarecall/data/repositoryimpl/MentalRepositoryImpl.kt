@@ -7,9 +7,8 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.Menta
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.LocalDate
-import javax.inject.Inject
 
-class MentalRepositoryImpl @Inject constructor(
+class MentalRepositoryImpl(
     private val mentalService: MentalService,
 ) : MentalRepository {
 

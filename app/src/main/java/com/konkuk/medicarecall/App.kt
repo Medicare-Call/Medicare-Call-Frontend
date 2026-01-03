@@ -8,15 +8,20 @@ import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.konkuk.medicarecall.data.di.settingsModules
+import com.konkuk.medicarecall.data.di.calendarModule
+import com.konkuk.medicarecall.data.di.homeDetailModule
+import com.konkuk.medicarecall.data.di.homeModule
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.GlobalContext.startKoin
-class App : Application() {
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.context.startKoin
+
+class App : Application(), KoinComponent {
 
     private val fcmRepository: FcmRepository by inject()
 
@@ -29,6 +34,9 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 settingsModules,
+                calendarModule,
+                homeModule,
+                homeDetailModule,
             )
         }
         createNotificationChannel()

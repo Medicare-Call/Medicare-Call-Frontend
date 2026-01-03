@@ -4,9 +4,8 @@ import com.konkuk.medicarecall.data.api.elders.MealService
 import com.konkuk.medicarecall.data.repository.MealRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import java.time.LocalDate
-import javax.inject.Inject
 
-class MealRepositoryImpl @Inject constructor(
+class MealRepositoryImpl(
     private val mealService: MealService,
 ) : MealRepository {
     override suspend fun getMealUiStateList(elderId: Int, date: LocalDate): List<MealUiState> {
