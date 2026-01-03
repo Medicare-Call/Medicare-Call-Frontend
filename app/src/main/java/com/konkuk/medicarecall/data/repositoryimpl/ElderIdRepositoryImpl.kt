@@ -1,7 +1,9 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import org.koin.core.annotation.Single
 
+@Single
 class ElderIdRepositoryImpl : ElderIdRepository {
 
     private val elderIds: MutableList<Map<String, Int>> = mutableListOf()

@@ -5,10 +5,11 @@ import com.konkuk.medicarecall.data.dto.request.CertificationCodeRequestDto
 import com.konkuk.medicarecall.data.dto.request.PhoneNumberConfirmRequestDto
 import com.konkuk.medicarecall.data.dto.response.VerificationResponseDto
 import com.konkuk.medicarecall.data.repository.VerificationRepository
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class VerificationRepositoryImpl @Inject constructor(
+@Single
+class VerificationRepositoryImpl(
     private val authService: AuthService,
 ) : VerificationRepository {
     override suspend fun requestCertificationCode(phone: String) =

@@ -6,8 +6,10 @@ import com.konkuk.medicarecall.data.repository.MedicineRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
+import org.koin.core.annotation.Single
 import java.time.LocalDate
 
+@Single
 class MedicineRepositoryImpl(
     private val medicineService: MedicineService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,

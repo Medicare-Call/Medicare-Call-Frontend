@@ -8,8 +8,10 @@ import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
 
+@Single
 class EldersHealthInfoRepositoryImpl(
     private val elderInfoService: EldersInfoService,
     private val elderRegisterService: ElderRegisterService,

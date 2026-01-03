@@ -5,8 +5,10 @@ import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.repository.HomeRepository
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
 
+@Single
 class HomeRepositoryImpl(
     private val homeService: HomeService,
 ) : HomeRepository {

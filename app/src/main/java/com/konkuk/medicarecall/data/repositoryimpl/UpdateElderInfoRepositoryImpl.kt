@@ -4,8 +4,10 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
 
+@Single
 class UpdateElderInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
 ) : UpdateElderInfoRepository {

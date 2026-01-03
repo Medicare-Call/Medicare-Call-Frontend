@@ -4,8 +4,10 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.SubscribeService
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
 
+@Single
 class SubscribeRepositoryImpl(
     private val subscribeService: SubscribeService,
 ) : SubscribeRepository {
