@@ -107,11 +107,6 @@ dependencies {
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
 
     // Koin
-    implementation("io.insert-koin:koin-core:3.5.3")
-    implementation("io.insert-koin:koin-android:3.5.3")
-    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
-
-    // Koin
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.annotations)
