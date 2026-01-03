@@ -33,6 +33,7 @@ val settingsApiModule = module {
     single { get<Retrofit>().create(NoticeService::class.java) }
     single { get<Retrofit>().create(EldersInfoService::class.java) }
     single { get<Retrofit>().create(ElderRegisterService::class.java) }
+    single { get<Retrofit>().create(SubscribeService::class.java) }
 }
 
 // 설정 관련 레포지토리 모듈

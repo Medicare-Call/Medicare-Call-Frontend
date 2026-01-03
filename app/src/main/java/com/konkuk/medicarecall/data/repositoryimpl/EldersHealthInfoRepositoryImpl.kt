@@ -11,7 +11,7 @@ import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import retrofit2.HttpException
 import javax.inject.Singleton
 
-@Singleton
+
 class EldersHealthInfoRepositoryImpl(
     private val elderInfoService: EldersInfoService,
     private val elderRegisterService: ElderRegisterService,
