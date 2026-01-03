@@ -56,7 +56,7 @@ class NetworkModule {
     }.build()
 
     @Single
-    fun retrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
+    fun retrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient)
@@ -65,10 +65,10 @@ class NetworkModule {
     @Single
     @AuthRetrofit
     fun authRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit {
-        val authOkHttpClient = OkHttpClient.Builder()
-            .readTimeout(20, TimeUnit.SECONDS)
-            .addInterceptor(loggingInterceptor)
-            .build()
+        val authOkHttpClient = OkHttpClient.Builder().apply {
+            readTimeout(20, TimeUnit.SECONDS)
+            if (BuildConfig.DEBUG) addInterceptor(loggingInterceptor)
+        }.build()
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
