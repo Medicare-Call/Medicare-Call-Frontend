@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.PushNotificationDto
@@ -32,11 +31,12 @@ import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.component.SwitchButton
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.DetailMyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingAlarmScreen(
     modifier: Modifier = Modifier,
-    myDataViewModel: DetailMyDataViewModel = hiltViewModel(),
+    myDataViewModel: DetailMyDataViewModel = koinViewModel(),
     myDataInfo: MyInfoResponseDto,
     onBack: () -> Unit = {},
 ) {

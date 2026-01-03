@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
@@ -35,13 +34,14 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HealthDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     healthInfoResponseDto: EldersHealthResponseDto,
-    detailViewModel: DetailHealthViewModel = hiltViewModel(),
+    detailViewModel: DetailHealthViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val diseaseList = remember(healthInfoResponseDto) {

@@ -8,12 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class SubscribeViewModel @Inject constructor(
+class SubscribeViewModel(
     private val repository: SubscribeRepository,
 ) : ViewModel() {
     var subscriptions by mutableStateOf<List<EldersSubscriptionResponseDto>>(emptyList())

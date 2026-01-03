@@ -5,13 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
-
-@HiltViewModel
-class DetailMyDataViewModel @Inject constructor(
+class DetailMyDataViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     fun updateUserData(

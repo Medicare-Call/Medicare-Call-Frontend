@@ -23,7 +23,6 @@ import retrofit2.HttpException
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
-
 class HomeViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val homeRepository: HomeRepository,
