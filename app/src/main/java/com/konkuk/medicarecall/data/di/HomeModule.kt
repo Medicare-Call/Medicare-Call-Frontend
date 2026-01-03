@@ -13,8 +13,6 @@ val homeModule = module {
             homeRepository = get(),
             eldersHealthInfoRepository = get(),
             savedStateHandle = savedStateHandle,
-            // 화면 재생성 및 프로세스 복구를 위해 elderId를 SavedStateHandle로 관리
-            // SavedStateHandle은 Android 전용으로 KMP 공용 대상이 아님
-        )
+           )
     }
 }
