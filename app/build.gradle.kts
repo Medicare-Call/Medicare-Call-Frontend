@@ -5,9 +5,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("plugin.serialization") version "2.2.20"
     alias(libs.plugins.detekt)
     alias(libs.plugins.google.services)
+    id("de.jensklingenberg.ktorfit") version "2.7.1"
+
 }
 
 detekt {
@@ -119,6 +121,9 @@ dependencies {
 
     // Detekt formatting plugin
     detektPlugins(libs.detekt.formatting)
+
+    // Ktorfit
+    implementation("de.jensklingenberg.ktorfit:ktorfit-lib:2.7.1")
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
