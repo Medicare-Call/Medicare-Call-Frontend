@@ -22,7 +22,6 @@ import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import retrofit2.Retrofit
 
 @Module
 class ApiModule {

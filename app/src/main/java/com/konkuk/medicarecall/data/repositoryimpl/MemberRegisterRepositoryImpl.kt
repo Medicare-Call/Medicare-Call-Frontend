@@ -6,7 +6,6 @@ import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.ui.type.GenderType
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class MemberRegisterRepositoryImpl(
@@ -34,8 +33,8 @@ class MemberRegisterRepositoryImpl(
             if (response.isSuccessful) {
                 response.body() ?: error("Response body is null")
             } else {
-                val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                throw HttpException(response)
+                val errorBody = response.errorBody()?.toString() ?: "Unknown error"
+                throw Exception(response.toString())
             }
         }
 }

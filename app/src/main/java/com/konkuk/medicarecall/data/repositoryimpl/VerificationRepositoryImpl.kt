@@ -6,7 +6,6 @@ import com.konkuk.medicarecall.data.dto.request.PhoneNumberConfirmRequestDto
 import com.konkuk.medicarecall.data.dto.response.VerificationResponseDto
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class VerificationRepositoryImpl(
@@ -24,7 +23,7 @@ class VerificationRepositoryImpl(
             if (response.isSuccessful) {
                 response.body() ?: error("Response body is null")
             } else {
-                throw HttpException(response)
+                throw Exception(response.toString())
             }
         }
 }

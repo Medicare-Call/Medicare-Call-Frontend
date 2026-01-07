@@ -17,7 +17,6 @@ import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.RelationshipType
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class ElderRegisterRepositoryImpl(
@@ -38,8 +37,8 @@ class ElderRegisterRepositoryImpl(
         if (response.isSuccessful) {
             return response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
+            throw Exception(errorBody) // Exception Type?
         }
     }
 
@@ -55,8 +54,8 @@ class ElderRegisterRepositoryImpl(
             ),
         )
         if (!response.isSuccessful) {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
+            throw Exception(errorBody) // Exception Type?
         }
     }
 
@@ -78,7 +77,7 @@ class ElderRegisterRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            throw HttpException(response)
+            throw Exception(response.toString()) // Exception Type?
         }
     }
 
@@ -103,7 +102,7 @@ class ElderRegisterRepositoryImpl(
             ),
         )
         if (!response.isSuccessful) {
-            throw HttpException(response)
+            throw Exception(response.toString())
         }
     }
 }

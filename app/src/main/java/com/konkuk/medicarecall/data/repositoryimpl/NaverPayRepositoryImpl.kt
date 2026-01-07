@@ -5,7 +5,6 @@ import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class NaverPayRepositoryImpl(
@@ -19,7 +18,7 @@ class NaverPayRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            throw HttpException(response)
+            throw Exception(response.toString())
         }
     }
 }

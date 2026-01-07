@@ -2,9 +2,9 @@ package com.konkuk.medicarecall.data.api.payments
 
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
+import de.jensklingenberg.ktorfit.Response
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.POST
 
 interface NaverPayService {
     // 결제창 호출은 아래와 같이 할 수 있습니다.
