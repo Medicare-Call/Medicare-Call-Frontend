@@ -6,9 +6,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("plugin.serialization") version "2.2.20"
     alias(libs.plugins.detekt)
     alias(libs.plugins.google.services)
+    id("de.jensklingenberg.ktorfit") version "2.7.1"
 }
 
 detekt {
@@ -98,11 +99,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 
     // Retrofit & OkHttp
-    implementation("com.squareup.retrofit2:retrofit:2.12.0")
-    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.12.0")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+//    implementation("com.squareup.retrofit2:retrofit:2.12.0")
+//    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.12.0")
+//    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+//    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+//    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
@@ -125,6 +126,10 @@ dependencies {
 
     // Detekt formatting plugin
     detektPlugins(libs.detekt.formatting)
+
+    // Ktorfit
+    implementation("de.jensklingenberg.ktorfit:ktorfit-lib:2.7.1")
+    implementation("de.jensklingenberg.ktorfit:ktorfit-converters-response:2.7.1")
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
