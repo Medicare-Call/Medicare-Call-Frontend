@@ -1,6 +1,6 @@
 [versions]
-agp = "8.13.0"
-kotlin = "2.0.21"
+agp = "8.13.2"
+kotlin = "2.2.20"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -21,13 +21,13 @@ googleService = "4.4.3"
 hilt = "2.52"
 hiltNavigationCompose = "1.2.0"
 hiltManager = "1.0.0"
-ksp = "2.0.21-1.0.28"
+ksp = "2.3.2"
 datastore = "1.1.7"
 datastorePreferences = "1.1.7"
 coreSplashscreen = "1.2.0-rc01"
 media3CommonKtx = "1.8.0"
-koin = "4.0.0"
-koinAnnotations = "2.1.0"
+koin = "4.1.1"
+koinAnnotations = "2.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

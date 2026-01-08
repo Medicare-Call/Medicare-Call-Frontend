@@ -1,10 +1,10 @@
 package com.konkuk.medicarecall.data.api.member
 
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import de.jensklingenberg.ktorfit.Response
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.POST
 
 interface SettingService {
     // 설정 불러오기

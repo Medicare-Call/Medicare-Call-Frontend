@@ -13,6 +13,7 @@ import com.konkuk.medicarecall.data.di.settingsModules
 import com.konkuk.medicarecall.data.di.calendarModule
 import com.konkuk.medicarecall.data.di.homeDetailModule
 import com.konkuk.medicarecall.data.di.homeModule
+import com.konkuk.medicarecall.data.di.statisticsModules
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +43,7 @@ class App : Application(), KoinComponent {
                     calendarModule +
                     homeModule +
                     homeDetailModule +
-                    statisticsModule +
+                    statisticsModules +
                     appModules +
                     defaultModule,
             )
