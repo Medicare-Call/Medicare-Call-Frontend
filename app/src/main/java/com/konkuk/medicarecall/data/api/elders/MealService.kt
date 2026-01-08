@@ -5,7 +5,6 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
-
 interface MealService {
     @GET("elders/{elderId}/meals")
     suspend fun getDailyMeal(

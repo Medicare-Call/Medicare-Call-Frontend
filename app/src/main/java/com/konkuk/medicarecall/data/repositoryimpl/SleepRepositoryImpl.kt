@@ -32,7 +32,6 @@ class SleepRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): SleepUiState {
-
         return runCatching {
             sleepService.getDailySleep(
                 elderId,

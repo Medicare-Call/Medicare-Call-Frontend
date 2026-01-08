@@ -36,6 +36,4 @@ class KtorApiModule {
     @Single
     fun sleepService(ktorfit: Ktorfit): SleepService =
         ktorfit.create()
-
-
 }

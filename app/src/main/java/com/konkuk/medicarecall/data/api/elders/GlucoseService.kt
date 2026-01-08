@@ -5,7 +5,6 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
-
 interface GlucoseService {
 
     @GET("elders/{elderId}/blood-sugar/weekly")

@@ -15,7 +15,7 @@ class HomeRepositoryImpl(
         elderId: Int, careCallOption: String,
     ): Result<Unit> = runCatching {
         homeService.requestImmediateCareCall(
-            ImmediateCallRequestDto(elderId, careCallOption)
+            ImmediateCallRequestDto(elderId, careCallOption),
         )
     }
 

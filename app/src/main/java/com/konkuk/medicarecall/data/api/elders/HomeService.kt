@@ -7,7 +7,6 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 
-
 interface HomeService {
     @GET("elders/{elderId}/home")
     suspend fun getHomeSummary(
