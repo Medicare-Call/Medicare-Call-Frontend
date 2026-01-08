@@ -7,9 +7,7 @@ import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import kotlinx.coroutines.launch
-import org.koin.android.annotation.KoinViewModel
 
-@KoinViewModel
 class DetailElderInfoViewModel(
     private val eldersInfoRepository: UpdateElderInfoRepository,
 ) : ViewModel() {

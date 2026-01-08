@@ -5,18 +5,19 @@ import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.Token
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.util.TokenSerializer
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
-import org.koin.core.annotation.Single
+import javax.inject.Inject
+import javax.inject.Singleton
 
 val Context.tokenDataStore by dataStore(
     fileName = "tokens",
     serializer = TokenSerializer,
 )
 
-@Single
-class DataStoreRepositoryImpl(
-    private val context: Context,
-) : DataStoreRepository {
+@Singleton
+class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) :
+    DataStoreRepository {
 
     override suspend fun saveAccessToken(token: String) {
         context.tokenDataStore.updateData { it.copy(accessToken = token) }

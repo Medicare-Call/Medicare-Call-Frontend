@@ -11,11 +11,9 @@ import com.konkuk.medicarecall.data.dto.response.StatisticsResponseDto
 import com.konkuk.medicarecall.data.dto.response.SummaryStatsDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
-import org.koin.core.annotation.Single
 import retrofit2.HttpException
 import java.time.LocalDate
 
-@Single
 class StatisticsRepositoryImpl(
     private val statisticsService: StatisticsService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,

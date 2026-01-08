@@ -4,9 +4,7 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.data.repository.NoticeRepository
-import org.koin.core.annotation.Single
 
-@Single
 class NoticeRepositoryImpl(
     private val noticeService: NoticeService,
 ) : NoticeRepository {

@@ -11,10 +11,8 @@ import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
-import org.koin.core.annotation.Single
 import retrofit2.HttpException
 
-@Single
 class EldersInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
 ) : EldersInfoRepository {

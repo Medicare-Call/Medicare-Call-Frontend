@@ -5,75 +5,97 @@ import com.konkuk.medicarecall.data.api.auth.RefreshService
 import com.konkuk.medicarecall.data.network.AuthAuthenticator
 import com.konkuk.medicarecall.data.network.AuthInterceptor
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
-
-@Named
-annotation class AuthRetrofit
-
-val json = Json {
-    encodeDefaults = true
-    ignoreUnknownKeys = true
-    prettyPrint = true
-    isLenient = true
-}
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
-class NetworkModule {
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
 
-    @Single
-    fun authInterceptor(dataStoreRepository: DataStoreRepository) = AuthInterceptor(dataStoreRepository)
-
-    @Single
-    fun authAuthenticator(
-        dataStoreRepository: DataStoreRepository,
-        refreshService: RefreshService,
-    ) = AuthAuthenticator(dataStoreRepository, refreshService)
-
-    @Single
-    fun httpLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(dataStoreRepository: DataStoreRepository): Interceptor {
+        return AuthInterceptor(dataStoreRepository)
     }
 
-    @Single
-    fun okHttpClient(
-        authInterceptor: AuthInterceptor,
+    @Provides
+    @Singleton
+    fun provideAuthAuthenticator(
+        dataStoreRepository: DataStoreRepository,
+        refreshService: RefreshService,
+    ): AuthAuthenticator {
+        return AuthAuthenticator(dataStoreRepository, refreshService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        authInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor,
         authAuthenticator: AuthAuthenticator,
-    ) = OkHttpClient.Builder().apply {
-        readTimeout(20, TimeUnit.SECONDS)
-        addInterceptor(authInterceptor)
-        if (BuildConfig.DEBUG) addInterceptor(loggingInterceptor)
-        authenticator(authAuthenticator)
-    }.build()
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .readTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .authenticator(authAuthenticator)
+            .build()
+    }
 
-    @Single
-    fun retrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
-        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .client(okHttpClient)
-        .build()
-
-    @Single
-    @AuthRetrofit
-    fun authRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit {
-        val authOkHttpClient = OkHttpClient.Builder().apply {
-            readTimeout(20, TimeUnit.SECONDS)
-            if (BuildConfig.DEBUG) addInterceptor(loggingInterceptor)
-        }.build()
-
+    @Provides
+    @Singleton
+    @Named("AuthRetrofit")
+    fun provideAuthRetrofit(loggingInterceptor: HttpLoggingInterceptor): Retrofit {
+        val json = Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            isLenient = true
+        }
+        val authOkHttpClient = OkHttpClient.Builder()
+            .readTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .client(authOkHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val json = Json {
+            encodeDefaults = true
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            isLenient = true
+        }
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .client(okHttpClient)
             .build()
     }
 }

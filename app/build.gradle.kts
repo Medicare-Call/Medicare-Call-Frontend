@@ -1,3 +1,4 @@
+import java.lang.module.ModuleFinder.compose
 import java.util.Properties
 
 plugins {
@@ -107,6 +108,11 @@ dependencies {
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
 
     // Koin
+    implementation("io.insert-koin:koin-core:3.5.3")
+    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
+    // Koin
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.annotations)
@@ -123,8 +129,4 @@ dependencies {
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     jvmTarget = "11"
-}
-
-ksp {
-    arg("KOIN_DEFAULT_MODULE", "true")
 }

@@ -16,11 +16,12 @@ import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.RelationshipType
-import org.koin.core.annotation.Single
 import retrofit2.HttpException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-@Single
-class ElderRegisterRepositoryImpl(
+@Singleton
+class ElderRegisterRepositoryImpl @Inject constructor(
     private val elderRegisterService: ElderRegisterService,
 //    private val elderIdRepository: ElderIdRepository,
 ) : ElderRegisterRepository {

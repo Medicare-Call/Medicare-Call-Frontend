@@ -5,11 +5,10 @@ import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.dto.request.SetCallTimeRequestDto
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
-import org.koin.core.annotation.Single
 import retrofit2.HttpException
+import javax.inject.Inject
 
-@Single
-class SetCallRepositoryImpl(
+class SetCallRepositoryImpl @Inject constructor(
     private val service: SetCallService,
 ) : SetCallRepository {
     override suspend fun saveForElder(

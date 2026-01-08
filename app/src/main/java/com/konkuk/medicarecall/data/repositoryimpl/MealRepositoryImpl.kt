@@ -3,10 +3,8 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import com.konkuk.medicarecall.data.api.elders.MealService
 import com.konkuk.medicarecall.data.repository.MealRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
-import org.koin.core.annotation.Single
 import java.time.LocalDate
 
-@Single
 class MealRepositoryImpl(
     private val mealService: MealService,
 ) : MealRepository {

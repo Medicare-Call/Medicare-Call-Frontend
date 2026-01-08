@@ -4,7 +4,6 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.SleepService
 import com.konkuk.medicarecall.data.repository.SleepRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
-import org.koin.core.annotation.Single
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.LocalDate
@@ -13,7 +12,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
 
-@Single
 class SleepRepositoryImpl(
     private val sleepService: SleepService,
 ) : SleepRepository {

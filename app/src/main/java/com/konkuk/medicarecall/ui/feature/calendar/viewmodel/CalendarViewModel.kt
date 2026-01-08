@@ -4,12 +4,10 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.koin.android.annotation.KoinViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 
-@KoinViewModel
 class CalendarViewModel : ViewModel() {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())

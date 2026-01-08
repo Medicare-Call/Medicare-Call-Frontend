@@ -7,8 +7,12 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
-import com.konkuk.medicarecall.data.di.ApiModule
-import com.konkuk.medicarecall.data.di.NetworkModule
+import com.konkuk.medicarecall.data.di.appModules
+import com.konkuk.medicarecall.data.di.statisticsModule
+import com.konkuk.medicarecall.data.di.settingsModules
+import com.konkuk.medicarecall.data.di.calendarModule
+import com.konkuk.medicarecall.data.di.homeDetailModule
+import com.konkuk.medicarecall.data.di.homeModule
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +24,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.defaultModule
-import org.koin.ksp.generated.module
 
 class App : Application(), KoinComponent {
 
@@ -35,11 +38,13 @@ class App : Application(), KoinComponent {
             androidLogger()
             androidContext(this@App)
             modules(
-                defaultModule,
-            )
-            modules(
-                ApiModule().module,
-                NetworkModule().module,
+                settingsModules +
+                    calendarModule +
+                    homeModule +
+                    homeDetailModule +
+                    statisticsModule +
+                    appModules +
+                    defaultModule,
             )
         }
         createNotificationChannel()
