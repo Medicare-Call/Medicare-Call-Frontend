@@ -6,7 +6,6 @@ import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class HomeRepositoryImpl(
@@ -15,23 +14,9 @@ class HomeRepositoryImpl(
     override suspend fun requestImmediateCareCall(
         elderId: Int, careCallOption: String,
     ): Result<Unit> = runCatching {
-        val response = homeService.requestImmediateCareCall(
-            ImmediateCallRequestDto(elderId, careCallOption),
+        homeService.requestImmediateCareCall(
+            ImmediateCallRequestDto(elderId, careCallOption)
         )
-        if (response.isSuccessful) {
-            Log.d(
-                "httplog",
-                "전화 걸림, 어르신: $Int, 시간: $careCallOption",
-            )
-        } else {
-            val errorBody =
-                response.errorBody()?.string() ?: "Unknown error(updating health info)"
-            Log.e(
-                "httplog",
-                "전화 걸기 실패: ${response.code()} - $errorBody",
-            )
-            throw HttpException(response)
-        }
     }
 
     override suspend fun getHomeSummary(elderId: Int): HomeResponseDto {
