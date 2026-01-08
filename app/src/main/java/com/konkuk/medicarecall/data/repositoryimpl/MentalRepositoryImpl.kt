@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.MentalService
 import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
@@ -16,29 +15,26 @@ class MentalRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): MentalUiState {
-        return runCatching {
-            mentalService.getDailyMental(
-                elderId,
-                date.toString(),
-            )
-        }.fold(
-            onSuccess = { dto ->
-                val comments = dto.commentList.orEmpty()
-                Log.d("MENTAL", "comments=$comments")
 
-                MentalUiState(
-                    mentalSummary = comments,
-                    isRecorded = comments.isNotEmpty(),
-                )
-            },
-            onFailure = {
-                Log.w(
-                    "MentalRepository",
-                    "Failed to fetch mental data, fallback to EMPTY",
-                    it,
-                )
-                MentalUiState.EMPTY
-            },
+        val response = mentalService.getDailyMental(
+            elderId,
+            date.toString(),
         )
+
+        return if (response.isSuccessful) {
+            val comments = response.body()?.commentList.orEmpty()
+
+            MentalUiState(
+                mentalSummary = comments,
+                isRecorded = comments.isNotEmpty(),
+            )
+        } else {
+            if (response.code == 404) {
+                MentalUiState.EMPTY
+            } else {
+                error("Failed to fetch mental data: ${response.code}")
+            }
+        }
     }
 }
+
