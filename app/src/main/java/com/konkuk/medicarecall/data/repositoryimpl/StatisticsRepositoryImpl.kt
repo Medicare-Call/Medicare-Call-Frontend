@@ -12,7 +12,6 @@ import com.konkuk.medicarecall.data.dto.response.SummaryStatsDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 import java.time.LocalDate
 
 @Single
@@ -22,15 +21,15 @@ class StatisticsRepositoryImpl(
 ) : StatisticsRepository {
 
     override suspend fun getStatistics(elderId: Int, startDate: String): StatisticsResponseDto {
-        return try {
-            val response = statisticsService.getStatistics(elderId = elderId, startDate = startDate)
-            response
-        } catch (e: HttpException) {
-            if (e.code() == 404) {
-                createUnrecordedStatisticsDto(elderId)
-            } else {
-                throw e
-            }
+        val response = statisticsService.getStatistics(elderId = elderId, startDate = startDate)
+        return if (response.isSuccessful) {
+            response.body() ?: throw Exception("Statistics body is null")
+        } else if (response.code == 404) {
+            // 404 에러일 경우 기록되지 않은 통계 DTO 생성 로직 실행
+            createUnrecordedStatisticsDto(elderId)
+        } else {
+            // 그 외의 에러 처리
+            throw Exception("Failed to fetch statistics: ${response.code}")
         }
     }
 
