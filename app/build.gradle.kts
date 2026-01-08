@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("plugin.serialization") version "2.2.20"
     alias(libs.plugins.detekt)
     alias(libs.plugins.google.services)
 }
@@ -102,6 +102,16 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    // Ktorfit
+    implementation(libs.ktorfit.lib)
+    ksp(libs.ktorfit.ksp)
 
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
