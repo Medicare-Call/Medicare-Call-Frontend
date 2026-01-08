@@ -32,43 +32,41 @@ class SleepRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): SleepUiState {
-        return runCatching {
-            sleepService.getDailySleep(
-                elderId,
-                date.toString(),
-            )
-        }.fold(
-            onSuccess = { response ->
-
-                // 서버 응답이 "기록됨" 상태인지 검증
-                val isValid =
-                    response.totalSleep?.hours != null &&
-                        response.totalSleep.minutes != null &&
-                        !response.sleepTime.isNullOrBlank() &&
-                        !response.wakeTime.isNullOrBlank()
-
-                if (isValid) {
-                    SleepUiState(
-                        date = response.date,
-                        totalSleepHours = response.totalSleep.hours,
-                        totalSleepMinutes = response.totalSleep.minutes,
-                        bedTime = formatTime(response.sleepTime),
-                        wakeUpTime = formatTime(response.wakeTime),
-                        isRecorded = true,
-                    )
-                } else {
-                    // 데이터 미기록 상태
-                    SleepUiState.EMPTY.copy(date = response.date)
-                }
-            },
-            onFailure = {
-                Log.w(
-                    "SleepRepository",
-                    "Failed to fetch sleep data, fallback to EMPTY",
-                    it,
-                )
-                SleepUiState.EMPTY.copy(date = date.toString())
-            },
+        val response = sleepService.getDailySleep(
+            elderId,
+            date.toString(),
         )
+
+        return if (response.isSuccessful) {
+            val body = response.body()
+                ?: error("Sleep response body is null")
+
+            // 서버 응답의 모든 값이 유효한지 확인
+            if (
+                body.totalSleep?.hours != null &&
+                body.totalSleep.minutes != null &&
+                !body.sleepTime.isNullOrBlank() &&
+                !body.wakeTime.isNullOrBlank()
+            ) {
+                SleepUiState(
+                    date = body.date,
+                    totalSleepHours = body.totalSleep.hours,
+                    totalSleepMinutes = body.totalSleep.minutes,
+                    bedTime = formatTime(body.sleepTime),
+                    wakeUpTime = formatTime(body.wakeTime),
+                    isRecorded = true,
+                )
+            } else {
+                // 데이터 미기록 상태
+                SleepUiState.EMPTY.copy(date = body.date)
+            }
+        } else {
+            if (response.code == 404) {
+                // 미기록
+                SleepUiState.EMPTY.copy(date = date.toString())
+            } else {
+                error("Failed to fetch sleep data: ${response.code}")
+            }
+        }
     }
 }
