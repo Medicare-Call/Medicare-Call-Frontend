@@ -14,15 +14,34 @@ class HomeRepositoryImpl(
     override suspend fun requestImmediateCareCall(
         elderId: Int, careCallOption: String,
     ): Result<Unit> = runCatching {
-        homeService.requestImmediateCareCall(
+        val response = homeService.requestImmediateCareCall(
             ImmediateCallRequestDto(elderId, careCallOption),
         )
+        if (response.isSuccessful) {
+            Log.d(
+                "httplog",
+                "전화 걸림, 어르신: $Int, 시간: $careCallOption",
+            )
+        } else {
+            Log.e(
+                "httplog",
+                "전화 걸기 실패: ${response.code}",
+            )
+            error("Immediate care call failed with code=${response.code}")
+        }
     }
 
     override suspend fun getHomeSummary(elderId: Int): HomeResponseDto {
         // DTO만 반환
         Log.d("HomeRepo", "[REQ] elderId=$elderId")
-        val res = homeService.getHomeSummary(elderId) // DTO를 받음
+        val response = homeService.getHomeSummary(elderId)
+
+        if (!response.isSuccessful) {
+            error("Home summary fetch failed with code=${response.code}")
+        }
+
+        val res = response.body()
+            ?: error("Home summary response body is null")
 
         val medicationStatus = res.medicationStatus
         val meds = medicationStatus?.medicationList.orEmpty()
