@@ -112,6 +112,7 @@ dependencies {
     // Ktorfit
     implementation(libs.ktorfit.lib)
     ksp(libs.ktorfit.ksp)
+    implementation("de.jensklingenberg.ktorfit:ktorfit-converters-response:2.7.1")
 
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
