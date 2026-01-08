@@ -15,10 +15,12 @@ class GlucoseRepositoryImpl(
         type: String,
     ): Result<GlucoseResponseDto> =
         runCatching {
-            glucoseService.getGlucoseGraph(
-                elderId = elderId,
-                counter = counter,
-                type = type,
-            )
+            val response = glucoseService.getGlucoseGraph(elderId, counter, type)
+            if (response.isSuccessful) {
+                response.body() ?: error("Response body is null")
+            } else {
+//                val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                error("Failed to fetch glucose graph: ${response.code}")
+            }
         }
 }
