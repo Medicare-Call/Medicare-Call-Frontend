@@ -16,8 +16,7 @@ class HealthRepositoryImpl(
             HealthUiState(
                 symptoms = response.symptomList.orEmpty(),
                 symptomAnalysis = response.analysisComment.orEmpty(),
-                isRecorded =
-                    !response.symptomList.isNullOrEmpty() || !response.analysisComment.isNullOrBlank(),
+                isRecorded = !response.symptomList.isNullOrEmpty() || !response.analysisComment.isNullOrBlank(),
             )
         }
 }
