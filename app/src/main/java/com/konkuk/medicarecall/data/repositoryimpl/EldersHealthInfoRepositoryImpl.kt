@@ -31,12 +31,11 @@ class EldersHealthInfoRepositoryImpl(
             Log.d("Cache", "Fetching new health info from server")
             val response = elderInfoService.getElderHealthInfo()
             if (response.isSuccessful) {
-                val body = response.body()
-                    ?: error("Response body is null(eldersHealthInfo)")
-                cachedHealthInfo = body // 캐시에 저장
+                val body = response.body() ?: error("Response body is null(eldersHealthInfo)")
+                cachedHealthInfo = body
                 body
             } else {
-                throw Exception("Failed to fetch health info: ${response.code}")
+                error("Failed to fetch health info: ${response.code}")
             }
         }
     }
@@ -46,32 +45,26 @@ class EldersHealthInfoRepositoryImpl(
     ): Result<Unit> =
         runCatching {
             val medicationSchedule = elderInfo.medications.toMedicationSchedules()
-            val elder = ElderHealthRegisterRequestDto(
+            val elderRequest = ElderHealthRegisterRequestDto(
                 diseaseNames = elderInfo.diseases,
                 medicationSchedules = medicationSchedule,
                 notes = elderInfo.notes,
             )
             val response = elderRegisterService.postElderHealthInfo(
                 elderInfo.elderId,
-                elder,
+                elderRequest,
             )
             if (response.isSuccessful) {
                 refresh()
-                Log.d(
-                    "EldersHealthInfoRepository",
-                    "Health info updated successfully for elderId: ${elderInfo.elderId}",
-                )
+                Log.d("EldersHealthInfoRepository", "Update success: ${elderInfo.elderId}")
             } else {
                 val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-                Log.e(
-                    "EldersHealthInfoRepository",
-                    "Failed to update health info: ${response.code} - $errorBody",
-                )
-                throw Exception("Update failed with code ${response.code}")
+                Log.e("EldersHealthInfoRepository", "Update failed: ${response.code} - $errorBody")
+                error("Update failed with code ${response.code}")
             }
         }
 
-    fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<MedicationSchedule> {
+    private fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<MedicationSchedule> {
         val timesByMed = linkedMapOf<String, MutableSet<MedicationTimeType>>()
         for ((time, meds) in this) {
             for (med in meds) {

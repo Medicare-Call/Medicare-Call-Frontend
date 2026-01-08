@@ -14,7 +14,7 @@ class UpdateElderInfoRepositoryImpl(
             if (response.isSuccessful) {
                 Unit
             } else {
-                throw Exception("Update failed with code ${response.code}")
+                error("Update failed with code ${response.code}")
             }
         }
 
@@ -25,7 +25,7 @@ class UpdateElderInfoRepositoryImpl(
         } else {
             val body = response.errorBody()?.toString().orEmpty()
             Log.e("DeleteElder", "HTTP ${response.code} body=$body")
-            throw Exception("Delete failed: ${response.code}")
+            error("Delete failed: ${response.code}")
         }
     }
 }

@@ -16,13 +16,13 @@ class NoticeRepositoryImpl(
             Log.d("NoticeRepository", "공지사항 응답 코드: ${response.code}")
 
             if (response.isSuccessful) {
-                val body = response.body() ?: throw Exception("Response body is null")
+                val body = response.body() ?: error("Response body is null")
                 Log.d("NoticeRepository", "응답 바디: ${body.size}개")
                 body
             } else {
                 val error = response.errorBody()?.toString()
                 Log.e("NoticeRepository", "응답 실패: $error")
-                throw Exception("Error fetching notices: $error")
+                error("Error fetching notices: $error")
             }
         }.onFailure {
             Log.e("NoticeRepository", "공지사항 불러오기 실패", it)

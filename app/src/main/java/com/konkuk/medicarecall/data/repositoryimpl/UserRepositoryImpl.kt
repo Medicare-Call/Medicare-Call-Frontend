@@ -16,10 +16,10 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getMyInfo() = runCatching {
         val response = settingService.getMyInfo()
         if (response.isSuccessful) {
-            response.body() ?: throw Exception("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
             val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            throw Exception("Error ${response.code}: $errorBody")
+            error("Error ${response.code}: $errorBody")
         }
     }
 
@@ -27,23 +27,22 @@ class UserRepositoryImpl @Inject constructor(
         Log.d("UserRepository", "updateMyInfo() 진입: $userUpdateRequestDto")
         val response = settingService.updateMyInfo(userUpdateRequestDto)
         if (response.isSuccessful) {
-            response.body() ?: throw Exception("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
-            throw Exception("Update failed with code ${response.code}")
+            error("Update failed with code ${response.code}")
         }
     }
 
     override suspend fun logout(): Result<Unit> {
         val result = runCatching {
-            val refresh = tokenStore.getRefreshToken() ?: throw Exception("Refresh token is null")
+            val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
             val response = authService.logout("Bearer $refresh")
             if (!response.isSuccessful) {
                 val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-                throw Exception("Logout failed: ${response.code} - $errorBody")
+                error("Logout failed: ${response.code} - $errorBody")
             }
             Unit
         }
-        // 성공/실패와 무관하게 로컬 토큰 제거
         tokenStore.clearTokens()
         return result
     }

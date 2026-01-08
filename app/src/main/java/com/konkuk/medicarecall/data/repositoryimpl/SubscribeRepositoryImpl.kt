@@ -16,13 +16,13 @@ class SubscribeRepositoryImpl(
             Log.d("SubscribeRepository", "구독 정보 응답 코드: ${response.code}")
 
             if (response.isSuccessful) {
-                val body = response.body() ?: throw Exception("Response body is null")
+                val body = response.body() ?: error("Response body is null")
                 Log.d("SubscribeRepository", "응답 바디: ${body.size}개")
                 body
             } else {
                 val error = response.errorBody()?.toString()
                 Log.e("SubscribeRepository", "응답 실패: $error")
-                throw Exception("HTTP ${response.code}: $error")
+                error("HTTP ${response.code}: $error")
             }
         }.onFailure {
             Log.e("SubscribeRepository", "구독 정보 불러오기 실패", it)

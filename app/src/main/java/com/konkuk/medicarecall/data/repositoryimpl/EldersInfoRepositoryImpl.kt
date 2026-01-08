@@ -18,25 +18,22 @@ class EldersInfoRepositoryImpl(
     override suspend fun getElders(): Result<List<EldersInfoResponseDto>> = runCatching {
         val response = eldersInfoService.getElders()
         if (response.isSuccessful) {
-            response.body() ?: throw Exception("Response body is null(eldersPersonalInfo)")
+            response.body() ?: error("Response body is null(eldersPersonalInfo)")
         } else {
-            throw Exception("Error ${response.code}: ${response.errorBody()}")
+            error("Error ${response.code}: ${response.errorBody()}")
         }
     }
 
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> = runCatching {
         val response = eldersInfoService.getSubscriptions()
         if (response.isSuccessful) {
-            response.body() ?: throw Exception("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
-            throw Exception("Error ${response.code}: ${response.errorBody()}")
+            error("Error ${response.code}: ${response.errorBody()}")
         }
     }
 
-    override suspend fun updateElder(
-        id: Int,
-        request: ElderData,
-    ): Result<Unit> = runCatching {
+    override suspend fun updateElder(id: Int, request: ElderData): Result<Unit> = runCatching {
         val response = eldersInfoService.updateElder(
             id,
             ElderRegisterRequestDto(
@@ -48,28 +45,20 @@ class EldersInfoRepositoryImpl(
                 residenceType = ElderResidenceType.entries.find { it.displayName == request.livingType }!!,
             ),
         )
-        if (response.isSuccessful) {
-            Unit
-        } else {
-            throw Exception("Error ${response.code}")
-        }
+        if (response.isSuccessful) Unit else error("Error ${response.code}")
     }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
         val response = eldersInfoService.deleteElderSettings(id)
-        if (response.isSuccessful) {
-            Unit
-        } else {
-            throw Exception("Error ${response.code}")
-        }
+        if (response.isSuccessful) Unit else error("Error ${response.code}")
     }
 
     override suspend fun getCareCallTimes(id: Int): Result<CallTimeResponseDto> = runCatching {
         val response = eldersInfoService.getCallTimes(id)
         if (response.isSuccessful) {
-            response.body() ?: throw Exception("Response body is null")
+            response.body() ?: error("Response body is null")
         } else {
-            throw Exception("Error ${response.code}")
+            error("Error ${response.code}")
         }
     }
 }
