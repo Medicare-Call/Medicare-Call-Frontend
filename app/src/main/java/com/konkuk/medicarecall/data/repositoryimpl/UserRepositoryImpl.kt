@@ -6,10 +6,11 @@ import com.konkuk.medicarecall.data.api.member.SettingService
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(
+@Single
+class UserRepositoryImpl(
     private val settingService: SettingService,
     private val authService: AuthService,
     private val tokenStore: DataStoreRepository,

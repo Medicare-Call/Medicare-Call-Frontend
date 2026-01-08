@@ -20,132 +20,107 @@ import com.konkuk.medicarecall.data.api.member.MemberRegisterService
 import com.konkuk.medicarecall.data.api.member.SettingService
 import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.api.payments.NaverPayService
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 import retrofit2.Retrofit
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
-object ApiModule {
+class ApiModule {
 
-    @Provides
-    @Singleton
-    fun provideRefreshService(@Named("AuthRetrofit") retrofit: Retrofit): RefreshService =
+    @Single
+    fun refreshService(@AuthRetrofit retrofit: Retrofit): RefreshService =
         retrofit.create(RefreshService::class.java)
 
-    @Provides
-    @Singleton
-    fun provideAuthService(retrofit: Retrofit): AuthService =
+    @Single
+    fun authService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 
-    @Provides
-    @Singleton
-    fun provideEldersInfoService(retrofit: Retrofit): EldersInfoService {
+    @Single
+    fun eldersInfoService(retrofit: Retrofit): EldersInfoService {
         return retrofit.create(EldersInfoService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideMemberRegisterService(retrofit: Retrofit): MemberRegisterService {
+    @Single
+    fun memberRegisterService(retrofit: Retrofit): MemberRegisterService {
         return retrofit.create(MemberRegisterService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideElderRegisterService(retrofit: Retrofit): ElderRegisterService {
         return retrofit.create(ElderRegisterService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideNoticeService(retrofit: Retrofit): NoticeService {
         return retrofit.create(NoticeService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideSetCallService(retrofit: Retrofit): SetCallService {
         return retrofit.create(SetCallService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideSubscribeService(retrofit: Retrofit): SubscribeService {
         return retrofit.create(SubscribeService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideSettingService(retrofit: Retrofit): SettingService {
         return retrofit.create(SettingService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideNaverPayService(retrofit: Retrofit): NaverPayService {
         return retrofit.create(NaverPayService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideHomeService(retrofit: Retrofit): HomeService {
         return retrofit.create(HomeService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideGlucoseService(retrofit: Retrofit): GlucoseService {
         return retrofit.create(GlucoseService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideMealService(retrofit: Retrofit): MealService {
         return retrofit.create(MealService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideMedicineService(retrofit: Retrofit): MedicineService {
         return retrofit.create(MedicineService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideSleepService(retrofit: Retrofit): SleepService {
         return retrofit.create(SleepService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideHealthService(retrofit: Retrofit): HealthService {
         return retrofit.create(HealthService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideMentalService(retrofit: Retrofit): MentalService {
         return retrofit.create(MentalService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideStatisticsService(retrofit: Retrofit): StatisticsService {
         return retrofit.create(StatisticsService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideFcmValidationService(retrofit: Retrofit): FcmValidationService {
         return retrofit.create(FcmValidationService::class.java)
     }
 
-    @Provides
-    @Singleton
+    @Single
     fun provideFcmUpdateService(retrofit: Retrofit): FcmUpdateService {
         return retrofit.create(FcmUpdateService::class.java)
     }

@@ -9,20 +9,18 @@ import com.konkuk.medicarecall.data.api.fcm.FcmValidationService
 import com.konkuk.medicarecall.data.model.FcmToken
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import com.konkuk.medicarecall.data.util.FcmTokenSerializer
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.koin.core.annotation.Single
 
 val Context.fcmDataStore by dataStore(
     fileName = "fcm_tokens",
     serializer = FcmTokenSerializer,
 )
 
-@Singleton
-class FcmRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+@Single
+class FcmRepositoryImpl(
+    private val context: Context,
     private val fcmValidationService: FcmValidationService,
     private val fcmUpdateService: FcmUpdateService,
 ) : FcmRepository {
