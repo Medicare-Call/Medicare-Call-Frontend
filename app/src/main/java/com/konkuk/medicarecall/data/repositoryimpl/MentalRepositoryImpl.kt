@@ -4,10 +4,12 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.MentalService
 import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.LocalDate
 
+@Single
 class MentalRepositoryImpl(
     private val mentalService: MentalService,
 ) : MentalRepository {

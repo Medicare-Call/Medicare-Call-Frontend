@@ -8,7 +8,10 @@ import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import org.koin.core.annotation.Single
+import retrofit2.HttpException
 
+@Single
 class EldersHealthInfoRepositoryImpl(
     private val elderInfoService: EldersInfoService,
     private val elderRegisterService: ElderRegisterService,
@@ -31,11 +34,12 @@ class EldersHealthInfoRepositoryImpl(
             Log.d("Cache", "Fetching new health info from server")
             val response = elderInfoService.getElderHealthInfo()
             if (response.isSuccessful) {
-                val body = response.body() ?: error("Response body is null(eldersHealthInfo)")
-                cachedHealthInfo = body
+                val body = response.body()
+                    ?: error("Response body is null(eldersHealthInfo)")
+                cachedHealthInfo = body // 캐시에 저장
                 body
             } else {
-                error("Failed to fetch health info: ${response.code}")
+                throw HttpException(response)
             }
         }
     }
@@ -45,26 +49,33 @@ class EldersHealthInfoRepositoryImpl(
     ): Result<Unit> =
         runCatching {
             val medicationSchedule = elderInfo.medications.toMedicationSchedules()
-            val elderRequest = ElderHealthRegisterRequestDto(
+            val elder = ElderHealthRegisterRequestDto(
                 diseaseNames = elderInfo.diseases,
                 medicationSchedules = medicationSchedule,
                 notes = elderInfo.notes,
             )
             val response = elderRegisterService.postElderHealthInfo(
                 elderInfo.elderId,
-                elderRequest,
+                elder,
             )
             if (response.isSuccessful) {
                 refresh()
-                Log.d("EldersHealthInfoRepository", "Update success: ${elderInfo.elderId}")
+                Log.d(
+                    "EldersHealthInfoRepository",
+                    "Health info updated successfully for elderId: ${elderInfo.elderId}",
+                )
             } else {
-                val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-                Log.e("EldersHealthInfoRepository", "Update failed: ${response.code} - $errorBody")
-                error("Update failed with code ${response.code}")
+                val errorBody =
+                    response.errorBody()?.string() ?: "Unknown error(updating health info)"
+                Log.e(
+                    "EldersHealthInfoRepository",
+                    "Failed to update health info: ${response.code()} - $errorBody",
+                )
+                throw HttpException(response)
             }
         }
 
-    private fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<MedicationSchedule> {
+    fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<MedicationSchedule> {
         val timesByMed = linkedMapOf<String, MutableSet<MedicationTimeType>>()
         for ((time, meds) in this) {
             for (med in meds) {

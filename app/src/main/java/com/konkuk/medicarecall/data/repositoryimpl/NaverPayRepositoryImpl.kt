@@ -4,10 +4,11 @@ import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class NaverPayRepositoryImpl @Inject constructor(
+@Single
+class NaverPayRepositoryImpl(
     private val naverPayService: NaverPayService,
 ) : NaverPayRepository {
 

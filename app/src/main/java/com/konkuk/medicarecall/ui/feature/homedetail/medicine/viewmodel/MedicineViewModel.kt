@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 import retrofit2.HttpException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@KoinViewModel
 class MedicineViewModel(
     private val medicineRepository: MedicineRepository,
 ) : ViewModel() {

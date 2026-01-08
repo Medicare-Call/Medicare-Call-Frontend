@@ -38,9 +38,7 @@ import com.konkuk.medicarecall.ui.navigation.component.MainBottomBar
 import com.konkuk.medicarecall.ui.navigation.component.MainTab
 import com.konkuk.medicarecall.ui.navigation.rememberMainNavigator
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @RequiresApi(Build.VERSION_CODES.Q)

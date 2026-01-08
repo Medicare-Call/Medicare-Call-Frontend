@@ -6,9 +6,11 @@ import com.konkuk.medicarecall.data.api.member.SettingService
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
-import javax.inject.Inject
+import org.koin.core.annotation.Single
+import retrofit2.HttpException
 
-class UserRepositoryImpl @Inject constructor(
+@Single
+class UserRepositoryImpl(
     private val settingService: SettingService,
     private val authService: AuthService,
     private val tokenStore: DataStoreRepository,
@@ -18,8 +20,8 @@ class UserRepositoryImpl @Inject constructor(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            error("Error ${response.code}: $errorBody")
+            val errorBody = response.errorBody()?.string() ?: "Unknown error"
+            throw HttpException(response)
         }
     }
 
@@ -29,7 +31,7 @@ class UserRepositoryImpl @Inject constructor(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            error("Update failed with code ${response.code}")
+            throw HttpException(response)
         }
     }
 
@@ -38,11 +40,12 @@ class UserRepositoryImpl @Inject constructor(
             val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
             val response = authService.logout("Bearer $refresh")
             if (!response.isSuccessful) {
-                val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-                error("Logout failed: ${response.code} - $errorBody")
+                val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                throw HttpException(response)
             }
             Unit
         }
+        // 성공/실패와 무관하게 로컬 토큰 제거(보안/UX 측면에서 권장)
         tokenStore.clearTokens()
         return result
     }

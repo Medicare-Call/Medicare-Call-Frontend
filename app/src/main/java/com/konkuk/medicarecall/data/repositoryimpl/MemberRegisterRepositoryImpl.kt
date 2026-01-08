@@ -5,10 +5,11 @@ import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.ui.type.GenderType
+import org.koin.core.annotation.Single
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class MemberRegisterRepositoryImpl @Inject constructor(
+@Single
+class MemberRegisterRepositoryImpl(
     private val memberRegisterService: MemberRegisterService,
 ) : MemberRegisterRepository {
 

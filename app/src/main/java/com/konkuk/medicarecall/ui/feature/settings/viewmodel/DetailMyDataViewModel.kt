@@ -8,6 +8,7 @@ import com.konkuk.medicarecall.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import kotlin.coroutines.cancellation.CancellationException
+
 @KoinViewModel
 class DetailMyDataViewModel(
     private val userRepository: UserRepository,

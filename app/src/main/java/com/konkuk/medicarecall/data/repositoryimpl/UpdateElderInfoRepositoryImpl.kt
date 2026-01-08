@@ -4,7 +4,10 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
+import org.koin.core.annotation.Single
+import retrofit2.HttpException
 
+@Single
 class UpdateElderInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
 ) : UpdateElderInfoRepository {
@@ -12,20 +15,20 @@ class UpdateElderInfoRepositoryImpl(
         runCatching {
             val response = eldersInfoService.updateElder(id, request)
             if (response.isSuccessful) {
-                Unit
+                response.body() ?: error("Response body is null")
             } else {
-                error("Update failed with code ${response.code}")
+                throw HttpException(response)
             }
         }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
         val response = eldersInfoService.deleteElderSettings(id)
         if (response.isSuccessful) {
-            Unit
+            response.body() ?: error("Response body is null")
         } else {
-            val body = response.errorBody()?.toString().orEmpty()
-            Log.e("DeleteElder", "HTTP ${response.code} body=$body")
-            error("Delete failed: ${response.code}")
+            val body = response.errorBody()?.string().orEmpty()
+            Log.e("DeleteElder", "HTTP ${response.code()} body=$body")
+            throw HttpException(response)
         }
     }
 }
