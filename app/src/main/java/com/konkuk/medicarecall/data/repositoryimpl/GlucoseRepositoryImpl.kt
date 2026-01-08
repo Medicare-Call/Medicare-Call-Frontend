@@ -4,7 +4,6 @@ import com.konkuk.medicarecall.data.api.elders.GlucoseService
 import com.konkuk.medicarecall.data.dto.response.GlucoseResponseDto
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class GlucoseRepositoryImpl(
@@ -16,12 +15,10 @@ class GlucoseRepositoryImpl(
         type: String,
     ): Result<GlucoseResponseDto> =
         runCatching {
-            val response = glucoseService.getGlucoseGraph(elderId, counter, type)
-            if (response.isSuccessful) {
-                response.body() ?: error("Response body is null")
-            } else {
-//                val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                throw HttpException(response)
-            }
+            glucoseService.getGlucoseGraph(
+                elderId = elderId,
+                counter = counter,
+                type = type,
+            )
         }
 }
