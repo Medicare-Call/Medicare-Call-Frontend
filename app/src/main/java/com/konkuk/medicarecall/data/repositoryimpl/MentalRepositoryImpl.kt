@@ -15,7 +15,6 @@ class MentalRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): MentalUiState {
-
         val response = mentalService.getDailyMental(
             elderId,
             date.toString(),
@@ -37,4 +36,3 @@ class MentalRepositoryImpl(
         }
     }
 }
-
