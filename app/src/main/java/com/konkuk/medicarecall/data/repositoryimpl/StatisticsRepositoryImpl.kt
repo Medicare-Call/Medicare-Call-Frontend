@@ -22,14 +22,17 @@ class StatisticsRepositoryImpl(
 
     override suspend fun getStatistics(elderId: Int, startDate: String): StatisticsResponseDto {
         val response = statisticsService.getStatistics(elderId = elderId, startDate = startDate)
+
         return if (response.isSuccessful) {
-            response.body() ?: throw Exception("Statistics body is null")
-        } else if (response.code == 404) {
-            // 404 에러일 경우 기록되지 않은 통계 DTO 생성 로직 실행
-            createUnrecordedStatisticsDto(elderId)
+            // throw IllegalStateException 대신 error() 사용
+            response.body() ?: error("Statistics response body is null")
         } else {
-            // 그 외의 에러 처리
-            throw Exception("Failed to fetch statistics: ${response.code}")
+            if (response.code == 404) {
+                createUnrecordedStatisticsDto(elderId)
+            } else {
+                // throw IllegalStateException 대신 error() 사용
+                error("Failed to fetch statistics with status code: ${response.code}")
+            }
         }
     }
 
