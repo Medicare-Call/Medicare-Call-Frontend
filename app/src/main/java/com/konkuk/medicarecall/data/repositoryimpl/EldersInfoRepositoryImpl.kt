@@ -11,7 +11,6 @@ import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
-import retrofit2.HttpException
 
 class EldersInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
@@ -19,21 +18,18 @@ class EldersInfoRepositoryImpl(
     override suspend fun getElders(): Result<List<EldersInfoResponseDto>> = runCatching {
         val response = eldersInfoService.getElders()
         if (response.isSuccessful) {
-            response.body()
-                ?: error("Response body is null(eldersPersonalInfo)")
+            response.body() ?: throw Exception("Response body is null(eldersPersonalInfo)")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error(eldersPersonalInfo)"
-            throw HttpException(response)
+            throw Exception("Error ${response.code}: ${response.errorBody()}")
         }
     }
 
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> = runCatching {
         val response = eldersInfoService.getSubscriptions()
         if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
+            response.body() ?: throw Exception("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            throw Exception("Error ${response.code}: ${response.errorBody()}")
         }
     }
 
@@ -53,29 +49,27 @@ class EldersInfoRepositoryImpl(
             ),
         )
         if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
+            Unit
         } else {
-            throw HttpException(response)
+            throw Exception("Error ${response.code}")
         }
     }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
         val response = eldersInfoService.deleteElderSettings(id)
         if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
+            Unit
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            throw Exception("Error ${response.code}")
         }
     }
 
     override suspend fun getCareCallTimes(id: Int): Result<CallTimeResponseDto> = runCatching {
         val response = eldersInfoService.getCallTimes(id)
         if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
+            response.body() ?: throw Exception("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            throw Exception("Error ${response.code}")
         }
     }
 }

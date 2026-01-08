@@ -8,7 +8,6 @@ import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
-import retrofit2.HttpException
 
 class EldersHealthInfoRepositoryImpl(
     private val elderInfoService: EldersInfoService,
@@ -37,7 +36,7 @@ class EldersHealthInfoRepositoryImpl(
                 cachedHealthInfo = body // 캐시에 저장
                 body
             } else {
-                throw HttpException(response)
+                throw Exception("Failed to fetch health info: ${response.code}")
             }
         }
     }
@@ -63,13 +62,12 @@ class EldersHealthInfoRepositoryImpl(
                     "Health info updated successfully for elderId: ${elderInfo.elderId}",
                 )
             } else {
-                val errorBody =
-                    response.errorBody()?.string() ?: "Unknown error(updating health info)"
+                val errorBody = response.errorBody()?.toString() ?: "Unknown error"
                 Log.e(
                     "EldersHealthInfoRepository",
-                    "Failed to update health info: ${response.code()} - $errorBody",
+                    "Failed to update health info: ${response.code} - $errorBody",
                 )
-                throw HttpException(response)
+                throw Exception("Update failed with code ${response.code}")
             }
         }
 

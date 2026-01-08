@@ -4,7 +4,6 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
-import retrofit2.HttpException
 
 class UpdateElderInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
@@ -13,20 +12,20 @@ class UpdateElderInfoRepositoryImpl(
         runCatching {
             val response = eldersInfoService.updateElder(id, request)
             if (response.isSuccessful) {
-                response.body() ?: error("Response body is null")
+                Unit
             } else {
-                throw HttpException(response)
+                throw Exception("Update failed with code ${response.code}")
             }
         }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
         val response = eldersInfoService.deleteElderSettings(id)
         if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
+            Unit
         } else {
-            val body = response.errorBody()?.string().orEmpty()
-            Log.e("DeleteElder", "HTTP ${response.code()} body=$body")
-            throw HttpException(response)
+            val body = response.errorBody()?.toString().orEmpty()
+            Log.e("DeleteElder", "HTTP ${response.code} body=$body")
+            throw Exception("Delete failed: ${response.code}")
         }
     }
 }
