@@ -68,53 +68,48 @@ class MedicineRepositoryImpl(
 
         return runCatching { medicineService.getDailyMedication(elderId, date.toString()) }
             .fold(
-                onSuccess = { res ->
-                    if (res.isSuccessful) {
-                        val dto = res.body()
-                        if (dto == null || dto.medications.isEmpty()) {
-                            // 성공이지만 자료 없음 → 스케줄로 대체
-                            return@fold if (grayTemplate.isNotEmpty()) grayTemplate else emptyList()
-                        }
+                onSuccess = { dto ->
+                    // 기록은 성공했지만 데이터가 비어 있는 경우
+                    if (dto.medications.isEmpty()) {
+                        return@fold grayTemplate.ifEmpty { emptyList() }
+                    }
 
-                        // --- 순서 정렬 로직 시작 ---
+                    // --- 순서 정렬 로직 시작 ---
 
-                        val correctOrder = grayTemplate.map { it.medicineName }
+                    val correctOrder = grayTemplate.map { it.medicineName }
 
-                        val sortedMedications = dto.medications.sortedBy { medDto ->
-                            correctOrder.indexOf(medDto.type)
-                                .let { if (it == -1) Int.MAX_VALUE else it }
-                        }
+                    val sortedMedications = dto.medications.sortedBy { medDto ->
+                        correctOrder.indexOf(medDto.type)
+                            .let { if (it == -1) Int.MAX_VALUE else it }
+                    }
 
-                        val order = listOf("MORNING", "LUNCH", "DINNER")
-                        val kor = mapOf("MORNING" to "아침", "LUNCH" to "점심", "DINNER" to "저녁")
+                    val order = listOf("MORNING", "LUNCH", "DINNER")
+                    val kor = mapOf("MORNING" to "아침", "LUNCH" to "점심", "DINNER" to "저녁")
 
-                        return@fold sortedMedications.map { m ->
-                            val mapped = order.mapNotNull { slot ->
-                                m.times.find { it.time == slot }?.let { t ->
-                                    DoseStatusItem(
-                                        time = kor[slot] ?: slot,
-                                        doseStatus = when (t.taken) {
-                                            true -> DoseStatus.TAKEN
-                                            false -> DoseStatus.SKIPPED
-                                            null -> DoseStatus.NOT_RECORDED
-                                        },
-                                    )
-                                }
+                    sortedMedications.map { m ->
+                        val mapped = order.mapNotNull { slot ->
+                            m.times.find { it.time == slot }?.let { t ->
+                                DoseStatusItem(
+                                    time = kor[slot] ?: slot,
+                                    doseStatus = when (t.taken) {
+                                        true -> DoseStatus.TAKEN
+                                        false -> DoseStatus.SKIPPED
+                                        null -> DoseStatus.NOT_RECORDED
+                                    },
+                                )
                             }
-                            val padded = if (mapped.size < m.goalCount) {
-                                mapped + List(m.goalCount - mapped.size) {
-                                    DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
-                                }
-                            } else mapped.take(m.goalCount)
-
-                            MedicineUiState(
-                                medicineName = m.type,
-                                todayRequiredCount = m.goalCount,
-                                doseStatusList = padded,
-                            )
                         }
-                    } else {
-                        grayTemplate.ifEmpty { emptyList() }
+                        val padded = if (mapped.size < m.goalCount) {
+                            mapped + List(m.goalCount - mapped.size) {
+                                DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
+                            }
+                        } else mapped.take(m.goalCount)
+
+                        MedicineUiState(
+                            medicineName = m.type,
+                            todayRequiredCount = m.goalCount,
+                            doseStatusList = padded,
+                        )
                     }
                 },
                 onFailure = {
