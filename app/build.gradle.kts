@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.serialization") version "2.2.20"
     alias(libs.plugins.detekt)
     alias(libs.plugins.google.services)
+    id("de.jensklingenberg.ktorfit") version "2.7.1"
 }
 
 detekt {

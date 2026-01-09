@@ -15,13 +15,14 @@ class NoticeRepositoryImpl(
         return runCatching {
             val response = noticeService.getNotices()
             Log.d("NoticeRepository", "응답 수신됨: isSuccessful = ${response.isSuccessful}")
-            Log.d("NoticeRepository", "공지사항 응답 코드: ${response.code()}")
+            Log.d("NoticeRepository", "공지사항 응답 코드: ${response.code}")
+
             if (response.isSuccessful) {
-                val body = response.body() ?: throw NullPointerException("Response body is null")
+                val body = response.body() ?: error("Response body is null")
                 Log.d("NoticeRepository", "응답 바디: ${body.size}개")
                 body
             } else {
-                val error = response.errorBody()?.string()
+                val error = response.errorBody()?.toString()
                 Log.e("NoticeRepository", "응답 실패: $error")
                 error("Error fetching notices: $error")
             }
