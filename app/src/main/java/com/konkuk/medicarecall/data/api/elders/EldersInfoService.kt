@@ -12,7 +12,6 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 
-
 interface EldersInfoService {
     @GET("elders")
     suspend fun getElders(): Response<List<EldersInfoResponseDto>>

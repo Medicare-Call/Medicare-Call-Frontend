@@ -5,8 +5,6 @@ import com.konkuk.medicarecall.data.api.elders.SleepService
 import com.konkuk.medicarecall.data.repository.SleepRepository
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
-import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -34,29 +32,41 @@ class SleepRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): SleepUiState {
-        return try {
-            val response = sleepService.getDailySleep(elderId, date.toString())
+        val response = sleepService.getDailySleep(
+            elderId,
+            date.toString(),
+        )
+
+        return if (response.isSuccessful) {
+            val body = response.body()
+                ?: error("Sleep response body is null")
 
             // 서버 응답의 모든 값이 유효한지 확인
-            if (response.totalSleep?.hours != null && response.totalSleep.minutes != null && !response.sleepTime.isNullOrBlank() && !response.wakeTime.isNullOrBlank()) {
+            if (
+                body.totalSleep?.hours != null &&
+                body.totalSleep.minutes != null &&
+                !body.sleepTime.isNullOrBlank() &&
+                !body.wakeTime.isNullOrBlank()
+            ) {
                 SleepUiState(
-                    date = response.date,
-                    totalSleepHours = response.totalSleep.hours,
-                    totalSleepMinutes = response.totalSleep.minutes,
-                    bedTime = formatTime(response.sleepTime),
-                    wakeUpTime = formatTime(response.wakeTime),
+                    date = body.date,
+                    totalSleepHours = body.totalSleep.hours,
+                    totalSleepMinutes = body.totalSleep.minutes,
+                    bedTime = formatTime(body.sleepTime),
+                    wakeUpTime = formatTime(body.wakeTime),
                     isRecorded = true,
                 )
             } else {
                 // 데이터 미기록 상태
-                SleepUiState.Companion.EMPTY.copy(date = response.date)
+                SleepUiState.EMPTY.copy(date = body.date)
             }
-        } catch (e: HttpException) {
-            Log.w("SleepRepository", "HTTP error fetching sleep data: ${e.code()}", e)
-            SleepUiState.Companion.EMPTY.copy(date = date.toString())
-        } catch (e: IOException) {
-            Log.w("SleepRepository", "Network error fetching sleep data", e)
-            SleepUiState.Companion.EMPTY.copy(date = date.toString())
+        } else {
+            if (response.code == 404) {
+                // 미기록
+                SleepUiState.EMPTY.copy(date = date.toString())
+            } else {
+                error("Failed to fetch sleep data: ${response.code}")
+            }
         }
     }
 }

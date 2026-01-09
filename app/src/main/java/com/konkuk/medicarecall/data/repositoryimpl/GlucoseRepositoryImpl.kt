@@ -4,7 +4,6 @@ import com.konkuk.medicarecall.data.api.elders.GlucoseService
 import com.konkuk.medicarecall.data.dto.response.GlucoseResponseDto
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class GlucoseRepositoryImpl(
@@ -21,7 +20,7 @@ class GlucoseRepositoryImpl(
                 response.body() ?: error("Response body is null")
             } else {
 //                val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                throw HttpException(response)
+                error("Failed to fetch glucose graph: ${response.code}")
             }
         }
 }

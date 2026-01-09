@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.google.services)
     id("de.jensklingenberg.ktorfit") version "2.7.1"
-
 }
 
 detekt {
@@ -104,6 +103,17 @@ dependencies {
 //    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 //    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 //    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    // Ktorfit
+    implementation(libs.ktorfit.lib)
+    ksp(libs.ktorfit.ksp)
+    implementation("de.jensklingenberg.ktorfit:ktorfit-converters-response:2.7.1")
 
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")

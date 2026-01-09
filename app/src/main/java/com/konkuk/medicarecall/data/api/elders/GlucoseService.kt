@@ -1,10 +1,10 @@
 package com.konkuk.medicarecall.data.api.elders
 
 import com.konkuk.medicarecall.data.dto.response.GlucoseResponseDto
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import de.jensklingenberg.ktorfit.Response
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Path
+import de.jensklingenberg.ktorfit.http.Query
 
 interface GlucoseService {
 
