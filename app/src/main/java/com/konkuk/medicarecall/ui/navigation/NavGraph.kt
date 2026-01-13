@@ -15,12 +15,7 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetailScreen
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.homeDetailNavGraph
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
@@ -116,59 +111,10 @@ fun NavGraph(
             navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
         )
 
-        // 홈 상세 화면_식사 화면
-        composable<Route.MealDetail> {
-            val args = it.toRoute<Route.MealDetail>()
-            MealDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_복용 화면
-        composable<Route.MedicineDetail> {
-            val args = it.toRoute<Route.MedicineDetail>()
-            MedicineDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_수면 화면
-        composable<Route.SleepDetail> {
-            val args = it.toRoute<Route.SleepDetail>()
-            SleepDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_건강 징후 화면
-        composable<Route.StateHealthDetail> {
-            val args = it.toRoute<Route.StateHealthDetail>()
-            StateHealthDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_심리 상태 화면
-        composable<Route.StateMentalDetail> {
-            val args = it.toRoute<Route.StateMentalDetail>()
-            StateMentalDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_혈당 화면
-        composable<Route.GlucoseDetail> {
-            val args = it.toRoute<Route.GlucoseDetail>()
-            GlucoseDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
+        // 홈 상세 네비게이션
+        homeDetailNavGraph(
+            popBackStack = { navController.popBackStack() },
+        )
 
         // 통계
         composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
