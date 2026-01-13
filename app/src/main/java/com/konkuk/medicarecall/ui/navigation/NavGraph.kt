@@ -16,6 +16,7 @@ import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.homeDetailNavGraph
+import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
@@ -42,7 +43,6 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
-import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
 import kotlin.reflect.typeOf
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
@@ -116,20 +116,11 @@ fun NavGraph(
             popBackStack = { navController.popBackStack() },
         )
 
-        // 통계
-        composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
-            StatisticsScreen(
-                navController = navController,
-                navigateToAlarm = { navController.navigate(Route.Alarm) },
-            )
-        }
-
-//        statisticsNavGraph(
-//            navController = navController,
-//            getBackStackHomeViewModel = { backStackEntry ->
-//                backStackEntry.sharedViewModel<HomeViewModel, MainTabRoute.Home>(navController)
-//            },
-//        )
+        // 통계 네비게이션
+        statisticsNavGraph(
+            navController = navController,
+            navigateToAlarm = { navController.navigate(Route.Alarm) },
+        )
 
         // 설정
         composable<MainTabRoute.Settings> {
