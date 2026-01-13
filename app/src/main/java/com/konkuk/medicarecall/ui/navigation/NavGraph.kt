@@ -7,20 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.homeDetailNavGraph
-import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
-import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
 import com.konkuk.medicarecall.ui.feature.login.navigation.loginNavGraph
+import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
-import kotlin.reflect.typeOf
+import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
@@ -63,7 +58,7 @@ fun NavGraph(
 
         // 알림 네비게이션
         alarmNavGraph(
-            popBackStack = { navController.popBackStack() },
+            popBackStack = navigator::popBackStack,
         )
 
         // 홈
@@ -88,68 +83,51 @@ fun NavGraph(
 
         // 홈 상세 네비게이션
         homeDetailNavGraph(
-            popBackStack = { navController.popBackStack() },
+            popBackStack = navigator::popBackStack,
         )
 
         // 통계 네비게이션
         statisticsNavGraph(
             navController = navController,
-            navigateToAlarm = { navController.navigate(Route.Alarm) },
+            navigateToAlarm = navigator::navigateToAlarm,
+            getBackStackHomeViewModel = { backStackEntry -> backStackEntry.sharedViewModel<HomeViewModel, MainTabRoute.Home>(navController) },
         )
 
         // 설정 네비게이션
         settingNavGraph(
-            popBackStack = { navController.popBackStack() },
-            navigateToElderPersonalInfo = { navController.navigate(Route.ElderPersonalInfo) },
-            navigateToElderPersonalDetail = { elderInfo -> navController.navigate(Route.ElderPersonalDetail(elderInfo)) },
-            navigateToElderHealthInfo = { navController.navigate(Route.ElderHealthInfo) },
-            navigateToHealthDetail = { healthInfo -> navController.navigate(Route.ElderHealthDetail(healthInfo)) },
-            navigateToNotificationSetting = { myInfo -> navController.navigate(Route.NotificationSetting(myInfo)) },
-            navigateToSubscribeInfo = { navController.navigate(Route.SubscribeInfo) },
-            navigateToSubscribeDetail = { subscription -> navController.navigate(Route.SubscribeDetail(subscription)) },
-            navigateToNotice = { navController.navigate(Route.Notice) },
-            navigateToNoticeDetail = { notice -> navController.navigate(Route.NoticeDetail(notice)) },
-            navigateToServiceCenter = { navController.navigate(Route.ServiceCenter) },
-            navigateToUserInfo = { navController.navigate(Route.UserInfo) },
-            navigateToUserInfoSetting = { myInfo -> navController.navigate(Route.UserInfoSetting(myInfo)) },
-            navigateToLoginAfterLogout = {
-                navController.navigate(Route.LoginStart) {
-                    popUpTo(MainTabRoute.Home) { inclusive = true }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            },
+            popBackStack = navigator::popBackStack,
+            navigateToElderPersonalInfo = navigator::navigateToElderPersonalInfo,
+            navigateToElderPersonalDetail = navigator::navigateToElderPersonalDetail,
+            navigateToElderHealthInfo = navigator::navigateToHealthInfo,
+            navigateToHealthDetail = navigator::navigateToHealthDetail,
+            navigateToNotificationSetting = navigator::navigateToNotificationSetting,
+            navigateToSubscribeInfo = navigator::navigateToSubscribeInfo,
+            navigateToSubscribeDetail = navigator::navigateToSubscribeDetail,
+            navigateToNotice = navigator::navigateToNotice,
+            navigateToNoticeDetail = navigator::navigateToNoticeDetail,
+            navigateToServiceCenter = navigator::navigateToServiceCenter,
+            navigateToUserInfo = navigator::navigateToUserInfo,
+            navigateToUserInfoSetting = navigator::navigateToUserInfoSetting,
+            navigateToLoginAfterLogout = navigator::navigateToLoginAfterLogout,
             navController = navController,
         )
 
         // 로그인 네비게이션
         loginNavGraph(
             navController = navController,
-            popBackStack = { navController.popBackStack() },
+            popBackStack = navigator::popBackStack,
             navigateToMainAfterLogin = { navController.navigateToMainAfterLogin() },
             navigateToHome = { navController.navigateToMainAfterLogin() },
-            navigateToPhone = { navController.navigate(Route.LoginPhone) },
-            navigateToVerification = { navController.navigate(Route.LoginVerification) },
-            navigateToRegisterUserInfo = {
-                navController.navigate(Route.LoginRegisterUserInfo) {
-                    popUpTo(Route.LoginVerification) { inclusive = true }
-                }
-            },
-            navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
-            navigateToRegisterElderHealth = { navController.navigate(Route.LoginRegisterElderHealth) },
+            navigateToPhone = navigator::navigateToLoginPhone,
+            navigateToVerification = navigator::navigateToLoginVerification,
+            navigateToRegisterUserInfo = navigator::navigateToLoginRegisterUserInfo,
+            navigateToRegisterElder = navigator::navigateToLoginRegisterElder,
+            navigateToRegisterElderHealth = navigator::navigateToLoginRegisterElderHealth,
             navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-            navigateToCareCallSettingWithPopUpTo = {
-                navController.navigate(Route.LoginCareCallSetting) {
-                    popUpTo(Route.LoginRegisterElder) { inclusive = true }
-                }
-            },
-            navigateToPurchase = { navController.navigateToMainAfterLogin() },
-            navigateToNaverPayView = { navController.navigate(Route.LoginNaverPayView) },
-            navigateToFinish = {
-                navController.navigate(Route.LoginFinish) {
-                    popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                }
-            },
+            navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
+            navigateToPurchase = navigator::navigateToLoginPurchase,
+            navigateToNaverPayView = navigator::navigateToLoginNaverPayView,
+            navigateToFinish = navigator::navigateToLoginFinish,
         )
     }
 }
