@@ -18,18 +18,7 @@ import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.homeDetailNavGraph
 import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
 import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
-import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.navigation.loginNavGraph
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
 import kotlin.reflect.typeOf
 
@@ -43,8 +32,6 @@ fun NavHostController.navigateToMainAfterLogin() {
 @Composable
 fun NavGraph(
     navigator: MainNavigator,
-    loginViewModel: LoginViewModel,
-    loginElderViewModel: LoginElderViewModel,
     modifier: Modifier = Modifier,
 ) {
     val navController = navigator.navController
@@ -135,145 +122,34 @@ fun NavGraph(
             navController = navController,
         )
 
-        // 로그인 내비게이션
-        composable<Route.LoginStart> {
-            LoginStartScreen(
-                navigateToPhone = { navController.navigate(Route.LoginPhone) },
-                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
-                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigateToMainAfterLogin() },
-                navigateToHome = {
-                    navController.navigateToMainAfterLogin()
-                },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginPhone> {
-            LoginPhoneScreen(
-                onBack = { navController.popBackStack() },
-                navigateToVerification = { navController.navigate(Route.LoginVerification) },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginVerification> {
-            LoginVerificationScreen(
-                onBack = { navController.popBackStack() },
-                navigateToUserInfo = {
-                    navController.navigate(Route.LoginRegisterUserInfo) {
-                        popUpTo(Route.LoginVerification) { inclusive = true }
-                    }
-                },
-                navigateToPhone = { navController.navigate(Route.LoginPhone) },
-                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
-                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigateToMainAfterLogin() },
-                navigateToHome = {
-                    navController.navigateToMainAfterLogin()
-                },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginRegisterUserInfo> {
-            LoginMyInfoScreen(
-                onBack = { navController.popBackStack() },
-                navigateToRegisterElder = {
-                    navController.navigate(Route.LoginRegisterElder) {
-                        popUpTo(Route.LoginStart)
-                    }
-                },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginRegisterElder> {
-            LoginElderScreen(
-                onBack = { navController.popBackStack() },
-                navigateToRegisterElderHealth = {
-                    navController.navigate(Route.LoginRegisterElderHealth)
-                },
-                loginElderViewModel = loginElderViewModel,
-            )
-        }
-        composable<Route.LoginRegisterElderHealth> {
-            LoginElderMedInfoScreen(
-                onBack = { navController.popBackStack() },
-                navigateToCareCallSetting = {
-                    navController.navigate(Route.LoginCareCallSetting) {
-                        popUpTo(Route.LoginRegisterElder) {
-                            inclusive = true
-                        }
-                    }
-                },
-                loginElderViewModel = loginElderViewModel,
-            )
-        }
-
-        composable<Route.LoginCareCallSetting> {
-            CallTimeScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToPayment = {
-                    navController.navigate(Route.LoginFinish) {
-                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable<Route.LoginPurchase> {
-            PaymentScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToNaverPay = {
-                    navController.navigate(Route.LoginNaverPayView)
-                },
-            )
-        }
-
-        composable<Route.LoginNaverPayView> {
-            NaverPayWebViewScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToFinish = {
-                    navController.navigate(Route.LoginFinish) {
-                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable<Route.LoginFinish> {
-            LoginFinishScreen(
-                navigateToMain = {
-                    navController.navigateToMainAfterLogin()
-                },
-            )
-        }
-
-//        loginNavGraph(
-//            popBackStack = navigator::popBackStack,
-//            navigateToHome = navigator::navigateToHome,
-//            navigateToPhone = navigator::navigateToLoginPhone,
-//            navigateToVerification = navigator::navigateToLoginVerification,
-//            navigateTpRegisterUserInfo = navigator::navigateToLoginRegisterUserInfo,
-//            navigateToRegisterElder = navigator::navigateToLoginRegisterElder,
-//            navigateToRegisterElderHealth = navigator::navigateToLoginRegisterElderHealth,
-//            navigateToCareCallSetting = navigator::navigateToLoginCareCallSetting,
-//            navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
-//            navigateToPurchase = navigator::navigateToLoginPurchase,
-//            navigateToNaverPayView = navigator::navigateToLoginNaverPayView,
-//            navigateToFinish = navigator::navigateToLoginFinish,
-//            navigateToMainAfterLogin = navController::navigateToMainAfterLogin,
-//            getBackStackLoginViewModel = { backStackEntry ->
-//                backStackEntry
-//                    .sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
-//            },
-//            getBackStackLoginElderViewModel = { backStackEntry ->
-//                backStackEntry
-//                    .sharedViewModel<LoginElderViewModel, Route.LoginRegisterElder>(navController)
-//            }
-//        )
+        // 로그인 네비게이션
+        loginNavGraph(
+            navController = navController,
+            popBackStack = { navController.popBackStack() },
+            navigateToMainAfterLogin = { navController.navigateToMainAfterLogin() },
+            navigateToHome = { navController.navigateToMainAfterLogin() },
+            navigateToPhone = { navController.navigate(Route.LoginPhone) },
+            navigateToVerification = { navController.navigate(Route.LoginVerification) },
+            navigateToRegisterUserInfo = {
+                navController.navigate(Route.LoginRegisterUserInfo) {
+                    popUpTo(Route.LoginVerification) { inclusive = true }
+                }
+            },
+            navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
+            navigateToRegisterElderHealth = { navController.navigate(Route.LoginRegisterElderHealth) },
+            navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
+            navigateToCareCallSettingWithPopUpTo = {
+                navController.navigate(Route.LoginCareCallSetting) {
+                    popUpTo(Route.LoginRegisterElder) { inclusive = true }
+                }
+            },
+            navigateToPurchase = { navController.navigateToMainAfterLogin() },
+            navigateToNaverPayView = { navController.navigate(Route.LoginNaverPayView) },
+            navigateToFinish = {
+                navController.navigate(Route.LoginFinish) {
+                    popUpTo(Route.LoginNaverPayView) { inclusive = true }
+                }
+            },
+        )
     }
 }
