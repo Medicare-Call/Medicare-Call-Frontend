@@ -40,8 +40,7 @@ class App : Application() {
                 defaultModule,
                 ApiModule().module,
                 NetworkModule().module,
-
-                )
+            )
         }
         createNotificationChannel()
         fetchAndStoreFcmToken()

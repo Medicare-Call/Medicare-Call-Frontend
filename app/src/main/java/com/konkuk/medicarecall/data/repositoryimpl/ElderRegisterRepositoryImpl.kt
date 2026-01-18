@@ -7,6 +7,7 @@ import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.ElderRegisterResponseDto
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
@@ -37,8 +38,7 @@ class ElderRegisterRepositoryImpl(
         if (response.isSuccessful) {
             return response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            throw Exception(errorBody) // Exception Type?
+            throw HttpException(response) // Exception Type?
         }
     }
 
@@ -54,8 +54,7 @@ class ElderRegisterRepositoryImpl(
             ),
         )
         if (!response.isSuccessful) {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            throw Exception(errorBody) // Exception Type?
+            throw HttpException(response) // Exception Type?
         }
     }
 
@@ -77,7 +76,7 @@ class ElderRegisterRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            throw Exception(response.toString()) // Exception Type?
+            throw HttpException(response)
         }
     }
 
@@ -102,7 +101,7 @@ class ElderRegisterRepositoryImpl(
             ),
         )
         if (!response.isSuccessful) {
-            throw Exception(response.toString())
+            throw HttpException(response)
         }
     }
 }

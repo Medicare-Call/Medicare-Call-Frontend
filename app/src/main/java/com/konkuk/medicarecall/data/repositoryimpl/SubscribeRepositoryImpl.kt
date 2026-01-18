@@ -3,6 +3,7 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.SubscribeService
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import org.koin.core.annotation.Single
 
@@ -23,7 +24,7 @@ class SubscribeRepositoryImpl(
             } else {
                 val error = response.errorBody()?.toString()
                 Log.e("SubscribeRepository", "응답 실패: $error")
-                throw Exception(response.toString())
+                throw HttpException(response)
             }
         }.onFailure {
             Log.e("SubscribeRepository", "구독 정보 불러오기 실패", it)

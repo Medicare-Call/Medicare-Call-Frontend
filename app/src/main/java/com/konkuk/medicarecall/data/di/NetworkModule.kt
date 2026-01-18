@@ -66,7 +66,6 @@ class NetworkModule {
                         val accessToken = runBlocking { dataStoreRepository.getAccessToken() }
                         val refreshToken = runBlocking { dataStoreRepository.getRefreshToken() }
 
-
                         require(!refreshToken.isNullOrEmpty())
                         val refreshResponse = runBlocking {
                             refreshService.refreshToken(refreshToken)
@@ -85,13 +84,10 @@ class NetworkModule {
                             val accessToken = runBlocking { dataStoreRepository.getAccessToken() }
                             val refreshToken = runBlocking { dataStoreRepository.getRefreshToken() }
 
-
                             BearerTokens(accessToken ?: "", refreshToken)
                             //      response.request.newBuilder()
                             //          .header("Authorization", "Bearer ${newTokens.accessToken}")
                             //          .build() 대체
-
-
                         } else {
                             // 9. 토큰 갱신 실패 시 (RefreshToken 만료 등), 저장된 토큰 삭제 후 null 반환
                             Log.e(
@@ -106,14 +102,11 @@ class NetworkModule {
                 }
             }
         }
-
-
     }
 
     @Single
     fun ktorfit(client: HttpClient) = Ktorfit
         .Builder().httpClient(client).baseUrl(BuildConfig.BASE_URL).build()
-
 
     @Single
     @AuthKtorfit
