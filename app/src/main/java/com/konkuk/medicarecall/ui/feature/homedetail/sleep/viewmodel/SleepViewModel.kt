@@ -38,7 +38,7 @@ class SleepViewModel(
             } catch (e: Exception) {
                 when (e) {
                     is HttpException -> {
-                        when (e.code) {
+                        when (e.code()) {
                             404 -> {
                                 // 미기록
                                 Log.i(TAG, "No data (404) elderId=$elderId, date=$formatted")
@@ -54,14 +54,14 @@ class SleepViewModel(
                             }
 
                             401, 403 -> {
-                                Log.w(TAG, "Unauthorized (${e.code}) elderId=$elderId")
+                                Log.w(TAG, "Unauthorized (${e.code()}) elderId=$elderId")
                                 _sleepState.value = SleepUiState.Companion.EMPTY
                             }
 
                             else -> {
                                 Log.e(
                                     TAG,
-                                    "API error code=${e.code} elderId=$elderId, date=$formatted",
+                                    "API error code=${e.code()} elderId=$elderId, date=$formatted",
                                     e,
                                 )
                                 _sleepState.value = SleepUiState.Companion.EMPTY

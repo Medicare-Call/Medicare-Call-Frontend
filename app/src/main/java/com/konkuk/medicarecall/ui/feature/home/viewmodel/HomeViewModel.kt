@@ -193,7 +193,7 @@ class HomeViewModel(
                 )
             } catch (e: Exception) {
                 // 기존 로직 유지(404면 완전 폴백)
-                if (e is HttpException && e.code == 404) {
+                if (e is HttpException && e.code() == 404) {
                     val fallbackUiState = createFallbackHomeUiState(elderId)
                     _homeUiState.value = fallbackUiState.copy(isLoading = false)
                 } else {

@@ -42,8 +42,8 @@ class CheckLoginStatusUseCase(
                     .onFailure { exception ->
                         when (exception) {
                             is HttpException -> {
-                                val code = exception.code
-                                val errorBody = exception.response?.errorBody()?.toString()
+                                val code = exception.code()
+                                val errorBody = exception.response()?.errorBody()?.toString()
 
                                 Log.e("httplog", "HTTP 에러 발생 - 코드: $code, 메시지: $errorBody")
 

@@ -47,11 +47,11 @@ class MentalViewModel(
                     Log.i(TAG, "No data (EMPTY) elderId=$elderId, date=$formatted")
                 }
             } catch (e: HttpException) {
-                if (e.code == 404) {
+                if (e.code() == 404) {
                     Log.i(TAG, "No data (404) elderId=$elderId, date=$formatted")
                     _mental.value = MentalUiState.Companion.EMPTY
                 } else {
-                    Log.e(TAG, "API error code=${e.code} elderId=$elderId, date=$formatted", e)
+                    Log.e(TAG, "API error code=${e.code()} elderId=$elderId, date=$formatted", e)
                     _mental.value = MentalUiState.Companion.EMPTY
                 }
             } catch (e: Exception) {

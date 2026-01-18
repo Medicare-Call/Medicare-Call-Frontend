@@ -173,7 +173,7 @@ class StatisticsViewModel(
 
                 Log.e("STATISTICS_DEBUG", "onFailure: 데이터 로딩 실패", e)
 
-                val summaryState = if (e is HttpException && e.code == 404) {
+                val summaryState = if (e is HttpException && e.code() == 404) {
                     // 데이터가 없는 경우(404)는 오류 메시지 없이 빈 상태를 표시합니다.
                     WeeklySummaryUiState.Companion.EMPTY
                 } else {

@@ -283,7 +283,7 @@ class LoginElderViewModel(
                 .onFailure { exception ->
                     when (exception) {
                         is HttpException -> {
-                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code}, ${exception.message}")
+                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message}")
                         }
                     }
                 }
@@ -298,7 +298,7 @@ class LoginElderViewModel(
             .onFailure { exception ->
                 when (exception) {
                     is HttpException -> {
-                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code}, ${exception.message}")
+                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
                     }
                 }
             }
