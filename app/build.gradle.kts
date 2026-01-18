@@ -121,6 +121,12 @@ dependencies {
     // Detekt formatting plugin
     detektPlugins(libs.detekt.formatting)
 
+    // Ktor
+    implementation("io.ktor:ktor-client-auth:3.3.3")
+    implementation("io.ktor:ktor-client-logging:3.3.3")
+    implementation("io.ktor:ktor-client-content-negotiation:3.3.3") // Use latest version
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.3.3")
+
     // Ktorfit
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:2.7.1")
     implementation("de.jensklingenberg.ktorfit:ktorfit-converters-response:2.7.1")

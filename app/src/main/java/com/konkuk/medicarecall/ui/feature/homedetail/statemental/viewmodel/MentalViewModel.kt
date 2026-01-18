@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -47,11 +47,11 @@ class MentalViewModel(
                     Log.i(TAG, "No data (EMPTY) elderId=$elderId, date=$formatted")
                 }
             } catch (e: HttpException) {
-                if (e.code() == 404) {
+                if (e.code == 404) {
                     Log.i(TAG, "No data (404) elderId=$elderId, date=$formatted")
                     _mental.value = MentalUiState.Companion.EMPTY
                 } else {
-                    Log.e(TAG, "API error code=${e.code()} elderId=$elderId, date=$formatted", e)
+                    Log.e(TAG, "API error code=${e.code} elderId=$elderId, date=$formatted", e)
                     _mental.value = MentalUiState.Companion.EMPTY
                 }
             } catch (e: Exception) {

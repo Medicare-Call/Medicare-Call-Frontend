@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -76,12 +76,12 @@ class MedicineViewModel(
             } catch (e: Exception) {
                 when (e) {
                     is HttpException -> {
-                        when (e.code()) {
+                        when (e.code) {
                             404, 400, 401, 403 -> {
-                                val tag = when (e.code()) {
+                                val tag = when (e.code) {
                                     404 -> "No data (404)"
-                                    400 -> "Bad request (400): ${e.message()}"
-                                    401, 403 -> "Unauthorized (${e.code()})"
+                                    400 -> "Bad request (400): ${e.message}"
+                                    401, 403 -> "Unauthorized (${e.code})"
                                     else -> ""
                                 }
                                 Log.w(TAG, "$tag elderId=$elderId, date=$formatted")
@@ -97,7 +97,7 @@ class MedicineViewModel(
                             else -> {
                                 Log.e(
                                     TAG,
-                                    "API error code=${e.code()} elderId=$elderId, date=$formatted",
+                                    "API error code=${e.code} elderId=$elderId, date=$formatted",
                                     e,
                                 )
                                 _state.update {

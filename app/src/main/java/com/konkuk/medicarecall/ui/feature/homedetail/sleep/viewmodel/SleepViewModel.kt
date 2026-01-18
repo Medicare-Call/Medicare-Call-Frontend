@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -38,7 +38,7 @@ class SleepViewModel(
             } catch (e: Exception) {
                 when (e) {
                     is HttpException -> {
-                        when (e.code()) {
+                        when (e.code) {
                             404 -> {
                                 // 미기록
                                 Log.i(TAG, "No data (404) elderId=$elderId, date=$formatted")
@@ -48,20 +48,20 @@ class SleepViewModel(
                             400 -> {
                                 Log.w(
                                     TAG,
-                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}",
+                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message}",
                                 )
                                 _sleepState.value = SleepUiState.Companion.EMPTY
                             }
 
                             401, 403 -> {
-                                Log.w(TAG, "Unauthorized (${e.code()}) elderId=$elderId")
+                                Log.w(TAG, "Unauthorized (${e.code}) elderId=$elderId")
                                 _sleepState.value = SleepUiState.Companion.EMPTY
                             }
 
                             else -> {
                                 Log.e(
                                     TAG,
-                                    "API error code=${e.code()} elderId=$elderId, date=$formatted",
+                                    "API error code=${e.code} elderId=$elderId, date=$formatted",
                                     e,
                                 )
                                 _sleepState.value = SleepUiState.Companion.EMPTY

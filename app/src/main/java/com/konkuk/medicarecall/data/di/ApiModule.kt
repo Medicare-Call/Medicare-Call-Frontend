@@ -48,7 +48,7 @@ import org.koin.core.annotation.Single
 class ApiModule {
 
     @Single
-    fun refreshService(@AuthRetrofit ktorfit: Ktorfit): RefreshService =
+    fun refreshService(@AuthKtorfit ktorfit: Ktorfit): RefreshService =
         ktorfit.createRefreshService()
 
     @Single

@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
@@ -193,7 +193,7 @@ class HomeViewModel(
                 )
             } catch (e: Exception) {
                 // 기존 로직 유지(404면 완전 폴백)
-                if (e is HttpException && e.code() == 404) {
+                if (e is HttpException && e.code == 404) {
                     val fallbackUiState = createFallbackHomeUiState(elderId)
                     _homeUiState.value = fallbackUiState.copy(isLoading = false)
                 } else {

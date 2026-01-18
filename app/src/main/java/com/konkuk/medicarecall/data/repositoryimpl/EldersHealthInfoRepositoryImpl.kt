@@ -6,10 +6,10 @@ import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class EldersHealthInfoRepositoryImpl(
@@ -66,10 +66,10 @@ class EldersHealthInfoRepositoryImpl(
                 )
             } else {
                 val errorBody =
-                    response.errorBody()?.string() ?: "Unknown error(updating health info)"
+                    response.errorBody()?.toString() ?: "Unknown error(updating health info)"
                 Log.e(
                     "EldersHealthInfoRepository",
-                    "Failed to update health info: ${response.code()} - $errorBody",
+                    "Failed to update health info: ${response.code} - $errorBody",
                 )
                 throw HttpException(response)
             }

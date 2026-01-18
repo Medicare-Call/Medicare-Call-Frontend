@@ -19,7 +19,7 @@ class GlucoseRepositoryImpl(
             if (response.isSuccessful) {
                 response.body() ?: error("Response body is null")
             } else {
-//                val errorBody = response.errorBody()?.string() ?: "Unknown error"
+//                val errorBody = response.errorBody()?.toString() ?: "Unknown error"
                 error("Failed to fetch glucose graph: ${response.code}")
             }
         }
