@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,30 +20,30 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @Composable
 fun WeeklyCalendar(
-    calendarUiState: CalendarUiState, // 현재 선택된 연/월/주차 날짜 상태
+    selectedDate: LocalDate,
+    weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit, // 날짜 클릭 시 동작할 콜백
 ) {
     val weekDays = listOf("일", "월", "화", "수", "목", "금", "토") // 요일 표시
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.Companion.fillMaxWidth()) {
         // 요일 (일~토)
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.Companion.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             weekDays.forEach { day ->
                 Box(
-                    modifier = Modifier,
-                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.Companion,
+                    contentAlignment = Alignment.Companion.Center,
                 ) {
                     Text(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .padding(horizontal = 6.5.dp),
                         text = day,
                         style = MediCareCallTheme.typography.R_18,
@@ -52,29 +52,29 @@ fun WeeklyCalendar(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.Companion.height(3.dp))
         // 해당 주 날짜
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.Companion.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            calendarUiState.weekDates.forEach { date ->
+            weekDates.forEach { date ->
 
-                val isSelected = date == calendarUiState.selectedDate
+                val isSelected = date == selectedDate
 
                 Box(
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .size(29.dp)
                         .clip(CircleShape)
-                        .background(if (isSelected) MediCareCallTheme.colors.main else Color.Transparent)
+                        .background(if (isSelected) MediCareCallTheme.colors.main else Color.Companion.Transparent)
                         .clickable { onDateSelected(date) },
-                    contentAlignment = Alignment.Center,
+                    contentAlignment = Alignment.Companion.Center,
                 ) {
                     Text(
-                        modifier = Modifier,
+                        modifier = Modifier.Companion,
                         text = "${date.dayOfMonth}",
                         style = if (isSelected) MediCareCallTheme.typography.SB_18 else MediCareCallTheme.typography.M_17,
-                        color = if (isSelected) Color.White else MediCareCallTheme.colors.gray4,
+                        color = if (isSelected) Color.Companion.White else MediCareCallTheme.colors.gray4,
                     )
                 }
             }
@@ -89,12 +89,8 @@ fun PreviewWeeklyCalendar() {
     val week = (0..6).map { baseDate.plusDays(it.toLong()) }
 
     WeeklyCalendar(
-        calendarUiState = CalendarUiState(
-            currentYear = baseDate.year,
-            currentMonth = baseDate.monthValue,
-            weekDates = week,
-            selectedDate = baseDate.plusDays(2),
-        ),
+        weekDates = week,
+        selectedDate = baseDate.plusDays(2),
         onDateSelected = {},
     )
 }
