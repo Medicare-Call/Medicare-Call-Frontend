@@ -21,11 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
-import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
@@ -38,15 +36,14 @@ import java.time.LocalDate
 fun StateMentalDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    calendarViewModel: CalendarViewModel = koinViewModel(),
     mentalViewModel: MentalViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        calendarViewModel.resetToToday()
+        mentalViewModel.resetToToday()
     }
 
-    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
+    val selectedDate by mentalViewModel.selectedDate.collectAsStateWithLifecycle()
     val mental by mentalViewModel.mental.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
@@ -60,8 +57,8 @@ fun StateMentalDetailScreen(
         onBack = onBack,
         selectedDate = selectedDate,
         mental = mental,
-        weekDates = calendarViewModel.getCurrentWeekDates(),
-        onDateSelected = { calendarViewModel.selectDate(it) },
+        weekDates = mentalViewModel.getCurrentWeekDates(),
+        onDateSelected = { mentalViewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }
@@ -103,12 +100,8 @@ fun StateMentalDetailScreenLayout(
                 )
                 Spacer(Modifier.height(24.dp))
                 WeeklyCalendar(
-                    calendarUiState = CalendarUiState(
-                        currentYear = selectedDate.year,
-                        currentMonth = selectedDate.monthValue,
-                        weekDates = weekDates,
-                        selectedDate = selectedDate,
-                    ),
+                    weekDates = weekDates,
+                    selectedDate = selectedDate,
                     onDateSelected = onDateSelected,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
