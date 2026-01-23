@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -29,7 +29,7 @@ fun DatePickerModal(
     onDismiss: () -> Unit,
 ) {
     val dpColors = DatePickerDefaults.colors(
-        containerColor = Color.White,
+        containerColor = Color.Companion.White,
         // 👇 상속받지 말고 명시적으로 지정
         titleContentColor = MediCareCallTheme.colors.black,
         headlineContentColor = MediCareCallTheme.colors.black,
@@ -40,7 +40,7 @@ fun DatePickerModal(
 
         // 선택/오늘 강조
         selectedDayContainerColor = MediCareCallTheme.colors.main,
-        selectedDayContentColor = Color.White,
+        selectedDayContentColor = Color.Companion.White,
         todayContentColor = MediCareCallTheme.colors.black,
         todayDateBorderColor = MediCareCallTheme.colors.main,
         selectedYearContentColor = MediCareCallTheme.colors.white,
@@ -92,7 +92,7 @@ fun DatePickerModal(
                 ) { Text("취소") }
             },
         ) {
-            Surface(shape = RoundedCornerShape(16.dp), color = Color.White) {
+            Surface(shape = RoundedCornerShape(16.dp), color = Color.Companion.White) {
                 DatePicker(state = datePickerState, colors = dpColors)
             }
         }

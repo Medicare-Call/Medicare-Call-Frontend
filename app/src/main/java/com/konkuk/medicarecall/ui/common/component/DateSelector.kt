@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +34,7 @@ fun DateSelector(
     val month = selectedDate.monthValue
 
     Row(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .fillMaxWidth()
             .clickable(
                 indication = null,
@@ -42,13 +42,13 @@ fun DateSelector(
             ) { showDatePicker = true },
 
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Companion.CenterVertically,
     ) {
         Text(
             text = "${year}년 ${month}월",
             style = MediCareCallTheme.typography.SB_20,
             color = MediCareCallTheme.colors.gray9,
-            modifier = Modifier.padding(end = 4.dp),
+            modifier = Modifier.Companion.padding(end = 4.dp),
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_down_small),
