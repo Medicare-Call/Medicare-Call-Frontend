@@ -47,7 +47,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.ui.common.component.NameBar
@@ -79,7 +78,6 @@ fun HomeScreen(
     navigateToStateHealthDetailScreen: (Int) -> Unit,
     navigateToStateMentalDetailScreen: (Int) -> Unit,
     navigateToGlucoseDetailScreen: (Int) -> Unit,
-    mainBackStackEntry: NavBackStackEntry,
 ) {
     val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
     val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
@@ -92,14 +90,13 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val updatedName by mainBackStackEntry.savedStateHandle
-        .getStateFlow<String?>("ELDER_NAME_UPDATED", null)
-        .collectAsStateWithLifecycle()
+    // 네비게이션 결과
+    val updatedName by homeViewModel.updatedName.collectAsStateWithLifecycle()
 
     LaunchedEffect(updatedName) {
         updatedName?.let {
             homeViewModel.overrideName(it)
-            mainBackStackEntry.savedStateHandle.remove<String>("ELDER_NAME_UPDATED") // 원샷 처리
+            homeViewModel.clearUpdatedName()
         }
     }
 
