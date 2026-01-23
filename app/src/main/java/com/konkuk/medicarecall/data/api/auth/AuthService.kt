@@ -8,7 +8,6 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.POST
 
-
 /** 인증과 관련된 API 모음 (토큰 갱신, 본인인증, 로그아웃) */
 
 interface AuthService {

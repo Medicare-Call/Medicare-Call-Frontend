@@ -20,6 +20,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
@@ -160,4 +161,29 @@ fun List<MedicationSchedule>.toTimeMap(): Map<MedicationTimeType, List<String>> 
         }
     }
     return map.mapValues { it.value.toList() }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HealthDetailScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .systemBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "어르신 건강정보 설정",
+                leftIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "go_back",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black,
+                    )
+                },
+            )
+        }
+    }
 }

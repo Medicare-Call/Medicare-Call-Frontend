@@ -38,6 +38,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -299,5 +300,27 @@ fun LoginMyInfoScreen(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 14.dp),
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginMyInfoScreenPreview() {
+    MediCareCallTheme {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .padding(horizontal = 20.dp)
+                .statusBarsPadding(),
+        ) {
+            Column {
+                Text(
+                    "회원 정보를\n입력해주세요",
+                    style = MediCareCallTheme.typography.B_26,
+                    color = MediCareCallTheme.colors.black,
+                )
+            }
+        }
     }
 }

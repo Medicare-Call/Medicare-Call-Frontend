@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import org.koin.androidx.compose.koinViewModel
@@ -164,5 +165,13 @@ fun PaymentScreen(
                 onClick = { if (isClicked) navigateToNaverPay() },
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PaymentScreenPreview() {
+    MediCareCallTheme {
+        PaymentScreen(onBack = {})
     }
 }

@@ -4,7 +4,6 @@ import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import de.jensklingenberg.ktorfit.Response
 import de.jensklingenberg.ktorfit.http.GET
 
-
 interface NoticeService {
     // 공지사항 조회
     @GET("notices")

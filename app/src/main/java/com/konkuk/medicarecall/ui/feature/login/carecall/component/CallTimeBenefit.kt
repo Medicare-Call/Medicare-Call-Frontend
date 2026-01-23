@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -35,5 +36,17 @@ fun CallTimeBenefit(content: String, modifier: Modifier = Modifier) {
             color = MediCareCallTheme.colors.gray5,
             modifier = modifier.weight(1f),
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CallTimeBenefitPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            CallTimeBenefit(content = "어르신 맞춤형 AI 건강관리")
+            Spacer(Modifier.height(8.dp))
+            CallTimeBenefit(content = "1:1 전담 케어매니저 배정")
+        }
     }
 }
