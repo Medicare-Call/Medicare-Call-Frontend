@@ -29,7 +29,10 @@ class StatisticsViewModel(
     private val repository: StatisticsRepository,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
-
+    // 네비게이션 결과(복약 변경 등)를 ViewModel 책임으로 처리
+    fun onMedsChanged() {
+        refresh()
+    }
     private val _uiState = MutableStateFlow(StatisticsUiState())
     val uiState: StateFlow<StatisticsUiState> = _uiState.asStateFlow()
 
