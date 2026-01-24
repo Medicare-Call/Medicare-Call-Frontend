@@ -7,6 +7,7 @@ import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.ElderRegisterResponseDto
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
@@ -17,7 +18,6 @@ import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.RelationshipType
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class ElderRegisterRepositoryImpl(
@@ -38,8 +38,7 @@ class ElderRegisterRepositoryImpl(
         if (response.isSuccessful) {
             return response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            throw HttpException(response) // Exception Type?
         }
     }
 
@@ -55,8 +54,7 @@ class ElderRegisterRepositoryImpl(
             ),
         )
         if (!response.isSuccessful) {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
-            throw HttpException(response)
+            throw HttpException(response) // Exception Type?
         }
     }
 
