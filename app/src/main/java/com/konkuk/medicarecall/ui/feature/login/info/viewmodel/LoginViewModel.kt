@@ -1,9 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.login.info.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
@@ -39,36 +36,38 @@ class LoginViewModel(
     val events = _events.asSharedFlow()
 
     // 입력 상태값
-    var phoneNumber by mutableStateOf("")
-        private set
-    var verificationCode by mutableStateOf("")
-        private set
-    var name by mutableStateOf("")
-        private set
-    var dateOfBirth by mutableStateOf("")
-        private set
-    var isMale by mutableStateOf(true)
-        private set
+    private val _phoneNumber = MutableStateFlow("")
+    val phoneNumber = _phoneNumber.asStateFlow()
+    private val _verificationCode = MutableStateFlow("")
+    val verificationCode = _verificationCode.asStateFlow()
+    private val _name = MutableStateFlow("")
+    val name = _name.asStateFlow()
+    private val _dateOfBirth = MutableStateFlow("")
+    val dateOfBirth = _dateOfBirth.asStateFlow()
+
+    // 상태값
+    private val _isMale = MutableStateFlow(true)
+    val isMale = _isMale.asStateFlow()
 
     // 상태 변경
     fun onPhoneNumberChanged(new: String) {
-        phoneNumber = new
+        _phoneNumber.value = new
     }
 
     fun onVerificationCodeChanged(new: String) {
-        verificationCode = new
+        _verificationCode.value = new
     }
 
     fun onNameChanged(new: String) {
-        name = new
+        _name.value = new
     }
 
     fun onDOBChanged(new: String) {
-        dateOfBirth = new
+        _dateOfBirth.value = new
     }
 
     fun onGenderChanged(new: Boolean) {
-        isMale = new
+        _isMale.value = new
     }
 
     private val debug = false
