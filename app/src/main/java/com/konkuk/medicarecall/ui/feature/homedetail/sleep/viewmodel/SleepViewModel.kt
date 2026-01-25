@@ -3,12 +3,12 @@ package com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.SleepRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -68,7 +68,7 @@ class SleepViewModel(
                             400 -> {
                                 Log.w(
                                     TAG,
-                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}",
+                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message}",
                                 )
                                 _sleepState.value = SleepUiState.Companion.EMPTY
                             }

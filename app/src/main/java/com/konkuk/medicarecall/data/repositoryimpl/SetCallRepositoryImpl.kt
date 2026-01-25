@@ -3,10 +3,10 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.dto.request.SetCallTimeRequestDto
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class SetCallRepositoryImpl(
@@ -19,8 +19,8 @@ class SetCallRepositoryImpl(
         runCatching {
             val response = service.saveCareCallTimes(elderId, body)
             if (!response.isSuccessful) {
-                Log.e("SetCallRepository", "HTTP ${response.code()} ${response.message()}")
-                Log.e("SetCallRepository", "ErrorBody=${response.errorBody()?.string()}")
+                Log.e("SetCallRepository", "HTTP ${response.code} ${response.message}")
+                Log.e("SetCallRepository", "ErrorBody=${response.errorBody()?.toString()}")
                 throw HttpException(response)
             }
         }

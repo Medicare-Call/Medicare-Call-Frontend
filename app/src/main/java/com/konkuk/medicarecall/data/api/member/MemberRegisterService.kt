@@ -2,10 +2,10 @@ package com.konkuk.medicarecall.data.api.member
 
 import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
+import de.jensklingenberg.ktorfit.Response
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.Header
+import de.jensklingenberg.ktorfit.http.POST
 
 interface MemberRegisterService {
     @POST("members")
