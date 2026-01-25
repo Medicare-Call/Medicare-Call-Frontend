@@ -13,8 +13,6 @@ import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
@@ -48,14 +46,6 @@ fun NavController.navigateToLoginCareCallSetting(navOptions: NavOptions? = null)
     navigate(Route.LoginCareCallSetting, navOptions)
 }
 
-fun NavController.navigateToLoginPurchase() {
-    navigate(Route.LoginPurchase)
-}
-
-fun NavController.navigateToLoginNaverPayView() {
-    navigate(Route.LoginNaverPayView)
-}
-
 fun NavController.navigateToLoginFinish() {
     navigate(Route.LoginFinish)
 }
@@ -72,7 +62,6 @@ fun NavGraphBuilder.loginNavGraph(
     navigateToCareCallSetting: () -> Unit,
     navigateToCareCallSettingWithPopUpTo: () -> Unit,
     navigateToPurchase: () -> Unit,
-    navigateToNaverPayView: () -> Unit,
     navigateToFinish: () -> Unit,
     getBackStackLoginViewModel: @Composable (NavBackStackEntry) -> LoginViewModel,
     getBackStackLoginElderViewModel: @Composable (NavBackStackEntry) -> LoginElderViewModel,
@@ -132,20 +121,6 @@ fun NavGraphBuilder.loginNavGraph(
         CallTimeScreen(
             onBack = popBackStack,
             navigateToPayment = navigateToPurchase,
-        )
-    }
-
-    composable<Route.LoginPurchase> {
-        PaymentScreen(
-            onBack = popBackStack,
-            navigateToNaverPay = navigateToNaverPayView,
-        )
-    }
-
-    composable<Route.LoginNaverPayView> {
-        NaverPayWebViewScreen(
-            onBack = popBackStack,
-            navigateToFinish = navigateToFinish,
         )
     }
 

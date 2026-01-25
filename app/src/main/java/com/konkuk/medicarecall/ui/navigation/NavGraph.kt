@@ -28,8 +28,6 @@ import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
@@ -446,31 +444,7 @@ fun NavGraph(
                 },
                 navigateToPayment = {
                     navController.navigate(Route.LoginFinish) {
-                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable<Route.LoginPurchase> {
-            PaymentScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToNaverPay = {
-                    navController.navigate(Route.LoginNaverPayView)
-                },
-            )
-        }
-
-        composable<Route.LoginNaverPayView> {
-            NaverPayWebViewScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToFinish = {
-                    navController.navigate(Route.LoginFinish) {
-                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
+                        popUpTo(Route.LoginStart) { inclusive = true }
                     }
                 },
             )
