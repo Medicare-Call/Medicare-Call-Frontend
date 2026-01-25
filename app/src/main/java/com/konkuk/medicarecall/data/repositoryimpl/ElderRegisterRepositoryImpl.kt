@@ -7,9 +7,9 @@ import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.ElderRegisterResponseDto
-import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
+import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
@@ -22,10 +22,9 @@ import org.koin.core.annotation.Single
 @Single
 class ElderRegisterRepositoryImpl(
     private val elderRegisterService: ElderRegisterService,
-//    private val elderIdRepository: ElderIdRepository,
 ) : ElderRegisterRepository {
-    private suspend fun postElder(elderData: ElderData): ElderRegisterResponseDto {
-        val response = elderRegisterService.postElder(
+    private suspend fun postElder(elderData: ElderData): ElderRegisterResponseDto =
+        elderRegisterService.postElder(
             ElderRegisterRequestDto(
                 name = elderData.name,
                 birthDate = elderData.birthDate.formatAsDate(),
@@ -34,16 +33,10 @@ class ElderRegisterRepositoryImpl(
                 relationship = RelationshipType.entries.find { it.displayName == elderData.relationship }!!,
                 residenceType = ElderResidenceType.entries.find { it.displayName == elderData.livingType }!!,
             ),
-        )
-        if (response.isSuccessful) {
-            return response.body() ?: error("Response body is null")
-        } else {
-            throw HttpException(response) // Exception Type?
-        }
-    }
+        ).handleResponse()
 
     override suspend fun postElderHealthInfo(id: Int, elderHealthData: ElderHealthData) {
-        val response = elderRegisterService.postElderHealthInfo(
+        elderRegisterService.postElderHealthInfo(
             id,
             ElderHealthRegisterRequestDto(
                 diseaseNames = elderHealthData.diseaseNames,
@@ -52,14 +45,11 @@ class ElderRegisterRepositoryImpl(
                     HealthIssueType.entries.find { it.displayName == notes }!!
                 },
             ),
-        )
-        if (!response.isSuccessful) {
-            throw HttpException(response) // Exception Type?
-        }
+        ).handleResponse()
     }
 
     override suspend fun postElderBulk(elderList: List<ElderData>): Result<ElderBulkRegisterResponseDto> = runCatching {
-        val response = elderRegisterService.postElderBulk(
+        elderRegisterService.postElderBulk(
             ElderBulkRegisterRequestDto(
                 elders = elderList.map { elderData ->
                     ElderBulkRegisterRequestDto.ElderInfo(
@@ -72,16 +62,11 @@ class ElderRegisterRepositoryImpl(
                     )
                 },
             ),
-        )
-        if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
-        } else {
-            throw HttpException(response)
-        }
+        ).handleResponse()
     }
 
     override suspend fun postElderHealthInfoBulk(elderHealthList: List<ElderHealthData>): Result<Unit> = runCatching {
-        val response = elderRegisterService.postElderHealthInfoBulk(
+        elderRegisterService.postElderHealthInfoBulk(
             ElderBulkHealthInfoRequestDto(
                 healthInfos = elderHealthList.map { elderHealthData ->
                     ElderBulkHealthInfoRequestDto.HealthInfo(
@@ -99,9 +84,6 @@ class ElderRegisterRepositoryImpl(
                     )
                 },
             ),
-        )
-        if (!response.isSuccessful) {
-            throw HttpException(response)
-        }
+        ).handleResponse()
     }
 }
