@@ -102,8 +102,8 @@ fun MealDetailScreenLayout(
                 Spacer(Modifier.height(12.dp))
 
                 WeeklyCalendar(
-                        weekDates = weekDates,
-                        selectedDate = selectedDate,
+                    weekDates = weekDates,
+                    selectedDate = selectedDate,
                     onDateSelected = onDateSelected,
                 )
 
