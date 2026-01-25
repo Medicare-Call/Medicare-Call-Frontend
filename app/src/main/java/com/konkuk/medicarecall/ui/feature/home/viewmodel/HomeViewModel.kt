@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 

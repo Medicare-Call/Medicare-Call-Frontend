@@ -12,7 +12,7 @@ import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 
 @Single
 class EldersInfoRepositoryImpl(
@@ -24,7 +24,7 @@ class EldersInfoRepositoryImpl(
             response.body()
                 ?: error("Response body is null(eldersPersonalInfo)")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error(eldersPersonalInfo)"
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error(eldersPersonalInfo)"
             throw HttpException(response)
         }
     }
@@ -34,7 +34,7 @@ class EldersInfoRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
             throw HttpException(response)
         }
     }
@@ -66,7 +66,7 @@ class EldersInfoRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
             throw HttpException(response)
         }
     }
@@ -76,7 +76,7 @@ class EldersInfoRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
             throw HttpException(response)
         }
     }
