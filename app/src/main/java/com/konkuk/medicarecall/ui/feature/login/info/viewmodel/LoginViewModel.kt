@@ -49,6 +49,16 @@ class LoginViewModel(
     private val _isMale = MutableStateFlow(true)
     val isMale = _isMale.asStateFlow()
 
+    // Agreement state
+    private val _showBottomSheet = MutableStateFlow(false)
+    val showBottomSheet = _showBottomSheet.asStateFlow()
+
+    private val _checkedStates = MutableStateFlow(listOf(false, false))
+    val checkedStates = _checkedStates.asStateFlow()
+
+    private val _allAgreeCheckState = MutableStateFlow(false)
+    val allAgreeCheckState = _allAgreeCheckState.asStateFlow()
+
     // 상태 변경
     fun onPhoneNumberChanged(new: String) {
         _phoneNumber.value = new
@@ -68,6 +78,23 @@ class LoginViewModel(
 
     fun onGenderChanged(new: Boolean) {
         _isMale.value = new
+    }
+
+    fun setShowBottomSheet(value: Boolean) {
+        _showBottomSheet.value = value
+    }
+
+    fun setCheckedState(index: Int, value: Boolean) {
+        _checkedStates.value = _checkedStates.value.toMutableList().apply { set(index, value) }
+    }
+
+    fun setAllAgreeCheckState(value: Boolean) {
+        _allAgreeCheckState.value = value
+        _checkedStates.value = List(_checkedStates.value.size) { value }
+    }
+
+    fun updateAllCheckedStates(newStates: List<Boolean>) {
+        _checkedStates.value = newStates
     }
 
     private val debug = false

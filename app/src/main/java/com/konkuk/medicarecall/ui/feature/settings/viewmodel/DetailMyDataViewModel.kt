@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UserRepository
+import com.konkuk.medicarecall.ui.type.GenderType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +17,30 @@ import kotlin.coroutines.cancellation.CancellationException
 class DetailMyDataViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    // Notification state (for SettingAlarmScreen)
+    private val _masterChecked = MutableStateFlow(false)
+    val masterChecked: StateFlow<Boolean> = _masterChecked.asStateFlow()
+
+    private val _completeChecked = MutableStateFlow(false)
+    val completeChecked: StateFlow<Boolean> = _completeChecked.asStateFlow()
+
+    private val _abnormalChecked = MutableStateFlow(false)
+    val abnormalChecked: StateFlow<Boolean> = _abnormalChecked.asStateFlow()
+
+    private val _missedChecked = MutableStateFlow(false)
+    val missedChecked: StateFlow<Boolean> = _missedChecked.asStateFlow()
+
+    // Form state (for MyDetailScreen)
+    private val _isMale = MutableStateFlow(false)
+    val isMale: StateFlow<Boolean> = _isMale.asStateFlow()
+
+    private val _name = MutableStateFlow("")
+    val name: StateFlow<String> = _name.asStateFlow()
+
+    private val _birth = MutableStateFlow("")
+    val birth: StateFlow<String> = _birth.asStateFlow()
+
+    // Async state
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     private val _isUpdateSuccess = MutableStateFlow(false)
@@ -61,5 +86,58 @@ class DetailMyDataViewModel(
     fun resetStatus() {
         _isUpdateSuccess.value = false
         _errorMessage.value = null
+    }
+
+    fun initializeNotificationSettings(myDataInfo: MyInfoResponseDto) {
+        _masterChecked.value = myDataInfo.pushNotification.all == "ON"
+        _completeChecked.value = myDataInfo.pushNotification.carecallCompleted == "ON" || _masterChecked.value
+        _abnormalChecked.value = myDataInfo.pushNotification.healthAlert == "ON" || _masterChecked.value
+        _missedChecked.value = myDataInfo.pushNotification.carecallMissed == "ON" || _masterChecked.value
+    }
+
+    fun setMasterChecked(value: Boolean) {
+        _masterChecked.value = value
+        _completeChecked.value = value
+        _abnormalChecked.value = value
+        _missedChecked.value = value
+    }
+
+    fun setCompleteChecked(value: Boolean) {
+        _completeChecked.value = value
+        if (!value) {
+            _masterChecked.value = false
+        }
+    }
+
+    fun setAbnormalChecked(value: Boolean) {
+        _abnormalChecked.value = value
+        if (!value) {
+            _masterChecked.value = false
+        }
+    }
+
+    fun setMissedChecked(value: Boolean) {
+        _missedChecked.value = value
+        if (!value) {
+            _masterChecked.value = false
+        }
+    }
+
+    fun initializeFormData(myDataInfo: MyInfoResponseDto) {
+        _isMale.value = myDataInfo.gender == GenderType.MALE
+        _name.value = myDataInfo.name
+        _birth.value = myDataInfo.birthDate.replace("-", "")
+    }
+
+    fun updateIsMale(value: Boolean) {
+        _isMale.value = value
+    }
+
+    fun updateName(value: String) {
+        _name.value = value
+    }
+
+    fun updateBirth(value: String) {
+        _birth.value = value
     }
 }

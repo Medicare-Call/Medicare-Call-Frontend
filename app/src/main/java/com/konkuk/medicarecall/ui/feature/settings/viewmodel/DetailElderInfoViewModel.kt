@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
+import com.konkuk.medicarecall.ui.type.ElderResidenceType
+import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.ui.type.RelationshipType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +20,29 @@ import org.koin.android.annotation.KoinViewModel
 class DetailElderInfoViewModel(
     private val eldersInfoRepository: UpdateElderInfoRepository,
 ) : ViewModel() {
+    // UI State
+    private val _isMale = MutableStateFlow(false)
+    val isMale: StateFlow<Boolean> = _isMale.asStateFlow()
+
+    private val _name = MutableStateFlow("")
+    val name: StateFlow<String> = _name.asStateFlow()
+
+    private val _birth = MutableStateFlow("")
+    val birth: StateFlow<String> = _birth.asStateFlow()
+
+    private val _phoneNum = MutableStateFlow("")
+    val phoneNum: StateFlow<String> = _phoneNum.asStateFlow()
+
+    private val _relationship = MutableStateFlow(RelationshipType.ACQUAINTANCE)
+    val relationship: StateFlow<RelationshipType> = _relationship.asStateFlow()
+
+    private val _residenceType = MutableStateFlow(ElderResidenceType.WITH_FAMILY)
+    val residenceType: StateFlow<ElderResidenceType> = _residenceType.asStateFlow()
+
+    private val _showDeleteDialog = MutableStateFlow(false)
+    val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog.asStateFlow()
+
+    // Async State
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
@@ -93,5 +119,44 @@ class DetailElderInfoViewModel(
         _isUpdateSuccess.value = false
         _isDeleteSuccess.value = false
         _errorMessage.value = null
+    }
+
+    fun initializeForm(elderInfo: EldersInfoResponseDto) {
+        _isMale.value = elderInfo.gender == GenderType.MALE
+        _name.value = elderInfo.name
+        _phoneNum.value = elderInfo.phone
+        _relationship.value = elderInfo.relationship
+        _residenceType.value = elderInfo.residenceType
+        // birth는 yyyy-MM-dd 형식을 yyyyMMdd로 변환
+        val birthFormatted = elderInfo.birthDate.replace("-", "")
+        _birth.value = birthFormatted
+    }
+
+    fun updateIsMale(value: Boolean) {
+        _isMale.value = value
+    }
+
+    fun updateName(value: String) {
+        _name.value = value
+    }
+
+    fun updateBirth(value: String) {
+        _birth.value = value
+    }
+
+    fun updatePhoneNum(value: String) {
+        _phoneNum.value = value
+    }
+
+    fun updateRelationship(value: RelationshipType) {
+        _relationship.value = value
+    }
+
+    fun updateResidenceType(value: ElderResidenceType) {
+        _residenceType.value = value
+    }
+
+    fun setShowDeleteDialog(value: Boolean) {
+        _showDeleteDialog.value = value
     }
 }

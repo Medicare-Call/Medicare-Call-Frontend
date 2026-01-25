@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -40,22 +41,18 @@ fun SettingAlarmScreen(
     myDataInfo: MyInfoResponseDto,
     onBack: () -> Unit = {},
 ) {
-    // 1. UI를 위한 로컬 상태를 선언합니다.
-    var masterChecked by remember { mutableStateOf(false) }
-    var completeChecked by remember { mutableStateOf(false) }
-    var abnormalChecked by remember { mutableStateOf(false) }
-    var missedChecked by remember { mutableStateOf(false) }
+    // ViewModel 상태 구독
+    val masterChecked by myDataViewModel.masterChecked.collectAsStateWithLifecycle()
+    val completeChecked by myDataViewModel.completeChecked.collectAsStateWithLifecycle()
+    val abnormalChecked by myDataViewModel.abnormalChecked.collectAsStateWithLifecycle()
+    val missedChecked by myDataViewModel.missedChecked.collectAsStateWithLifecycle()
 
-    // 2. `LaunchedEffect`를 사용해 외부 데이터(myDataInfo)가 바뀔 때마다 로컬 상태를 동기화합니다.
-    //    이렇게 하면 데이터가 변경되었을 때 UI가 즉시 올바르게 반영됩니다.
+    // 초기 데이터 로드
     LaunchedEffect(myDataInfo) {
-        masterChecked = myDataInfo.pushNotification.all == "ON"
-        completeChecked = myDataInfo.pushNotification.carecallCompleted == "ON" || masterChecked
-        abnormalChecked = myDataInfo.pushNotification.healthAlert == "ON" || masterChecked
-        missedChecked = myDataInfo.pushNotification.carecallMissed == "ON" || masterChecked
+        myDataViewModel.initializeNotificationSettings(myDataInfo)
     }
 
-    // 3. 상태를 업데이트하고 ViewModel을 호출하는 함수를 만듭니다. (코드 중복 제거)
+    // 상태를 업데이트하고 ViewModel을 호출하는 함수를 만듭니다. (코드 중복 제거)
     val updateSettings = {
         myDataViewModel.updateUserData(
             userInfo = myDataInfo.copy(
@@ -105,12 +102,7 @@ fun SettingAlarmScreen(
                 SwitchButton(
                     checked = masterChecked,
                     onCheckedChange = { isChecked ->
-                        // 4. 상태를 먼저 모두 변경하고,
-                        masterChecked = isChecked
-                        completeChecked = isChecked
-                        abnormalChecked = isChecked
-                        missedChecked = isChecked
-                        // 5. 마지막에 변경된 최종 상태로 ViewModel을 호출합니다.
+                        myDataViewModel.setMasterChecked(isChecked)
                         updateSettings()
                     },
                 )
@@ -128,10 +120,7 @@ fun SettingAlarmScreen(
                 SwitchButton(
                     checked = completeChecked,
                     onCheckedChange = { isChecked ->
-                        completeChecked = isChecked
-                        if (!isChecked) {
-                            masterChecked = false
-                        }
+                        myDataViewModel.setCompleteChecked(isChecked)
                         updateSettings()
                     },
                 )
@@ -149,10 +138,7 @@ fun SettingAlarmScreen(
                 SwitchButton(
                     checked = abnormalChecked,
                     onCheckedChange = { isChecked ->
-                        abnormalChecked = isChecked
-                        if (!isChecked) {
-                            masterChecked = false
-                        }
+                        myDataViewModel.setAbnormalChecked(isChecked)
                         updateSettings()
                     },
                 )
@@ -170,10 +156,7 @@ fun SettingAlarmScreen(
                 SwitchButton(
                     checked = missedChecked,
                     onCheckedChange = { isChecked ->
-                        missedChecked = isChecked
-                        if (!isChecked) {
-                            masterChecked = false
-                        }
+                        myDataViewModel.setMissedChecked(isChecked)
                         updateSettings()
                     },
                 )

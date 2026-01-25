@@ -20,9 +20,21 @@ class CallTimeViewModel(
     private val setCallRepo: SetCallRepository,
 ) : ViewModel() {
 
+    // Time data
     private val _timeMap = MutableStateFlow<Map<Int, CallTimes>>(emptyMap())
     val timeMap: StateFlow<Map<Int, CallTimes>> = _timeMap.asStateFlow()
 
+    // UI state
+    private val _showBottomSheet = MutableStateFlow(false)
+    val showBottomSheet: StateFlow<Boolean> = _showBottomSheet.asStateFlow()
+
+    private val _selectedIndex = MutableStateFlow(0)
+    val selectedIndex: StateFlow<Int> = _selectedIndex.asStateFlow()
+
+    private val _selectedTabIndex = MutableStateFlow(0)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
+
+    // Async state
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
@@ -83,5 +95,17 @@ class CallTimeViewModel(
     // 에러 상태 초기화
     fun clearError() {
         _lastError.value = null
+    }
+
+    fun setShowBottomSheet(value: Boolean) {
+        _showBottomSheet.value = value
+    }
+
+    fun setSelectedIndex(index: Int) {
+        _selectedIndex.value = index
+    }
+
+    fun setSelectedTabIndex(index: Int) {
+        _selectedTabIndex.value = index
     }
 }

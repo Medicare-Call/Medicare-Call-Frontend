@@ -32,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -92,9 +93,9 @@ fun NaverPayWebViewScreen(
         val context = LocalContext.current
         val baseHost = "medicare-call.shop"
         var popupWebView by remember { mutableStateOf<WebView?>(null) }
-        // ViewModel 상태 스냅샷
-        val orderCode = naverPayViewModel.orderCode
-        val accessToken = naverPayViewModel.accessToken
+        // ViewModel StateFlow를 State로 변환
+        val orderCode by naverPayViewModel.orderCode.collectAsStateWithLifecycle()
+        val accessToken by naverPayViewModel.accessToken.collectAsStateWithLifecycle()
         // 중복 네비 방지
         var navigated by rememberSaveable { mutableStateOf(false) }
         // WebView 인스턴스 재사용
@@ -275,11 +276,10 @@ fun NaverPayWebViewScreen(
                                             }
                                             // 우리 서버 이동 시 토큰 재부착 (팝업에서도 동일 정책)
                                             if (host == "medicare-call.shop") {
-                                                val token = naverPayViewModel.accessToken
-                                                if (!token.isNullOrBlank()) {
+                                                if (!accessToken.isNullOrBlank()) {
                                                     v.loadUrl(
                                                         url,
-                                                        mapOf("Authorization" to "Bearer $token"),
+                                                        mapOf("Authorization" to "Bearer $accessToken"),
                                                     )
                                                     return true
                                                 }
@@ -417,9 +417,8 @@ fun NaverPayWebViewScreen(
                                 }
                                 // 우리 서버 이동일 땐 토큰 다시 붙여서 로드
                                 if (host == "medicare-call.shop") {
-                                    val token = naverPayViewModel.accessToken
-                                    if (!token.isNullOrBlank()) {
-                                        view.loadUrl(url, mapOf("Authorization" to "Bearer $token"))
+                                    if (!accessToken.isNullOrBlank()) {
+                                        view.loadUrl(url, mapOf("Authorization" to "Bearer $accessToken"))
                                         return true
                                     }
                                 }
