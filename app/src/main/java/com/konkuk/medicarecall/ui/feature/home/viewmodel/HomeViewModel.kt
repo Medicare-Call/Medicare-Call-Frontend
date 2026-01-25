@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import com.konkuk.medicarecall.data.exception.HttpException
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
@@ -41,7 +41,6 @@ class HomeViewModel(
     fun clearUpdatedName() {
         savedStateHandle.remove<String>("ELDER_NAME_UPDATED")
     }
-
 
     fun overrideName(newName: String) {
         val id = selectedElderId.value ?: return
