@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repository
 
 import com.konkuk.medicarecall.data.dto.response.VerificationResponseDto
-import retrofit2.Response
+import de.jensklingenberg.ktorfit.Response
 
 interface VerificationRepository {
     suspend fun requestCertificationCode(phone: String): Result<Response<Unit>>

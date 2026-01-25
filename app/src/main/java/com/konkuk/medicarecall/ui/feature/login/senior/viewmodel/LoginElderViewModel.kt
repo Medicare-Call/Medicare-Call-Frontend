@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 
 @KoinViewModel
 class LoginElderViewModel(
@@ -283,7 +283,7 @@ class LoginElderViewModel(
                 .onFailure { exception ->
                     when (exception) {
                         is HttpException -> {
-                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message()}")
+                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message}")
                         }
                     }
                 }
@@ -298,7 +298,7 @@ class LoginElderViewModel(
             .onFailure { exception ->
                 when (exception) {
                     is HttpException -> {
-                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message()}")
+                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
                     }
                 }
             }

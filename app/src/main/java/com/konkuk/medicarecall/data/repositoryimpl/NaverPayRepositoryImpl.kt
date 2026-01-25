@@ -3,9 +3,9 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import com.konkuk.medicarecall.data.api.payments.NaverPayService
 import com.konkuk.medicarecall.data.dto.request.ReservePayRequestDto
 import com.konkuk.medicarecall.data.dto.response.ReservePayResponseDto
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.NaverPayRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
 
 @Single
 class NaverPayRepositoryImpl(
