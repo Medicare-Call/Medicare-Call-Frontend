@@ -14,15 +14,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.annotation.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.defaultModule
 import org.koin.ksp.generated.module
+import kotlin.getValue
 
-class App : Application(), KoinComponent {
+@KoinApplication
+class App : Application() {
 
     private val fcmRepository: FcmRepository by inject()
 
@@ -36,8 +38,6 @@ class App : Application(), KoinComponent {
             androidContext(this@App)
             modules(
                 defaultModule,
-            )
-            modules(
                 ApiModule().module,
                 NetworkModule().module,
             )

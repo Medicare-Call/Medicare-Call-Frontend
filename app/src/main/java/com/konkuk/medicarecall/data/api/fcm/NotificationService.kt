@@ -1,10 +1,10 @@
 package com.konkuk.medicarecall.data.api.fcm
 
 import com.konkuk.medicarecall.data.dto.request.NotificationStatusRequestDto
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
+import de.jensklingenberg.ktorfit.Response
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Path
 
 interface NotificationService { // 알림 관련
     @POST("notifications/{notificationId}")

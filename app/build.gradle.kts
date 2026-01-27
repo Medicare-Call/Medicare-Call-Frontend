@@ -104,17 +104,6 @@ dependencies {
 //    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 //    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Ktor
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-
-    // Ktorfit
-    implementation(libs.ktorfit.lib)
-    ksp(libs.ktorfit.ksp)
-    implementation("de.jensklingenberg.ktorfit:ktorfit-converters-response:2.7.1")
-
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
 
@@ -131,6 +120,12 @@ dependencies {
 
     // Detekt formatting plugin
     detektPlugins(libs.detekt.formatting)
+
+    // Ktor
+    implementation("io.ktor:ktor-client-auth:3.3.3")
+    implementation("io.ktor:ktor-client-logging:3.3.3")
+    implementation("io.ktor:ktor-client-content-negotiation:3.3.3") // Use latest version
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.3.3")
 
     // Ktorfit
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:2.7.1")

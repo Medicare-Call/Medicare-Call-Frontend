@@ -27,15 +27,18 @@ class FcmRepositoryImpl(
     override suspend fun saveFcmToken(token: String) { // fcm 토큰 저장
         context.fcmDataStore.updateData { it.copy(fcmToken = token) }
     }
+
     override suspend fun getFcmToken(): String? { // fcm 토큰 불러오기
         val preferences = context.fcmDataStore.data.first()
         return preferences.fcmToken
     }
+
     override suspend fun clearToken() {
         context.fcmDataStore.updateData {
             FcmToken(null)
         }
     }
+
     override suspend fun validateAndRefreshTokenIfNeeded(jwtToken: String) {
         try {
             val currentToken = getFcmToken()
@@ -55,7 +58,7 @@ class FcmRepositoryImpl(
             Log.d("FcmRepositoryImpl", "새 FCM 토큰 발급 및 저장 완료: $newToken")
 
             // 서버에 갱신 요청
-            val response = runCatching {
+            val response: Result<Unit> = runCatching {
                 fcmUpdateService.updateFcmToken(
                     header = "Bearer $jwtToken",
                     body = mapOf("fcmToken" to newToken),

@@ -5,7 +5,7 @@ import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 
 @Single
 class UpdateElderInfoRepositoryImpl(
@@ -26,8 +26,8 @@ class UpdateElderInfoRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            val body = response.errorBody()?.string().orEmpty()
-            Log.e("DeleteElder", "HTTP ${response.code()} body=$body")
+            val body = response.errorBody()?.toString().orEmpty()
+            Log.e("DeleteElder", "HTTP ${response.code} body=$body")
             throw HttpException(response)
         }
     }

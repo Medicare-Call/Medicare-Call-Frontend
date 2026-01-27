@@ -7,7 +7,7 @@ import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
 import org.koin.core.annotation.Single
-import retrofit2.HttpException
+import com.konkuk.medicarecall.data.exception.HttpException
 
 @Single
 class UserRepositoryImpl(
@@ -20,7 +20,7 @@ class UserRepositoryImpl(
         if (response.isSuccessful) {
             response.body() ?: error("Response body is null")
         } else {
-            val errorBody = response.errorBody()?.string() ?: "Unknown error"
+            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
             throw HttpException(response)
         }
     }
@@ -40,7 +40,7 @@ class UserRepositoryImpl(
             val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
             val response = authService.logout("Bearer $refresh")
             if (!response.isSuccessful) {
-                val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                val errorBody = response.errorBody()?.toString() ?: "Unknown error"
                 throw HttpException(response)
             }
             Unit
