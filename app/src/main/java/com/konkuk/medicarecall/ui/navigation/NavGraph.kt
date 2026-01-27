@@ -7,48 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
+import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
-import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.screen.MealDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen.MedicineDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.screen.SleepDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHealthDetailScreen
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetailScreen
-import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
-import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
-import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
-import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
+import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
+import com.konkuk.medicarecall.ui.feature.homedetail.navigation.homeDetailNavGraph
+import com.konkuk.medicarecall.ui.feature.login.navigation.loginNavGraph
+import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
-import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
-import kotlin.reflect.typeOf
+import com.konkuk.medicarecall.ui.feature.statistics.navigation.statisticsNavGraph
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
@@ -60,8 +27,6 @@ fun NavHostController.navigateToMainAfterLogin() {
 @Composable
 fun NavGraph(
     navigator: MainNavigator,
-    loginViewModel: LoginViewModel,
-    loginElderViewModel: LoginElderViewModel,
     modifier: Modifier = Modifier,
 ) {
     val navController = navigator.navController
@@ -93,7 +58,7 @@ fun NavGraph(
 
         // 알림 네비게이션
         alarmNavGraph(
-            popBackStack = { navController.popBackStack() },
+            popBackStack = navigator::popBackStack,
         )
 
         // 홈
@@ -116,396 +81,53 @@ fun NavGraph(
             navigateToGlucoseDetailScreen = navigator::navigateToGlucoseDetailScreen,
         )
 
-        // 홈 상세 화면_식사 화면
-        composable<Route.MealDetail> {
-            val args = it.toRoute<Route.MealDetail>()
-            MealDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
+        // 홈 상세 네비게이션
+        homeDetailNavGraph(
+            popBackStack = navigator::popBackStack,
+        )
 
-        // 홈 상세 화면_복용 화면
-        composable<Route.MedicineDetail> {
-            val args = it.toRoute<Route.MedicineDetail>()
-            MedicineDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
+        // 통계 네비게이션
+        statisticsNavGraph(
+            navController = navController,
+            navigateToAlarm = navigator::navigateToAlarm,
+            getBackStackHomeViewModel = { backStackEntry -> backStackEntry.sharedViewModel<HomeViewModel, MainTabRoute.Home>(navController) },
+        )
 
-        // 홈 상세 화면_수면 화면
-        composable<Route.SleepDetail> {
-            val args = it.toRoute<Route.SleepDetail>()
-            SleepDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
+        // 설정 네비게이션
+        settingNavGraph(
+            popBackStack = navigator::popBackStack,
+            navigateToElderPersonalInfo = navigator::navigateToElderPersonalInfo,
+            navigateToElderPersonalDetail = navigator::navigateToElderPersonalDetail,
+            navigateToElderHealthInfo = navigator::navigateToHealthInfo,
+            navigateToHealthDetail = navigator::navigateToHealthDetail,
+            navigateToNotificationSetting = navigator::navigateToNotificationSetting,
+            navigateToSubscribeInfo = navigator::navigateToSubscribeInfo,
+            navigateToSubscribeDetail = navigator::navigateToSubscribeDetail,
+            navigateToNotice = navigator::navigateToNotice,
+            navigateToNoticeDetail = navigator::navigateToNoticeDetail,
+            navigateToServiceCenter = navigator::navigateToServiceCenter,
+            navigateToUserInfo = navigator::navigateToUserInfo,
+            navigateToUserInfoSetting = navigator::navigateToUserInfoSetting,
+            navigateToLoginAfterLogout = navigator::navigateToLoginAfterLogout,
+            navController = navController,
+        )
 
-        // 홈 상세 화면_건강 징후 화면
-        composable<Route.StateHealthDetail> {
-            val args = it.toRoute<Route.StateHealthDetail>()
-            StateHealthDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_심리 상태 화면
-        composable<Route.StateMentalDetail> {
-            val args = it.toRoute<Route.StateMentalDetail>()
-            StateMentalDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 홈 상세 화면_혈당 화면
-        composable<Route.GlucoseDetail> {
-            val args = it.toRoute<Route.GlucoseDetail>()
-            GlucoseDetailScreen(
-                elderId = args.elderId,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        // 통계
-        composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
-            StatisticsScreen(
-                navController = navController,
-                navigateToAlarm = { navController.navigate(Route.Alarm) },
-            )
-        }
-
-//        statisticsNavGraph(
-//            navController = navController,
-//            getBackStackHomeViewModel = { backStackEntry ->
-//                backStackEntry.sharedViewModel<HomeViewModel, MainTabRoute.Home>(navController)
-//            },
-//        )
-
-        // 설정
-        composable<MainTabRoute.Settings> {
-            // TopLevelBackHandler(navController)
-            SettingsScreen(
-                navigateToUserInfo = {
-                    navController.navigate(Route.UserInfo)
-                },
-                navigateToNotice = {
-                    navController.navigate(Route.Notice)
-                },
-                navigateToCenter = {
-                    navController.navigate(Route.ServiceCenter)
-                },
-                navigateToSubscribe = {
-                    navController.navigate(Route.SubscribeInfo)
-                },
-                navigateToElderPersonalInfo = {
-                    navController.navigate(Route.ElderPersonalInfo)
-                },
-                navigateToElderHealthInfo = {
-                    navController.navigate(Route.ElderHealthInfo)
-                },
-                navigateToNotificationSetting = { myInfo ->
-                    navController.navigate(Route.NotificationSetting(myInfo))
-                },
-            )
-        }
-
-        composable<Route.ElderPersonalInfo> {
-            ElderInfoScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToElderDetail = { elderInfo ->
-                    navController.navigate(Route.ElderPersonalDetail(elderInfo))
-                },
-            )
-        }
-
-        composable<Route.ElderPersonalDetail>(
-            typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
-        ) { navBackstackEntry ->
-            val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
-            ElderDetailScreen(
-                onBack = { navController.popBackStack() },
-                eldersInfoResponseDto = elderInfo,
-                navController = navController,
-            )
-        }
-
-        composable<Route.ElderHealthInfo> {
-            HealthInfoScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToHealthDetail = { healthInfo ->
-                    navController.navigate(Route.ElderHealthDetail(healthInfo))
-                },
-            )
-        }
-
-        composable<Route.ElderHealthDetail>(
-            typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType),
-        ) { navBackstackEntry ->
-            val healthInfo = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health
-            HealthDetailScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                healthInfoResponseDto = healthInfo,
-            )
-        }
-
-        composable<Route.NotificationSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
-        ) { navBackStackEntry ->
-            val myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo
-            SettingAlarmScreen(
-                myDataInfo = myDataInfo,
-                onBack = {
-                    navController.popBackStack()
-                },
-            )
-        }
-
-        composable<Route.SubscribeInfo> {
-            SettingSubscribeScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToSubscribeDetail = { subscription ->
-                    navController.navigate(Route.SubscribeDetail(subscription))
-                },
-            )
-        }
-
-        composable<Route.SubscribeDetail>(
-            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType),
-        ) { navBackStackEntry ->
-            val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
-            SubscribeDetailScreen(
-                elderInfo = elderInfo,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        composable<Route.Notice> {
-            AnnouncementScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToNoticeDetail = { notice ->
-                    navController.navigate(Route.NoticeDetail(notice))
-                },
-            )
-        }
-
-        composable<Route.NoticeDetail>(
-            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType),
-        ) { navBackStackEntry ->
-            val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
-            AnnouncementDetailScreen(
-                noticeInfo = noticeInfo,
-                onBack = { navController.popBackStack() },
-            )
-        }
-
-        composable<Route.ServiceCenter> {
-            ServiceCenterScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-            )
-        }
-
-        composable<Route.UserInfo> {
-            MyDataSettingScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToUserInfoSetting = { myInfo ->
-                    navController.navigate(Route.UserInfoSetting(myInfo))
-                },
-                navigateToLoginAfterLogout = {
-                    navController.navigate(Route.LoginStart) {
-                        popUpTo(MainTabRoute.Home) { inclusive = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-            )
-        }
-
-        composable<Route.UserInfoSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
-        ) { navBackStackEntry ->
-            val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
-            MyDetailScreen(
-                myDataInfo = myDataInfo,
-                onBack = {
-                    navController.popBackStack()
-                },
-            )
-        }
-
-//        settingNavGraph(
-//            popBackStack = navigator::popBackStack,
-//            navigateToElderHealthInfo = navigator::navigateToElderPersonalInfo,
-//            navigateToElderPersonalInfo = navigator::navigateToElderPersonalInfo,
-//            navigateToElderPersonalDetail = navigator::navigateToElderPersonalDetail,
-//            navigateToHealthDetail = navigator::navigateToHealthDetail,
-//            navigateToNotificationSetting = navigator::navigateToNotificationSetting,
-//            navigateToSubscribeInfo = navigator::navigateToSubscribeInfo,
-//            navigateToSubscribeDetail = navigator::navigateToSubscribeDetail,
-//            navigateToNotice = navigator::navigateToNotice,
-//            navigateToNoticeDetail = navigator::navigateToNoticeDetail,
-//            navigateToServiceCenter = navigator::navigateToServiceCenter,
-//            navigateToUserInfo = navigator::navigateToUserInfo,
-//            navigateToUserInfoSetting = navigator::navigateToUserInfoSetting,
-//            navigateToLoginAfterLogout = navigator::navigateToLoginAfterLogout
-//        )
-
-        // 로그인 내비게이션
-        composable<Route.LoginStart> {
-            LoginStartScreen(
-                navigateToPhone = { navController.navigate(Route.LoginPhone) },
-                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
-                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigateToMainAfterLogin() },
-                navigateToHome = {
-                    navController.navigateToMainAfterLogin()
-                },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginPhone> {
-            LoginPhoneScreen(
-                onBack = { navController.popBackStack() },
-                navigateToVerification = { navController.navigate(Route.LoginVerification) },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginVerification> {
-            LoginVerificationScreen(
-                onBack = { navController.popBackStack() },
-                navigateToUserInfo = {
-                    navController.navigate(Route.LoginRegisterUserInfo) {
-                        popUpTo(Route.LoginVerification) { inclusive = true }
-                    }
-                },
-                navigateToPhone = { navController.navigate(Route.LoginPhone) },
-                navigateToRegisterElder = { navController.navigate(Route.LoginRegisterElder) },
-                navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
-                navigateToPurchase = { navController.navigateToMainAfterLogin() },
-                navigateToHome = {
-                    navController.navigateToMainAfterLogin()
-                },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginRegisterUserInfo> {
-            LoginMyInfoScreen(
-                onBack = { navController.popBackStack() },
-                navigateToRegisterElder = {
-                    navController.navigate(Route.LoginRegisterElder) {
-                        popUpTo(Route.LoginStart)
-                    }
-                },
-                loginViewModel = loginViewModel,
-            )
-        }
-        composable<Route.LoginRegisterElder> {
-            LoginElderScreen(
-                onBack = { navController.popBackStack() },
-                navigateToRegisterElderHealth = {
-                    navController.navigate(Route.LoginRegisterElderHealth)
-                },
-                loginElderViewModel = loginElderViewModel,
-            )
-        }
-        composable<Route.LoginRegisterElderHealth> {
-            LoginElderMedInfoScreen(
-                onBack = { navController.popBackStack() },
-                navigateToCareCallSetting = {
-                    navController.navigate(Route.LoginCareCallSetting) {
-                        popUpTo(Route.LoginRegisterElder) {
-                            inclusive = true
-                        }
-                    }
-                },
-                loginElderViewModel = loginElderViewModel,
-            )
-        }
-
-        composable<Route.LoginCareCallSetting> {
-            CallTimeScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToPayment = {
-                    navController.navigate(Route.LoginFinish) {
-                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable<Route.LoginPurchase> {
-            PaymentScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToNaverPay = {
-                    navController.navigate(Route.LoginNaverPayView)
-                },
-            )
-        }
-
-        composable<Route.LoginNaverPayView> {
-            NaverPayWebViewScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
-                navigateToFinish = {
-                    navController.navigate(Route.LoginFinish) {
-                        popUpTo(Route.LoginNaverPayView) { inclusive = true }
-                    }
-                },
-            )
-        }
-
-        composable<Route.LoginFinish> {
-            LoginFinishScreen(
-                navigateToMain = {
-                    navController.navigateToMainAfterLogin()
-                },
-            )
-        }
-
-//        loginNavGraph(
-//            popBackStack = navigator::popBackStack,
-//            navigateToHome = navigator::navigateToHome,
-//            navigateToPhone = navigator::navigateToLoginPhone,
-//            navigateToVerification = navigator::navigateToLoginVerification,
-//            navigateTpRegisterUserInfo = navigator::navigateToLoginRegisterUserInfo,
-//            navigateToRegisterElder = navigator::navigateToLoginRegisterElder,
-//            navigateToRegisterElderHealth = navigator::navigateToLoginRegisterElderHealth,
-//            navigateToCareCallSetting = navigator::navigateToLoginCareCallSetting,
-//            navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
-//            navigateToPurchase = navigator::navigateToLoginPurchase,
-//            navigateToNaverPayView = navigator::navigateToLoginNaverPayView,
-//            navigateToFinish = navigator::navigateToLoginFinish,
-//            navigateToMainAfterLogin = navController::navigateToMainAfterLogin,
-//            getBackStackLoginViewModel = { backStackEntry ->
-//                backStackEntry
-//                    .sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
-//            },
-//            getBackStackLoginElderViewModel = { backStackEntry ->
-//                backStackEntry
-//                    .sharedViewModel<LoginElderViewModel, Route.LoginRegisterElder>(navController)
-//            }
-//        )
+        // 로그인 네비게이션
+        loginNavGraph(
+            navController = navController,
+            popBackStack = navigator::popBackStack,
+            navigateToMainAfterLogin = { navController.navigateToMainAfterLogin() },
+            navigateToHome = { navController.navigateToMainAfterLogin() },
+            navigateToPhone = navigator::navigateToLoginPhone,
+            navigateToVerification = navigator::navigateToLoginVerification,
+            navigateToRegisterUserInfo = navigator::navigateToLoginRegisterUserInfo,
+            navigateToRegisterElder = navigator::navigateToLoginRegisterElder,
+            navigateToRegisterElderHealth = navigator::navigateToLoginRegisterElderHealth,
+            navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
+            navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
+            navigateToPurchase = navigator::navigateToLoginPurchase,
+            navigateToNaverPayView = navigator::navigateToLoginNaverPayView,
+            navigateToFinish = navigator::navigateToLoginFinish,
+        )
     }
 }
