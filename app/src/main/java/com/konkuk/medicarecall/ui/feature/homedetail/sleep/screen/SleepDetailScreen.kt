@@ -35,20 +35,20 @@ import java.time.LocalDate
 fun SleepDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    sleepViewModel: SleepViewModel = koinViewModel(),
+    viewModel: SleepViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        sleepViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by sleepViewModel.selectedDate.collectAsStateWithLifecycle()
-    val sleep by sleepViewModel.sleep.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val sleep by viewModel.sleep.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         elderId?.let { id ->
-            sleepViewModel.loadSleepDataForDate(id, selectedDate)
+            viewModel.loadSleepDataForDate(id, selectedDate)
         }
     }
 
@@ -57,8 +57,8 @@ fun SleepDetailScreen(
         onBack = onBack,
         selectedDate = selectedDate,
         sleep = sleep,
-        weekDates = sleepViewModel.getCurrentWeekDates(),
-        onDateSelected = { sleepViewModel.selectDate(it) },
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = { viewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }

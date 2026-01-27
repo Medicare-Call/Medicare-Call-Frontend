@@ -39,30 +39,30 @@ import java.time.LocalDate
 fun MedicineDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    medicineViewModel: MedicineViewModel = koinViewModel(),
+    viewModel: MedicineViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        medicineViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by medicineViewModel.selectedDate.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         Log.d("MED_UI", "LaunchedEffect: elderId=$elderId, date=$selectedDate")
-        elderId?.let { medicineViewModel.loadMedicinesForDate(it, selectedDate) }
+        elderId?.let { viewModel.loadMedicinesForDate(it, selectedDate) }
     }
 
-    val uiState by medicineViewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
     Log.d("MED_UI", "render medicines=${uiState.items.size}")
 
     MedicineDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         medicines = uiState.items,
-        weekDates = medicineViewModel.getCurrentWeekDates(),
-        onDateSelected = { medicineViewModel.selectDate(it) },
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = { viewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }

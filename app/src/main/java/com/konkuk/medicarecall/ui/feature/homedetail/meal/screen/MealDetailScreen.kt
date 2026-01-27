@@ -36,27 +36,27 @@ import java.time.LocalDate
 fun MealDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    mealViewModel: MealViewModel = koinViewModel(),
+    viewModel: MealViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        mealViewModel.resetToToday()
+        viewModel.resetToToday()
     }
     // 날짜만 Observe
-    val selectedDate by mealViewModel.selectedDate.collectAsStateWithLifecycle()
-    val meals by mealViewModel.meals.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val meals by viewModel.meals.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
-        mealViewModel.loadMealsForDate(elderId, selectedDate)
+        viewModel.loadMealsForDate(elderId, selectedDate)
     }
 
     MealDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         meals = meals,
-        weekDates = mealViewModel.getCurrentWeekDates(),
-        onDateSelected = mealViewModel::selectDate,
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = viewModel::selectDate,
         onMonthClick = { /* 모달 열기 */ },
     )
 }

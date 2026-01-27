@@ -36,22 +36,22 @@ import java.time.LocalDate
 fun StateHealthDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    healthViewModel: HealthViewModel = koinViewModel(),
+    viewModel: HealthViewModel = koinViewModel(),
 ) {
-    val isLoading = healthViewModel.isLoading.collectAsStateWithLifecycle()
+    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        healthViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by healthViewModel.selectedDate.collectAsStateWithLifecycle()
-    val health by healthViewModel.health.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val health by viewModel.health.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         elderId?.let { id ->
-            healthViewModel.loadHealthDataForDate(id, selectedDate)
+            viewModel.loadHealthDataForDate(id, selectedDate)
         }
     }
 
@@ -61,8 +61,8 @@ fun StateHealthDetailScreen(
             onBack = onBack,
             selectedDate = selectedDate,
             health = health,
-            weekDates = healthViewModel.getCurrentWeekDates(),
-            onDateSelected = { healthViewModel.selectDate(it) },
+            weekDates = viewModel.getCurrentWeekDates(),
+            onDateSelected = { viewModel.selectDate(it) },
             onMonthClick = { /* 모달 열기 */ },
         )
     else

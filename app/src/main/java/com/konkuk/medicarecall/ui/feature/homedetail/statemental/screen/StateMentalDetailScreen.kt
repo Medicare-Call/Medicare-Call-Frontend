@@ -36,20 +36,20 @@ import java.time.LocalDate
 fun StateMentalDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    mentalViewModel: MentalViewModel = koinViewModel(),
+    viewModel: MentalViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        mentalViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by mentalViewModel.selectedDate.collectAsStateWithLifecycle()
-    val mental by mentalViewModel.mental.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val mental by viewModel.mental.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         elderId?.let { id ->
-            mentalViewModel.loadMentalDataForDate(id, selectedDate)
+            viewModel.loadMentalDataForDate(id, selectedDate)
         }
     }
 
@@ -57,8 +57,8 @@ fun StateMentalDetailScreen(
         onBack = onBack,
         selectedDate = selectedDate,
         mental = mental,
-        weekDates = mentalViewModel.getCurrentWeekDates(),
-        onDateSelected = { mentalViewModel.selectDate(it) },
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = { viewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }
