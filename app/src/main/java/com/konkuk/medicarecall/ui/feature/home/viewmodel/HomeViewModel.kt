@@ -1,9 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,7 +51,8 @@ class HomeViewModel(
         //  softRefreshCurrentElder()
     }
 
-    var isLoading by mutableStateOf(true)
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun callImmediate(
         careCallTimeOption: String,

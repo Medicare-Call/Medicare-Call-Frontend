@@ -17,10 +17,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,23 +58,21 @@ fun ElderDetailScreen(
     navController: NavHostController,
     detailViewModel: DetailElderInfoViewModel = koinViewModel(),
 ) {
-    val gender = when (eldersInfoResponseDto.gender) {
-        GenderType.MALE -> true
-        else -> false
-    }
-    val parseDate =
-        LocalDate.parse(eldersInfoResponseDto.birthDate) // yyyy-MM-dd 형식의 문자열을 LocalDate로 변환
-    val date = parseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
     val scrollState = rememberScrollState()
 
-    var isMale by remember { mutableStateOf<Boolean>(gender) }
-    var name by remember { mutableStateOf(eldersInfoResponseDto.name) }
-    var birth by remember { mutableStateOf(date) }
-    var phoneNum by remember { mutableStateOf(eldersInfoResponseDto.phone) }
-    var relationship by remember { mutableStateOf(eldersInfoResponseDto.relationship) }
-    var residenceType by remember { mutableStateOf(eldersInfoResponseDto.residenceType) }
+    // ViewModel 상태 구독
+    val isMale by detailViewModel.isMale.collectAsStateWithLifecycle()
+    val name by detailViewModel.name.collectAsStateWithLifecycle()
+    val birth by detailViewModel.birth.collectAsStateWithLifecycle()
+    val phoneNum by detailViewModel.phoneNum.collectAsStateWithLifecycle()
+    val relationship by detailViewModel.relationship.collectAsStateWithLifecycle()
+    val residenceType by detailViewModel.residenceType.collectAsStateWithLifecycle()
+    val showDeleteDialog by detailViewModel.showDeleteDialog.collectAsStateWithLifecycle()
 
-    var showDeleteDialog by remember { mutableStateOf(false) }
+    // 초기 데이터 로드
+    LaunchedEffect(Unit) {
+        detailViewModel.initializeForm(eldersInfoResponseDto)
+    }
 
     Column(
         modifier = Modifier
@@ -107,7 +107,7 @@ fun ElderDetailScreen(
                     color = MediCareCallTheme.colors.negative,
                     style = MediCareCallTheme.typography.SB_16,
                     modifier = Modifier.clickable {
-                        showDeleteDialog = true
+                        detailViewModel.setShowDeleteDialog(true)
                     },
                 )
             }
@@ -117,7 +117,7 @@ fun ElderDetailScreen(
                 Column {
                     DefaultTextField(
                         value = name,
-                        onValueChange = { name = it },
+                        onValueChange = { detailViewModel.updateName(it) },
                         category = "이름",
                         placeHolder = "이름",
                     )
@@ -125,7 +125,7 @@ fun ElderDetailScreen(
                 Column {
                     DefaultTextField(
                         value = birth,
-                        onValueChange = { birth = it },
+                        onValueChange = { detailViewModel.updateBirth(it) },
                         category = "생년월일",
                         placeHolder = "YYYY / MM / DD",
                         keyboardType = KeyboardType.Number,
@@ -143,14 +143,14 @@ fun ElderDetailScreen(
                     GenderToggleButton(
                         isMale = isMale,
                         onGenderChange = { newValue ->
-                            isMale = newValue
+                            detailViewModel.updateIsMale(newValue)
                         },
                     )
                 }
                 Column {
                     DefaultTextField(
                         value = phoneNum,
-                        onValueChange = { phoneNum = it },
+                        onValueChange = { detailViewModel.updatePhoneNum(it) },
                         placeHolder = "휴대폰 번호",
                         keyboardType = KeyboardType.Number,
                         visualTransformation = PhoneNumberVisualTransformation(),
@@ -166,9 +166,10 @@ fun ElderDetailScreen(
                         scrollState,
                         value = relationship.displayName,
                         onOptionSelect = { newValue ->
-                            relationship = RelationshipType.entries.firstOrNull {
+                            val selectedRelationship = RelationshipType.entries.firstOrNull {
                                 it.displayName == newValue
                             } ?: RelationshipType.ACQUAINTANCE
+                            detailViewModel.updateRelationship(selectedRelationship)
                         },
                     )
                 }
@@ -181,9 +182,10 @@ fun ElderDetailScreen(
                         scrollState,
                         value = residenceType.displayName,
                         onOptionSelect = { newValue ->
-                            residenceType = ElderResidenceType.entries.firstOrNull {
+                            val selectedResidenceType = ElderResidenceType.entries.firstOrNull {
                                 it.displayName == newValue
                             } ?: ElderResidenceType.WITH_FAMILY
+                            detailViewModel.updateResidenceType(selectedResidenceType)
                         },
                     )
                 }
@@ -236,9 +238,9 @@ fun ElderDetailScreen(
         }
         if (showDeleteDialog) {
             DeleteConfirmDialog(
-                onDismiss = { showDeleteDialog = false },
+                onDismiss = { detailViewModel.setShowDeleteDialog(false) },
                 onDelete = {
-                    showDeleteDialog = false
+                    detailViewModel.setShowDeleteDialog(false)
                     detailViewModel.deleteElderInfo(eldersInfoResponseDto.elderId)
                     onBack() // 삭제 후 설정 화면으로 이동
                 },

@@ -14,10 +14,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,10 +46,16 @@ fun MyDetailScreen(
     onBack: () -> Unit = {},
     detailMyDataViewModel: DetailMyDataViewModel = koinViewModel(),
 ) {
-    var isMale by remember { mutableStateOf<Boolean>(myDataInfo.gender == GenderType.MALE) }
-    var name by remember { mutableStateOf(myDataInfo.name) }
-    var birth by remember { mutableStateOf(myDataInfo.birthDate.replace("-", "")) }
+    // ViewModel 상태 구독
+    val isMale by detailMyDataViewModel.isMale.collectAsStateWithLifecycle()
+    val name by detailMyDataViewModel.name.collectAsStateWithLifecycle()
+    val birth by detailMyDataViewModel.birth.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+
+    // 초기 데이터 로드
+    LaunchedEffect(Unit) {
+        detailMyDataViewModel.initializeFormData(myDataInfo)
+    }
 
     Column(
         modifier = Modifier
@@ -74,14 +82,14 @@ fun MyDetailScreen(
         ) {
             DefaultTextField(
                 value = name,
-                onValueChange = { name = it },
+                onValueChange = { detailMyDataViewModel.updateName(it) },
                 category = "이름",
                 placeHolder = "이름",
             )
             Spacer(modifier = modifier.height(20.dp))
             DefaultTextField(
                 value = birth,
-                onValueChange = { birth = it },
+                onValueChange = { detailMyDataViewModel.updateBirth(it) },
                 category = "생년월일",
                 placeHolder = "YYYY / MM / DD",
                 keyboardType = KeyboardType.Number,
@@ -99,7 +107,7 @@ fun MyDetailScreen(
                 GenderToggleButton(
                     isMale = isMale,
                     onGenderChange = { newValue ->
-                        isMale = newValue
+                        detailMyDataViewModel.updateIsMale(newValue)
                     },
                 )
             }
