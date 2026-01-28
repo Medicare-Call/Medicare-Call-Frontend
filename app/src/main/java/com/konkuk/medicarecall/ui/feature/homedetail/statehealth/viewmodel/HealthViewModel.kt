@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.HealthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import java.time.LocalDate
@@ -21,9 +24,26 @@ class HealthViewModel(
     }
 
     private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
     private val _health = MutableStateFlow(HealthUiState.Companion.EMPTY)
+
+    /**
+     * StateHealthDetailScreen 전용 통합 StateFlow
+     */
+    val healthScreenUiState: StateFlow<HealthScreenUiState> = combine(
+        _isLoading,
+        _health,
+    ) { loading, healthData ->
+        HealthScreenUiState(
+            isLoading = loading,
+            healthData = healthData,
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = HealthScreenUiState.EMPTY,
+    )
+
+    val isLoading: StateFlow<Boolean> = _isLoading
     val health: StateFlow<HealthUiState> = _health
 
     fun loadHealthDataForDate(elderId: Int, date: LocalDate) {

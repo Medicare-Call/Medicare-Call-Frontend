@@ -41,15 +41,14 @@ fun StateHealthDetailScreen(
     calendarViewModel: CalendarViewModel = koinViewModel(),
     healthViewModel: HealthViewModel = koinViewModel(),
 ) {
-    val isLoading = healthViewModel.isLoading.collectAsStateWithLifecycle()
+
+    val healthScreenUiState by healthViewModel.healthScreenUiState.collectAsStateWithLifecycle()
+    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         calendarViewModel.resetToToday()
     }
-
-    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
-    val health by healthViewModel.health.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
@@ -58,12 +57,12 @@ fun StateHealthDetailScreen(
         }
     }
 
-    if (!isLoading.value)
+    if (!healthScreenUiState.isLoading)
         StateHealthDetailScreenLayout(
             modifier = Modifier,
             onBack = onBack,
             selectedDate = selectedDate,
-            health = health,
+            health = healthScreenUiState.healthData,
             weekDates = calendarViewModel.getCurrentWeekDates(),
             onDateSelected = { calendarViewModel.selectDate(it) },
             onMonthClick = { /* 모달 열기 */ },

@@ -13,3 +13,18 @@ data class HealthUiState(
         )
     }
 }
+
+/**
+ * StateHealthDetailScreen 전용 통합 UiState
+ */
+data class HealthScreenUiState(
+    val isLoading: Boolean,
+    val healthData: HealthUiState,
+) {
+    companion object {
+        val EMPTY = HealthScreenUiState(
+            isLoading = true,
+            healthData = HealthUiState.EMPTY,
+        )
+    }
+}
