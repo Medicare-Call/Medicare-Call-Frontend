@@ -8,11 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen.GlucoseDetailScreen
@@ -48,7 +43,6 @@ import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
 import com.konkuk.medicarecall.ui.feature.statistics.screen.StatisticsScreen
-import kotlin.reflect.typeOf
 
 // ---- 헬퍼: 로그인 성공 후 인증 그래프 제거하고 main으로 ---
 fun NavHostController.navigateToMainAfterLogin() {
@@ -207,8 +201,8 @@ fun NavGraph(
                 navigateToElderHealthInfo = {
                     navController.navigate(Route.ElderHealthInfo)
                 },
-                navigateToNotificationSetting = { myInfo ->
-                    navController.navigate(Route.NotificationSetting(myInfo))
+                navigateToNotificationSetting = {
+                    navController.navigate(Route.NotificationSetting)
                 },
             )
         }
@@ -218,19 +212,17 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navigateToElderDetail = { elderInfo ->
-                    navController.navigate(Route.ElderPersonalDetail(elderInfo))
+                navigateToElderDetail = { elderId ->
+                    navController.navigate(Route.ElderPersonalDetail(elderId))
                 },
             )
         }
 
-        composable<Route.ElderPersonalDetail>(
-            typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
-        ) { navBackstackEntry ->
-            val elderInfo = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info
+        composable<Route.ElderPersonalDetail> { navBackstackEntry ->
+            val elderId = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().elderId
             ElderDetailScreen(
                 onBack = { navController.popBackStack() },
-                eldersInfoResponseDto = elderInfo,
+                elderId = elderId,
                 navController = navController,
             )
         }
@@ -240,30 +232,24 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navigateToHealthDetail = { healthInfo ->
-                    navController.navigate(Route.ElderHealthDetail(healthInfo))
+                navigateToHealthDetail = { elderId ->
+                    navController.navigate(Route.ElderHealthDetail(elderId))
                 },
             )
         }
 
-        composable<Route.ElderHealthDetail>(
-            typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType),
-        ) { navBackstackEntry ->
-            val healthInfo = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health
+        composable<Route.ElderHealthDetail> { navBackstackEntry ->
+            val elderId = navBackstackEntry.toRoute<Route.ElderHealthDetail>().elderId
             HealthDetailScreen(
+                elderId = elderId,
                 onBack = {
                     navController.popBackStack()
                 },
-                healthInfoResponseDto = healthInfo,
             )
         }
 
-        composable<Route.NotificationSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
-        ) { navBackStackEntry ->
-            val myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo
+        composable<Route.NotificationSetting> {
             SettingAlarmScreen(
-                myDataInfo = myDataInfo,
                 onBack = {
                     navController.popBackStack()
                 },
@@ -275,18 +261,16 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navigateToSubscribeDetail = { subscription ->
-                    navController.navigate(Route.SubscribeDetail(subscription))
+                navigateToSubscribeDetail = { elderId ->
+                    navController.navigate(Route.SubscribeDetail(elderId))
                 },
             )
         }
 
-        composable<Route.SubscribeDetail>(
-            typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType),
-        ) { navBackStackEntry ->
-            val elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription
+        composable<Route.SubscribeDetail> { navBackStackEntry ->
+            val elderId = navBackStackEntry.toRoute<Route.SubscribeDetail>().elderId
             SubscribeDetailScreen(
-                elderInfo = elderInfo,
+                elderId = elderId,
                 onBack = { navController.popBackStack() },
             )
         }
@@ -296,18 +280,16 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navigateToNoticeDetail = { notice ->
-                    navController.navigate(Route.NoticeDetail(notice))
+                navigateToNoticeDetail = { noticeId ->
+                    navController.navigate(Route.NoticeDetail(noticeId))
                 },
             )
         }
 
-        composable<Route.NoticeDetail>(
-            typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType),
-        ) { navBackStackEntry ->
-            val noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice
+        composable<Route.NoticeDetail> { navBackStackEntry ->
+            val noticeId = navBackStackEntry.toRoute<Route.NoticeDetail>().noticeId
             AnnouncementDetailScreen(
-                noticeInfo = noticeInfo,
+                noticeId = noticeId,
                 onBack = { navController.popBackStack() },
             )
         }
@@ -325,8 +307,8 @@ fun NavGraph(
                 onBack = {
                     navController.popBackStack()
                 },
-                navigateToUserInfoSetting = { myInfo ->
-                    navController.navigate(Route.UserInfoSetting(myInfo))
+                navigateToUserInfoSetting = {
+                    navController.navigate(Route.UserInfoSetting)
                 },
                 navigateToLoginAfterLogout = {
                     navController.navigate(Route.LoginStart) {
@@ -338,12 +320,8 @@ fun NavGraph(
             )
         }
 
-        composable<Route.UserInfoSetting>(
-            typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
-        ) { navBackStackEntry ->
-            val myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo
+        composable<Route.UserInfoSetting> {
             MyDetailScreen(
-                myDataInfo = myDataInfo,
                 onBack = {
                     navController.popBackStack()
                 },

@@ -45,7 +45,7 @@ fun SettingsScreen(
     navigateToSubscribe: () -> Unit = {},
     navigateToElderPersonalInfo: () -> Unit = {},
     navigateToElderHealthInfo: () -> Unit = {},
-    navigateToNotificationSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
+    navigateToNotificationSetting: () -> Unit = {},
     myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -277,7 +277,7 @@ fun SettingsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navigateToNotificationSetting(myInfo)
+                                navigateToNotificationSetting()
                             },
                     ) {
                         Text(

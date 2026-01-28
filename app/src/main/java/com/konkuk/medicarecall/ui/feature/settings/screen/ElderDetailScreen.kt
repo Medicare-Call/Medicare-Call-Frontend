@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,8 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
@@ -51,27 +54,63 @@ import java.time.format.DateTimeFormatter
 fun ElderDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    eldersInfoResponseDto: EldersInfoResponseDto,
+    elderId: Int,
     navController: NavHostController,
     detailViewModel: DetailElderInfoViewModel = koinViewModel(),
 ) {
-    val gender = when (eldersInfoResponseDto.gender) {
-        GenderType.MALE -> true
-        else -> false
-    }
-    val parseDate =
-        LocalDate.parse(eldersInfoResponseDto.birthDate) // yyyy-MM-dd 형식의 문자열을 LocalDate로 변환
-    val date = parseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+    // 뷰모델로부터 데이터 및 성공 여부 상태 수집
+    val elderData by detailViewModel.uiState.collectAsStateWithLifecycle()
+    val isSuccess by detailViewModel.isSuccess.collectAsStateWithLifecycle()
+
     val scrollState = rememberScrollState()
 
-    var isMale by remember { mutableStateOf<Boolean>(gender) }
-    var name by remember { mutableStateOf(eldersInfoResponseDto.name) }
-    var birth by remember { mutableStateOf(date) }
-    var phoneNum by remember { mutableStateOf(eldersInfoResponseDto.phone) }
-    var relationship by remember { mutableStateOf(eldersInfoResponseDto.relationship) }
-    var residenceType by remember { mutableStateOf(eldersInfoResponseDto.residenceType) }
 
+    var isMale by remember { mutableStateOf<Boolean?>(null) }
+    var name by remember { mutableStateOf("") }
+    var birth by remember { mutableStateOf("") }
+    var phoneNum by remember { mutableStateOf("") }
+    var relationship by remember { mutableStateOf(RelationshipType.ACQUAINTANCE) }
+    var residenceType by remember { mutableStateOf(ElderResidenceType.ALONE) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+
+    // 수정 모드일 때 ID로 데이터를 로드
+    LaunchedEffect(elderId) {
+        if (elderId != -1) {
+            detailViewModel.loadElderDataById(elderId)
+        }
+    }
+
+    // 수정 모드일 때 서버에서 불러온 데이터를 UI 필드에 동기화
+    LaunchedEffect(elderData) {
+        elderData?.let {
+            name = it.name
+            isMale = it.gender == GenderType.MALE
+            phoneNum = it.phone
+            relationship = it.relationship
+            residenceType = it.residenceType
+
+            // 날짜 형식 변환 (yyyy-MM-dd -> yyyyMMdd)
+            try {
+                val parseDate = LocalDate.parse(it.birthDate)
+                birth = parseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+            } catch (e: Exception) {
+                birth = ""
+            }
+        }
+    }
+
+    // 작업 성공(등록/수정 완료) 시 화면 이동 처리
+    LaunchedEffect(isSuccess) {
+        if (isSuccess) {
+            navController.previousBackStackEntry?.savedStateHandle?.set("ELDER_NAME_UPDATED", name)
+            onBack()
+        }
+    }
+
+    // ID 값에 따른 모드 판별 및 텍스트 설정
+    val isEditMode = elderId != -1
+    val screenTitle = if (isEditMode) "어르신 개인정보 설정" else "어르신 등록"
+    val confirmButtonText = if (isEditMode) "수정 완료" else "등록 완료"
 
     Column(
         modifier = Modifier
@@ -81,7 +120,7 @@ fun ElderDetailScreen(
             .imePadding(),
     ) {
         SettingsTopAppBar(
-            title = "어르신 개인정보 설정",
+            title = screenTitle,
             leftIcon = {
                 Icon(
                     painterResource(id = R.drawable.ic_settings_back),
@@ -99,17 +138,22 @@ fun ElderDetailScreen(
                 .verticalScroll(scrollState),
         ) {
             Spacer(Modifier.height(20.dp))
-            Row {
-                Spacer(modifier = modifier.weight(1f))
-                Text(
-                    text = "삭제",
-                    color = MediCareCallTheme.colors.negative,
-                    style = MediCareCallTheme.typography.SB_16,
-                    modifier = Modifier.clickable {
-                        showDeleteDialog = true
-                    },
-                )
+
+            // 수정 모드일 때만 '삭제' 텍스트 노출
+            if (isEditMode) {
+                Row {
+                    Spacer(modifier = modifier.weight(1f))
+                    Text(
+                        text = "삭제",
+                        color = MediCareCallTheme.colors.negative,
+                        style = MediCareCallTheme.typography.SB_16,
+                        modifier = Modifier.clickable {
+                            showDeleteDialog = true
+                        },
+                    )
+                }
             }
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
@@ -140,7 +184,7 @@ fun ElderDetailScreen(
                     )
                     Spacer(modifier = modifier.height(10.dp))
                     GenderToggleButton(
-                        isMale = isMale,
+                        isMale = isMale ?: true, // 초기값 null 대응
                         onGenderChange = { newValue ->
                             isMale = newValue
                         },
@@ -187,19 +231,6 @@ fun ElderDetailScreen(
                     )
                 }
 
-//                Button(
-//                    modifier = modifier.fillMaxWidth().height(50.dp),
-//                    shape = RoundedCornerShape(14.dp),
-//                    onClick = {},
-//                    colors = ButtonDefaults.buttonColors(
-//                        contentColor = MediCareCallTheme.colors.white,
-//                        containerColor = MediCareCallTheme.colors.main
-//                    )
-//
-//                ) {
-//                    Text("확인")
-//                }
-
                 CTAButton(
                     type = if (
                         name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
@@ -212,22 +243,18 @@ fun ElderDetailScreen(
                     } else {
                         CTAButtonType.DISABLED
                     },
-                    text = "확인",
+                    text = confirmButtonText,
                     onClick = {
-                        detailViewModel.updateElderInfo(
-                            elderInfo = EldersInfoResponseDto(
-                                elderId = eldersInfoResponseDto.elderId,
-                                name = name,
-                                birthDate = toDashedDate(birth),
-                                gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE,
-                                phone = phoneNum,
-                                relationship = relationship,
-                                residenceType = residenceType,
-                            ),
-                        ) {
-                            navController.previousBackStackEntry?.savedStateHandle?.set("ELDER_NAME_UPDATED", name)
-                            navController.popBackStack()
-                        }
+                        // 통합 처리 함수(processElderInfo)를 사용하여 등록/수정 요청
+                        val requestDto = ElderRegisterRequestDto(
+                            name = name,
+                            birthDate = toDashedDate(birth),
+                            gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE,
+                            phone = phoneNum,
+                            relationship = relationship,
+                            residenceType = residenceType,
+                        )
+                        detailViewModel.processElderInfo(requestDto)
                     },
                     modifier = Modifier.padding(bottom = 20.dp),
                 )
@@ -238,16 +265,17 @@ fun ElderDetailScreen(
                 onDismiss = { showDeleteDialog = false },
                 onDelete = {
                     showDeleteDialog = false
-                    detailViewModel.deleteElderInfo(eldersInfoResponseDto.elderId)
-                    onBack() // 삭제 후 설정 화면으로 이동
+                    detailViewModel.deleteElderInfo(elderId)
+                    onBack()
                 },
             )
         }
     }
 }
 
+// 날짜 형식 변환 함수 (기존 유지)
 fun toDashedDate(yyyymmdd: String): String {
     val d = yyyymmdd.filter { it.isDigit() }
-    require(d.length == 8) { "yyyyMMdd 형식(8자리)이어야 합니다." }
+    if (d.length != 8) return yyyymmdd // 에러 방지 위해 8자리 아닐 시 그대로 반환
     return "${d.substring(0, 4)}-${d.substring(4, 6)}-${d.substring(6, 8)}"
 }
