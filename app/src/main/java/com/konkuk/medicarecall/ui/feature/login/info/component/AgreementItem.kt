@@ -4,8 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -15,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -69,5 +73,25 @@ fun AgreementItem(
             contentDescription = "약관 보기",
             tint = MediCareCallTheme.colors.gray3,
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AgreementItemPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            AgreementItem(
+                text = "서비스 이용약관 동의",
+                isChecked = true,
+                onCheckedChange = {},
+            )
+            Spacer(Modifier.height(16.dp))
+            AgreementItem(
+                text = "개인정보 수집 및 이용 동의",
+                isChecked = false,
+                onCheckedChange = {},
+            )
+        }
     }
 }

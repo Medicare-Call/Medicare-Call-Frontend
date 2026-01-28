@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
@@ -154,5 +155,22 @@ fun formatDateToKorean(dateStr: String): String {
         outputFormat.format(date!!)
     } catch (e: Exception) {
         dateStr // 파싱 실패 시 원래 문자열 반환
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SubscribeDetailScreenPreview() {
+    MediCareCallTheme {
+        SubscribeDetailScreen(
+            elderInfo = EldersSubscriptionResponseDto(
+                elderId = 1,
+                name = "김옥자",
+                plan = "메디케어콜 프리미엄 플랜",
+                price = 50000,
+                nextBillingDate = "2024-02-15",
+                startDate = "2024-01-15",
+            ),
+        )
     }
 }

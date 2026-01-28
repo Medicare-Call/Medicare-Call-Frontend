@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -47,6 +48,18 @@ fun ChipItem(text: String, onRemove: () -> Unit) {
                     .clickable { onRemove() },
                 tint = MediCareCallTheme.colors.main,
             )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChipItemPreview() {
+    MediCareCallTheme {
+        Row(Modifier.padding(16.dp)) {
+            ChipItem(text = "고혈압", onRemove = {})
+            Spacer(Modifier.width(8.dp))
+            ChipItem(text = "당뇨", onRemove = {})
         }
     }
 }
