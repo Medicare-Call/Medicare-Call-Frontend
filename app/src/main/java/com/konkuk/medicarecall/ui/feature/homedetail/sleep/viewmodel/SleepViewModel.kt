@@ -44,6 +44,7 @@ class SleepViewModel(
     private companion object {
         const val TAG = "SLEEP_API"
     }
+
     private val _uiState = MutableStateFlow(SleepUiState())
     val uiState: StateFlow<SleepUiState> = _uiState.asStateFlow()
 
@@ -60,7 +61,7 @@ class SleepViewModel(
                         totalSleepHours = data.totalSleepHours,
                         totalSleepMinutes = data.totalSleepMinutes,
                         bedTime = data.bedTime,
-                        wakeUpTime = data.wakeUpTime
+                        wakeUpTime = data.wakeUpTime,
                     )
                 }
             }.onFailure { error ->
