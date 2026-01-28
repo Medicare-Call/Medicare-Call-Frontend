@@ -1,8 +1,8 @@
 package com.konkuk.medicarecall.data.repository
 
-import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
+import com.konkuk.medicarecall.domain.model.Sleep
 import java.time.LocalDate
 
 interface SleepRepository {
-    suspend fun getSleepUiState(elderId: Int, date: LocalDate): SleepUiState
+    suspend fun getSleepData(elderId: Int, date: LocalDate): Result<Sleep>
 }

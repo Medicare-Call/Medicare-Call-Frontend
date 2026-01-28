@@ -35,7 +35,6 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SleepDetailScreen(
-    elderId: Int,
     onBack: () -> Unit,
     calendarViewModel: CalendarViewModel = koinViewModel(),
     sleepViewModel: SleepViewModel = koinViewModel(),
@@ -46,26 +45,36 @@ fun SleepDetailScreen(
     }
 
     val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
-    val sleep by sleepViewModel.sleep.collectAsStateWithLifecycle()
+    val uiState by sleepViewModel.uiState.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
-    LaunchedEffect(elderId, selectedDate) {
-        elderId?.let { id ->
-            sleepViewModel.loadSleepDataForDate(id, selectedDate)
-        }
+    LaunchedEffect(selectedDate) {
+        sleepViewModel.loadSleepDataForDate(selectedDate)
     }
 
     SleepDetailScreenLayout(
         modifier = Modifier,
         onBack = onBack,
         selectedDate = selectedDate,
-        sleep = sleep,
+        sleep = uiState,
         weekDates = calendarViewModel.getCurrentWeekDates(),
         onDateSelected = { calendarViewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }
 
+@Composable
+fun SleepDetailScreen(
+    modifier: Modifier = Modifier,
+    sleep: SleepUiState = SleepUiState(),
+    onBack: () -> Unit = {},
+    onDateSelected: (LocalDate) -> Unit = {},
+    onMonthClick: () -> Unit = {},
+) {
+    // TODO: UI ...
+}
+
+// TODO: 나중에 제거
 @Composable
 fun SleepDetailScreenLayout(
     modifier: Modifier = Modifier,
@@ -124,7 +133,7 @@ fun PreviewSleepDetailScreen() {
         SleepDetailScreenLayout(
             onBack = {},
             selectedDate = LocalDate.now(),
-            sleep = SleepUiState.Companion.EMPTY,
+            sleep = SleepUiState(),
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
             onMonthClick = {},
