@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,13 +20,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import java.time.LocalDate
 
 @Composable
 fun WeeklyCalendar(
-    calendarUiState: CalendarUiState, // 현재 선택된 연/월/주차 날짜 상태
+    selectedDate: LocalDate,
+    weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit, // 날짜 클릭 시 동작할 콜백
 ) {
     val weekDays = listOf("일", "월", "화", "수", "목", "금", "토") // 요일 표시
@@ -58,9 +58,9 @@ fun WeeklyCalendar(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            calendarUiState.weekDates.forEach { date ->
+            weekDates.forEach { date ->
 
-                val isSelected = date == calendarUiState.selectedDate
+                val isSelected = date == selectedDate
 
                 Box(
                     modifier = Modifier
@@ -89,12 +89,8 @@ fun PreviewWeeklyCalendar() {
     val week = (0..6).map { baseDate.plusDays(it.toLong()) }
 
     WeeklyCalendar(
-        calendarUiState = CalendarUiState(
-            currentYear = baseDate.year,
-            currentMonth = baseDate.monthValue,
-            weekDates = week,
-            selectedDate = baseDate.plusDays(2),
-        ),
+        weekDates = week,
+        selectedDate = baseDate.plusDays(2),
         onDateSelected = {},
     )
 }

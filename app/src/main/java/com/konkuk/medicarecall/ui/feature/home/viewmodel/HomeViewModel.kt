@@ -62,7 +62,7 @@ class HomeViewModel(
     }
 
     // 홈 화면 상태 (isLoading 포함)
-    private val _homeUiState = MutableStateFlow(HomeUiState.Companion.EMPTY)
+    private val _homeUiState = MutableStateFlow(HomeUiState.EMPTY)
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     // 어르신 전체 목록
@@ -90,7 +90,7 @@ class HomeViewModel(
                     savedStateHandle[KEY_SELECTED_ELDER_ID] = elderId
                     fetchHomeSummaryForToday(elderId)
                 } else {
-                    _homeUiState.value = HomeUiState.Companion.EMPTY.copy(isLoading = false)
+                    _homeUiState.value = HomeUiState.EMPTY.copy(isLoading = false)
                 }
             }
         }
@@ -198,7 +198,7 @@ class HomeViewModel(
                     _homeUiState.value = fallbackUiState.copy(isLoading = false)
                 } else {
                     Log.e(TAG, "getHomeSummary failed elderId=$elderId", e)
-                    _homeUiState.value = HomeUiState.Companion.EMPTY.copy(isLoading = false)
+                    _homeUiState.value = HomeUiState.EMPTY.copy(isLoading = false)
                 }
             } finally {
                 _homeUiState.update { it.copy(isLoading = false) }
@@ -260,7 +260,7 @@ class HomeViewModel(
             correctMedicationOrder.indexOf(medUiState.medicineName)
                 .let { if (it == -1) Int.MAX_VALUE else it }
         }
-        return HomeUiState.Companion.EMPTY.copy(
+        return HomeUiState.EMPTY.copy(
             elderName = elderName,
             medicines = sortedFallbackMedicines,
         )

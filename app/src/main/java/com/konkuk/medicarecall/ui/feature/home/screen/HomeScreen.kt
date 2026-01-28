@@ -72,7 +72,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = koinViewModel(),
     navigateToMealDetailScreen: (Int) -> Unit,
     navigateToMedicineDetailScreen: (Int) -> Unit,
     navigateToSleepDetailScreen: (Int) -> Unit,
@@ -81,10 +81,10 @@ fun HomeScreen(
     navigateToGlucoseDetailScreen: (Int) -> Unit,
     mainBackStackEntry: NavBackStackEntry,
 ) {
-    val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
-    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
-    val elderNameList by homeViewModel.elderNameList.collectAsStateWithLifecycle()
-    val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
+    val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
+    val elderInfoList by viewModel.elderInfoList.collectAsStateWithLifecycle()
+    val elderNameList by viewModel.elderNameList.collectAsStateWithLifecycle()
+    val selectedElderId by viewModel.selectedElderId.collectAsStateWithLifecycle()
 
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -98,7 +98,7 @@ fun HomeScreen(
 
     LaunchedEffect(updatedName) {
         updatedName?.let {
-            homeViewModel.overrideName(it)
+            viewModel.overrideName(it)
             mainBackStackEntry.savedStateHandle.remove<String>("ELDER_NAME_UPDATED") // 원샷 처리
         }
     }
@@ -113,7 +113,7 @@ fun HomeScreen(
         onDropdownClick = { dropdownOpened = true },
         onDropdownDismiss = { dropdownOpened = false },
         onDropdownItemSelected = { selectedName ->
-            homeViewModel.selectElder(selectedName)
+            viewModel.selectElder(selectedName)
             dropdownOpened = false
         },
         navigateToMealDetailScreen = { selectedElderId?.let(navigateToMealDetailScreen) },
@@ -131,14 +131,14 @@ fun HomeScreen(
             scope.launch {
                 snackbarHostState.showSnackbar("케어콜이 곧 연결됩니다. 잠시만 기다려 주세요.")
                 delay(3000) // 케어콜 데이터 처리 기다리는 시간
-                homeViewModel.forceRefreshHomeData()
+                viewModel.forceRefreshHomeData()
             }
         },
         onRefresh = {
-            homeViewModel.forceRefreshHomeData()
+            viewModel.forceRefreshHomeData()
         },
         immediateCall = {
-            homeViewModel.callImmediate(it)
+            viewModel.callImmediate(it)
         },
     )
 }

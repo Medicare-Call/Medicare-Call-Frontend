@@ -22,11 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
-import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.component.MedicineDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
@@ -41,31 +39,30 @@ import java.time.LocalDate
 fun MedicineDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    calendarViewModel: CalendarViewModel = koinViewModel(),
-    medicineViewModel: MedicineViewModel = koinViewModel(),
+    viewModel: MedicineViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        calendarViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         Log.d("MED_UI", "LaunchedEffect: elderId=$elderId, date=$selectedDate")
-        elderId?.let { medicineViewModel.loadMedicinesForDate(it, selectedDate) }
+        elderId?.let { viewModel.loadMedicinesForDate(it, selectedDate) }
     }
 
-    val uiState by medicineViewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
     Log.d("MED_UI", "render medicines=${uiState.items.size}")
 
     MedicineDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
         medicines = uiState.items,
-        weekDates = calendarViewModel.getCurrentWeekDates(),
-        onDateSelected = { calendarViewModel.selectDate(it) },
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = { viewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }
@@ -109,12 +106,8 @@ fun MedicineDetailScreenLayout(
                 )
                 Spacer(Modifier.height(12.dp))
                 WeeklyCalendar(
-                    calendarUiState = CalendarUiState(
-                        currentYear = selectedDate.year,
-                        currentMonth = selectedDate.monthValue,
-                        weekDates = weekDates,
-                        selectedDate = selectedDate,
-                    ),
+                    weekDates = weekDates,
+                    selectedDate = selectedDate,
                     onDateSelected = onDateSelected,
                 )
                 Spacer(modifier = Modifier.height(32.dp))

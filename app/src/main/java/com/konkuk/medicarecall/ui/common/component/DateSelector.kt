@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +34,7 @@ fun DateSelector(
     val month = selectedDate.monthValue
 
     Row(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .fillMaxWidth()
             .clickable(
                 indication = null,
