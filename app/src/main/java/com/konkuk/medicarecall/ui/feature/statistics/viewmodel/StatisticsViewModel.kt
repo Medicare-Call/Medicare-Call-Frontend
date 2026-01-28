@@ -22,6 +22,13 @@ data class StatisticsUiState(
     val isLoading: Boolean = false,
     val summary: WeeklySummaryUiState? = null,
     val error: String? = null,
+    val currentWeek: Pair<LocalDate, LocalDate> = LocalDate.now().let {
+        val start = it.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        start to start.plusDays(6)
+    },
+    val isLatestWeek: Boolean = true,
+    val isEarliestWeek: Boolean = false,
+    val dropdownOpened: Boolean = false,
 )
 
 @KoinViewModel
@@ -35,15 +42,6 @@ class StatisticsViewModel(
 
     private val _selectedElderId = MutableStateFlow<Int?>(null)
 
-    private val _currentWeek = MutableStateFlow(getWeekRange(LocalDate.now()))
-    val currentWeek: StateFlow<Pair<LocalDate, LocalDate>> = _currentWeek
-
-    private val _isLatestWeek = MutableStateFlow(true)
-    val isLatestWeek: StateFlow<Boolean> = _isLatestWeek
-
-    private val _isEarliestWeek = MutableStateFlow(false)
-    val isEarliestWeek: StateFlow<Boolean> = _isEarliestWeek
-
     // [수정 1] earliestDate의 초기값을 아주 먼 과거로 설정하여 초기 오류를 방지합니다.
     private var earliestDate: LocalDate = LocalDate.MIN
     private var lastFetchTime: Long = 0
@@ -51,16 +49,20 @@ class StatisticsViewModel(
     init {
         viewModelScope.launch {
             _selectedElderId
-                .combine(_currentWeek) { id, week -> id to week }
+                .combine(_uiState) { id, state -> id to state.currentWeek }
                 .distinctUntilChanged()
                 .collect { (id, week) ->
                     if (id != null) {
                         // [수정 2] 주차가 변경될 때마다 isLatestWeek와 isEarliestWeek를 다시 계산합니다.
                         // 이렇게 하면 API 호출 성공/실패와 관계없이 UI 상태가 정확해집니다.
                         val weekStart = week.first
-                        _isLatestWeek.value = weekStart == weekStartOf(LocalDate.now())
-                        // earliestDate가 아직 초기값(LocalDate.MIN)이 아닐 때만 계산합니다.
-                        _isEarliestWeek.value = earliestDate != LocalDate.MIN && weekStart == weekStartOf(earliestDate)
+                        val isLatestWeek = weekStart == weekStartOf(LocalDate.now())
+                        val isEarliestWeek = earliestDate != LocalDate.MIN && weekStart == weekStartOf(earliestDate)
+
+                        _uiState.value = _uiState.value.copy(
+                            isLatestWeek = isLatestWeek,
+                            isEarliestWeek = isEarliestWeek,
+                        )
 
                         getWeeklyStatistics(elderId = id, startDate = weekStart)
                     }
@@ -75,7 +77,7 @@ class StatisticsViewModel(
         }
 
         val id = _selectedElderId.value ?: return
-        val start = _currentWeek.value.first
+        val start = _uiState.value.currentWeek.first
         getWeeklyStatistics(
             elderId = id,
             startDate = start,
@@ -97,18 +99,25 @@ class StatisticsViewModel(
     fun showPreviousWeek() {
         // [수정 4] isEarliestWeek 상태를 직접 신뢰하여 UI 이동을 막습니다.
         // 이 상태는 collect 블록에서 안정적으로 관리됩니다.
-        if (_isEarliestWeek.value) return
-        _currentWeek.value = getWeekRange(_currentWeek.value.first.minusWeeks(1))
+        if (_uiState.value.isEarliestWeek) return
+        val newWeek = getWeekRange(_uiState.value.currentWeek.first.minusWeeks(1))
+        _uiState.value = _uiState.value.copy(currentWeek = newWeek)
     }
 
     fun showNextWeek() {
-        if (_isLatestWeek.value) return
-        _currentWeek.value = getWeekRange(_currentWeek.value.first.plusWeeks(1))
+        if (_uiState.value.isLatestWeek) return
+        val newWeek = getWeekRange(_uiState.value.currentWeek.first.plusWeeks(1))
+        _uiState.value = _uiState.value.copy(currentWeek = newWeek)
     }
 
     fun jumpToTodayWeek() = jumpToWeekOf(LocalDate.now())
     fun jumpToWeekOf(date: LocalDate) {
-        _currentWeek.value = getWeekRange(date)
+        val newWeek = getWeekRange(date)
+        _uiState.value = _uiState.value.copy(currentWeek = newWeek)
+    }
+
+    fun toggleDropdown(isOpen: Boolean) {
+        _uiState.value = _uiState.value.copy(dropdownOpened = isOpen)
     }
 
     // [삭제 1] updateWeekState 함수는 이제 init 블록의 로직으로 대체되었으므로 삭제합니다.
@@ -156,7 +165,8 @@ class StatisticsViewModel(
                 if (earliestDate == LocalDate.MIN) {
                     earliestDate = LocalDate.parse(dto.subscriptionStartDate)
                     // earliestDate가 갱신되었으므로, 현재 주차가 가장 이른 주차인지 다시 확인합니다.
-                    _isEarliestWeek.value = _currentWeek.value.first == weekStartOf(earliestDate)
+                    val isEarliestWeek = _uiState.value.currentWeek.first == weekStartOf(earliestDate)
+                    _uiState.value = _uiState.value.copy(isEarliestWeek = isEarliestWeek)
                 }
 
                 Log.d("STATISTICS_DEBUG", "onSuccess: DTO 수신 완료\n$dto")
