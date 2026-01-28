@@ -31,6 +31,17 @@ class HomeViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
+
+    // 이름 업데이트 수신
+    private val _updatedName: StateFlow<String?> =
+        savedStateHandle.getStateFlow("ELDER_NAME_UPDATED", null)
+
+    val updatedName: StateFlow<String?> = _updatedName
+
+    fun clearUpdatedName() {
+        savedStateHandle.remove<String>("ELDER_NAME_UPDATED")
+    }
+
     fun overrideName(newName: String) {
         val id = selectedElderId.value ?: return
 
