@@ -81,7 +81,6 @@ fun HomeScreen(
     navigateToGlucoseDetailScreen: (Int) -> Unit,
     mainBackStackEntry: NavBackStackEntry,
 ) {
-
     val screenUiState by homeViewModel.homeScreenUiState.collectAsStateWithLifecycle()
 
     var dropdownOpened by remember { mutableStateOf(false) }

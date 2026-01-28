@@ -41,7 +41,6 @@ fun StateHealthDetailScreen(
     calendarViewModel: CalendarViewModel = koinViewModel(),
     healthViewModel: HealthViewModel = koinViewModel(),
 ) {
-
     val healthScreenUiState by healthViewModel.healthScreenUiState.collectAsStateWithLifecycle()
     val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
 

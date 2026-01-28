@@ -96,9 +96,9 @@ data class DoseStatusUiState(
  * HomeScreen 전체의 통합 UiState
  */
 data class HomeScreenUiState(
-    val homeData: HomeUiState,               // 홈 화면 메인 데이터
-    val elderInfoList: List<ElderInfo>,      // 어르신 전체 목록
-    val selectedElderId: Int?,               // 현재 선택된 어르신 ID
+    val homeData: HomeUiState, // 홈 화면 메인 데이터
+    val elderInfoList: List<ElderInfo>, // 어르신 전체 목록
+    val selectedElderId: Int?, // 현재 선택된 어르신 ID
 ) {
     companion object {
         val EMPTY = HomeScreenUiState(
