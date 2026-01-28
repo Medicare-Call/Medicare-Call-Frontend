@@ -91,3 +91,22 @@ data class DoseStatusUiState(
     val time: String, // "아침", "점심", "저녁"
     val taken: Boolean?, // true: 먹음, false: 안 먹음, null: 미기록
 )
+
+/**
+ * HomeScreen 전체의 통합 UiState
+ */
+data class HomeScreenUiState(
+    val homeData: HomeUiState,               // 홈 화면 메인 데이터
+    val elderInfoList: List<ElderInfo>,      // 어르신 전체 목록
+    val selectedElderId: Int?,               // 현재 선택된 어르신 ID
+) {
+    companion object {
+        val EMPTY = HomeScreenUiState(
+            homeData = HomeUiState.EMPTY,
+            elderInfoList = emptyList(),
+            selectedElderId = null,
+        )
+    }
+}
+
+data class ElderInfo(val id: Int, val name: String, val phone: String?)
