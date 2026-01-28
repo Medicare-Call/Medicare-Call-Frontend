@@ -81,10 +81,8 @@ fun HomeScreen(
     navigateToGlucoseDetailScreen: (Int) -> Unit,
     mainBackStackEntry: NavBackStackEntry,
 ) {
-    val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
-    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
-    val elderNameList by homeViewModel.elderNameList.collectAsStateWithLifecycle()
-    val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
+
+    val screenUiState by homeViewModel.homeScreenUiState.collectAsStateWithLifecycle()
 
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -105,9 +103,9 @@ fun HomeScreen(
 
     HomeScreenLayout(
         modifier = modifier,
-        homeUiState = homeUiState,
-        elderInfoList = elderInfoList,
-        selectedElderId = selectedElderId,
+        homeUiState = screenUiState.homeData,
+        elderInfoList = screenUiState.elderInfoList,
+        selectedElderId = screenUiState.selectedElderId,
         isRefreshing = isRefreshing,
         dropdownOpened = dropdownOpened,
         onDropdownClick = { dropdownOpened = true },
@@ -116,17 +114,17 @@ fun HomeScreen(
             homeViewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetailScreen = { selectedElderId?.let(navigateToMealDetailScreen) },
-        navigateToMedicineDetailScreen = { selectedElderId?.let(navigateToMedicineDetailScreen) },
-        navigateToSleepDetailScreen = { selectedElderId?.let(navigateToSleepDetailScreen) },
-        navigateToStateHealthDetailScreen = { selectedElderId?.let(navigateToStateHealthDetailScreen) },
-        navigateToStateMentalDetailScreen = { selectedElderId?.let(navigateToStateMentalDetailScreen) },
-        navigateToGlucoseDetailScreen = { selectedElderId?.let(navigateToGlucoseDetailScreen) },
+        navigateToMealDetailScreen = { screenUiState.selectedElderId?.let(navigateToMealDetailScreen) },
+        navigateToMedicineDetailScreen = { screenUiState.selectedElderId?.let(navigateToMedicineDetailScreen) },
+        navigateToSleepDetailScreen = { screenUiState.selectedElderId?.let(navigateToSleepDetailScreen) },
+        navigateToStateHealthDetailScreen = { screenUiState.selectedElderId?.let(navigateToStateHealthDetailScreen) },
+        navigateToStateMentalDetailScreen = { screenUiState.selectedElderId?.let(navigateToStateMentalDetailScreen) },
+        navigateToGlucoseDetailScreen = { screenUiState.selectedElderId?.let(navigateToGlucoseDetailScreen) },
 
         navigateToAlarm = {},
 
         snackbarHostState = snackbarHostState,
-        isLoading = homeUiState.isLoading,
+        isLoading = screenUiState.homeData.isLoading,
         onFabClick = {
             scope.launch {
                 snackbarHostState.showSnackbar("케어콜이 곧 연결됩니다. 잠시만 기다려 주세요.")

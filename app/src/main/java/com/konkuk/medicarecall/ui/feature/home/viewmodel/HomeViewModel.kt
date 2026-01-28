@@ -15,14 +15,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import com.konkuk.medicarecall.data.exception.HttpException
-
-data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
 @KoinViewModel
 class HomeViewModel(
@@ -63,21 +62,36 @@ class HomeViewModel(
 
     // 홈 화면 상태 (isLoading 포함)
     private val _homeUiState = MutableStateFlow(HomeUiState.Companion.EMPTY)
-    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     // 어르신 전체 목록
     private val _elderInfoList = MutableStateFlow<List<ElderInfo>>(emptyList())
-    val elderInfoList: StateFlow<List<ElderInfo>> = _elderInfoList.asStateFlow()
-
-//    드롭다운에 표시할 어르신 이름 목록
-//    val elderNameList: StateFlow<List<String>> = _elderInfoList.mapState { list ->
-//        list.map { it.name }
-//    }
 
     // 현재 선택된 어르신 ID
     private val _selectedElderId = MutableStateFlow<Int?>(
         savedStateHandle.get<Int?>(KEY_SELECTED_ELDER_ID),
     )
+
+    /**
+     * HomeScreen 전용 통합 StateFlow
+     */
+    val homeScreenUiState: StateFlow<HomeScreenUiState> = combine(
+        _homeUiState,
+        _elderInfoList,
+        _selectedElderId,
+    ) { homeData, elderInfos, selectedId ->
+        HomeScreenUiState(
+            homeData = homeData,
+            elderInfoList = elderInfos,
+            selectedElderId = selectedId,
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = HomeScreenUiState.EMPTY,
+    )
+
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
+    val elderInfoList: StateFlow<List<ElderInfo>> = _elderInfoList.asStateFlow()
     val selectedElderId: StateFlow<Int?> = _selectedElderId.asStateFlow()
 
     init {
