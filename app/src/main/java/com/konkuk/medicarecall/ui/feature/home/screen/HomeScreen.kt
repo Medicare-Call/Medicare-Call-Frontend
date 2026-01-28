@@ -3,16 +3,43 @@ package com.konkuk.medicarecall.ui.feature.home.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +50,14 @@ import androidx.navigation.NavBackStackEntry
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
-import com.konkuk.medicarecall.ui.feature.home.component.*
+import com.konkuk.medicarecall.ui.feature.home.component.CareCallFloatingButton
+import com.konkuk.medicarecall.ui.feature.home.component.CareCallSnackBar
+import com.konkuk.medicarecall.ui.feature.home.component.HomeGlucoseLevelContainer
+import com.konkuk.medicarecall.ui.feature.home.component.HomeMealContainer
+import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
+import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
+import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
+import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.ElderInfo
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
@@ -48,7 +82,6 @@ fun HomeScreen(
     val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
     val elderNameList by homeViewModel.elderNameList.collectAsStateWithLifecycle()
     val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
-    val isInitialLoading by homeViewModel.isLoading.collectAsStateWithLifecycle()
 
     var dropdownOpened by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -88,7 +121,7 @@ fun HomeScreen(
         navigateToStateMentalDetailScreen = { selectedElderId?.let(navigateToStateMentalDetailScreen) },
         navigateToGlucoseDetailScreen = { selectedElderId?.let(navigateToGlucoseDetailScreen) },
         snackbarHostState = snackbarHostState,
-        isLoading = isInitialLoading || homeUiState.isLoading,
+        isLoading = homeUiState.isLoading,
         onFabClick = {
             scope.launch {
                 snackbarHostState.showSnackbar("케어콜이 곧 연결됩니다. 잠시만 기다려 주세요.")
@@ -185,7 +218,10 @@ fun HomeScreenLayout(
     ) { innerPadding ->
         Box(modifier = modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.fillMaxSize().background(Color.White).padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(innerPadding),
             ) {
                 NameBar(
                     name = selectedElderName,
@@ -198,7 +234,9 @@ fun HomeScreenLayout(
                 PullToRefreshBox(
                     isRefreshing = isRefreshing,
                     onRefresh = onRefresh,
-                    modifier = Modifier.fillMaxSize().background(MediCareCallTheme.colors.bg),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MediCareCallTheme.colors.bg),
                     state = refreshState,
                     indicator = {
                         PullToRefreshDefaults.Indicator(
@@ -219,7 +257,10 @@ fun HomeScreenLayout(
                         }
                     } else {
                         Column(
-                            modifier = Modifier.verticalScroll(rememberScrollState()).fillMaxSize().padding(horizontal = 20.dp),
+                            modifier = Modifier
+                                .verticalScroll(rememberScrollState())
+                                .fillMaxSize()
+                                .padding(horizontal = 20.dp),
                         ) {
                             Spacer(Modifier.height(20.dp))
                             Text(text = "오늘의 건강 통계", style = MediCareCallTheme.typography.SB_18, color = MediCareCallTheme.colors.gray6)
@@ -247,34 +288,34 @@ fun HomeScreenLayout(
                                     breakfastEaten = homeUiState.breakfastEaten,
                                     lunchEaten = homeUiState.lunchEaten,
                                     dinnerEaten = homeUiState.dinnerEaten,
-                                    onClick = navigateToMealDetailScreen
+                                    onClick = navigateToMealDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeMedicineContainer(
                                     medicines = homeUiState.medicines,
-                                    onClick = navigateToMedicineDetailScreen
+                                    onClick = navigateToMedicineDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeSleepContainer(
                                     totalSleepHours = homeUiState.sleep?.meanHours ?: 0,
                                     totalSleepMinutes = homeUiState.sleep?.meanMinutes ?: 0,
                                     isRecorded = (homeUiState.sleep?.meanHours ?: 0) > 0 || (homeUiState.sleep?.meanMinutes ?: 0) > 0,
-                                    onClick = navigateToSleepDetailScreen
+                                    onClick = navigateToSleepDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateHealthContainer(
                                     healthStatus = homeUiState.healthStatus ?: "",
-                                    onClick = navigateToStateHealthDetailScreen
+                                    onClick = navigateToStateHealthDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeStateMentalContainer(
                                     mentalStatus = homeUiState.mentalStatus ?: "",
-                                    onClick = navigateToStateMentalDetailScreen
+                                    onClick = navigateToStateMentalDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 HomeGlucoseLevelContainer(
                                     glucoseLevelAverageToday = homeUiState.glucoseLevelAverageToday ?: 0,
-                                    onClick = navigateToGlucoseDetailScreen
+                                    onClick = navigateToGlucoseDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
                             }
