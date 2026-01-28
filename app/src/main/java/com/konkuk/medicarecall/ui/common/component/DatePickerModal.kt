@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.calendar
+package com.konkuk.medicarecall.ui.common.component
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults

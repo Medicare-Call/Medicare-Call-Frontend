@@ -18,9 +18,7 @@ import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginCareCallSetting
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginFinish
-import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginNaverPayView
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginPhone
-import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginPurchase
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterElder
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterElderHealth
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterUserInfo
@@ -114,14 +112,6 @@ class MainNavigator(
                 }
             },
         )
-    }
-
-    fun navigateToLoginPurchase() {
-        navController.navigateToLoginPurchase()
-    }
-
-    fun navigateToLoginNaverPayView() {
-        navController.navigateToLoginNaverPayView()
     }
 
     fun navigateToLoginFinish() {

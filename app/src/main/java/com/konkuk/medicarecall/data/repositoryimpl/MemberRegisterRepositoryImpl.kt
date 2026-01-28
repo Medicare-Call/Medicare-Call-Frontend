@@ -4,7 +4,7 @@ import com.konkuk.medicarecall.data.api.member.MemberRegisterService
 import com.konkuk.medicarecall.data.dto.request.MemberRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.MemberTokenResponseDto
 import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
-import com.konkuk.medicarecall.data.exception.HttpException
+import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.type.GenderType
 import org.koin.core.annotation.Single
 
@@ -19,22 +19,10 @@ class MemberRegisterRepositoryImpl(
         birthDate: String,
         gender: GenderType,
         fcmToken: String,
-    ): Result<MemberTokenResponseDto> =
-        runCatching {
-            val response = memberRegisterService.postMemberRegister(
-                "Bearer $token",
-                MemberRegisterRequestDto(
-                    name,
-                    birthDate,
-                    gender,
-                    fcmToken,
-                ),
-            )
-
-            if (response.isSuccessful) {
-                response.body() ?: error("Response body is null")
-            } else {
-                throw HttpException(response)
-            }
-        }
+    ): Result<MemberTokenResponseDto> = runCatching {
+        memberRegisterService.postMemberRegister(
+            "Bearer $token",
+            MemberRegisterRequestDto(name, birthDate, gender, fcmToken),
+        ).handleResponse()
+    }
 }

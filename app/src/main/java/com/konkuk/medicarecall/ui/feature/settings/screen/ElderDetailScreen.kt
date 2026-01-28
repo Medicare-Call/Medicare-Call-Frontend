@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
@@ -252,4 +253,28 @@ fun toDashedDate(yyyymmdd: String): String {
     val d = yyyymmdd.filter { it.isDigit() }
     require(d.length == 8) { "yyyyMMdd 형식(8자리)이어야 합니다." }
     return "${d.substring(0, 4)}-${d.substring(4, 6)}-${d.substring(6, 8)}"
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ElderDetailScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .systemBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "어르신 개인정보 설정",
+                leftIcon = {
+                    Icon(
+                        painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "setting back",
+                        tint = MediCareCallTheme.colors.black,
+                    )
+                },
+            )
+        }
+    }
 }

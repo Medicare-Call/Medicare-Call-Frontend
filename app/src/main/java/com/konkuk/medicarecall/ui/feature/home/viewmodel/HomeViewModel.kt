@@ -28,6 +28,17 @@ class HomeViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
+
+    // 이름 업데이트 수신
+    private val _updatedName: StateFlow<String?> =
+        savedStateHandle.getStateFlow("ELDER_NAME_UPDATED", null)
+
+    val updatedName: StateFlow<String?> = _updatedName
+
+    fun clearUpdatedName() {
+        savedStateHandle.remove<String>("ELDER_NAME_UPDATED")
+    }
+
     fun overrideName(newName: String) {
         val id = selectedElderId.value ?: return
 
@@ -141,7 +152,7 @@ class HomeViewModel(
             // val today = LocalDate.now()
             try {
                 // ① 요약 API 호출 (DTO를 받음)
-                val dto = homeRepository.getHomeSummary(elderId)
+                val dto = homeRepository.getHomeSummary(elderId).getOrThrow()
 
                 // ② DTO를 UiState로 변환 (ViewModel이 직접 함)
                 val uiFromServer = HomeUiState.from(dto)
@@ -196,7 +207,7 @@ class HomeViewModel(
                     _homeUiState.value = fallbackUiState.copy(isLoading = false)
                 } else {
                     Log.e(TAG, "getHomeSummary failed elderId=$elderId", e)
-                    _homeUiState.value = HomeUiState.Companion.EMPTY.copy(isLoading = false)
+                    _homeUiState.value = HomeUiState.EMPTY.copy(isLoading = false)
                 }
             } finally {
                 _homeUiState.update { it.copy(isLoading = false) }

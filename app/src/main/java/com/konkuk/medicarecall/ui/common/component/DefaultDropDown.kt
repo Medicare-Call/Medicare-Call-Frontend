@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -164,6 +165,22 @@ fun <T> DefaultDropdown(
                     }
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DefaultDropdownPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            DefaultDropdown(
+                enumList = listOf("옵션 1", "옵션 2", "옵션 3"),
+                placeHolder = "선택하세요",
+                category = "카테고리",
+                scrollState = rememberScrollState(),
+                value = "",
+            )
         }
     }
 }
