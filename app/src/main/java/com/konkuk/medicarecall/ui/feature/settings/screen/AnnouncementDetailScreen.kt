@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
@@ -93,5 +94,21 @@ fun AnnouncementDetailScreen(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnnouncementDetailScreenPreview() {
+    MediCareCallTheme {
+        AnnouncementDetailScreen(
+            noticeInfo = NoticesResponseDto(
+                id = 1,
+                title = "서비스 업데이트 안내",
+                author = "메디케어콜",
+                contents = "안녕하세요. 메디케어콜입니다.\n새로운 기능이 추가되었습니다.\n앞으로도 더 나은 서비스를 제공하겠습니다.",
+                publishedAt = "2024-01-15",
+            ),
+        )
     }
 }
