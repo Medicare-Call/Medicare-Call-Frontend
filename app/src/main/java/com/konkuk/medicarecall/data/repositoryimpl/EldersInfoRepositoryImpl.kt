@@ -6,46 +6,34 @@ import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
+import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
 import org.koin.core.annotation.Single
-import com.konkuk.medicarecall.data.exception.HttpException
 
 @Single
 class EldersInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
 ) : EldersInfoRepository {
     override suspend fun getElders(): Result<List<EldersInfoResponseDto>> = runCatching {
-        val response = eldersInfoService.getElders()
-        if (response.isSuccessful) {
-            response.body()
-                ?: error("Response body is null(eldersPersonalInfo)")
-        } else {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error(eldersPersonalInfo)"
-            throw HttpException(response)
-        }
+        eldersInfoService.getElders().handleResponse()
     }
 
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> = runCatching {
-        val response = eldersInfoService.getSubscriptions()
-        if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
-        } else {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            throw HttpException(response)
-        }
+        eldersInfoService.getSubscriptions().handleResponse()
     }
 
     override suspend fun updateElder(
         id: Int,
         request: ElderData,
     ): Result<Unit> = runCatching {
-        val response = eldersInfoService.updateElder(
-            id,
-            ElderRegisterRequestDto(
+        eldersInfoService.updateElder(
+            elderId = id,
+            request = ElderRegisterRequestDto(
                 request.name,
                 birthDate = request.birthDate.formatAsDate(),
                 gender = if (request.gender) GenderType.MALE else GenderType.FEMALE,
@@ -53,31 +41,14 @@ class EldersInfoRepositoryImpl(
                 relationship = RelationshipType.entries.find { it.displayName == request.relationship }!!,
                 residenceType = ElderResidenceType.entries.find { it.displayName == request.livingType }!!,
             ),
-        )
-        if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
-        } else {
-            throw HttpException(response)
-        }
+        ).handleResponse()
     }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
-        val response = eldersInfoService.deleteElderSettings(id)
-        if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
-        } else {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            throw HttpException(response)
-        }
+        eldersInfoService.deleteElderSettings(id).handleNullableResponse()
     }
 
     override suspend fun getCareCallTimes(id: Int): Result<CallTimeResponseDto> = runCatching {
-        val response = eldersInfoService.getCallTimes(id)
-        if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
-        } else {
-            val errorBody = response.errorBody()?.toString() ?: "Unknown error"
-            throw HttpException(response)
-        }
+        eldersInfoService.getCallTimes(id).handleResponse()
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
@@ -124,6 +125,30 @@ fun MyDetailScreen(
                             pushNotification = myDataInfo.pushNotification,
                         ),
                     ) { onBack() }
+                },
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MyDetailScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "내 정보 설정",
+                leftIcon = {
+                    Icon(
+                        painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "setting back",
+                        tint = MediCareCallTheme.colors.black,
+                    )
                 },
             )
         }

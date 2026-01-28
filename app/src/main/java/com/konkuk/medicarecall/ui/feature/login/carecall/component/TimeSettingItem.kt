@@ -18,10 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.type.TimeSettingType
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.TimeSettingType
 
 @Composable
 fun TimeSettingItem(
@@ -86,6 +87,26 @@ fun TimeSettingItem(
                     color = MediCareCallTheme.colors.gray9,
                 )
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TimeSettingItemPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            TimeSettingItem(
+                category = "1차",
+                timeType = TimeSettingType.FIRST,
+                timeText = null,
+            )
+            Spacer(Modifier.height(16.dp))
+            TimeSettingItem(
+                category = "2차",
+                timeType = TimeSettingType.SECOND,
+                timeText = "오전 10:00",
+            )
         }
     }
 }

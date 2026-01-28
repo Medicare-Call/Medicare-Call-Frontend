@@ -1,10 +1,9 @@
-package com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel
+package com.konkuk.medicarecall.domain.model
 
-data class SleepUiState(
+data class Sleep(
     val date: String = "",
     val totalSleepHours: Int? = null,
     val totalSleepMinutes: Int? = null,
     val bedTime: String? = null,
     val wakeUpTime: String? = null,
-    val isRecorded: Boolean = bedTime != null && wakeUpTime != null,
 )

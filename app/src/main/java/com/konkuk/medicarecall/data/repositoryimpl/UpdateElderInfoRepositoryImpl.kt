@@ -1,11 +1,11 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
+import com.konkuk.medicarecall.data.util.handleResponse
 import org.koin.core.annotation.Single
-import com.konkuk.medicarecall.data.exception.HttpException
 
 @Single
 class UpdateElderInfoRepositoryImpl(
@@ -13,22 +13,10 @@ class UpdateElderInfoRepositoryImpl(
 ) : UpdateElderInfoRepository {
     override suspend fun updateElderInfo(id: Int, request: ElderRegisterRequestDto): Result<Unit> =
         runCatching {
-            val response = eldersInfoService.updateElder(id, request)
-            if (response.isSuccessful) {
-                response.body() ?: error("Response body is null")
-            } else {
-                throw HttpException(response)
-            }
+            eldersInfoService.updateElder(id, request).handleResponse()
         }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
-        val response = eldersInfoService.deleteElderSettings(id)
-        if (response.isSuccessful) {
-            response.body() ?: error("Response body is null")
-        } else {
-            val body = response.errorBody()?.toString().orEmpty()
-            Log.e("DeleteElder", "HTTP ${response.code} body=$body")
-            throw HttpException(response)
-        }
+        eldersInfoService.deleteElderSettings(id).handleNullableResponse()
     }
 }

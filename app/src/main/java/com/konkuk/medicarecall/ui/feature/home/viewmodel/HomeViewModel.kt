@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import com.konkuk.medicarecall.data.exception.HttpException
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
@@ -143,7 +143,7 @@ class HomeViewModel(
             // val today = LocalDate.now()
             try {
                 // ① 요약 API 호출 (DTO를 받음)
-                val dto = homeRepository.getHomeSummary(elderId)
+                val dto = homeRepository.getHomeSummary(elderId).getOrThrow()
 
                 // ② DTO를 UiState로 변환 (ViewModel이 직접 함)
                 val uiFromServer = HomeUiState.from(dto)
