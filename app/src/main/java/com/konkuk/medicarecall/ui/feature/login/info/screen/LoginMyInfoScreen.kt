@@ -39,6 +39,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -296,6 +297,111 @@ fun LoginMyInfoScreen(
             Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 14.dp),
+        )
+    }
+}
+
+@Composable
+private fun LoginMyInfoScreenLayout(
+    modifier: Modifier = Modifier,
+    name: String,
+    dateOfBirth: String,
+    isMale: Boolean?,
+    onNameChanged: (String) -> Unit,
+    onDOBChanged: (String) -> Unit,
+    onGenderChanged: (Boolean) -> Unit,
+    onNextClick: () -> Unit,
+) {
+    val scrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(MediCareCallTheme.colors.bg)
+            .padding(horizontal = 20.dp)
+            .statusBarsPadding()
+            .imePadding(),
+    ) {
+        Column {
+            Column(
+                Modifier.verticalScroll(scrollState),
+            ) {
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    "회원 정보를\n입력해주세요",
+                    style = MediCareCallTheme.typography.B_26,
+                    color = MediCareCallTheme.colors.black,
+                )
+                Spacer(Modifier.height(40.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "이름",
+                        color = MediCareCallTheme.colors.gray7,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    DefaultTextField(
+                        name,
+                        onNameChanged,
+                        placeHolder = "이름",
+                        textFieldModifier = Modifier.focusRequester(focusRequester),
+                    )
+                }
+                Spacer(Modifier.height(20.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "생년월일",
+                        color = MediCareCallTheme.colors.gray7,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    DefaultTextField(
+                        dateOfBirth,
+                        { input ->
+                            val filtered = input.filter { it.isDigit() }.take(8)
+                            onDOBChanged(filtered)
+                        },
+                        placeHolder = "YYYY / MM / DD",
+                        keyboardType = KeyboardType.Number,
+                        visualTransformation = DateOfBirthVisualTransformation(),
+                        maxLength = 8,
+                    )
+                }
+                Spacer(Modifier.height(20.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "성별",
+                        color = MediCareCallTheme.colors.gray7,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    GenderToggleButton(isMale ?: true, onGenderChanged)
+                }
+                Spacer(Modifier.height(30.dp))
+                CTAButton(
+                    if (name.isNotEmpty() && dateOfBirth.length == 8 && isMale != null)
+                        CTAButtonType.GREEN
+                    else
+                        CTAButtonType.DISABLED,
+                    "다음",
+                    onNextClick,
+                    Modifier.padding(bottom = 20.dp),
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, heightDp = 800)
+@Composable
+private fun LoginMyInfoScreenPreview() {
+    MediCareCallTheme {
+        LoginMyInfoScreenLayout(
+            name = "홍길동",
+            dateOfBirth = "19900101",
+            isMale = true,
+            onNameChanged = {},
+            onDOBChanged = {},
+            onGenderChanged = {},
+            onNextClick = {},
         )
     }
 }

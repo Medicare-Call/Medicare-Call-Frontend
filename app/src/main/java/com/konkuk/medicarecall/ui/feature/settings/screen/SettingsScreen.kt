@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -292,6 +293,53 @@ fun SettingsScreen(
                             tint = MediCareCallTheme.colors.gray2,
                         )
                     }
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingsScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(title = "설정")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_setting_profile),
+                        contentDescription = "settings profile image",
+                        modifier = Modifier.size(80.dp),
+                    )
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Text(
+                        text = "홍길동",
+                        style = MediCareCallTheme.typography.SB_18,
+                        color = MediCareCallTheme.colors.black,
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = "님",
+                        style = MediCareCallTheme.typography.R_18,
+                        color = MediCareCallTheme.colors.black,
+                    )
                 }
             }
         }

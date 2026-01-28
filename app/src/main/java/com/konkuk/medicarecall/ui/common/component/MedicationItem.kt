@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
@@ -147,5 +148,26 @@ fun MedicationItem(
                 }
             },
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MedicationItemPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            MedicationItem(
+                medicationSchedule = mapOf(
+                    MedicationTimeType.MORNING to listOf("당뇨약"),
+                    MedicationTimeType.DINNER to listOf("혈압약"),
+                ),
+                selectedList = listOf(),
+                inputText = "",
+                onTextChange = {},
+                onSelectTime = {},
+                onAddMedication = { _, _ -> },
+                onRemoveChip = { _, _ -> },
+            )
+        }
     }
 }

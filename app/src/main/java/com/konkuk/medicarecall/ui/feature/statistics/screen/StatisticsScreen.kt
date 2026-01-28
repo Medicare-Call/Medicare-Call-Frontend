@@ -48,7 +48,6 @@ import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
@@ -105,18 +104,22 @@ fun StatisticsScreen(
     LaunchedEffect(selectedElderId) {
         selectedElderId?.let { statisticsViewModel.setSelectedElderId(it) }
     }
-    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
-    val medsChanged by (savedStateHandle?.getStateFlow("medsChanged", false) ?: MutableStateFlow(
-        false,
-    ))
-        .collectAsStateWithLifecycle()
 
-    LaunchedEffect(medsChanged) {
-        if (medsChanged) {
-            statisticsViewModel.refresh()
-            savedStateHandle?.set("medsChanged", false)
-        }
+    // 복약 변경 이벤트 수신
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getStateFlow("medsChanged", false)
+            ?.collect { changed ->
+                if (changed) {
+                    statisticsViewModel.onMedsChanged()
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("medsChanged", false)
+                }
+            }
     }
+
     StatisticsScreenLayout(
         modifier = modifier,
         uiState = uiState,
