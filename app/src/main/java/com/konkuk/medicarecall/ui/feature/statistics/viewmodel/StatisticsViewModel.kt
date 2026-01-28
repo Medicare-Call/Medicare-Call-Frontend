@@ -41,8 +41,6 @@ class StatisticsViewModel(
     val uiState: StateFlow<StatisticsUiState> = _uiState.asStateFlow()
 
     private val _selectedElderId = MutableStateFlow<Int?>(null)
-
-    // [수정 1] earliestDate의 초기값을 아주 먼 과거로 설정하여 초기 오류를 방지합니다.
     private var earliestDate: LocalDate = LocalDate.MIN
     private var lastFetchTime: Long = 0
 
@@ -53,8 +51,6 @@ class StatisticsViewModel(
                 .distinctUntilChanged()
                 .collect { (id, week) ->
                     if (id != null) {
-                        // [수정 2] 주차가 변경될 때마다 isLatestWeek와 isEarliestWeek를 다시 계산합니다.
-                        // 이렇게 하면 API 호출 성공/실패와 관계없이 UI 상태가 정확해집니다.
                         val weekStart = week.first
                         val isLatestWeek = weekStart == weekStartOf(LocalDate.now())
                         val isEarliestWeek = earliestDate != LocalDate.MIN && weekStart == weekStartOf(earliestDate)
@@ -87,8 +83,6 @@ class StatisticsViewModel(
 
     fun setSelectedElderId(id: Int) {
         if (_selectedElderId.value != id) {
-            // [수정 3] 새로운 사용자를 선택하면 earliestDate를 초기화합니다.
-            // 이렇게 해야 이전 사용자의 기록이 다음 사용자에게 영향을 주지 않습니다.
             earliestDate = LocalDate.MIN
             _selectedElderId.value = id
         }
@@ -97,8 +91,6 @@ class StatisticsViewModel(
     /* ---------------- Week 이동 ---------------- */
 
     fun showPreviousWeek() {
-        // [수정 4] isEarliestWeek 상태를 직접 신뢰하여 UI 이동을 막습니다.
-        // 이 상태는 collect 블록에서 안정적으로 관리됩니다.
         if (_uiState.value.isEarliestWeek) return
         val newWeek = getWeekRange(_uiState.value.currentWeek.first.minusWeeks(1))
         _uiState.value = _uiState.value.copy(currentWeek = newWeek)
@@ -161,7 +153,6 @@ class StatisticsViewModel(
                 repository.getStatistics(elderId, formatted) to correctOrder
             }.onSuccess { (dto, order) ->
                 lastFetchTime = System.currentTimeMillis()
-                // [수정 5] API 호출 성공 시 earliestDate를 처음 한 번만 설정합니다.
                 if (earliestDate == LocalDate.MIN) {
                     earliestDate = LocalDate.parse(dto.subscriptionStartDate)
                     // earliestDate가 갱신되었으므로, 현재 주차가 가장 이른 주차인지 다시 확인합니다.
