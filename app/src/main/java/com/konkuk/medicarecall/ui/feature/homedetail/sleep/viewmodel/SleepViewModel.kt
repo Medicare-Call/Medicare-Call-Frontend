@@ -37,7 +37,7 @@ class SleepViewModel(
                         totalSleepHours = data.totalSleepHours,
                         totalSleepMinutes = data.totalSleepMinutes,
                         bedTime = data.bedTime,
-                        wakeUpTime = data.wakeUpTime
+                        wakeUpTime = data.wakeUpTime,
                     )
                 }
             }.onFailure { error ->
