@@ -4,7 +4,7 @@ import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.dto.request.SetCallTimeRequestDto
 import com.konkuk.medicarecall.data.repository.SetCallRepository
-import com.konkuk.medicarecall.data.util.handleResponse
+import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.ui.model.CallTimes
 import org.koin.core.annotation.Single
 
@@ -16,7 +16,7 @@ class SetCallRepositoryImpl(
         elderId: Int,
         body: SetCallTimeRequestDto,
     ): Result<Unit> = runCatching {
-        service.saveCareCallTimes(elderId, body).handleResponse()
+        service.saveCareCallTimes(elderId, body).handleNullableResponse()
     }
 
     // 오버로드: UI에서 CallTimes만 넘기면 레포가 변환까지 처리

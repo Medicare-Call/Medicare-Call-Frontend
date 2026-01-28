@@ -7,6 +7,7 @@ import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import org.koin.core.annotation.Single
@@ -47,7 +48,7 @@ class EldersHealthInfoRepositoryImpl(
             medicationSchedules = medicationSchedule,
             notes = elderInfo.notes,
         )
-        elderRegisterService.postElderHealthInfo(elderInfo.elderId, elder).handleResponse()
+        elderRegisterService.postElderHealthInfo(elderInfo.elderId, elder).handleNullableResponse()
         refresh()
     }
 

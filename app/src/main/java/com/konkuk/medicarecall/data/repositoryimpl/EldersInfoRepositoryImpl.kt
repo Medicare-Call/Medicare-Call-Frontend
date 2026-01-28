@@ -6,6 +6,7 @@ import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
@@ -44,7 +45,7 @@ class EldersInfoRepositoryImpl(
     }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
-        eldersInfoService.deleteElderSettings(id).handleResponse()
+        eldersInfoService.deleteElderSettings(id).handleNullableResponse()
     }
 
     override suspend fun getCareCallTimes(id: Int): Result<CallTimeResponseDto> = runCatching {

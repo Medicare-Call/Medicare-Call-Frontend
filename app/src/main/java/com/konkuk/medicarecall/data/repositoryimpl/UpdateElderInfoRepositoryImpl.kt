@@ -3,6 +3,7 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import org.koin.core.annotation.Single
 
@@ -16,6 +17,6 @@ class UpdateElderInfoRepositoryImpl(
         }
 
     override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
-        eldersInfoService.deleteElderSettings(id).handleResponse()
+        eldersInfoService.deleteElderSettings(id).handleNullableResponse()
     }
 }

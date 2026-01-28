@@ -5,6 +5,7 @@ import com.konkuk.medicarecall.data.api.member.SettingService
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import org.koin.core.annotation.Single
 
@@ -25,7 +26,7 @@ class UserRepositoryImpl(
     override suspend fun logout(): Result<Unit> {
         val result = runCatching {
             val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
-            authService.logout("Bearer $refresh").handleResponse()
+            authService.logout("Bearer $refresh").handleNullableResponse()
         }
         // 성공/실패와 무관하게 로컬 토큰 제거(보안/UX 측면에서 권장)
         tokenStore.clearTokens()

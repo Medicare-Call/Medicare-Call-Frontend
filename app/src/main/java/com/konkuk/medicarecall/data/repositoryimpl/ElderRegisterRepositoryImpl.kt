@@ -9,6 +9,7 @@ import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.ElderRegisterResponseDto
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
+import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
@@ -45,7 +46,7 @@ class ElderRegisterRepositoryImpl(
                     HealthIssueType.entries.find { it.displayName == notes }!!
                 },
             ),
-        ).handleResponse()
+        ).handleNullableResponse()
     }
 
     override suspend fun postElderBulk(elderList: List<ElderData>): Result<ElderBulkRegisterResponseDto> = runCatching {
@@ -84,6 +85,6 @@ class ElderRegisterRepositoryImpl(
                     )
                 },
             ),
-        ).handleResponse()
+        ).handleNullableResponse()
     }
 }
