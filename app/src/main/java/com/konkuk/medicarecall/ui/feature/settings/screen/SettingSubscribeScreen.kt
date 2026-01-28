@@ -32,7 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingSubscribeScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToSubscribeDetail: (subscription: EldersSubscriptionResponseDto) -> Unit = {},
+    navigateToSubscribeDetail: (elderId: Int) -> Unit = {},
     viewModel: SubscribeViewModel = koinViewModel(),
 ) {
     val eldersInfo = viewModel.subscriptions
@@ -70,7 +70,7 @@ fun SettingSubscribeScreen(
                 SubscribeCard(
                     elderInfo = it,
                     onClick = {
-                        navigateToSubscribeDetail(it)
+                        navigateToSubscribeDetail(it.elderId)
                     },
                 )
             }

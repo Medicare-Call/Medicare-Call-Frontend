@@ -27,7 +27,7 @@ import org.koin.androidx.compose.koinViewModel
 fun AnnouncementScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navigateToNoticeDetail: (notice: NoticesResponseDto) -> Unit = {},
+    navigateToNoticeDetail: (noticeId: Int) -> Unit = {},
     viewModel: NoticeViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
@@ -71,7 +71,7 @@ fun AnnouncementScreen(
                         date = notice.publishedAt.replace("-", "."),
                         onClick = {
                             Log.d("AnnouncementScreen", "공지사항 클릭: ${notice.title}")
-                            navigateToNoticeDetail(notice)
+                            navigateToNoticeDetail(notice.id)
                         },
                     )
                 }

@@ -51,7 +51,7 @@ import org.koin.androidx.compose.koinViewModel
 fun MyDataSettingScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToUserInfoSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
+    navigateToUserInfoSetting: () -> Unit = {},
     navigateToLoginAfterLogout: () -> Unit = {},
     myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
@@ -129,8 +129,7 @@ fun MyDataSettingScreen(
                         color = MediCareCallTheme.colors.active,
                         modifier = modifier.clickable(
                             onClick = {
-                                // myDataInfo가 null 아닌 경우에만 네비게이션
-                                myDataInfo?.let { navigateToUserInfoSetting(it) }
+                                navigateToUserInfoSetting()
                             },
                         ),
                     )

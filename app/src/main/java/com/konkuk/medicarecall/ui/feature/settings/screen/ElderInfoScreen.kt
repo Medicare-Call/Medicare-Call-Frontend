@@ -33,7 +33,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ElderInfoScreen(
     onBack: () -> Unit = {},
-    navigateToElderDetail: (elderInfo: EldersInfoResponseDto) -> Unit = {},
+    navigateToElderDetail: (Int) -> Unit = {},
     personalViewModel: EldersInfoViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -86,7 +86,7 @@ fun ElderInfoScreen(
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        navigateToElderDetail(it)
+                        navigateToElderDetail(it.elderId)
                     },
                 )
             }

@@ -33,7 +33,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HealthInfoScreen(
     onBack: () -> Unit = {},
-    navigateToHealthDetail: (EldersHealthResponseDto) -> Unit = {},
+    navigateToHealthDetail: (Int) -> Unit = {},
     healthInfoViewModel: EldersHealthViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -86,7 +86,7 @@ fun HealthInfoScreen(
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        navigateToHealthDetail(it)
+                        navigateToHealthDetail(it.elderId)
                     },
                 )
             }

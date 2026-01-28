@@ -1,10 +1,5 @@
 package com.konkuk.medicarecall.ui.navigation
 
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import kotlinx.serialization.Serializable
 
 sealed interface Route {
@@ -67,28 +62,29 @@ sealed interface Route {
     data object ElderPersonalInfo : Route
 
     @Serializable
-    data class ElderPersonalDetail(val info: EldersInfoResponseDto) : Route
+    data class ElderPersonalDetail(val elderId: Int = -1) : Route
+    // 등록(-1)과 수정(id)을 통합하기 위해 기본값 추가
 
     @Serializable
     data object ElderHealthInfo : Route
 
     @Serializable
-    data class ElderHealthDetail(val health: EldersHealthResponseDto) : Route
+    data class ElderHealthDetail(val elderId: Int) : Route
 
     @Serializable
-    data class NotificationSetting(val myInfo: MyInfoResponseDto) : Route
+    data object NotificationSetting : Route
 
     @Serializable
     data object SubscribeInfo : Route
 
     @Serializable
-    data class SubscribeDetail(val subscription: EldersSubscriptionResponseDto) : Route
+    data class SubscribeDetail(val elderId: Int) : Route
 
     @Serializable
     data object Notice : Route
 
     @Serializable
-    data class NoticeDetail(val notice: NoticesResponseDto) : Route
+    data class NoticeDetail(val noticeId: Int) : Route
 
     @Serializable
     data object ServiceCenter : Route
@@ -97,7 +93,7 @@ sealed interface Route {
     data object UserInfo : Route
 
     @Serializable
-    data class UserInfoSetting(val myInfo: MyInfoResponseDto) : Route
+    data object UserInfoSetting : Route
 
     // 알림
     @Serializable

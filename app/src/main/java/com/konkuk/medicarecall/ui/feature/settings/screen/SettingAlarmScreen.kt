@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.PushNotificationDto
@@ -37,9 +38,10 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingAlarmScreen(
     modifier: Modifier = Modifier,
     myDataViewModel: DetailMyDataViewModel = koinViewModel(),
-    myDataInfo: MyInfoResponseDto,
     onBack: () -> Unit = {},
 ) {
+    val myDataInfo by myDataViewModel.myDataInfo.collectAsStateWithLifecycle()
+
     // 1. UI를 위한 로컬 상태를 선언합니다.
     var masterChecked by remember { mutableStateOf(false) }
     var completeChecked by remember { mutableStateOf(false) }
@@ -49,25 +51,29 @@ fun SettingAlarmScreen(
     // 2. `LaunchedEffect`를 사용해 외부 데이터(myDataInfo)가 바뀔 때마다 로컬 상태를 동기화합니다.
     //    이렇게 하면 데이터가 변경되었을 때 UI가 즉시 올바르게 반영됩니다.
     LaunchedEffect(myDataInfo) {
-        masterChecked = myDataInfo.pushNotification.all == "ON"
-        completeChecked = myDataInfo.pushNotification.carecallCompleted == "ON" || masterChecked
-        abnormalChecked = myDataInfo.pushNotification.healthAlert == "ON" || masterChecked
-        missedChecked = myDataInfo.pushNotification.carecallMissed == "ON" || masterChecked
+        myDataInfo?.let {
+            masterChecked = it.pushNotification.all == "ON"
+            completeChecked = it.pushNotification.carecallCompleted == "ON" || masterChecked
+            abnormalChecked = it.pushNotification.healthAlert == "ON" || masterChecked
+            missedChecked = it.pushNotification.carecallMissed == "ON" || masterChecked
+        }
     }
 
     // 3. 상태를 업데이트하고 ViewModel을 호출하는 함수를 만듭니다. (코드 중복 제거)
     val updateSettings = {
-        myDataViewModel.updateUserData(
-            userInfo = myDataInfo.copy(
-                // 기존 데이터를 복사하여 변경사항만 적용
-                pushNotification = PushNotificationDto(
-                    all = if (masterChecked) "ON" else "OFF",
-                    carecallCompleted = if (completeChecked) "ON" else "OFF",
-                    healthAlert = if (abnormalChecked) "ON" else "OFF",
-                    carecallMissed = if (missedChecked) "ON" else "OFF",
+        myDataInfo?.let {
+            myDataViewModel.updateUserData(
+                userInfo = it.copy(
+                    // 기존 데이터를 복사하여 변경사항만 적용
+                    pushNotification = PushNotificationDto(
+                        all = if (masterChecked) "ON" else "OFF",
+                        carecallCompleted = if (completeChecked) "ON" else "OFF",
+                        healthAlert = if (abnormalChecked) "ON" else "OFF",
+                        carecallMissed = if (missedChecked) "ON" else "OFF",
+                    ),
                 ),
-            ),
-        )
+            )
+        }
     }
 
     Column(

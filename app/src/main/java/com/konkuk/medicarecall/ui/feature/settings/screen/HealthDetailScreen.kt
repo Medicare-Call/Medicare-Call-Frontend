@@ -2,7 +2,9 @@ package com.konkuk.medicarecall.ui.feature.settings.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,14 +15,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
@@ -40,18 +48,15 @@ import org.koin.androidx.compose.koinViewModel
 fun HealthDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    healthInfoResponseDto: EldersHealthResponseDto,
+    elderId: Int,
     detailViewModel: DetailHealthViewModel = koinViewModel(),
 ) {
-    val scrollState = rememberScrollState()
-    val diseaseList = remember(healthInfoResponseDto) {
-        healthInfoResponseDto.diseases.toMutableStateList()
-    }
-    val medications = remember(healthInfoResponseDto) {
-        healthInfoResponseDto.medications.toMedicationSchedules().toMutableStateList()
-    }
-    val noteList = remember(healthInfoResponseDto) {
-        healthInfoResponseDto.notes.map { it.displayName }.toMutableStateList()
+    val healthData by detailViewModel.healthData.collectAsStateWithLifecycle()
+    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
+    val errorMessage by detailViewModel.errorMessage.collectAsStateWithLifecycle()
+
+    LaunchedEffect(elderId) {
+        detailViewModel.loadHealthInfoById(elderId)
     }
 
     Column(
@@ -75,60 +80,128 @@ fun HealthDetailScreen(
                 )
             },
         )
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .verticalScroll(scrollState),
-        ) {
-            Spacer(Modifier.height(20.dp))
-            // 질환 정보
-            IllnessInfoItem(
-                diseaseList = diseaseList,
-                onAddDisease = { diseaseList.add(it) },
-                onRemoveDisease = { diseaseList.remove(it) },
-            )
-            Spacer(modifier = modifier.height(20.dp))
-            // 복약정보
-            MedInfoItem(
-                medications = medications,
-//                onAddMedication = { medications.add(it) },
-//                onRemoveMedication = { medications.remove(it) },
-            )
-            Spacer(modifier = modifier.height(20.dp))
-            // 특이사항
-            SpecialNoteItem(
-                enumList = HealthIssueType.entries.map { it.displayName }.toList(),
-                noteList = noteList,
-                onAddNote = { noteList.add(it) },
-                onRemoveNote = { noteList.remove(it) },
-                placeHolder = "특이사항 선택하기",
-                category = "특이사항",
-                scrollState = scrollState,
-            )
-            Spacer(modifier = modifier.height(20.dp))
-            CTAButton(
-                type = CTAButtonType.GREEN,
-                text = "확인",
-                onClick = {
-                    val noteEnums: List<HealthIssueType> = noteList.mapNotNull { display ->
-                        HealthIssueType.entries.firstOrNull { it.displayName == display }
-                    }
-                    detailViewModel.updateElderHealth(
-                        healthInfo = EldersHealthResponseDto(
-                            elderId = healthInfoResponseDto.elderId,
-                            name = healthInfoResponseDto.name,
-                            diseases = diseaseList,
-                            medications = medications.toTimeMap(),
-                            notes = noteEnums,
-                        ),
-                    ) {
-                        onBack()
-                    }
-                },
-                modifier = Modifier.padding(bottom = 20.dp),
-            )
+
+        when {
+            isLoading && healthData == null -> {
+                // Loading state
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("건강정보를 불러오는 중입니다...")
+                }
+            }
+
+            errorMessage != null -> {
+                // Error state
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = errorMessage ?: "오류가 발생했습니다",
+                        color = MediCareCallTheme.colors.negative,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    CTAButton(
+                        type = CTAButtonType.GREEN,
+                        text = "다시 시도",
+                        onClick = {
+                            detailViewModel.loadHealthInfoById(elderId)
+                        },
+                    )
+                }
+            }
+
+            healthData != null -> {
+                // Data loaded state
+                HealthDetailContent(
+                    healthInfoResponseDto = healthData!!,
+                    detailViewModel = detailViewModel,
+                    onBack = onBack,
+                )
+            }
         }
+    }
+}
+
+@Composable
+private fun HealthDetailContent(
+    healthInfoResponseDto: EldersHealthResponseDto,
+    detailViewModel: DetailHealthViewModel,
+    onBack: () -> Unit,
+) {
+    val scrollState = rememberScrollState()
+    val diseaseList = remember(healthInfoResponseDto) {
+        healthInfoResponseDto.diseases.toMutableStateList()
+    }
+    val medications = remember(healthInfoResponseDto) {
+        healthInfoResponseDto.medications.toMedicationSchedules().toMutableStateList()
+    }
+    val noteList = remember(healthInfoResponseDto) {
+        healthInfoResponseDto.notes.map { it.displayName }.toMutableStateList()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .verticalScroll(scrollState),
+    ) {
+        Spacer(Modifier.height(20.dp))
+        // 질환 정보
+        IllnessInfoItem(
+            diseaseList = diseaseList,
+            onAddDisease = { diseaseList.add(it) },
+            onRemoveDisease = { diseaseList.remove(it) },
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        // 복약정보
+        MedInfoItem(
+            medications = medications,
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        // 특이사항
+        SpecialNoteItem(
+            enumList = HealthIssueType.entries.map { it.displayName }.toList(),
+            noteList = noteList,
+            onAddNote = { noteList.add(it) },
+            onRemoveNote = { noteList.remove(it) },
+            placeHolder = "특이사항 선택하기",
+            category = "특이사항",
+            scrollState = scrollState,
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        CTAButton(
+            type = CTAButtonType.GREEN,
+            text = "확인",
+            onClick = {
+                val noteEnums: List<HealthIssueType> = noteList.mapNotNull { display ->
+                    HealthIssueType.entries.firstOrNull { it.displayName == display }
+                }
+                detailViewModel.updateElderHealth(
+                    healthInfo = EldersHealthResponseDto(
+                        elderId = healthInfoResponseDto.elderId,
+                        name = healthInfoResponseDto.name,
+                        diseases = diseaseList,
+                        medications = medications.toTimeMap(),
+                        notes = noteEnums,
+                    ),
+                ) {
+                    onBack()
+                }
+            },
+            modifier = Modifier.padding(bottom = 20.dp),
+        )
     }
 }
 
