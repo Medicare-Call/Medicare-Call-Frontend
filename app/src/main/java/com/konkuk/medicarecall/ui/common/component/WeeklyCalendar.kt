@@ -31,19 +31,19 @@ fun WeeklyCalendar(
 ) {
     val weekDays = listOf("일", "월", "화", "수", "목", "금", "토") // 요일 표시
 
-    Column(modifier = Modifier.Companion.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         // 요일 (일~토)
         Row(
-            modifier = Modifier.Companion.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             weekDays.forEach { day ->
                 Box(
-                    modifier = Modifier.Companion,
-                    contentAlignment = Alignment.Companion.Center,
+                    modifier = Modifier,
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        modifier = Modifier.Companion
+                        modifier = Modifier
                             .padding(horizontal = 6.5.dp),
                         text = day,
                         style = MediCareCallTheme.typography.R_18,
@@ -52,10 +52,10 @@ fun WeeklyCalendar(
                 }
             }
         }
-        Spacer(modifier = Modifier.Companion.height(3.dp))
+        Spacer(modifier = Modifier.height(3.dp))
         // 해당 주 날짜
         Row(
-            modifier = Modifier.Companion.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             weekDates.forEach { date ->
@@ -63,18 +63,18 @@ fun WeeklyCalendar(
                 val isSelected = date == selectedDate
 
                 Box(
-                    modifier = Modifier.Companion
+                    modifier = Modifier
                         .size(29.dp)
                         .clip(CircleShape)
-                        .background(if (isSelected) MediCareCallTheme.colors.main else Color.Companion.Transparent)
+                        .background(if (isSelected) MediCareCallTheme.colors.main else Color.Transparent)
                         .clickable { onDateSelected(date) },
-                    contentAlignment = Alignment.Companion.Center,
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        modifier = Modifier.Companion,
+                        modifier = Modifier,
                         text = "${date.dayOfMonth}",
                         style = if (isSelected) MediCareCallTheme.typography.SB_18 else MediCareCallTheme.typography.M_17,
-                        color = if (isSelected) Color.Companion.White else MediCareCallTheme.colors.gray4,
+                        color = if (isSelected) Color.White else MediCareCallTheme.colors.gray4,
                     )
                 }
             }

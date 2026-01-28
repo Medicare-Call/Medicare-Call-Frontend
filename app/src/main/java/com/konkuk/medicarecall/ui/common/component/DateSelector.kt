@@ -42,13 +42,13 @@ fun DateSelector(
             ) { showDatePicker = true },
 
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Companion.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "${year}년 ${month}월",
             style = MediCareCallTheme.typography.SB_20,
             color = MediCareCallTheme.colors.gray9,
-            modifier = Modifier.Companion.padding(end = 4.dp),
+            modifier = Modifier.padding(end = 4.dp),
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_down_small),
