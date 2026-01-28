@@ -1,11 +1,11 @@
 package com.konkuk.medicarecall.ui.feature.login.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
@@ -51,6 +51,7 @@ fun NavController.navigateToLoginFinish() {
 }
 
 fun NavGraphBuilder.loginNavGraph(
+    navController: NavHostController,
     popBackStack: () -> Unit,
     navigateToMainAfterLogin: () -> Unit,
     navigateToHome: () -> Unit,
@@ -61,66 +62,76 @@ fun NavGraphBuilder.loginNavGraph(
     navigateToRegisterElderHealth: () -> Unit,
     navigateToCareCallSetting: () -> Unit,
     navigateToCareCallSettingWithPopUpTo: () -> Unit,
-    navigateToPurchase: () -> Unit,
+    //navigateToPurchase: () -> Unit,
     navigateToFinish: () -> Unit,
-    getBackStackLoginViewModel: @Composable (NavBackStackEntry) -> LoginViewModel,
-    getBackStackLoginElderViewModel: @Composable (NavBackStackEntry) -> LoginElderViewModel,
 ) {
-    composable<Route.LoginStart> {
+    composable<Route.LoginStart> { backStackEntry ->
+        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+
         LoginStartScreen(
             navigateToPhone = navigateToPhone,
             navigateToRegisterElder = navigateToRegisterElder,
             navigateToCareCallSetting = navigateToCareCallSetting,
-            navigateToPurchase = navigateToPurchase,
+            navigateToPurchase = navigateToHome,
             navigateToHome = navigateToHome,
-            loginViewModel = getBackStackLoginViewModel(it),
+            loginViewModel = loginViewModel,
         )
     }
-    composable<Route.LoginPhone> {
+    composable<Route.LoginPhone> { backStackEntry ->
+        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+
         LoginPhoneScreen(
             onBack = popBackStack,
             navigateToVerification = navigateToVerification,
-            loginViewModel = getBackStackLoginViewModel(it),
+            loginViewModel = loginViewModel,
         )
     }
-    composable<Route.LoginVerification> {
+    composable<Route.LoginVerification> { backStackEntry ->
+        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+
         LoginVerificationScreen(
             onBack = popBackStack,
             navigateToUserInfo = navigateToRegisterUserInfo,
             navigateToPhone = navigateToPhone,
             navigateToRegisterElder = navigateToRegisterElder,
             navigateToCareCallSetting = navigateToCareCallSetting,
-            navigateToPurchase = navigateToPurchase,
+            navigateToPurchase = navigateToHome,
             navigateToHome = navigateToHome,
-            loginViewModel = getBackStackLoginViewModel(it),
+            loginViewModel = loginViewModel,
         )
     }
-    composable<Route.LoginRegisterUserInfo> {
+    composable<Route.LoginRegisterUserInfo> { backStackEntry ->
+        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+
         LoginMyInfoScreen(
             onBack = popBackStack,
             navigateToRegisterElder = navigateToRegisterElder,
-            loginViewModel = getBackStackLoginViewModel(it),
+            loginViewModel = loginViewModel,
         )
     }
-    composable<Route.LoginRegisterElder> {
+    composable<Route.LoginRegisterElder> { backStackEntry ->
+        val loginElderViewModel: LoginElderViewModel = backStackEntry.sharedViewModel<LoginElderViewModel, Route.LoginRegisterElder>(navController)
+
         LoginElderScreen(
             onBack = popBackStack,
             navigateToRegisterElderHealth = navigateToRegisterElderHealth,
-            loginElderViewModel = getBackStackLoginElderViewModel(it),
+            loginElderViewModel = loginElderViewModel,
         )
     }
-    composable<Route.LoginRegisterElderHealth> {
+    composable<Route.LoginRegisterElderHealth> { backStackEntry ->
+        val loginElderViewModel: LoginElderViewModel = backStackEntry.sharedViewModel<LoginElderViewModel, Route.LoginRegisterElder>(navController)
+
         LoginElderMedInfoScreen(
             onBack = popBackStack,
             navigateToCareCallSetting = navigateToCareCallSettingWithPopUpTo,
-            loginElderViewModel = getBackStackLoginElderViewModel(it),
+            loginElderViewModel = loginElderViewModel,
         )
     }
 
     composable<Route.LoginCareCallSetting> {
         CallTimeScreen(
             onBack = popBackStack,
-            navigateToPayment = navigateToPurchase,
+            navigateToPayment = navigateToFinish
         )
     }
 
