@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -210,4 +211,29 @@ fun formatPhoneNumber(number: String): String {
         "(\\d{3})(\\d{4})(\\d{4})".toRegex(),
         "$1-$2-$3",
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MyDataSettingScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "내 정보 설정",
+                leftIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "go_back",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black,
+                    )
+                },
+            )
+        }
+    }
 }

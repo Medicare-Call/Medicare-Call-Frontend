@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -209,5 +210,22 @@ private fun MutableList<MedicationSchedule>.removeOnePeriod(
         val remain = current.scheduleTimes.filterNot { it == period }
         if (remain.isEmpty()) removeAt(idx)
         else this[idx] = current.copy(scheduleTimes = remain)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MedInfoItemPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            MedInfoItem(
+                medications = mutableListOf(
+                    MedicationSchedule(
+                        medicationName = "당뇨약",
+                        scheduleTimes = listOf(MedicationTimeType.MORNING, MedicationTimeType.DINNER),
+                    ),
+                ),
+            )
+        }
     }
 }

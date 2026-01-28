@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.alarm.component.AlarmItem
@@ -65,6 +66,16 @@ fun AlarmScreen(
             AlarmType.READ_ALARM,
             "✅ 1차 케어콜이 완료되었어요. 확인해 보세요!",
             "7월 7일 13:15",
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AlarmScreenPreview() {
+    MediCareCallTheme {
+        AlarmScreen(
+            onBack = {},
         )
     }
 }
