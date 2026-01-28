@@ -11,12 +11,16 @@ import com.konkuk.medicarecall.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
+data class MyDataUiState(
+    val myDataInfo: MyInfoResponseDto = MyInfoResponseDto(),
+)
+
 @KoinViewModel
 class MyDataViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     fun refresh() = getUserData()
-    var myDataInfo by mutableStateOf(MyInfoResponseDto())
+    var uiState by mutableStateOf(MyDataUiState())
         private set
 
     init {
@@ -36,7 +40,7 @@ class MyDataViewModel(
             userRepository.getMyInfo()
                 .onSuccess {
                     Log.d("MyDataViewModel", "사용자 정보 불러오기 성공: $it")
-                    myDataInfo = it
+                    uiState = uiState.copy(myDataInfo = it)
                 }
                 .onFailure {
                     Log.e("MyDataViewModel", "사용자 정보 불러오기 실패: ${it.message}", it)

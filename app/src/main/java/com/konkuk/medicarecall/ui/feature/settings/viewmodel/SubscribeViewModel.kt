@@ -11,13 +11,16 @@ import com.konkuk.medicarecall.data.repository.SubscribeRepository
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
+data class SubscribeUiState(
+    val subscriptions: List<EldersSubscriptionResponseDto> = emptyList(),
+    val errorMessage: String? = null,
+)
+
 @KoinViewModel
 class SubscribeViewModel(
     private val repository: SubscribeRepository,
 ) : ViewModel() {
-    var subscriptions by mutableStateOf<List<EldersSubscriptionResponseDto>>(emptyList())
-        private set
-    var errorMessage by mutableStateOf<String?>(null)
+    var uiState by mutableStateOf(SubscribeUiState())
         private set
 
     init {
@@ -30,10 +33,10 @@ class SubscribeViewModel(
             repository.getSubscriptions()
                 .onSuccess {
                     Log.d("SubscribeViewModel", "구독 정보 불러오기 성공: ${it.size}개")
-                    subscriptions = it
+                    uiState = uiState.copy(subscriptions = it)
                 }
                 .onFailure {
-                    errorMessage = "구독 정보를 불러오지 못했습니다."
+                    uiState = uiState.copy(errorMessage = "구독 정보를 불러오지 못했습니다.")
                     it.printStackTrace()
                     Log.e("SubscribeViewModel", "구독 로딩 실패: ${it.message}", it)
                 }

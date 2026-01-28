@@ -47,8 +47,8 @@ fun ElderInfoScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val eldersInfo = personalViewModel.eldersInfoList
-    val error = personalViewModel.errorMessage
+    val eldersInfo = personalViewModel.uiState.eldersInfoList
+    val error = personalViewModel.uiState.errorMessage
 
     Log.d("PersonalInfoScreen", "Elders Info: $eldersInfo")
     Log.d("PersonalInfoScreen", "Elders Info Size: ${eldersInfo.size}")

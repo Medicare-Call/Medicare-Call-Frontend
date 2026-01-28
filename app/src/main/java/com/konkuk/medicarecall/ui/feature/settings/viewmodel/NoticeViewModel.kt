@@ -11,15 +11,17 @@ import com.konkuk.medicarecall.data.repository.NoticeRepository
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
+data class NoticeUiState(
+    val noticeList: List<NoticesResponseDto> = emptyList(),
+    val errorMessage: String? = null,
+)
+
 @KoinViewModel
 class NoticeViewModel(
     private val repository: NoticeRepository,
 ) : ViewModel() {
 
-    var noticeList by mutableStateOf<List<NoticesResponseDto>>(emptyList())
-        private set
-
-    var errorMessage by mutableStateOf<String?>(null)
+    var uiState by mutableStateOf(NoticeUiState())
         private set
 
     init {
@@ -32,10 +34,10 @@ class NoticeViewModel(
             repository.getNotices()
                 .onSuccess {
                     Log.d("NoticeViewModel", "공지사항 불러오기 성공: ${it.size}개")
-                    noticeList = it
+                    uiState = uiState.copy(noticeList = it)
                 }
                 .onFailure {
-                    errorMessage = "공지사항을 불러오지 못했습니다."
+                    uiState = uiState.copy(errorMessage = "공지사항을 불러오지 못했습니다.")
                     it.printStackTrace()
                     Log.e("NoticeViewModel", "공지 로딩 실패: ${it.message}", it)
                 }

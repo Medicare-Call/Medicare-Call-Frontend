@@ -58,7 +58,7 @@ fun SettingsScreen(
         lifecycleOwner.lifecycle.addObserver(obs)
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
-    val myInfo = myDataViewModel.myDataInfo
+    val myInfo = myDataViewModel.uiState.myDataInfo
     Column(
         modifier = Modifier
             .fillMaxSize()

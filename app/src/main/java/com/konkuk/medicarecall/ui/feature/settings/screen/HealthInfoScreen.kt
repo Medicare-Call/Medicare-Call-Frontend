@@ -47,8 +47,8 @@ fun HealthInfoScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val healthInfo = healthInfoViewModel.eldersInfoList
-    val error = healthInfoViewModel.errorMessage
+    val healthInfo = healthInfoViewModel.uiState.eldersInfoList
+    val error = healthInfoViewModel.uiState.errorMessage
 
     Log.d("HealthInfoScreen", "어르신 건강정보 수: ${healthInfo.size}")
     Log.d("HealthInfoScreen", "Error Message: $error")

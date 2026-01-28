@@ -12,28 +12,30 @@ import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
+data class EldersInfoUiState(
+    val eldersInfoList: List<EldersInfoResponseDto> = emptyList(),
+    val isLoading: Boolean = false,
+    val error: Throwable? = null,
+    val errorMessage: String? = null,
+)
+
 @KoinViewModel
 class EldersInfoViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
 
-    var eldersInfoList by mutableStateOf<List<EldersInfoResponseDto>>(emptyList())
+    var uiState by mutableStateOf(EldersInfoUiState())
         private set
-    val isLoading = mutableStateOf(false)
-    val error = mutableStateOf<Throwable?>(null)
 
     var elderNameIdMapList = elderIdRepository.getElderIds()
-
-    var errorMessage by mutableStateOf<String?>(null)
-        private set
 
     init {
         ensureLoaded()
     }
 
     fun ensureLoaded() {
-        if (eldersInfoList.isEmpty() && !isLoading.value) {
+        if (uiState.eldersInfoList.isEmpty() && !uiState.isLoading) {
             loadEldersInfo()
         }
     }
@@ -41,15 +43,19 @@ class EldersInfoViewModel(
     fun refresh() = loadEldersInfo(force = true)
 
     private fun loadEldersInfo(force: Boolean = false) {
-        if (isLoading.value) return
-        isLoading.value = true
+        if (uiState.isLoading) return
+        uiState = uiState.copy(isLoading = true)
         Log.d("EldersInfoViewModel", "loadEldersInfo() 호출 (force=$force)")
 
         viewModelScope.launch {
             eldersInfoRepository.getElders()
                 .onSuccess { list ->
                     Log.d("EldersInfoViewModel", "노인 개인 정보 불러오기 성공: ${list.size}개")
-                    eldersInfoList = list
+                    uiState = uiState.copy(
+                        eldersInfoList = list,
+                        error = null,
+                        errorMessage = null,
+                    )
 
                     // 이름→ID 매핑(순서 유지)
                     val mapped = list.map { mapOf(it.name to it.elderId) }
@@ -65,17 +71,16 @@ class EldersInfoViewModel(
                             elderIdRepository.addElderId(e.key, e.value)
                         }
                     }
-
-                    error.value = null
-                    errorMessage = null
                 }
                 .onFailure {
-                    error.value = it
-                    errorMessage = "노인 개인 정보를 불러오지 못했습니다."
+                    uiState = uiState.copy(
+                        error = it,
+                        errorMessage = "노인 개인 정보를 불러오지 못했습니다.",
+                    )
                     Log.e("EldersInfoViewModel", "노인 개인 정보 로딩 실패: ${it.message}", it)
                 }
 
-            isLoading.value = false
+            uiState = uiState.copy(isLoading = false)
         }
     }
 }

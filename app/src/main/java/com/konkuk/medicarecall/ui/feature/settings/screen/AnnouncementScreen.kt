@@ -31,8 +31,8 @@ fun AnnouncementScreen(
     viewModel: NoticeViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
-    val notices = viewModel.noticeList
-    val error = viewModel.errorMessage
+    val notices = viewModel.uiState.noticeList
+    val error = viewModel.uiState.errorMessage
 
     Log.d("AnnouncementScreen(notice)", "현재 공지 수: ${notices.size}")
     error?.let {

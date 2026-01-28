@@ -35,7 +35,7 @@ fun SettingSubscribeScreen(
     navigateToSubscribeDetail: (subscription: EldersSubscriptionResponseDto) -> Unit = {},
     viewModel: SubscribeViewModel = koinViewModel(),
 ) {
-    val eldersInfo = viewModel.subscriptions
+    val eldersInfo = viewModel.uiState.subscriptions
     Log.d("SettingSubscribeScreen", "Elders Info: $eldersInfo")
 
     Column(
