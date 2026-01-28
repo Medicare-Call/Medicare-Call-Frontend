@@ -23,13 +23,10 @@ class UserRepositoryImpl(
         settingService.updateMyInfo(userUpdateRequestDto).handleResponse()
     }
 
-    override suspend fun logout(): Result<Unit> {
-        val result = runCatching {
-            val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
-            authService.logout("Bearer $refresh").handleNullableResponse()
-        }
+    override suspend fun logout(): Result<Unit> = runCatching {
+        val refresh = tokenStore.getRefreshToken() ?: error("Refresh token is null")
+        authService.logout("Bearer $refresh").handleNullableResponse()
         // 성공/실패와 무관하게 로컬 토큰 제거(보안/UX 측면에서 권장)
         tokenStore.clearTokens()
-        return result
     }
 }
