@@ -86,9 +86,6 @@ fun StatisticsScreen(
 
     // ③ 통계 VM의 상태를 구독합니다.
     val uiState by statisticsViewModel.uiState.collectAsStateWithLifecycle()
-    val currentWeek by statisticsViewModel.currentWeek.collectAsStateWithLifecycle()
-    val isLatestWeek by statisticsViewModel.isLatestWeek.collectAsStateWithLifecycle()
-    val isEarliestWeek by statisticsViewModel.isEarliestWeek.collectAsStateWithLifecycle()
 
     // ④ 표시할 이름을 결정합니다.
     // 우선순위 1: 통계 데이터에 포함된 이름 (가장 정확함)
@@ -121,12 +118,10 @@ fun StatisticsScreen(
         modifier = modifier,
         uiState = uiState,
         elderNameList = elderNameList,
-        currentWeek = currentWeek,
-        isLatestWeek = isLatestWeek,
-        isEarliestWeek = isEarliestWeek,
         onPreviousWeek = { statisticsViewModel.showPreviousWeek() },
         onNextWeek = { statisticsViewModel.showNextWeek() },
         onDropdownItemSelected = { name -> homeViewModel.selectElder(name) },
+        onDropdownToggle = { isOpen -> statisticsViewModel.toggleDropdown(isOpen) },
         currentElderName = currentElderName,
         navigateToAlarm = { navController.navigateToAlarm() },
     )
@@ -138,15 +133,12 @@ fun StatisticsScreenLayout(
     uiState: StatisticsUiState,
     elderNameList: List<String>,
     navigateToAlarm: () -> Unit = {},
-    currentWeek: Pair<LocalDate, LocalDate>,
-    isLatestWeek: Boolean,
-    isEarliestWeek: Boolean,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
     onDropdownItemSelected: (String) -> Unit,
+    onDropdownToggle: (Boolean) -> Unit = {},
     currentElderName: String,
 ) {
-    val dropdownOpened = remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -156,7 +148,7 @@ fun StatisticsScreenLayout(
         NameBar(
             name = currentElderName,
             modifier = Modifier.statusBarsPadding(),
-            onDropdownClick = { dropdownOpened.value = !dropdownOpened.value },
+            onDropdownClick = { onDropdownToggle(!uiState.dropdownOpened) },
             notificationCount = uiState.summary?.unreadNotification ?: 0,
             navigateToAlarm = navigateToAlarm,
         )
@@ -178,9 +170,9 @@ fun StatisticsScreenLayout(
 
             uiState.summary != null -> {
                 WeekendBar(
-                    currentWeek = currentWeek,
-                    isLatestWeek = isLatestWeek,
-                    isEarliestWeek = isEarliestWeek,
+                    currentWeek = uiState.currentWeek,
+                    isLatestWeek = uiState.isLatestWeek,
+                    isEarliestWeek = uiState.isEarliestWeek,
                     onPreviousWeek = onPreviousWeek,
                     onNextWeek = onNextWeek,
                 )
@@ -193,14 +185,14 @@ fun StatisticsScreenLayout(
         }
     }
 
-    if (dropdownOpened.value) {
+    if (uiState.dropdownOpened) {
         NameDropdown(
             items = elderNameList,
             selectedName = currentElderName,
-            onDismiss = { dropdownOpened.value = false },
+            onDismiss = { onDropdownToggle(false) },
             onItemSelected = { name ->
                 onDropdownItemSelected(name)
-                dropdownOpened.value = false
+                onDropdownToggle(false)
             },
         )
     }
