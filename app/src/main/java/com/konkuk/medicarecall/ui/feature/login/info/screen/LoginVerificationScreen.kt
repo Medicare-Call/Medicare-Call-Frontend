@@ -163,10 +163,68 @@ fun LoginVerificationScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+private fun LoginVerificationScreenLayout(
+    modifier: Modifier = Modifier,
+    verificationCode: String,
+    onVerificationCodeChanged: (String) -> Unit,
+    onConfirmClick: () -> Unit,
+    onBack: () -> Unit = {},
+) {
+    val scrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(MediCareCallTheme.colors.bg)
+            .padding(horizontal = 20.dp)
+            .statusBarsPadding()
+            .imePadding(),
+    ) {
+        Column {
+            LoginBackButton(onBack)
+            Column(
+                Modifier.verticalScroll(scrollState),
+            ) {
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    "인증번호를\n입력해주세요",
+                    style = MediCareCallTheme.typography.B_26,
+                    color = MediCareCallTheme.colors.black,
+                )
+                Spacer(Modifier.height(40.dp))
+                DefaultTextField(
+                    verificationCode,
+                    { input ->
+                        val filtered = input.filter { it.isDigit() }.take(6)
+                        onVerificationCodeChanged(filtered)
+                    },
+                    placeHolder = "인증번호 입력",
+                    keyboardType = KeyboardType.Number,
+                    textFieldModifier = Modifier.focusRequester(focusRequester),
+                    maxLength = 6,
+                )
+                Spacer(Modifier.height(30.dp))
+                CTAButton(
+                    type = if (verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                    "확인",
+                    onClick = onConfirmClick,
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, heightDp = 600)
 @Composable
 private fun LoginVerificationScreenPreview() {
     MediCareCallTheme {
-        LoginVerificationScreen()
+        LoginVerificationScreenLayout(
+            verificationCode = "123456",
+            onVerificationCodeChanged = {},
+            onConfirmClick = {},
+            onBack = {},
+        )
     }
 }

@@ -168,10 +168,141 @@ fun PaymentScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+private fun PaymentScreenLayout(
+    modifier: Modifier = Modifier,
+    elderNames: List<String>,
+    isPaymentMethodSelected: Boolean,
+    onPaymentMethodClick: () -> Unit,
+    onPaymentClick: () -> Unit,
+    onBack: () -> Unit,
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MediCareCallTheme.colors.bg)
+            .systemBarsPadding()
+            .imePadding(),
+    ) {
+        Column(
+            modifier = modifier.padding(horizontal = 20.dp),
+        ) {
+            LoginBackButton(onBack)
+            Spacer(modifier = modifier.height(20.dp))
+            Text(
+                text = "결제하기",
+                style = MediCareCallTheme.typography.B_26,
+                color = MediCareCallTheme.colors.black,
+            )
+            Spacer(modifier = modifier.height(10.dp))
+        }
+
+        Column(
+            modifier = modifier
+                .verticalScroll(scrollState)
+                .padding(horizontal = 20.dp)
+                .padding(vertical = 20.dp),
+        ) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "선택한 어르신",
+                    style = MediCareCallTheme.typography.B_17,
+                    color = MediCareCallTheme.colors.black,
+                )
+                Spacer(modifier = modifier.width(8.dp))
+                Text(
+                    text = "${elderNames.size}명",
+                    style = MediCareCallTheme.typography.R_14,
+                    color = MediCareCallTheme.colors.gray5,
+                )
+            }
+            Spacer(modifier = modifier.height(20.dp))
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .border(
+                        1.dp,
+                        MediCareCallTheme.colors.gray3,
+                        shape = RoundedCornerShape(14.dp),
+                    )
+                    .background(
+                        MediCareCallTheme.colors.white,
+                        shape = RoundedCornerShape(14.dp),
+                    )
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                elderNames.forEach { elder ->
+                    PaymentPriceItem(elder, "29,000")
+                }
+            }
+            Spacer(modifier = modifier.height(50.dp))
+            Row(
+                modifier = modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = "결제 금액",
+                    style = MediCareCallTheme.typography.B_17,
+                    color = MediCareCallTheme.colors.black,
+                )
+                Spacer(modifier = modifier.weight(1f))
+                val totalAmount = elderNames.size * 29000
+                val formatted = NumberFormat.getNumberInstance(Locale.KOREA).format(totalAmount)
+                val displayText = "₩$formatted/월"
+                Text(
+                    text = displayText,
+                    style = MediCareCallTheme.typography.SB_14,
+                    color = MediCareCallTheme.colors.main,
+                )
+            }
+            Spacer(modifier = modifier.height(20.dp))
+            Button(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 18.dp),
+                onClick = onPaymentMethodClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MediCareCallTheme.colors.bg,
+                ),
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(
+                    2.dp,
+                    color = if (isPaymentMethodSelected) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray3,
+                ),
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_naver_pay),
+                    contentDescription = "네이버페이 아이콘",
+                    modifier = modifier
+                        .height(18.dp)
+                        .width(61.dp),
+                )
+            }
+            Spacer(modifier = modifier.weight(1f))
+            CTAButton(
+                type = if (isPaymentMethodSelected) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                text = "결제하기",
+                onClick = onPaymentClick,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, heightDp = 900)
 @Composable
 private fun PaymentScreenPreview() {
     MediCareCallTheme {
-        PaymentScreen(onBack = {})
+        PaymentScreenLayout(
+            elderNames = listOf("김옥자", "박막례", "최이순"),
+            isPaymentMethodSelected = true,
+            onPaymentMethodClick = {},
+            onPaymentClick = {},
+            onBack = {},
+        )
     }
 }

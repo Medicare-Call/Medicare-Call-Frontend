@@ -116,10 +116,69 @@ fun LoginPhoneScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+private fun LoginPhoneScreenLayout(
+    modifier: Modifier = Modifier,
+    phoneNumber: String,
+    onPhoneNumberChanged: (String) -> Unit,
+    onNextClick: () -> Unit,
+    onBack: () -> Unit = {},
+) {
+    val scrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(MediCareCallTheme.colors.bg)
+            .padding(horizontal = 20.dp)
+            .statusBarsPadding()
+            .imePadding(),
+    ) {
+        Column {
+            LoginBackButton(onBack)
+            Column(
+                modifier = Modifier.verticalScroll(scrollState),
+            ) {
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    "휴대폰 번호를\n입력해주세요",
+                    style = MediCareCallTheme.typography.B_26,
+                    color = MediCareCallTheme.colors.black,
+                )
+                Spacer(Modifier.height(40.dp))
+                DefaultTextField(
+                    phoneNumber,
+                    { input ->
+                        val filtered = input.filter { it.isDigit() }.take(11)
+                        onPhoneNumberChanged(filtered)
+                    },
+                    placeHolder = "휴대폰 번호",
+                    keyboardType = KeyboardType.Number,
+                    visualTransformation = PhoneNumberVisualTransformation(),
+                    textFieldModifier = Modifier.focusRequester(focusRequester),
+                    maxLength = 11,
+                )
+                Spacer(Modifier.height(30.dp))
+                CTAButton(
+                    type = if (phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                    "인증번호 받기",
+                    onNextClick,
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, heightDp = 600)
 @Composable
 private fun LoginPhoneScreenPreview() {
     MediCareCallTheme {
-        LoginPhoneScreen()
+        LoginPhoneScreenLayout(
+            phoneNumber = "01012345678",
+            onPhoneNumberChanged = {},
+            onNextClick = {},
+            onBack = {},
+        )
     }
 }
