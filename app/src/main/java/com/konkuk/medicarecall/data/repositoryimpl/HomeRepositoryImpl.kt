@@ -21,6 +21,7 @@ class HomeRepositoryImpl(
         ).handleNullableResponse()
     }
 
-    override suspend fun getHomeSummary(elderId: Int): HomeResponseDto =
+    override suspend fun getHomeSummary(elderId: Int): Result<HomeResponseDto> = runCatching {
         homeService.getHomeSummary(elderId).handleResponse()
+    }
 }
