@@ -13,8 +13,6 @@ import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.NaverPayWebViewScreen
-import com.konkuk.medicarecall.ui.feature.login.payment.screen.PaymentScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
@@ -48,14 +46,6 @@ fun NavController.navigateToLoginCareCallSetting(navOptions: NavOptions? = null)
     navigate(Route.LoginCareCallSetting, navOptions)
 }
 
-fun NavController.navigateToLoginPurchase() {
-    navigate(Route.LoginPurchase)
-}
-
-fun NavController.navigateToLoginNaverPayView() {
-    navigate(Route.LoginNaverPayView)
-}
-
 fun NavController.navigateToLoginFinish() {
     navigate(Route.LoginFinish)
 }
@@ -72,8 +62,7 @@ fun NavGraphBuilder.loginNavGraph(
     navigateToRegisterElderHealth: () -> Unit,
     navigateToCareCallSetting: () -> Unit,
     navigateToCareCallSettingWithPopUpTo: () -> Unit,
-    navigateToPurchase: () -> Unit,
-    navigateToNaverPayView: () -> Unit,
+    // navigateToPurchase: () -> Unit,
     navigateToFinish: () -> Unit,
 ) {
     composable<Route.LoginStart> { backStackEntry ->
@@ -83,7 +72,7 @@ fun NavGraphBuilder.loginNavGraph(
             navigateToPhone = navigateToPhone,
             navigateToRegisterElder = navigateToRegisterElder,
             navigateToCareCallSetting = navigateToCareCallSetting,
-            navigateToPurchase = navigateToPurchase,
+            navigateToPurchase = navigateToHome,
             navigateToHome = navigateToHome,
             loginViewModel = loginViewModel,
         )
@@ -106,7 +95,7 @@ fun NavGraphBuilder.loginNavGraph(
             navigateToPhone = navigateToPhone,
             navigateToRegisterElder = navigateToRegisterElder,
             navigateToCareCallSetting = navigateToCareCallSetting,
-            navigateToPurchase = navigateToPurchase,
+            navigateToPurchase = navigateToHome,
             navigateToHome = navigateToHome,
             loginViewModel = loginViewModel,
         )
@@ -142,21 +131,7 @@ fun NavGraphBuilder.loginNavGraph(
     composable<Route.LoginCareCallSetting> {
         CallTimeScreen(
             onBack = popBackStack,
-            navigateToPayment = navigateToPurchase,
-        )
-    }
-
-    composable<Route.LoginPurchase> {
-        PaymentScreen(
-            onBack = popBackStack,
-            navigateToNaverPay = navigateToNaverPayView,
-        )
-    }
-
-    composable<Route.LoginNaverPayView> {
-        NaverPayWebViewScreen(
-            onBack = popBackStack,
-            navigateToFinish = navigateToFinish,
+            navigateToPayment = navigateToFinish,
         )
     }
 

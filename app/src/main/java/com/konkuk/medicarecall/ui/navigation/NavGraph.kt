@@ -125,8 +125,6 @@ fun NavGraph(
             navigateToRegisterElderHealth = navigator::navigateToLoginRegisterElderHealth,
             navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
             navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
-            navigateToPurchase = navigator::navigateToLoginPurchase,
-            navigateToNaverPayView = navigator::navigateToLoginNaverPayView,
             navigateToFinish = navigator::navigateToLoginFinish,
         )
     }

@@ -22,4 +22,3 @@ class SleepRepositoryImpl(
         ).handleResponse().toModel()
     }
 }
-
