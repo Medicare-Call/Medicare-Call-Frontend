@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,9 +59,10 @@ fun ElderDetailScreen(
     navController: NavHostController,
     detailViewModel: DetailElderInfoViewModel = koinViewModel(),
 ) {
-    // 뷰모델로부터 데이터 및 성공 여부 상태 수집
+    // 뷰모델로부터 데이터 및 상태 수집
     val elderData by detailViewModel.uiState.collectAsStateWithLifecycle()
     val isSuccess by detailViewModel.isSuccess.collectAsStateWithLifecycle()
+    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
@@ -131,12 +133,26 @@ fun ElderDetailScreen(
             },
         )
 
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .verticalScroll(scrollState),
-        ) {
+        when {
+            isEditMode && isLoading && elderData == null -> {
+                // 수정 모드에서 데이터 로딩 중일 때
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            else -> {
+                // 등록 모드 또는 데이터 로드 완료
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .verticalScroll(scrollState),
+                ) {
             Spacer(Modifier.height(20.dp))
 
             // 수정 모드일 때만 '삭제' 텍스트 노출
@@ -254,10 +270,12 @@ fun ElderDetailScreen(
                             relationship = relationship,
                             residenceType = residenceType,
                         )
-                        detailViewModel.processElderInfo(requestDto)
+                        detailViewModel.processElderInfo(elderId, requestDto)
                     },
                     modifier = Modifier.padding(bottom = 20.dp),
                 )
+            }
+                }
             }
         }
         if (showDeleteDialog) {

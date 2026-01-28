@@ -24,8 +24,12 @@ class DetailElderInfoViewModel(
     private val _isSuccess = MutableStateFlow(false)
     val isSuccess: StateFlow<Boolean> = _isSuccess.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     fun loadElderDataById(elderId: Int) {
         viewModelScope.launch {
+            _isLoading.value = true
             eldersInfoRepository.getElders()
                 .onSuccess { list ->
                     val elderData = list.firstOrNull { it.elderId == elderId }
@@ -36,6 +40,9 @@ class DetailElderInfoViewModel(
                 }
                 .onFailure { exception ->
                     Log.e("DetailElderInfoViewModel", "어르신 정보 로딩 실패", exception)
+                }
+                .also {
+                    _isLoading.value = false
                 }
         }
     }
@@ -66,6 +73,28 @@ class DetailElderInfoViewModel(
                 }
                 .onFailure { exception ->
                     Log.e("DetailElderInfoViewModel", "어르신 개인 정보 수정 실패: $exception")
+                    _isSuccess.value = false
+                }
+        }
+    }
+
+    fun processElderInfo(elderId: Int, request: ElderRegisterRequestDto) {
+        Log.d("DetailElderInfoViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId, request=$request")
+        viewModelScope.launch {
+            updateElderInfoRepository.updateElderInfo(
+                id = elderId,
+                request = request,
+            )
+                .onSuccess {
+                    Log.d("DetailElderInfoViewModel", "어르신 정보 처리 완료: $it")
+                    _isSuccess.value = true
+                    // 수정 모드(elderId != -1)일 때만 데이터 재로드
+                    if (elderId != -1) {
+                        loadElderDataById(elderId)
+                    }
+                }
+                .onFailure { exception ->
+                    Log.e("DetailElderInfoViewModel", "어르신 정보 처리 실패: $exception")
                     _isSuccess.value = false
                 }
         }
