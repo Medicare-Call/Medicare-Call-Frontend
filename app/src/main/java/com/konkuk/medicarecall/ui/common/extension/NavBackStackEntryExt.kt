@@ -16,16 +16,17 @@ inline fun <reified T : ViewModel, reified R : Route> NavBackStackEntry.sharedVi
 ): T {
     destination.route ?: return koinViewModel<T>()
 
-    val entry = try {
-        navController.getBackStackEntry<R>()
-    } catch (e: IllegalArgumentException) {
-        Log.e("NavBackStackEntryExt", "No back stack entry found for route: ${R::class}", e)
-        null
+    val parentEntry = remember(this) {
+        try {
+            navController.getBackStackEntry<R>()
+        } catch (e: IllegalArgumentException) {
+            Log.e("NavBackStackEntryExt", "No back stack entry found for route: ${R::class}", e)
+            null
+        }
     }
 
-    return if (entry != null) {
-        val rememberedEntry = remember(this) { entry }
-        koinViewModel(viewModelStoreOwner = rememberedEntry)
+    return if (parentEntry != null) {
+        koinViewModel(viewModelStoreOwner = parentEntry)
     } else {
         koinViewModel()
     }
