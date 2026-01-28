@@ -16,15 +16,15 @@ fun NavController.navigateToStatistics(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.statisticsNavGraph(
-    navController: NavHostController, // 나중에 바꿔야함.
+    navController: NavHostController,
+    navigateToAlarm: () -> Unit,
     getBackStackHomeViewModel: @Composable (NavBackStackEntry) -> HomeViewModel,
 ) {
     composable<MainTabRoute.WeeklyStatistics> { backStackEntry ->
-        val homeViewModel: HomeViewModel = getBackStackHomeViewModel(backStackEntry)
-
         StatisticsScreen(
             navController = navController,
-            homeViewModel = homeViewModel,
+            homeViewModel = getBackStackHomeViewModel(backStackEntry),
+            navigateToAlarm = navigateToAlarm,
         )
     }
 }

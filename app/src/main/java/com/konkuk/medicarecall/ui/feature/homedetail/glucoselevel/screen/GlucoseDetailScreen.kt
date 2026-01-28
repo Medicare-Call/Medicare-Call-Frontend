@@ -56,10 +56,10 @@ fun GlucoseDetailScreen(
     modifier: Modifier = Modifier,
     elderId: Int,
     onBack: () -> Unit,
-    glucoseViewModel: GlucoseViewModel = koinViewModel(),
+    viewModel: GlucoseViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
-    val uiState by glucoseViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     // 페이지 카운터
     val counter = remember {
@@ -74,18 +74,18 @@ fun GlucoseDetailScreen(
     val coroutineScope = rememberCoroutineScope()
 
     // 데이터 새로고침 로직
-    val refreshData = remember(glucoseViewModel) {
+    val refreshData = remember(viewModel) {
         {
             counter[GlucoseTiming.BEFORE_MEAL] = 0
             counter[GlucoseTiming.AFTER_MEAL] = 0
 
-            glucoseViewModel.getGlucoseData(
+            viewModel.getGlucoseData(
                 elderId = elderId,
                 counter = 0,
                 type = GlucoseTiming.BEFORE_MEAL,
                 isRefresh = true,
             )
-            glucoseViewModel.getGlucoseData(
+            viewModel.getGlucoseData(
                 elderId = elderId,
                 counter = 0,
                 type = GlucoseTiming.AFTER_MEAL,
@@ -119,7 +119,7 @@ fun GlucoseDetailScreen(
             val currentTiming = uiState.selectedTiming
             val currentPage = counter.getValue(currentTiming)
 
-            glucoseViewModel.getGlucoseData(
+            viewModel.getGlucoseData(
                 elderId = elderId,
                 counter = currentPage + 1, // 다음 페이지 요청
                 type = currentTiming,
@@ -145,11 +145,11 @@ fun GlucoseDetailScreen(
 
         // '공복'/'식후' 버튼
         onTimingChange = { newTiming ->
-            glucoseViewModel.updateTiming(newTiming)
+            viewModel.updateTiming(newTiming)
             coroutineScope.launch { scrollState.scrollTo(0) }
         },
         // 그래프 점
-        onPointClick = glucoseViewModel::onClickDots,
+        onPointClick = viewModel::onClickDots,
         scrollState = scrollState,
         onBack = onBack,
     )
