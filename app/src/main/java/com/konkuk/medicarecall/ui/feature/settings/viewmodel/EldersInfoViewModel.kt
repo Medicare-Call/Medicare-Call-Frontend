@@ -26,8 +26,6 @@ class EldersInfoViewModel(
 
     private val _error = MutableStateFlow<Throwable?>(null)
     val error: StateFlow<Throwable?> = _error.asStateFlow()
-
-
     private val _elderNameIdMapList = MutableStateFlow(elderIdRepository.getElderIds())
     val elderNameIdMapList: StateFlow<List<Map<String, Int>>> = _elderNameIdMapList.asStateFlow()
 

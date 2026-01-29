@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.settings.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,12 +41,13 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MyDetailScreen(
-    myDataInfo: MyInfoResponseDto,
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     detailMyDataViewModel: DetailMyDataViewModel = koinViewModel(),
 ) {
     // ViewModel 상태 구독
+    val myDataInfo by detailMyDataViewModel.myDataInfo.collectAsStateWithLifecycle()
+    val isLoading by detailMyDataViewModel.isLoading.collectAsStateWithLifecycle()
     val isMale by detailMyDataViewModel.isMale.collectAsStateWithLifecycle()
     val name by detailMyDataViewModel.name.collectAsStateWithLifecycle()
     val birth by detailMyDataViewModel.birth.collectAsStateWithLifecycle()
@@ -54,7 +55,24 @@ fun MyDetailScreen(
 
     // 초기 데이터 로드
     LaunchedEffect(Unit) {
-        detailMyDataViewModel.initializeFormData(myDataInfo)
+        detailMyDataViewModel.loadMyInfo()
+    }
+
+    // myDataInfo가 로드되면 폼 데이터 초기화
+    LaunchedEffect(myDataInfo) {
+        myDataInfo?.let { detailMyDataViewModel.initializeFormData(it) }
+    }
+
+    if (isLoading && myDataInfo == null) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
+        return
     }
 
     Column(
@@ -116,23 +134,26 @@ fun MyDetailScreen(
                 type = if (name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
                     birth.length == 8 &&
                     birth.isValidDate() &&
-                    isMale != null
+                    isMale != null &&
+                    myDataInfo != null
                 ) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                 text = "확인",
                 onClick = {
-                    val gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE
-                    detailMyDataViewModel.updateUserData(
-                        userInfo = MyInfoResponseDto(
-                            name = name,
-                            birthDate = birth.replaceFirst(
-                                "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
-                                "$1-$2-$3",
+                    myDataInfo?.let { info ->
+                        val gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE
+                        detailMyDataViewModel.updateUserData(
+                            userInfo = MyInfoResponseDto(
+                                name = name,
+                                birthDate = birth.replaceFirst(
+                                    "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
+                                    "$1-$2-$3",
+                                ),
+                                gender = gender,
+                                phone = info.phone,
+                                pushNotification = info.pushNotification,
                             ),
-                            gender = gender,
-                            phone = myDataInfo.phone,
-                            pushNotification = myDataInfo.pushNotification,
-                        ),
-                    ) { onBack() }
+                        ) { onBack() }
+                    }
                 },
             )
         }

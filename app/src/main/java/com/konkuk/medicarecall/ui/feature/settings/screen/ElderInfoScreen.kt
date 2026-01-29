@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.PersonalInfoCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
@@ -34,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ElderInfoScreen(
     onBack: () -> Unit = {},
-    navigateToElderDetail: (elderInfo: EldersInfoResponseDto) -> Unit = {},
+    navigateToElderDetail: (Int) -> Unit = {},
     personalViewModel: EldersInfoViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -48,8 +49,8 @@ fun ElderInfoScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val eldersInfo = personalViewModel.eldersInfoList
-    val error = personalViewModel.errorMessage
+    val eldersInfo by personalViewModel.eldersInfoList.collectAsStateWithLifecycle()
+    val error by personalViewModel.errorMessage.collectAsStateWithLifecycle()
 
     Log.d("PersonalInfoScreen", "Elders Info: $eldersInfo")
     Log.d("PersonalInfoScreen", "Elders Info Size: ${eldersInfo.size}")
@@ -87,7 +88,7 @@ fun ElderInfoScreen(
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        navigateToElderDetail(it)
+                        navigateToElderDetail(it.elderId)
                     },
                 )
             }

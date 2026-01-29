@@ -16,8 +16,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -47,6 +49,7 @@ fun LoginPhoneScreen(
     val focusRequester = remember { FocusRequester() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val phoneNumber by loginViewModel.phoneNumber.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -73,7 +76,7 @@ fun LoginPhoneScreen(
                 )
                 Spacer(Modifier.height(40.dp))
                 DefaultTextField(
-                    loginViewModel.phoneNumber,
+                    phoneNumber,
                     { input ->
                         val filtered = input.filter { it.isDigit() }.take(11)
                         loginViewModel.onPhoneNumberChanged(filtered)
@@ -88,12 +91,12 @@ fun LoginPhoneScreen(
 
                 Spacer(Modifier.height(30.dp))
                 CTAButton(
-                    type = if (loginViewModel.phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                    type = if (phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                     "인증번호 받기",
                     {
                         // TODO: 서버에 인증번호 요청하기
-                        if (loginViewModel.phoneNumber.startsWith("010")) {
-                            loginViewModel.postPhoneNumber(loginViewModel.phoneNumber)
+                        if (phoneNumber.startsWith("010")) {
+                            loginViewModel.postPhoneNumber(phoneNumber)
                             navigateToVerification()
                         } else {
                             coroutineScope.launch {

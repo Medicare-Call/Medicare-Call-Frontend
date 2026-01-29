@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.PersonalInfoCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersHealthViewModel
@@ -34,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HealthInfoScreen(
     onBack: () -> Unit = {},
-    navigateToHealthDetail: (EldersHealthResponseDto) -> Unit = {},
+    navigateToHealthDetail: (Int) -> Unit = {},
     healthInfoViewModel: EldersHealthViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -48,8 +49,8 @@ fun HealthInfoScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val healthInfo = healthInfoViewModel.eldersInfoList
-    val error = healthInfoViewModel.errorMessage
+    val healthInfo by healthInfoViewModel.eldersInfoList.collectAsStateWithLifecycle()
+    val error by healthInfoViewModel.errorMessage.collectAsStateWithLifecycle()
 
     Log.d("HealthInfoScreen", "어르신 건강정보 수: ${healthInfo.size}")
     Log.d("HealthInfoScreen", "Error Message: $error")
@@ -87,7 +88,7 @@ fun HealthInfoScreen(
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
-                        navigateToHealthDetail(it)
+                        navigateToHealthDetail(it.elderId)
                     },
                 )
             }

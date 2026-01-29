@@ -61,7 +61,6 @@ fun NavGraphBuilder.homeDetailNavGraph(
     composable<Route.SleepDetail> { backStackEntry ->
         val route = backStackEntry.toRoute<Route.SleepDetail>()
         SleepDetailScreen(
-            elderId = route.elderId,
             onBack = popBackStack,
         )
     }

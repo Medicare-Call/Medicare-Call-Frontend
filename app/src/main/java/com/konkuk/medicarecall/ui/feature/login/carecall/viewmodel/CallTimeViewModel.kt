@@ -78,7 +78,6 @@ class CallTimeViewModel(
                 // 모든 요청이 끝날 때까지 대기
                 jobs.awaitAll()
                 onSuccess()
-
             } catch (t: Throwable) {
                 // 코루틴 취소 예외는 재전파
                 if (t is CancellationException) throw t

@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.MainActivity
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.LogoutConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingInfoItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
@@ -52,13 +52,13 @@ import org.koin.androidx.compose.koinViewModel
 fun MyDataSettingScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToUserInfoSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
+    navigateToUserInfoSetting: () -> Unit = {},
     navigateToLoginAfterLogout: () -> Unit = {},
     myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
-    val myDataInfo = myDataViewModel.myDataInfo
+    val myDataInfo by myDataViewModel.myDataInfo.collectAsStateWithLifecycle()
     var showLogoutDialog by remember { mutableStateOf(false) }
-    val gender = when (myDataInfo?.gender) {
+    val gender = when (myDataInfo.gender) {
         GenderType.FEMALE -> "여성"
         else -> "남성"
     }
@@ -130,17 +130,16 @@ fun MyDataSettingScreen(
                         color = MediCareCallTheme.colors.active,
                         modifier = modifier.clickable(
                             onClick = {
-                                // myDataInfo가 null 아닌 경우에만 네비게이션
-                                myDataInfo?.let { navigateToUserInfoSetting(it) }
+                                navigateToUserInfoSetting()
                             },
                         ),
                     )
                 }
 
-                SettingInfoItem("이름", myDataInfo?.name ?: "이름 없음")
-                SettingInfoItem("생일", formatDateToKorean((myDataInfo?.birthDate ?: "날짜 정보가 없습니다")))
+                SettingInfoItem("이름", myDataInfo.name.ifEmpty { "이름 없음" })
+                SettingInfoItem("생일", formatDateToKorean(myDataInfo.birthDate.ifEmpty { "날짜 정보가 없습니다" }))
                 SettingInfoItem("성별", gender)
-                SettingInfoItem("휴대폰번호", formatPhoneNumber(myDataInfo?.phone ?: "전화번호 정보가 없습니다"))
+                SettingInfoItem("휴대폰번호", formatPhoneNumber(myDataInfo.phone.ifEmpty { "전화번호 정보가 없습니다" }))
             }
 
             Spacer(modifier = modifier.height(12.dp))

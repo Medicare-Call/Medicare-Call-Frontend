@@ -57,6 +57,8 @@ fun LoginVerificationScreen(
 
     val focusRequester = remember { FocusRequester() }
     val navigationDestination by loginViewModel.navigationDestination.collectAsStateWithLifecycle()
+    val verificationCode by loginViewModel.verificationCode.collectAsStateWithLifecycle()
+    val phoneNumber by loginViewModel.phoneNumber.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -127,7 +129,7 @@ fun LoginVerificationScreen(
                 )
                 Spacer(Modifier.height(40.dp))
                 DefaultTextField(
-                    loginViewModel.verificationCode,
+                    verificationCode,
                     { input ->
                         val filtered = input.filter { it.isDigit() }.take(6)
                         loginViewModel.onVerificationCodeChanged(filtered)
@@ -141,13 +143,13 @@ fun LoginVerificationScreen(
                 Spacer(Modifier.height(30.dp))
 
                 CTAButton(
-                    type = if (loginViewModel.verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                    type = if (verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                     "확인",
                     onClick = {
                         // TODO: 서버에 인증번호 보내서 확인하기
                         loginViewModel.confirmPhoneNumber(
-                            loginViewModel.phoneNumber,
-                            loginViewModel.verificationCode,
+                            phoneNumber,
+                            verificationCode,
                         )
                         loginViewModel.onVerificationCodeChanged("")
                     },
