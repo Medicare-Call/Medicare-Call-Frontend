@@ -1,17 +1,14 @@
 package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,19 +19,29 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
 data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+@KoinViewModel
+class HomeViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val homeRepository: HomeRepository,
     private val savedStateHandle: SavedStateHandle,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
     private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
+
+    // 이름 업데이트 수신
+    private val _updatedName: StateFlow<String?> =
+        savedStateHandle.getStateFlow("ELDER_NAME_UPDATED", null)
+
+    val updatedName: StateFlow<String?> = _updatedName
+
+    fun clearUpdatedName() {
+        savedStateHandle.remove<String>("ELDER_NAME_UPDATED")
+    }
+
     fun overrideName(newName: String) {
         val id = selectedElderId.value ?: return
 
@@ -47,7 +54,8 @@ class HomeViewModel @Inject constructor(
         //  softRefreshCurrentElder()
     }
 
-    var isLoading by mutableStateOf(true)
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun callImmediate(
         careCallTimeOption: String,
@@ -66,7 +74,7 @@ class HomeViewModel @Inject constructor(
     }
 
     // 홈 화면 상태 (isLoading 포함)
-    private val _homeUiState = MutableStateFlow(HomeUiState.Companion.EMPTY)
+    private val _homeUiState = MutableStateFlow(HomeUiState.EMPTY)
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     // 어르신 전체 목록
@@ -94,7 +102,7 @@ class HomeViewModel @Inject constructor(
                     savedStateHandle[KEY_SELECTED_ELDER_ID] = elderId
                     fetchHomeSummaryForToday(elderId)
                 } else {
-                    _homeUiState.value = HomeUiState.Companion.EMPTY.copy(isLoading = false)
+                    _homeUiState.value = HomeUiState.EMPTY.copy(isLoading = false)
                 }
             }
         }
@@ -142,7 +150,7 @@ class HomeViewModel @Inject constructor(
             // val today = LocalDate.now()
             try {
                 // ① 요약 API 호출 (DTO를 받음)
-                val dto = homeRepository.getHomeSummary(elderId)
+                val dto = homeRepository.getHomeSummary(elderId).getOrThrow()
 
                 // ② DTO를 UiState로 변환 (ViewModel이 직접 함)
                 val uiFromServer = HomeUiState.from(dto)
@@ -197,7 +205,7 @@ class HomeViewModel @Inject constructor(
                     _homeUiState.value = fallbackUiState.copy(isLoading = false)
                 } else {
                     Log.e(TAG, "getHomeSummary failed elderId=$elderId", e)
-                    _homeUiState.value = HomeUiState.Companion.EMPTY.copy(isLoading = false)
+                    _homeUiState.value = HomeUiState.EMPTY.copy(isLoading = false)
                 }
             } finally {
                 _homeUiState.update { it.copy(isLoading = false) }
@@ -259,7 +267,7 @@ class HomeViewModel @Inject constructor(
             correctMedicationOrder.indexOf(medUiState.medicineName)
                 .let { if (it == -1) Int.MAX_VALUE else it }
         }
-        return HomeUiState.Companion.EMPTY.copy(
+        return HomeUiState.EMPTY.copy(
             elderName = elderName,
             medicines = sortedFallbackMedicines,
         )

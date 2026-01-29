@@ -30,17 +30,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
-import com.konkuk.medicarecall.ui.feature.login.senior.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.navigation.NavGraph
 import com.konkuk.medicarecall.ui.navigation.component.MainBottomBar
 import com.konkuk.medicarecall.ui.navigation.component.MainTab
 import com.konkuk.medicarecall.ui.navigation.rememberMainNavigator
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -80,9 +75,6 @@ class MainActivity : ComponentActivity() {
                 // 알림 권한 요청
                 RequestNotificationPermission()
 
-                val loginViewModel: LoginViewModel = hiltViewModel()
-                val loginElderViewModel: LoginElderViewModel = hiltViewModel()
-
                 Scaffold(
                     modifier = Modifier.background(MediCareCallTheme.colors.bg),
                     containerColor = MediCareCallTheme.colors.bg,
@@ -100,8 +92,6 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavGraph(
                         navigator = navigator,
-                        loginViewModel = loginViewModel,
-                        loginElderViewModel = loginElderViewModel,
                         modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                     )
                 }

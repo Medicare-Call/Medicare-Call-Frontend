@@ -5,19 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import org.koin.android.annotation.KoinViewModel
+import com.konkuk.medicarecall.data.exception.HttpException
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
-import javax.inject.Inject
 
 data class StatisticsUiState(
     val isLoading: Boolean = false,
@@ -25,12 +24,15 @@ data class StatisticsUiState(
     val error: String? = null,
 )
 
-@HiltViewModel
-class StatisticsViewModel @Inject constructor(
+@KoinViewModel
+class StatisticsViewModel(
     private val repository: StatisticsRepository,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : ViewModel() {
-
+    // 네비게이션 결과(복약 변경 등)를 ViewModel 책임으로 처리
+    fun onMedsChanged() {
+        refresh()
+    }
     private val _uiState = MutableStateFlow(StatisticsUiState())
     val uiState: StateFlow<StatisticsUiState> = _uiState.asStateFlow()
 

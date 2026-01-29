@@ -1,50 +1,27 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.HomeService
 import com.konkuk.medicarecall.data.dto.request.ImmediateCallRequestDto
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import retrofit2.HttpException
-import javax.inject.Inject
+import com.konkuk.medicarecall.data.util.handleNullableResponse
+import com.konkuk.medicarecall.data.util.handleResponse
+import org.koin.core.annotation.Single
 
-class HomeRepositoryImpl @Inject constructor(
+@Single
+class HomeRepositoryImpl(
     private val homeService: HomeService,
 ) : HomeRepository {
     override suspend fun requestImmediateCareCall(
-        elderId: Int, careCallOption: String,
+        elderId: Int,
+        careCallOption: String,
     ): Result<Unit> = runCatching {
-        val response = homeService.requestImmediateCareCall(
+        homeService.requestImmediateCareCall(
             ImmediateCallRequestDto(elderId, careCallOption),
-        )
-        if (response.isSuccessful) {
-            Log.d(
-                "httplog",
-                "전화 걸림, 어르신: $Int, 시간: $careCallOption",
-            )
-        } else {
-            val errorBody =
-                response.errorBody()?.string() ?: "Unknown error(updating health info)"
-            Log.e(
-                "httplog",
-                "전화 걸기 실패: ${response.code()} - $errorBody",
-            )
-            throw HttpException(response)
-        }
+        ).handleNullableResponse()
     }
 
-    override suspend fun getHomeSummary(elderId: Int): HomeResponseDto {
-        // DTO만 반환
-        Log.d("HomeRepo", "[REQ] elderId=$elderId")
-        val res = homeService.getHomeSummary(elderId) // DTO를 받음
-
-        val medicationStatus = res.medicationStatus
-        val meds = medicationStatus?.medicationList.orEmpty()
-        Log.d(
-            "HomeRepo",
-            "[RES] elderName=${res.elderName}, medsCount=${meds.size}, " +
-                "totalTaken=${medicationStatus?.totalTaken}, totalGoal=${medicationStatus?.totalGoal}",
-        )
-        return res
+    override suspend fun getHomeSummary(elderId: Int): Result<HomeResponseDto> = runCatching {
+        homeService.getHomeSummary(elderId).handleResponse()
     }
 }

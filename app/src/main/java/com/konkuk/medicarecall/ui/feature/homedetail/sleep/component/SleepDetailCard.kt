@@ -155,6 +155,6 @@ fun PreviewSleepDetailCard_Recorded() {
 @Composable
 fun PreviewSleepDetailCard_Unrecorded() {
     SleepDetailCard(
-        sleeps = SleepUiState.Companion.EMPTY,
+        sleeps = SleepUiState.EMPTY,
     )
 }

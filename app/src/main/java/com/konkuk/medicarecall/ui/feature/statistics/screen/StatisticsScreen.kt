@@ -26,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -49,7 +48,7 @@ import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.coroutines.flow.MutableStateFlow
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
 @Composable
@@ -57,8 +56,8 @@ fun StatisticsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     navigateToAlarm: () -> Unit = {},
-    homeViewModel: HomeViewModel,
-    statisticsViewModel: StatisticsViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = koinViewModel(),
+    statisticsViewModel: StatisticsViewModel = koinViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
         homeViewModel.fetchElderList() // 어르신 목록 호출
@@ -105,18 +104,22 @@ fun StatisticsScreen(
     LaunchedEffect(selectedElderId) {
         selectedElderId?.let { statisticsViewModel.setSelectedElderId(it) }
     }
-    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
-    val medsChanged by (savedStateHandle?.getStateFlow("medsChanged", false) ?: MutableStateFlow(
-        false,
-    ))
-        .collectAsStateWithLifecycle()
 
-    LaunchedEffect(medsChanged) {
-        if (medsChanged) {
-            statisticsViewModel.refresh()
-            savedStateHandle?.set("medsChanged", false)
-        }
+    // 복약 변경 이벤트 수신
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getStateFlow("medsChanged", false)
+            ?.collect { changed ->
+                if (changed) {
+                    statisticsViewModel.onMedsChanged()
+                    navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("medsChanged", false)
+                }
+            }
     }
+
     StatisticsScreenLayout(
         modifier = modifier,
         uiState = uiState,

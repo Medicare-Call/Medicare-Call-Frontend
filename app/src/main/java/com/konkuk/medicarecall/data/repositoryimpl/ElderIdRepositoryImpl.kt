@@ -4,21 +4,16 @@ import android.content.Context
 import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.ElderIds
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
-import com.konkuk.medicarecall.data.util.ElderIdsSerializer
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import javax.inject.Singleton
+import org.koin.core.annotation.Single
 
 val Context.elderIdsDataStore by dataStore(
     fileName = "elderIds",
     serializer = ElderIdsSerializer,
 )
 
-@Singleton
-class ElderIdRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context) : ElderIdRepository {
+
+@Single
+class ElderIdRepositoryImpl : ElderIdRepository {
 
     override suspend fun updateElderIds(elderIdMap: Map<Int, String>) {
         context.elderIdsDataStore.updateData { it.copy(elderIds = elderIdMap) }

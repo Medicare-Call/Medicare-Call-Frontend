@@ -1,25 +1,23 @@
 package com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
+@KoinViewModel
 class CallTimeViewModel @Inject constructor(
     private val setCallRepository: SetCallRepository,
     private val elderIdRepository: ElderIdRepository,
@@ -62,11 +60,13 @@ class CallTimeViewModel @Inject constructor(
     }
 
     fun setTimes(id: Int, times: CallTimes) {
-        timeMap[id] = times
+        _timeMap.update { currentMap ->
+            currentMap.toMutableMap().apply { put(id, times) }
+        }
     }
 
     fun isCompleteFor(id: Int): Boolean {
-        val t = timeMap[id] ?: return false
+        val t = _timeMap.value[id] ?: return false
         return t.first != null && t.second != null && t.third != null
     }
 
@@ -83,22 +83,44 @@ class CallTimeViewModel @Inject constructor(
             error.value = null
             try {
                 require(elderIds.isNotEmpty()) { "어르신 목록이 비어 있습니다." }
+
+                // 병렬 요청 생성
                 val jobs = elderIds.map { id ->
-                    val times = timeMap[id] ?: error("'$id'의 시간이 비어있습니다.")
+                    val times = _timeMap.value[id] ?: error("'$id'의 시간이 비어있습니다.")
                     async {
                         setCallRepository.saveForElder(id, times).getOrThrow()
                         Log.d("CallTimeViewModel", "Saved call times for id:$id")
                     }
                 }
+
+                // 모든 요청이 끝날 때까지 대기
                 jobs.awaitAll()
                 onSuccess()
+
             } catch (t: Throwable) {
                 Log.e("CallTimeViewModel", "submitAllByName failed", t)
                 error.value = t
                 onError(t)
             } finally {
-                isLoading.value = false
+                _isLoading.value = false
             }
         }
+    }
+
+    // 에러 상태 초기화
+    fun clearError() {
+        _lastError.value = null
+    }
+
+    fun setShowBottomSheet(value: Boolean) {
+        _showBottomSheet.value = value
+    }
+
+    fun setSelectedIndex(index: Int) {
+        _selectedIndex.value = index
+    }
+
+    fun setSelectedTabIndex(index: Int) {
+        _selectedTabIndex.value = index
     }
 }

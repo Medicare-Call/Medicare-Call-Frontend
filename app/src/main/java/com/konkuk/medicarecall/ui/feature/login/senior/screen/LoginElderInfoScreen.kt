@@ -36,9 +36,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
@@ -57,7 +58,7 @@ fun LoginElderScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToRegisterElderHealth: () -> Unit = {},
-    loginElderViewModel: LoginElderViewModel = hiltViewModel(),
+    loginElderViewModel: LoginElderViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
@@ -236,6 +237,196 @@ fun LoginElderScreen(
             Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 14.dp),
+        )
+    }
+}
+
+@Composable
+private fun LoginElderScreenLayout(
+    modifier: Modifier = Modifier,
+    eldersList: List<com.konkuk.medicarecall.ui.model.ElderData>,
+    selectedIndex: Int,
+    isInputComplete: Boolean,
+    onBack: () -> Unit,
+    onNameChanged: (String) -> Unit,
+    onBirthDateChanged: (String) -> Unit,
+    onGenderChanged: (Boolean) -> Unit,
+    onPhoneNumberChanged: (String) -> Unit,
+    onRelationshipChange: (String) -> Unit,
+    onLivingTypeChanged: (String) -> Unit,
+    onAddElder: () -> Unit,
+    onRemoveElder: (Int) -> Unit,
+    onSelectElder: (Int) -> Unit,
+    onNextClick: () -> Unit,
+) {
+    val scrollState = rememberScrollState()
+    val snackBarState = remember { SnackbarHostState() }
+    val nameFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(selectedIndex) {
+        nameFocusRequester.requestFocus()
+        delay(100L)
+        scrollState.animateScrollTo(0)
+    }
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(MediCareCallTheme.colors.bg)
+            .padding(horizontal = 20.dp)
+            .systemBarsPadding()
+            .imePadding(),
+    ) {
+        Column {
+            LoginBackButton(onClick = onBack)
+            Column(
+                modifier
+                    .weight(1f)
+                    .verticalScroll(scrollState),
+            ) {
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    "어르신 등록하기",
+                    style = MediCareCallTheme.typography.B_26,
+                    color = MediCareCallTheme.colors.black,
+                )
+                if (eldersList.size != 1) {
+                    Spacer(Modifier.height(30.dp))
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        itemsIndexed(eldersList) { index, data ->
+                            ElderChip(
+                                name = data.name,
+                                selected = index == selectedIndex,
+                                onRemove = {
+                                    onRemoveElder(index)
+                                },
+                                onClick = { onSelectElder(index) },
+                            )
+                        }
+                    }
+                }
+                Spacer(Modifier.height(30.dp))
+                ElderInputForm(
+                    scrollState = scrollState,
+                    elderData = eldersList[selectedIndex],
+                    onNameChanged = onNameChanged,
+                    onBirthDateChanged = onBirthDateChanged,
+                    onGenderChanged = onGenderChanged,
+                    onPhoneNumberChanged = onPhoneNumberChanged,
+                    onRelationshipChange = onRelationshipChange,
+                    onLivingTypeChanged = onLivingTypeChanged,
+                    nameFocusRequester = nameFocusRequester,
+                )
+
+                val interactionSource = remember { MutableInteractionSource() }
+                val isPressed by interactionSource.collectIsPressedAsState()
+
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(
+                            if (isInputComplete) {
+                                if (isPressed)
+                                    MediCareCallTheme.colors.g200
+                                else
+                                    MediCareCallTheme.colors.g50
+                            } else MediCareCallTheme.colors.gray1,
+                        )
+                        .border(
+                            1.2.dp,
+                            color = if (isInputComplete)
+                                MediCareCallTheme.colors.main
+                            else
+                                MediCareCallTheme.colors.gray3,
+                            shape = RoundedCornerShape(14.dp),
+                        )
+                        .clickable(
+                            enabled = isInputComplete,
+                            indication = null,
+                            interactionSource = interactionSource,
+                        ) {
+                            onAddElder()
+                        },
+                ) {
+                    Row(
+                        Modifier
+                            .padding(vertical = 16.dp)
+                            .align(Alignment.Center),
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_plus),
+                            contentDescription = "플러스 아이콘",
+                            tint = if (isInputComplete)
+                                MediCareCallTheme.colors.main
+                            else MediCareCallTheme.colors.gray3,
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "어르신 더 추가하기",
+                            color = if (isInputComplete)
+                                MediCareCallTheme.colors.main
+                            else MediCareCallTheme.colors.gray3,
+                            style = MediCareCallTheme.typography.B_17,
+                        )
+                    }
+                }
+                Spacer(Modifier.height(30.dp))
+            }
+            CTAButton(
+                if (isInputComplete)
+                    CTAButtonType.GREEN
+                else CTAButtonType.DISABLED,
+                "다음",
+                onNextClick,
+                Modifier.padding(top = 20.dp, bottom = 20.dp),
+            )
+        }
+        DefaultSnackBar(
+            snackBarState,
+            Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 14.dp),
+        )
+    }
+}
+
+@Preview(showBackground = true, heightDp = 1000)
+@Composable
+private fun LoginElderScreenPreview() {
+    MediCareCallTheme {
+        LoginElderScreenLayout(
+            eldersList = listOf(
+                com.konkuk.medicarecall.ui.model.ElderData(
+                    name = "김옥자",
+                    birthDate = "19500101",
+                    gender = false,
+                    phoneNumber = "01012345678",
+                    relationship = "할머니",
+                    livingType = "동거",
+                ),
+                com.konkuk.medicarecall.ui.model.ElderData(
+                    name = "박막례",
+                    birthDate = "19480315",
+                    gender = false,
+                    phoneNumber = "01087654321",
+                    relationship = "할머니",
+                    livingType = "독거",
+                ),
+            ),
+            selectedIndex = 0,
+            isInputComplete = true,
+            onBack = {},
+            onNameChanged = {},
+            onBirthDateChanged = {},
+            onGenderChanged = {},
+            onPhoneNumberChanged = {},
+            onRelationshipChange = {},
+            onLivingTypeChanged = {},
+            onAddElder = {},
+            onRemoveElder = {},
+            onSelectElder = {},
+            onNextClick = {},
         )
     }
 }

@@ -1,24 +1,27 @@
 package com.konkuk.medicarecall.ui.feature.settings.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class MyDataViewModel @Inject constructor(
+@KoinViewModel
+class MyDataViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     fun refresh() = getUserData()
-    var myDataInfo by mutableStateOf(MyInfoResponseDto())
-        private set
+
+    // 내부 수정용
+    private val _myDataInfo = MutableStateFlow(MyInfoResponseDto())
+
+    // 외부 노출용 (읽기 전용)
+    val myDataInfo: StateFlow<MyInfoResponseDto> = _myDataInfo.asStateFlow()
 
     init {
         getUserData()
@@ -37,7 +40,7 @@ class MyDataViewModel @Inject constructor(
             userRepository.getMyInfo()
                 .onSuccess {
                     Log.d("MyDataViewModel", "사용자 정보 불러오기 성공: $it")
-                    myDataInfo = it
+                    _myDataInfo.value = it
                 }
                 .onFailure {
                     Log.e("MyDataViewModel", "사용자 정보 불러오기 실패: ${it.message}", it)

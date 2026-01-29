@@ -18,8 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -29,12 +29,13 @@ import com.konkuk.medicarecall.ui.feature.settings.component.PersonalInfoCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersHealthViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HealthInfoScreen(
     onBack: () -> Unit = {},
     navigateToHealthDetail: (EldersHealthResponseDto) -> Unit = {},
-    healthInfoViewModel: EldersHealthViewModel = hiltViewModel(),
+    healthInfoViewModel: EldersHealthViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -93,6 +94,42 @@ fun HealthInfoScreen(
 //            PersonalInfoCard("김옥자",  onClick = {navController.navigate(Route.HealthDetail.route)})
 //            PersonalInfoCard("박막례",  onClick = {navController.navigate(Route.HealthDetail.route)})
             Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HealthInfoScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "어르신 건강정보 설정",
+                leftIcon = {
+                    Icon(
+                        painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "setting back",
+                        tint = MediCareCallTheme.colors.black,
+                    )
+                },
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                PersonalInfoCard(name = "김옥자", onClick = {})
+                PersonalInfoCard(name = "박막례", onClick = {})
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }

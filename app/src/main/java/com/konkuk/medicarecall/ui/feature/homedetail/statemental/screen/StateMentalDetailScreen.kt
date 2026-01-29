@@ -18,19 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
-import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -38,21 +36,20 @@ import java.time.LocalDate
 fun StateMentalDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    calendarViewModel: CalendarViewModel = hiltViewModel(),
-    mentalViewModel: MentalViewModel = hiltViewModel(),
+    viewModel: MentalViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        calendarViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
-    val mental by mentalViewModel.mental.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val mental by viewModel.mental.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         elderId?.let { id ->
-            mentalViewModel.loadMentalDataForDate(id, selectedDate)
+            viewModel.loadMentalDataForDate(id, selectedDate)
         }
     }
 
@@ -60,8 +57,8 @@ fun StateMentalDetailScreen(
         onBack = onBack,
         selectedDate = selectedDate,
         mental = mental,
-        weekDates = calendarViewModel.getCurrentWeekDates(),
-        onDateSelected = { calendarViewModel.selectDate(it) },
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = { viewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
     )
 }
@@ -103,12 +100,8 @@ fun StateMentalDetailScreenLayout(
                 )
                 Spacer(Modifier.height(24.dp))
                 WeeklyCalendar(
-                    calendarUiState = CalendarUiState(
-                        currentYear = selectedDate.year,
-                        currentMonth = selectedDate.monthValue,
-                        weekDates = weekDates,
-                        selectedDate = selectedDate,
-                    ),
+                    weekDates = weekDates,
+                    selectedDate = selectedDate,
                     onDateSelected = onDateSelected,
                 )
                 Spacer(modifier = Modifier.height(32.dp))

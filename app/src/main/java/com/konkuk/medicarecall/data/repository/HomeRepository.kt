@@ -4,5 +4,5 @@ import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
 
 interface HomeRepository {
     suspend fun requestImmediateCareCall(elderId: Int, careCallOption: String): Result<Unit>
-    suspend fun getHomeSummary(elderId: Int): HomeResponseDto
+    suspend fun getHomeSummary(elderId: Int): Result<HomeResponseDto>
 }

@@ -1,80 +1,71 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.konkuk.medicarecall.data.repository.SleepRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.konkuk.medicarecall.ui.navigation.Route
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import org.koin.android.annotation.KoinViewModel
+import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import javax.inject.Inject
+import java.time.temporal.TemporalAdjusters
 
-@HiltViewModel
-class SleepViewModel @Inject constructor(
+@KoinViewModel
+class SleepViewModel(
     private val sleepRepository: SleepRepository,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    // 캘린더 상태
+    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    val selectedDate: StateFlow<LocalDate> = _selectedDate
+    fun selectDate(date: LocalDate) {
+        _selectedDate.value = date
+    }
 
+    fun resetToToday() {
+        _selectedDate.value = LocalDate.now()
+    }
+
+    fun getCurrentWeekDates(): List<LocalDate> {
+        val base = _selectedDate.value
+        val startOfWeek =
+            base.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
+        return (0..6).map { startOfWeek.plusDays(it.toLong()) }
+    }
+
+    // 수면 상태
     private companion object {
         const val TAG = "SLEEP_API"
     }
 
-    private val _sleepState = MutableStateFlow(SleepUiState.Companion.EMPTY)
-    val sleep: StateFlow<SleepUiState> = _sleepState
+    private val _uiState = MutableStateFlow(SleepUiState())
+    val uiState: StateFlow<SleepUiState> = _uiState.asStateFlow()
 
-    fun loadSleepDataForDate(elderId: Int, date: LocalDate) {
+    private val elderId = savedStateHandle.toRoute<Route.SleepDetail>().elderId
+    fun loadSleepDataForDate(date: LocalDate) {
         viewModelScope.launch {
-            val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            Log.d(TAG, "Request elderId=$elderId, date=$formatted")
-
-            try {
-                _sleepState.value = sleepRepository.getSleepUiState(
-                    elderId = elderId,
-                    date = date,
-                )
-                Log.i(TAG, "Success elderId=$elderId, date=$formatted")
-            } catch (e: Exception) {
-                when (e) {
-                    is HttpException -> {
-                        when (e.code()) {
-                            404 -> {
-                                // 미기록
-                                Log.i(TAG, "No data (404) elderId=$elderId, date=$formatted")
-                                _sleepState.value = SleepUiState.Companion.EMPTY
-                            }
-
-                            400 -> {
-                                Log.w(
-                                    TAG,
-                                    "Bad request (400) elderId=$elderId, date=$formatted, msg=${e.message()}",
-                                )
-                                _sleepState.value = SleepUiState.Companion.EMPTY
-                            }
-
-                            401, 403 -> {
-                                Log.w(TAG, "Unauthorized (${e.code()}) elderId=$elderId")
-                                _sleepState.value = SleepUiState.Companion.EMPTY
-                            }
-
-                            else -> {
-                                Log.e(
-                                    TAG,
-                                    "API error code=${e.code()} elderId=$elderId, date=$formatted",
-                                    e,
-                                )
-                                _sleepState.value = SleepUiState.Companion.EMPTY
-                            }
-                        }
-                    }
-
-                    else -> {
-                        Log.e(TAG, "Unexpected error elderId=$elderId, date=$formatted", e)
-                        _sleepState.value = SleepUiState.Companion.EMPTY
-                    }
+            sleepRepository.getSleepData(
+                elderId = elderId,
+                date = date,
+            ).onSuccess { data ->
+                _uiState.update {
+                    SleepUiState(
+                        date = data.date,
+                        totalSleepHours = data.totalSleepHours,
+                        totalSleepMinutes = data.totalSleepMinutes,
+                        bedTime = data.bedTime,
+                        wakeUpTime = data.wakeUpTime,
+                    )
                 }
+            }.onFailure { error ->
+                Log.e("SleepViewModel", "Error loading sleep data", error)
             }
         }
     }

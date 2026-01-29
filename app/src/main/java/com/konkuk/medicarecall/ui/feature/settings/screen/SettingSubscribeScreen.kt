@@ -19,21 +19,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.component.SubscribeCard
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.SubscribeViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingSubscribeScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     navigateToSubscribeDetail: (subscription: EldersSubscriptionResponseDto) -> Unit = {},
-    viewModel: SubscribeViewModel = hiltViewModel(),
+    viewModel: SubscribeViewModel = koinViewModel(),
 ) {
     val eldersInfo = viewModel.subscriptions
     Log.d("SettingSubscribeScreen", "Elders Info: $eldersInfo")
@@ -75,6 +76,31 @@ fun SettingSubscribeScreen(
                 )
             }
             Spacer(modifier = modifier.height(20.dp))
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingSubscribeScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "구독관리",
+                leftIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "go_back",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black,
+                    )
+                },
+            )
         }
     }
 }

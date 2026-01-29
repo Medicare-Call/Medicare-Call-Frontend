@@ -3,22 +3,42 @@ package com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.MedicineRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import org.koin.android.annotation.KoinViewModel
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
+import java.time.temporal.TemporalAdjusters
 
-@HiltViewModel
-class MedicineViewModel @Inject constructor(
+@KoinViewModel
+class MedicineViewModel(
     private val medicineRepository: MedicineRepository,
 ) : ViewModel() {
 
+    // 캘린더 상태
+    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    val selectedDate: StateFlow<LocalDate> = _selectedDate
+    fun selectDate(date: LocalDate) {
+        _selectedDate.value = date
+    }
+
+    fun resetToToday() {
+        _selectedDate.value = LocalDate.now()
+    }
+
+    fun getCurrentWeekDates(): List<LocalDate> {
+        val base = _selectedDate.value
+        val startOfWeek =
+            base.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
+        return (0..6).map { startOfWeek.plusDays(it.toLong()) }
+    }
+
+    // 복약 상태
     private companion object {
         const val TAG = "MED_API"
     }
@@ -81,7 +101,7 @@ class MedicineViewModel @Inject constructor(
                             404, 400, 401, 403 -> {
                                 val tag = when (e.code()) {
                                     404 -> "No data (404)"
-                                    400 -> "Bad request (400): ${e.message()}"
+                                    400 -> "Bad request (400): ${e.message}"
                                     401, 403 -> "Unauthorized (${e.code()})"
                                     else -> ""
                                 }

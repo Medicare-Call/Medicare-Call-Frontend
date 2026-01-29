@@ -2,6 +2,8 @@ package com.konkuk.medicarecall.data.di
 
 import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.auth.RefreshService
+import com.konkuk.medicarecall.data.api.auth.createAuthService
+import com.konkuk.medicarecall.data.api.auth.createRefreshService
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.api.elders.GlucoseService
@@ -14,139 +16,108 @@ import com.konkuk.medicarecall.data.api.elders.SetCallService
 import com.konkuk.medicarecall.data.api.elders.SleepService
 import com.konkuk.medicarecall.data.api.elders.StatisticsService
 import com.konkuk.medicarecall.data.api.elders.SubscribeService
+import com.konkuk.medicarecall.data.api.elders.createElderRegisterService
+import com.konkuk.medicarecall.data.api.elders.createEldersInfoService
+import com.konkuk.medicarecall.data.api.elders.createGlucoseService
+import com.konkuk.medicarecall.data.api.elders.createHealthService
+import com.konkuk.medicarecall.data.api.elders.createHomeService
+import com.konkuk.medicarecall.data.api.elders.createMealService
+import com.konkuk.medicarecall.data.api.elders.createMedicineService
+import com.konkuk.medicarecall.data.api.elders.createMentalService
+import com.konkuk.medicarecall.data.api.elders.createSetCallService
+import com.konkuk.medicarecall.data.api.elders.createSleepService
+import com.konkuk.medicarecall.data.api.elders.createStatisticsService
+import com.konkuk.medicarecall.data.api.elders.createSubscribeService
 import com.konkuk.medicarecall.data.api.fcm.FcmUpdateService
 import com.konkuk.medicarecall.data.api.fcm.FcmValidationService
+import com.konkuk.medicarecall.data.api.fcm.createFcmUpdateService
+import com.konkuk.medicarecall.data.api.fcm.createFcmValidationService
 import com.konkuk.medicarecall.data.api.member.MemberRegisterService
 import com.konkuk.medicarecall.data.api.member.SettingService
+import com.konkuk.medicarecall.data.api.member.createMemberRegisterService
+import com.konkuk.medicarecall.data.api.member.createSettingService
 import com.konkuk.medicarecall.data.api.notice.NoticeService
-import com.konkuk.medicarecall.data.api.payments.NaverPayService
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import javax.inject.Named
-import javax.inject.Singleton
+import com.konkuk.medicarecall.data.api.notice.createNoticeService
+import de.jensklingenberg.ktorfit.Ktorfit
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
 @Module
-@InstallIn(SingletonComponent::class)
-object ApiModule {
+class ApiModule {
 
-    @Provides
-    @Singleton
-    fun provideRefreshService(@Named("AuthRetrofit") retrofit: Retrofit): RefreshService =
-        retrofit.create(RefreshService::class.java)
+    @Single
+    fun refreshService(@AuthKtorfit ktorfit: Ktorfit): RefreshService =
+        ktorfit.createRefreshService()
 
-    @Provides
-    @Singleton
-    fun provideAuthService(retrofit: Retrofit): AuthService =
-        retrofit.create(AuthService::class.java)
+    @Single
+    fun authService(ktorfit: Ktorfit): AuthService =
+        ktorfit.createAuthService()
 
-    @Provides
-    @Singleton
-    fun provideEldersInfoService(retrofit: Retrofit): EldersInfoService {
-        return retrofit.create(EldersInfoService::class.java)
-    }
+    @Single
+    fun eldersInfoService(ktorfit: Ktorfit): EldersInfoService =
+        ktorfit.createEldersInfoService()
 
-    @Provides
-    @Singleton
-    fun provideMemberRegisterService(retrofit: Retrofit): MemberRegisterService {
-        return retrofit.create(MemberRegisterService::class.java)
-    }
+    @Single
+    fun memberRegisterService(ktorfit: Ktorfit): MemberRegisterService =
+        ktorfit.createMemberRegisterService()
 
-    @Provides
-    @Singleton
-    fun provideElderRegisterService(retrofit: Retrofit): ElderRegisterService {
-        return retrofit.create(ElderRegisterService::class.java)
-    }
+    @Single
+    fun provideElderRegisterService(ktorfit: Ktorfit): ElderRegisterService =
+        ktorfit.createElderRegisterService()
 
-    @Provides
-    @Singleton
-    fun provideNoticeService(retrofit: Retrofit): NoticeService {
-        return retrofit.create(NoticeService::class.java)
-    }
+    @Single
+    fun provideNoticeService(ktorfit: Ktorfit): NoticeService =
+        ktorfit.createNoticeService()
 
-    @Provides
-    @Singleton
-    fun provideSetCallService(retrofit: Retrofit): SetCallService {
-        return retrofit.create(SetCallService::class.java)
-    }
+    @Single
+    fun provideSetCallService(ktorfit: Ktorfit): SetCallService =
+        ktorfit.createSetCallService()
 
-    @Provides
-    @Singleton
-    fun provideSubscribeService(retrofit: Retrofit): SubscribeService {
-        return retrofit.create(SubscribeService::class.java)
-    }
+    @Single
+    fun provideSubscribeService(ktorfit: Ktorfit): SubscribeService =
+        ktorfit.createSubscribeService()
 
-    @Provides
-    @Singleton
-    fun provideSettingService(retrofit: Retrofit): SettingService {
-        return retrofit.create(SettingService::class.java)
-    }
+    @Single
+    fun provideSettingService(ktorfit: Ktorfit): SettingService =
+        ktorfit.createSettingService()
 
-    @Provides
-    @Singleton
-    fun provideNaverPayService(retrofit: Retrofit): NaverPayService {
-        return retrofit.create(NaverPayService::class.java)
-    }
+    @Single
+    fun provideHomeService(ktorfit: Ktorfit): HomeService =
+        ktorfit.createHomeService()
 
-    @Provides
-    @Singleton
-    fun provideHomeService(retrofit: Retrofit): HomeService {
-        return retrofit.create(HomeService::class.java)
-    }
+    @Single
+    fun provideGlucoseService(ktorfit: Ktorfit): GlucoseService =
+        ktorfit.createGlucoseService()
 
-    @Provides
-    @Singleton
-    fun provideGlucoseService(retrofit: Retrofit): GlucoseService {
-        return retrofit.create(GlucoseService::class.java)
-    }
+    @Single
+    fun provideMealService(ktorfit: Ktorfit): MealService =
+        ktorfit.createMealService()
 
-    @Provides
-    @Singleton
-    fun provideMealService(retrofit: Retrofit): MealService {
-        return retrofit.create(MealService::class.java)
-    }
+    @Single
+    fun provideMedicineService(ktorfit: Ktorfit): MedicineService =
+        ktorfit.createMedicineService()
 
-    @Provides
-    @Singleton
-    fun provideMedicineService(retrofit: Retrofit): MedicineService {
-        return retrofit.create(MedicineService::class.java)
-    }
+    @Single
+    fun provideSleepService(ktorfit: Ktorfit): SleepService =
+        ktorfit.createSleepService()
 
-    @Provides
-    @Singleton
-    fun provideSleepService(retrofit: Retrofit): SleepService {
-        return retrofit.create(SleepService::class.java)
-    }
+    @Single
+    fun provideHealthService(ktorfit: Ktorfit): HealthService =
+        ktorfit.createHealthService()
 
-    @Provides
-    @Singleton
-    fun provideHealthService(retrofit: Retrofit): HealthService {
-        return retrofit.create(HealthService::class.java)
-    }
+    @Single
+    fun provideMentalService(ktorfit: Ktorfit): MentalService =
+        ktorfit.createMentalService()
 
-    @Provides
-    @Singleton
-    fun provideMentalService(retrofit: Retrofit): MentalService {
-        return retrofit.create(MentalService::class.java)
-    }
+    @Single
+    fun provideStatisticsService(ktorfit: Ktorfit): StatisticsService =
+        ktorfit.createStatisticsService()
 
-    @Provides
-    @Singleton
-    fun provideStatisticsService(retrofit: Retrofit): StatisticsService {
-        return retrofit.create(StatisticsService::class.java)
-    }
+    @Single
+    fun provideFcmValidationService(ktorfit: Ktorfit): FcmValidationService =
+        ktorfit.createFcmValidationService()
 
-    @Provides
-    @Singleton
-    fun provideFcmValidationService(retrofit: Retrofit): FcmValidationService {
-        return retrofit.create(FcmValidationService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFcmUpdateService(retrofit: Retrofit): FcmUpdateService {
-        return retrofit.create(FcmUpdateService::class.java)
-    }
+    @Single
+    fun provideFcmUpdateService(ktorfit: Ktorfit): FcmUpdateService =
+        ktorfit.createFcmUpdateService()
 }

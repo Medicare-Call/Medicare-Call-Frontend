@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
@@ -77,5 +78,25 @@ fun SubscribeCard(
             modifier = modifier.size(28.dp),
             tint = MediCareCallTheme.colors.gray2,
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SubscribeCardPreview() {
+    MediCareCallTheme {
+        Column(Modifier.padding(16.dp)) {
+            SubscribeCard(
+                elderInfo = EldersSubscriptionResponseDto(
+                    elderId = 1,
+                    name = "김옥자",
+                    plan = "메디케어콜 프리미엄 플랜",
+                    price = 50000,
+                    nextBillingDate = "2024-02-15",
+                    startDate = "2024-01-15",
+                ),
+                onClick = {},
+            )
+        }
     }
 }

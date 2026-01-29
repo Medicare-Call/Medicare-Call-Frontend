@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,8 +39,8 @@ fun FirstTimeWheelPicker(
     initialMinute: Int = 0,
     onTimeChange: (hour: Int, minute: Int) -> Unit = { _, _ -> },
 ) {
-    var hour by remember { mutableStateOf(initialHour) }
-    var minute by remember { mutableStateOf(initialMinute) }
+    var hour by remember { mutableIntStateOf(initialHour) }
+    var minute by remember { mutableIntStateOf(initialMinute) }
 
     val mainColor = MediCareCallTheme.colors.main.toArgb()
     val minuteOptions = arrayOf("00", "10", "20", "30", "40", "50")

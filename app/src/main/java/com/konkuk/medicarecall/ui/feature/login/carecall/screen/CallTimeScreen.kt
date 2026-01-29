@@ -32,15 +32,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
@@ -238,8 +241,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.FIRST,
                     timeText = null,
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 0
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(0)
                     },
                 )
             } else {
@@ -248,8 +251,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.FIRST,
                     timeText = saved.first.toDisplayString(),
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 0
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(0)
                     },
                 )
                 Spacer(modifier = modifier.height(20.dp))
@@ -258,8 +261,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.SECOND,
                     timeText = saved.second?.toDisplayString(),
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 1
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(1)
                     },
                 )
                 Spacer(modifier = modifier.height(20.dp))
@@ -268,8 +271,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.THIRD,
                     timeText = saved.third?.toDisplayString(),
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 2
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(2)
                     },
                 )
             }
@@ -339,7 +342,7 @@ fun CallTimeScreen(
                     initialSecondMinute = saved.second?.third ?: 0,
                     initialThirdHour = saved.third?.second ?: 5,
                     initialThirdMinute = saved.third?.third ?: 0,
-                    onDismiss = { showBottomSheet = false },
+                    onDismiss = { callTimeViewModel.setShowBottomSheet(false) },
                     onConfirm = { fH, fM, sH, sM, tH, tM ->
                         callTimeViewModel.setTimes(
                             selectedId,
@@ -349,10 +352,18 @@ fun CallTimeScreen(
                                 third = Triple(1, tH, tM),
                             ),
                         )
-                        showBottomSheet = false
+                        callTimeViewModel.setShowBottomSheet(false)
                     },
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CallTimeScreenPreview() {
+    MediCareCallTheme {
+        CallTimeScreen()
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
@@ -46,4 +47,23 @@ fun AnnouncementCard(
             .height(1.dp)
             .background(MediCareCallTheme.colors.gray2),
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnnouncementCardPreview() {
+    MediCareCallTheme {
+        Column {
+            AnnouncementCard(
+                title = "서비스 업데이트 안내",
+                date = "2024.01.15",
+                onClick = {},
+            )
+            AnnouncementCard(
+                title = "새해 인사",
+                date = "2024.01.01",
+                onClick = {},
+            )
+        }
+    }
 }

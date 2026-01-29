@@ -19,7 +19,6 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import com.konkuk.medicarecall.data.repositoryimpl.FcmRepositoryImpl
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -29,7 +28,6 @@ import javax.inject.Inject
 /**
  * 다른 파일에서 직접 호출 안해도 되는 함수들 => FCM이나 안드로이드 시스템이 필요시 호출
  */
-@AndroidEntryPoint
 class FcmService : FirebaseMessagingService() {
 
     @Inject

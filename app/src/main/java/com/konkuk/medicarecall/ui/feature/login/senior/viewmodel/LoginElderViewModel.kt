@@ -9,17 +9,16 @@ import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
+import com.konkuk.medicarecall.data.exception.HttpException
 
-@HiltViewModel
-class LoginElderViewModel @Inject constructor(
+@KoinViewModel
+class LoginElderViewModel(
     private val elderRegisterRepository: ElderRegisterRepository,
 ) : ViewModel() {
     // 어르신 정보 화면
@@ -282,7 +281,7 @@ class LoginElderViewModel @Inject constructor(
                 .onFailure { exception ->
                     when (exception) {
                         is HttpException -> {
-                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message()}")
+                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message}")
                         }
                     }
                 }
@@ -297,7 +296,7 @@ class LoginElderViewModel @Inject constructor(
             .onFailure { exception ->
                 when (exception) {
                     is HttpException -> {
-                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message()}")
+                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
                     }
                 }
             }

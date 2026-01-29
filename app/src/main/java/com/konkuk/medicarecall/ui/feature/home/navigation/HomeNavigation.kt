@@ -39,7 +39,6 @@ fun NavGraphBuilder.homeNavGraph(
             navigateToGlucoseDetailScreen = { elderId ->
                 navigateToGlucoseDetailScreen(elderId)
             },
-            mainBackStackEntry = backStackEntry,
         )
     }
 }

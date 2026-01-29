@@ -14,8 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.splash.viewmodel.SplashViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
@@ -30,7 +31,7 @@ fun SplashScreen(
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
 ) {
-    val viewModel: SplashViewModel = hiltViewModel()
+    val viewModel: SplashViewModel = koinViewModel()
 
     val navigationDestination by viewModel.navigationDestination.collectAsStateWithLifecycle()
 
@@ -77,5 +78,24 @@ fun SplashScreen(
             Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds,
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SplashScreenPreview() {
+    MediCareCallTheme {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.main),
+        ) {
+            Image(
+                painterResource(R.drawable.bg_splash_new),
+                "Medicare Call 스플래시",
+                Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
+            )
+        }
     }
 }

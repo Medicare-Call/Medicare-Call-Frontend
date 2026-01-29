@@ -14,21 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.AnnouncementCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.NoticeViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AnnouncementScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToNoticeDetail: (notice: NoticesResponseDto) -> Unit = {},
-    viewModel: NoticeViewModel = hiltViewModel(),
+    viewModel: NoticeViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val notices = viewModel.noticeList
@@ -75,6 +76,37 @@ fun AnnouncementScreen(
                         },
                     )
                 }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnnouncementScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "공지사항",
+                leftIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "go_back",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { },
+                        tint = Color.Black,
+                    )
+                },
+            )
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                AnnouncementCard("서비스 업데이트 안내", "2024.01.15", onClick = {})
+                AnnouncementCard("새해 인사", "2024.01.01", onClick = {})
             }
         }
     }

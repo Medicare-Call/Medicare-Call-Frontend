@@ -2,16 +2,18 @@ package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.elders.HealthService
 import com.konkuk.medicarecall.data.repository.HealthRepository
+import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
+import org.koin.core.annotation.Single
 import java.time.LocalDate
-import javax.inject.Inject
 
-class HealthRepositoryImpl @Inject constructor(
+@Single
+class HealthRepositoryImpl(
     private val healthService: HealthService,
 ) : HealthRepository {
     override suspend fun getHealthUiState(elderId: Int, date: LocalDate): Result<HealthUiState> =
         runCatching {
-            val response = healthService.getDailyHealth(elderId, date.toString())
+            val response = healthService.getDailyHealth(elderId, date.toString()).handleResponse()
             HealthUiState(
                 symptoms = response.symptomList.orEmpty(),
                 symptomAnalysis = response.analysisComment.orEmpty(),

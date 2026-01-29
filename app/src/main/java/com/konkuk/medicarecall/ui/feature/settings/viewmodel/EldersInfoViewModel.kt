@@ -1,20 +1,19 @@
 package com.konkuk.medicarecall.ui.feature.settings.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.annotation.KoinViewModel
 
-@HiltViewModel
-class EldersInfoViewModel @Inject constructor(
+@KoinViewModel
+class EldersInfoViewModel(
     private val eldersInfoRepository: EldersInfoRepository,
     private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
@@ -47,8 +46,8 @@ class EldersInfoViewModel @Inject constructor(
                     val mapped = list.associate { it.elderId to it.name }
                     elderIdRepository.updateElderIds(mapped)
 
-                    error.value = null
-                    errorMessage = null
+                    _error.value = null
+                    _errorMessage.value = null
                 }
                 .onFailure {
                     error.value = it

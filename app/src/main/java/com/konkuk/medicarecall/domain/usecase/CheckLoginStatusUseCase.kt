@@ -4,10 +4,11 @@ import android.util.Log
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.NavigationDestination
-import retrofit2.HttpException
-import javax.inject.Inject
+import org.koin.core.annotation.Factory
+import com.konkuk.medicarecall.data.exception.HttpException
 
-class CheckLoginStatusUseCase @Inject constructor(
+@Factory
+class CheckLoginStatusUseCase(
     private val eldersInfoRepository: EldersInfoRepository,
     private val elderIdRepository: ElderIdRepository,
 ) {
@@ -43,7 +44,7 @@ class CheckLoginStatusUseCase @Inject constructor(
                         when (exception) {
                             is HttpException -> {
                                 val code = exception.code()
-                                val errorBody = exception.response()?.errorBody()?.string()
+                                val errorBody = exception.response()?.errorBody()?.toString()
 
                                 Log.e("httplog", "HTTP 에러 발생 - 코드: $code, 메시지: $errorBody")
 
