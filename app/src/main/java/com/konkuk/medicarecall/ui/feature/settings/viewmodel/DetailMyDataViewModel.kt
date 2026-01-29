@@ -40,6 +40,10 @@ class DetailMyDataViewModel(
     private val _birth = MutableStateFlow("")
     val birth: StateFlow<String> = _birth.asStateFlow()
 
+    // 사용자 정보 상태
+    private val _myDataInfo = MutableStateFlow<MyInfoResponseDto?>(null)
+    val myDataInfo: StateFlow<MyInfoResponseDto?> = _myDataInfo.asStateFlow()
+
     // Async state
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -47,6 +51,31 @@ class DetailMyDataViewModel(
     val isUpdateSuccess: StateFlow<Boolean> = _isUpdateSuccess.asStateFlow()
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
+    // API 호출 함수
+    fun loadMyInfo() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                userRepository.getMyInfo()
+                    .onSuccess { myInfo ->
+                        _myDataInfo.value = myInfo
+                    }
+                    .onFailure { exception ->
+                        _errorMessage.value = "내 정보를 불러오지 못했습니다: ${exception.message}"
+                        Log.e("DetailMyDataViewModel", "내 정보 로딩 실패", exception)
+                    }
+            } catch (ce: CancellationException) {
+                throw ce
+            } catch (e: Exception) {
+                _errorMessage.value = "내 정보를 불러오지 못했습니다: ${e.message}"
+                Log.e("DetailMyDataViewModel", "내 정보 로딩 실패", e)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
     fun updateUserData(
         userInfo: MyInfoResponseDto,

@@ -6,32 +6,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
 import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
-import com.konkuk.medicarecall.ui.navigation.EldersHealthResponseDtoType
-import com.konkuk.medicarecall.ui.navigation.EldersInfoResponseDtoType
-import com.konkuk.medicarecall.ui.navigation.EldersSubscriptionResponseDtoType
 import com.konkuk.medicarecall.ui.navigation.MainTabRoute
-import com.konkuk.medicarecall.ui.navigation.MyInfoResponseDtoType
-import com.konkuk.medicarecall.ui.navigation.NoticesResponseDtoType
 import com.konkuk.medicarecall.ui.navigation.Route
-import kotlin.reflect.typeOf
 
 fun NavController.navigateToSettings(navOptions: NavOptions) {
     navigate(MainTabRoute.Settings, navOptions)
@@ -41,36 +30,35 @@ fun NavController.navigateToElderPersonalInfo() {
     navigate(Route.ElderPersonalInfo)
 }
 
-fun NavController.navigateToElderPersonalDetail(info: EldersInfoResponseDto) {
-    navigate(Route.ElderPersonalDetail(info))
+fun NavController.navigateToElderPersonalDetail(elderId: Int = -1) {
+    navigate(Route.ElderPersonalDetail(elderId))
 }
 
 fun NavController.navigateToElderHealthInfo() {
     navigate(Route.ElderHealthInfo)
 }
 
-fun NavController.navigateToElderHealthDetail(health: EldersHealthResponseDto) { // EldersHealthResponseDto
-    navigate(Route.ElderHealthDetail(health))
+fun NavController.navigateToElderHealthDetail(elderId: Int) {
+    navigate(Route.ElderHealthDetail(elderId))
 }
-
-fun NavController.navigateToNotificationSetting(myInfo: MyInfoResponseDto) {
-    navigate(Route.NotificationSetting(myInfo))
+fun NavController.navigateToNotificationSetting() {
+    navigate(Route.NotificationSetting)
 }
 
 fun NavController.navigateToSubscribeInfo() {
     navigate(Route.SubscribeInfo)
 }
 
-fun NavController.navigateToSubscribeDetail(subscription: EldersSubscriptionResponseDto) {
-    navigate(Route.SubscribeDetail(subscription))
+fun NavController.navigateToSubscribeDetail(elderId: Int) {
+    navigate(Route.SubscribeDetail(elderId))
 }
 
 fun NavController.navigateToNotice() {
     navigate(Route.Notice)
 }
 
-fun NavController.navigateToNoticeDetail(notice: NoticesResponseDto) {
-    navigate(Route.NoticeDetail(notice))
+fun NavController.navigateToNoticeDetail(noticeId: Int) {
+    navigate(Route.NoticeDetail(noticeId))
 }
 
 fun NavController.navigateToServiceCenter() {
@@ -81,24 +69,24 @@ fun NavController.navigateToUserInfo() {
     navigate(Route.UserInfo)
 }
 
-fun NavController.navigateToUserInfoSetting(myInfo: MyInfoResponseDto) {
-    navigate(Route.UserInfoSetting(myInfo))
+fun NavController.navigateToUserInfoSetting() {
+    navigate(Route.UserInfoSetting)
 }
 
 fun NavGraphBuilder.settingNavGraph(
     popBackStack: () -> Unit,
     navigateToElderPersonalInfo: () -> Unit,
-    navigateToElderPersonalDetail: (EldersInfoResponseDto) -> Unit,
+    navigateToElderPersonalDetail: (Int) -> Unit,
     navigateToElderHealthInfo: () -> Unit,
-    navigateToHealthDetail: (EldersHealthResponseDto) -> Unit,
-    navigateToNotificationSetting: (MyInfoResponseDto) -> Unit,
+    navigateToHealthDetail: (Int) -> Unit,
+    navigateToNotificationSetting: () -> Unit,
     navigateToSubscribeInfo: () -> Unit,
-    navigateToSubscribeDetail: (EldersSubscriptionResponseDto) -> Unit,
+    navigateToSubscribeDetail: (Int) -> Unit,
     navigateToNotice: () -> Unit,
-    navigateToNoticeDetail: (NoticesResponseDto) -> Unit,
+    navigateToNoticeDetail: (Int) -> Unit,
     navigateToServiceCenter: () -> Unit,
     navigateToUserInfo: () -> Unit,
-    navigateToUserInfoSetting: (MyInfoResponseDto) -> Unit,
+    navigateToUserInfoSetting: () -> Unit,
     navigateToLoginAfterLogout: () -> Unit,
     navController: NavHostController,
 ) {
@@ -121,12 +109,11 @@ fun NavGraphBuilder.settingNavGraph(
         )
     }
 
-    composable<Route.ElderPersonalDetail>(
-        typeMap = mapOf(typeOf<EldersInfoResponseDto>() to EldersInfoResponseDtoType),
-    ) { navBackstackEntry ->
+    composable<Route.ElderPersonalDetail> { navBackstackEntry ->
+        val elderId = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().elderId
         ElderDetailScreen(
+            elderId = elderId, // Screen에 ID만 전달
             onBack = popBackStack,
-            eldersInfoResponseDto = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().info,
             navController = navController,
         )
     }
@@ -137,21 +124,16 @@ fun NavGraphBuilder.settingNavGraph(
             navigateToHealthDetail = navigateToHealthDetail,
         )
     }
-
-    composable<Route.ElderHealthDetail>(
-        typeMap = mapOf(typeOf<EldersHealthResponseDto>() to EldersHealthResponseDtoType),
-    ) { navBackstackEntry ->
+    composable<Route.ElderHealthDetail> { navBackstackEntry ->
+        val elderId = navBackstackEntry.toRoute<Route.ElderHealthDetail>().elderId
         HealthDetailScreen(
+            elderId = elderId,
             onBack = popBackStack,
-            healthInfoResponseDto = navBackstackEntry.toRoute<Route.ElderHealthDetail>().health,
         )
     }
 
-    composable<Route.NotificationSetting>(
-        typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
-    ) { navBackStackEntry ->
+    composable<Route.NotificationSetting> {
         SettingAlarmScreen(
-            myDataInfo = navBackStackEntry.toRoute<Route.NotificationSetting>().myInfo,
             onBack = popBackStack,
         )
     }
@@ -162,12 +144,9 @@ fun NavGraphBuilder.settingNavGraph(
             navigateToSubscribeDetail = navigateToSubscribeDetail,
         )
     }
-
-    composable<Route.SubscribeDetail>(
-        typeMap = mapOf(typeOf<EldersSubscriptionResponseDto>() to EldersSubscriptionResponseDtoType),
-    ) { navBackStackEntry ->
+    composable<Route.SubscribeDetail> { navBackStackEntry -> val elderId = navBackStackEntry.toRoute<Route.SubscribeDetail>().elderId
         SubscribeDetailScreen(
-            elderInfo = navBackStackEntry.toRoute<Route.SubscribeDetail>().subscription,
+            elderId = elderId,
             onBack = popBackStack,
         )
     }
@@ -179,11 +158,10 @@ fun NavGraphBuilder.settingNavGraph(
         )
     }
 
-    composable<Route.NoticeDetail>(
-        typeMap = mapOf(typeOf<NoticesResponseDto>() to NoticesResponseDtoType),
-    ) { navBackStackEntry ->
+    composable<Route.NoticeDetail> { navBackStackEntry ->
+        val noticeId = navBackStackEntry.toRoute<Route.NoticeDetail>().noticeId
         AnnouncementDetailScreen(
-            noticeInfo = navBackStackEntry.toRoute<Route.NoticeDetail>().notice,
+            noticeId = noticeId, // Screen에 ID만 전달
             onBack = popBackStack,
         )
     }
@@ -201,13 +179,6 @@ fun NavGraphBuilder.settingNavGraph(
             navigateToLoginAfterLogout = navigateToLoginAfterLogout,
         )
     }
-
-    composable<Route.UserInfoSetting>(
-        typeMap = mapOf(typeOf<MyInfoResponseDto>() to MyInfoResponseDtoType),
-    ) { navBackStackEntry ->
-        MyDetailScreen(
-            myDataInfo = navBackStackEntry.toRoute<Route.UserInfoSetting>().myInfo,
-            onBack = popBackStack,
-        )
+    composable<Route.UserInfoSetting> { MyDetailScreen(onBack = popBackStack)
     }
 }

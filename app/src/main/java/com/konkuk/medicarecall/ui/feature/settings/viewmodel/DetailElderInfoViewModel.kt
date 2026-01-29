@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
+import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
@@ -18,9 +19,38 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class DetailElderInfoViewModel(
-    private val eldersInfoRepository: UpdateElderInfoRepository,
+    private val eldersInfoRepository: EldersInfoRepository,
+    private val updateElderInfoRepository: UpdateElderInfoRepository,
 ) : ViewModel() {
-    // UI State
+    private val _uiState = MutableStateFlow<EldersInfoResponseDto?>(null)
+    val uiState: StateFlow<EldersInfoResponseDto?> = _uiState.asStateFlow()
+
+    private val _isSuccess = MutableStateFlow(false)
+    val isSuccess: StateFlow<Boolean> = _isSuccess.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    fun loadElderDataById(elderId: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            eldersInfoRepository.getElders()
+                .onSuccess { list ->
+                    val elderData = list.firstOrNull { it.elderId == elderId }
+                    _uiState.value = elderData
+                    if (elderData == null) {
+                        Log.w("DetailElderInfoViewModel", "어르신 정보를 찾을 수 없습니다. elderId: $elderId")
+                    }
+                }
+                .onFailure { exception ->
+                    Log.e("DetailElderInfoViewModel", "어르신 정보 로딩 실패", exception)
+                }
+                .also {
+                    _isLoading.value = false
+                }
+        }
+    }
+
     private val _isMale = MutableStateFlow(false)
     val isMale: StateFlow<Boolean> = _isMale.asStateFlow()
 
@@ -43,9 +73,6 @@ class DetailElderInfoViewModel(
     val showDeleteDialog: StateFlow<Boolean> = _showDeleteDialog.asStateFlow()
 
     // Async State
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
     private val _isUpdateSuccess = MutableStateFlow(false)
     val isUpdateSuccess: StateFlow<Boolean> = _isUpdateSuccess.asStateFlow()
 
@@ -67,25 +94,52 @@ class DetailElderInfoViewModel(
             relationship = elderInfo.relationship,
             residenceType = elderInfo.residenceType,
         )
+        Log.d("DetailElderInfoViewModel", "어르신 개인 정보 수정 요청: elderId=${elderInfo.elderId}")
 
+        viewModelScope.launch {
+            updateElderInfoRepository.updateElderInfo(
+                id = elderInfo.elderId,
+                request = updateInfo,
+            )
+                .onSuccess {
+                    Log.d("DetailElderInfoViewModel", "어르신 개인 정보 수정 완료: $it")
+                    _isSuccess.value = true
+                    loadElderDataById(elderInfo.elderId)
+                    onComplete?.invoke()
+                }
+                .onFailure { exception ->
+                    Log.e("DetailElderInfoViewModel", "어르신 개인 정보 수정 실패: $exception")
+                    _isSuccess.value = false
+                }
+        }
+    }
+
+    fun processElderInfo(elderId: Int, request: ElderRegisterRequestDto) {
+        Log.d("DetailElderInfoViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId")
         viewModelScope.launch {
             _isLoading.value = true
             _isUpdateSuccess.value = false
             _errorMessage.value = null
             try {
-                eldersInfoRepository.updateElderInfo(
-                    id = elderInfo.elderId,
-                    request = updateInfo,
-                ).onSuccess {
-                    Log.d("DetailElderInfoViewModel", "어르신 개인 정보 수정 완료: $it")
-                    _isUpdateSuccess.value = true
-                    onComplete?.invoke()
-                }.onFailure { exception ->
-                    // 취소 예외 처리 추가
-                    if (exception is CancellationException) throw exception
-                    Log.e("DetailElderInfoViewModel", "어르신 개인 정보 수정 실패: $exception")
-                    _errorMessage.value = "정보 수정을 실패했습니다. 다시 시도해주세요."
-                }
+                updateElderInfoRepository.updateElderInfo(
+                    id = elderId,
+                    request = request,
+                )
+                    .onSuccess {
+                        Log.d("DetailElderInfoViewModel", "어르신 정보 처리 완료: $it")
+                        _isSuccess.value = true
+                        _isUpdateSuccess.value = true
+                        // 수정 모드(elderId != -1)일 때만 데이터 재로드
+                        if (elderId != -1) {
+                            loadElderDataById(elderId)
+                        }
+                    }
+                    .onFailure { exception ->
+                        if (exception is CancellationException) throw exception
+                        Log.e("DetailElderInfoViewModel", "어르신 정보 처리 실패: $exception")
+                        _isSuccess.value = false
+                        _errorMessage.value = "정보 수정을 실패했습니다. 다시 시도해주세요."
+                    }
             } finally {
                 _isLoading.value = false
             }

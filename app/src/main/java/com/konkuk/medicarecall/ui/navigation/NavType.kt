@@ -5,29 +5,10 @@ import androidx.navigation.NavType
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import kotlinx.serialization.json.Json
 
 // NavType definitions for complex DTOs
-val MyInfoResponseDtoType = object : NavType<MyInfoResponseDto>(isNullableAllowed = false) {
-    override fun get(bundle: Bundle, key: String): MyInfoResponseDto? {
-        return bundle.getString(key)?.let { Json.decodeFromString(it) }
-    }
-
-    override fun parseValue(value: String): MyInfoResponseDto {
-        return Json.decodeFromString(value)
-    }
-
-    override fun serializeAsValue(value: MyInfoResponseDto): String {
-        return Json.encodeToString(value)
-    }
-
-    override fun put(bundle: Bundle, key: String, value: MyInfoResponseDto) {
-        bundle.putString(key, Json.encodeToString(value))
-    }
-}
-
 val EldersInfoResponseDtoType = object : NavType<EldersInfoResponseDto>(isNullableAllowed = false) {
     override fun get(bundle: Bundle, key: String): EldersInfoResponseDto? {
         return bundle.getString(key)?.let { Json.decodeFromString(it) }

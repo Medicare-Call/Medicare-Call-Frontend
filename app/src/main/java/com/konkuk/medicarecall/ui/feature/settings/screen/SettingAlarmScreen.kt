@@ -3,6 +3,7 @@ package com.konkuk.medicarecall.ui.feature.settings.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,22 +13,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.PushNotificationDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.component.SwitchButton
@@ -39,33 +38,53 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingAlarmScreen(
     modifier: Modifier = Modifier,
     myDataViewModel: DetailMyDataViewModel = koinViewModel(),
-    myDataInfo: MyInfoResponseDto,
     onBack: () -> Unit = {},
 ) {
     // ViewModel 상태 구독
+    val myDataInfo by myDataViewModel.myDataInfo.collectAsStateWithLifecycle()
+    val isLoading by myDataViewModel.isLoading.collectAsStateWithLifecycle()
     val masterChecked by myDataViewModel.masterChecked.collectAsStateWithLifecycle()
     val completeChecked by myDataViewModel.completeChecked.collectAsStateWithLifecycle()
     val abnormalChecked by myDataViewModel.abnormalChecked.collectAsStateWithLifecycle()
     val missedChecked by myDataViewModel.missedChecked.collectAsStateWithLifecycle()
 
     // 초기 데이터 로드
+    LaunchedEffect(Unit) {
+        myDataViewModel.loadMyInfo()
+    }
+
+    // myDataInfo가 로드되면 알림 설정 초기화
     LaunchedEffect(myDataInfo) {
-        myDataViewModel.initializeNotificationSettings(myDataInfo)
+        myDataInfo?.let { myDataViewModel.initializeNotificationSettings(it) }
     }
 
     // 상태를 업데이트하고 ViewModel을 호출하는 함수를 만듭니다. (코드 중복 제거)
     val updateSettings = {
-        myDataViewModel.updateUserData(
-            userInfo = myDataInfo.copy(
-                // 기존 데이터를 복사하여 변경사항만 적용
-                pushNotification = PushNotificationDto(
-                    all = if (masterChecked) "ON" else "OFF",
-                    carecallCompleted = if (completeChecked) "ON" else "OFF",
-                    healthAlert = if (abnormalChecked) "ON" else "OFF",
-                    carecallMissed = if (missedChecked) "ON" else "OFF",
+        myDataInfo?.let { info ->
+            myDataViewModel.updateUserData(
+                userInfo = info.copy(
+                    // 기존 데이터를 복사하여 변경사항만 적용
+                    pushNotification = PushNotificationDto(
+                        all = if (masterChecked) "ON" else "OFF",
+                        carecallCompleted = if (completeChecked) "ON" else "OFF",
+                        healthAlert = if (abnormalChecked) "ON" else "OFF",
+                        carecallMissed = if (missedChecked) "ON" else "OFF",
+                    ),
                 ),
-            ),
-        )
+            )
+        }
+    }
+
+    if (isLoading && myDataInfo == null) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
+        return
     }
 
     Column(

@@ -101,7 +101,6 @@ class CallTimeViewModel(
                 // 모든 요청이 끝날 때까지 대기
                 jobs.awaitAll()
                 onSuccess()
-
             } catch (t: Throwable) {
                 Log.e("CallTimeViewModel", "submitAllByName failed", t)
                 error.value = t

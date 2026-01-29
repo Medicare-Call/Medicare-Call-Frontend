@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.viewmodel.MyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -46,7 +47,7 @@ fun SettingsScreen(
     navigateToSubscribe: () -> Unit = {},
     navigateToElderPersonalInfo: () -> Unit = {},
     navigateToElderHealthInfo: () -> Unit = {},
-    navigateToNotificationSetting: (myInfo: MyInfoResponseDto) -> Unit = {},
+    navigateToNotificationSetting: () -> Unit = {},
     myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -59,7 +60,7 @@ fun SettingsScreen(
         lifecycleOwner.lifecycle.addObserver(obs)
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
-    val myInfo = myDataViewModel.myDataInfo
+    val myInfo by myDataViewModel.myDataInfo.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +90,7 @@ fun SettingsScreen(
                 )
                 Spacer(modifier = Modifier.width(14.dp))
                 Text(
-                    text = myInfo?.name ?: "이름이 등록되지 않았습니다.",
+                    text = myInfo.name.ifEmpty { "이름이 등록되지 않았습니다." },
                     style = MediCareCallTheme.typography.SB_18,
                     color = MediCareCallTheme.colors.black,
                 ) // 나중에 값 받아와서 이름 출력되도록 수정 필요
@@ -278,7 +279,7 @@ fun SettingsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navigateToNotificationSetting(myInfo)
+                                navigateToNotificationSetting()
                             },
                     ) {
                         Text(
