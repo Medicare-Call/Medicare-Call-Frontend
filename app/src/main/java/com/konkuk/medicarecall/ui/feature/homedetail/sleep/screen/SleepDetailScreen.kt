@@ -33,7 +33,6 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SleepDetailScreen(
-    elderId: Int,
     onBack: () -> Unit,
     viewModel: SleepViewModel = koinViewModel(),
 ) {
