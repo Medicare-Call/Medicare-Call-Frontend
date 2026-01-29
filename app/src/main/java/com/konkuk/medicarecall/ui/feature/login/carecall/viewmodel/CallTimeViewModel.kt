@@ -33,12 +33,6 @@ class CallTimeViewModel(
     private val _selectedIndex = mutableIntStateOf(0)
     private val _selectedTabIndex = mutableIntStateOf(0)
 
-    init {
-        viewModelScope.launch {
-            _elderIdMap.update { elderIdRepository.getElderIds().first(); }
-        }
-    }
-
     // Flow -> State 로 뱐환해서 보관
     private val _elderIds = mutableStateOf<Map<Int, String>>(emptyMap())
     val elderIds get() = _elderIds.value // UI에서 접근할 값
@@ -51,11 +45,9 @@ class CallTimeViewModel(
     private fun observeElderIds() {
         viewModelScope.launch {
             try {
-                elderIdRepository.getElderIds()
-                    .collect { result ->
-                        _elderIds.value = result
-                        Log.d("CallTimeViewModel", "elderIds 업데이트: $result")
-                    }
+                _elderIds.value = elderIdRepository.getElderIds()
+                _elderIdMap.update { elderIdRepository.getElderIds() }
+
             } catch (e: Exception) {
                 Log.e("CallTimeViewModel", "elderIds 수집 실패", e)
                 error.value = e

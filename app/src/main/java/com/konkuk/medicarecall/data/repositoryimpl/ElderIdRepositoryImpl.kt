@@ -25,15 +25,13 @@ class ElderIdRepositoryImpl(
     }
 
     override suspend fun updateElderId(elderId: Int, name: String) {
-        val elderIds = getElderIds().first().toMutableMap()
-        elderIds[elderId] = name
-        context.elderIdsDataStore.updateData { it.copy(elderIds = elderIds) }
+        context.elderIdsDataStore.updateData { it.copy(elderIds = it.elderIds.plus(elderId to name)) }
     }
 
-    override fun getElderIds(): Flow<Map<Int, String>> {
+    override suspend fun getElderIds(): Map<Int, String> {
         val preferences = context.elderIdsDataStore.data.map { it.elderIds }
-        return preferences
-    } // Flow 자체가 비동기 스트림인데 suspend를 또 붙였다 해서 수정했습니다. 문제 시 다시 원상복구 해놓겠습니다
+        return preferences.first()
+    }
 
     override suspend fun clearElderIds() {
         context.elderIdsDataStore.updateData {

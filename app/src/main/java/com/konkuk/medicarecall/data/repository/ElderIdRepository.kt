@@ -6,5 +6,5 @@ interface ElderIdRepository {
     suspend fun updateElderIds(elderIdMap: Map<Int, String>)
     suspend fun updateElderId(elderId: Int, name: String)
     suspend fun clearElderIds()
-    fun getElderIds(): Flow<Map<Int, String>>
+    suspend fun getElderIds(): Map<Int, String>
 }

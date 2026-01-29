@@ -125,7 +125,7 @@ class HomeViewModel(
             if (_elderInfoList.value.isEmpty()) {
                 _homeUiState.update { it.copy(isLoading = true) }
             }
-            val elderIdMap = elderIdRepository.getElderIds().first()
+            val elderIdMap = elderIdRepository.getElderIds()
             _elderInfoList.value = elderIdMap.map {
                 ElderInfo(id = it.key, name = it.value, phone = null)
             }
