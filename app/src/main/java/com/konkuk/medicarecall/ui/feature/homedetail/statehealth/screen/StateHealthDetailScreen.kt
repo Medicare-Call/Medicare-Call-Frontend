@@ -38,7 +38,7 @@ fun StateHealthDetailScreen(
     onBack: () -> Unit,
     viewModel: HealthViewModel = koinViewModel(),
 ) {
-    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
@@ -50,12 +50,10 @@ fun StateHealthDetailScreen(
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
-        elderId?.let { id ->
-            viewModel.loadHealthDataForDate(id, selectedDate)
-        }
+        viewModel.loadHealthDataForDate(elderId, selectedDate)
     }
 
-    if (!isLoading.value)
+    if (!isLoading)
         StateHealthDetailScreenLayout(
             modifier = Modifier,
             onBack = onBack,
