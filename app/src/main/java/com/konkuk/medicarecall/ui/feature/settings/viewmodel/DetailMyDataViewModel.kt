@@ -57,16 +57,23 @@ class DetailMyDataViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
-            userRepository.getMyInfo()
-                .onSuccess { info ->
-                    _myDataInfo.value = info
-                }
-                .onFailure { e ->
-                    if (e is CancellationException) throw e
-                    Log.e("DetailMyDataViewModel", "사용자 정보 로딩 실패: ${e.message}", e)
-                    _errorMessage.value = "사용자 정보를 불러오는데 실패했습니다."
-                }
-            _isLoading.value = false
+            try {
+                            userRepository.getMyInfo()
+                                .onSuccess { myInfo ->
+                                        _myDataInfo.value = myInfo
+                                    }
+                                .onFailure { exception ->
+                                        _errorMessage.value = "내 정보를 불러오지 못했습니다: ${exception.message}"
+                                        Log.e("DetailMyDataViewModel", "내 정보 로딩 실패", exception)
+                                    }
+                        } catch (ce: CancellationException) {
+                            throw ce
+                       } catch (e: Exception) {
+                            _errorMessage.value = "내 정보를 불러오지 못했습니다: ${e.message}"
+                            Log.e("DetailMyDataViewModel", "내 정보 로딩 실패", e)
+                        } finally {
+                            _isLoading.value = false
+                        }
         }
     }
 

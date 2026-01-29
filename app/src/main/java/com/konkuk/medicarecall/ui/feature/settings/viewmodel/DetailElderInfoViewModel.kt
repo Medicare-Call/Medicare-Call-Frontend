@@ -50,6 +50,7 @@ class DetailElderInfoViewModel(
                 }
         }
     }
+
     private val _isMale = MutableStateFlow(false)
     val isMale: StateFlow<Boolean> = _isMale.asStateFlow()
 
@@ -93,7 +94,7 @@ class DetailElderInfoViewModel(
             relationship = elderInfo.relationship,
             residenceType = elderInfo.residenceType,
         )
-        Log.d("DetailElderInfoViewModel", "어르신 개인 정보 수정 요청: $updateInfo")
+        Log.d("DetailElderInfoViewModel", "어르신 개인 정보 수정 요청: elderId=${elderInfo.elderId}")
 
         viewModelScope.launch {
             updateElderInfoRepository.updateElderInfo(
@@ -114,7 +115,7 @@ class DetailElderInfoViewModel(
     }
 
     fun processElderInfo(elderId: Int, request: ElderRegisterRequestDto) {
-        Log.d("DetailElderInfoViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId, request=$request")
+        Log.d("DetailElderInfoViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId")
         viewModelScope.launch {
             _isLoading.value = true
             _isUpdateSuccess.value = false

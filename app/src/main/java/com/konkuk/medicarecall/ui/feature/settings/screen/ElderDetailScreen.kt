@@ -67,7 +67,7 @@ fun ElderDetailScreen(
     val scrollState = rememberScrollState()
 
     // Local State: 폼 입력값 관리
-    var isMale by remember { mutableStateOf<Boolean?>(null) }
+    var isMale by remember { mutableStateOf(true) }
     var name by remember { mutableStateOf("") }
     var birth by remember { mutableStateOf("") } // yyyyMMdd (8자리)
     var phoneNum by remember { mutableStateOf("") }
@@ -204,7 +204,7 @@ fun ElderDetailScreen(
                             )
                             Spacer(modifier = modifier.height(10.dp))
                             GenderToggleButton(
-                                isMale = isMale ?: true, // 초기 로딩 전 기본값
+                                isMale = isMale,
                                 onGenderChange = { newValue ->
                                     isMale = newValue
                                 },
@@ -255,12 +255,12 @@ fun ElderDetailScreen(
                         // 확인/등록 버튼
                         CTAButton(
                             type = if (
-                                name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
+                                name.isNotEmpty() &&
+                                name.matches(Regex("^[가-힣a-zA-Z]+$")) &&
                                 birth.length == 8 &&
                                 birth.isValidDate() &&
                                 phoneNum.length == 11 &&
-                                phoneNum.startsWith("010") &&
-                                isMale != null
+                                phoneNum.startsWith("010")
                             ) {
                                 CTAButtonType.GREEN
                             } else {
@@ -271,7 +271,7 @@ fun ElderDetailScreen(
                                 val requestDto = ElderRegisterRequestDto(
                                     name = name,
                                     birthDate = toDashedDate(birth), // yyyy-MM-dd 변환
-                                    gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE,
+                                    gender = if (isMale) GenderType.MALE else GenderType.FEMALE,
                                     phone = phoneNum,
                                     relationship = relationship,
                                     residenceType = residenceType,

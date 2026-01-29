@@ -179,8 +179,6 @@ fun NavGraphBuilder.settingNavGraph(
             navigateToLoginAfterLogout = navigateToLoginAfterLogout,
         )
     }
-
-
     composable<Route.UserInfoSetting> { MyDetailScreen(onBack = popBackStack)
     }
 }

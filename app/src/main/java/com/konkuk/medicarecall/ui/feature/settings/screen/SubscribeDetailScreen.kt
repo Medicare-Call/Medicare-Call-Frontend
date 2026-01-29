@@ -123,7 +123,6 @@ fun SubscribeDetailScreen(
                 // Data loaded state
                 SubscribeDetailContent(
                     subscriptionInfo = subscriptionData!!,
-                    onBack = onBack,
                 )
             }
         }
@@ -133,7 +132,6 @@ fun SubscribeDetailScreen(
 @Composable
 private fun SubscribeDetailContent(
     subscriptionInfo: EldersSubscriptionResponseDto,
-    onBack: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
