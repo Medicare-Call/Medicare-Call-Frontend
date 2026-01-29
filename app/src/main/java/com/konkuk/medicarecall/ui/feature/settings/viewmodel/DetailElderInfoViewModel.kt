@@ -50,7 +50,6 @@ class DetailElderInfoViewModel(
                 }
         }
     }
-    // UI State
     private val _isMale = MutableStateFlow(false)
     val isMale: StateFlow<Boolean> = _isMale.asStateFlow()
 

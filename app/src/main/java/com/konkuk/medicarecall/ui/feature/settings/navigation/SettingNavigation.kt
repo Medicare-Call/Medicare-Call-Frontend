@@ -41,8 +41,6 @@ fun NavController.navigateToElderHealthInfo() {
 fun NavController.navigateToElderHealthDetail(elderId: Int) {
     navigate(Route.ElderHealthDetail(elderId))
 }
-
-
 fun NavController.navigateToNotificationSetting() {
     navigate(Route.NotificationSetting)
 }
@@ -126,8 +124,6 @@ fun NavGraphBuilder.settingNavGraph(
             navigateToHealthDetail = navigateToHealthDetail,
         )
     }
-
-
     composable<Route.ElderHealthDetail> { navBackstackEntry ->
         val elderId = navBackstackEntry.toRoute<Route.ElderHealthDetail>().elderId
         HealthDetailScreen(
@@ -148,10 +144,7 @@ fun NavGraphBuilder.settingNavGraph(
             navigateToSubscribeDetail = navigateToSubscribeDetail,
         )
     }
-
-
-    composable<Route.SubscribeDetail> { navBackStackEntry ->
-        val elderId = navBackStackEntry.toRoute<Route.SubscribeDetail>().elderId
+    composable<Route.SubscribeDetail> { navBackStackEntry -> val elderId = navBackStackEntry.toRoute<Route.SubscribeDetail>().elderId
         SubscribeDetailScreen(
             elderId = elderId,
             onBack = popBackStack,
@@ -189,9 +182,6 @@ fun NavGraphBuilder.settingNavGraph(
     }
 
 
-    composable<Route.UserInfoSetting> {
-        MyDetailScreen(
-            onBack = popBackStack,
-        )
+    composable<Route.UserInfoSetting> { MyDetailScreen(onBack = popBackStack)
     }
 }

@@ -28,12 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,8 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
@@ -54,6 +49,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.TimeSettingType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 // helper: Triple을 "오전/오후 hh시 mm분" 형태로 바꿔주는 함수
 fun Triple<Int, Int, Int>.toDisplayString(): String {

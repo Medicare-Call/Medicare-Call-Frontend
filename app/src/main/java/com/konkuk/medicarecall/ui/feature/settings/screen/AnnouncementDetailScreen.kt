@@ -126,8 +126,7 @@ fun AnnouncementDetailScreen(
 
 @Composable
 private fun AnnouncementDetailContent(
-    noticeInfo: NoticesResponseDto,
-    onBack: () -> Unit,
+    noticeInfo: NoticesResponseDto, onBack: () -> Unit,
 ) {
     val contents = noticeInfo.contents.replace("\\n", "\n")
     val scrollState = rememberScrollState()
