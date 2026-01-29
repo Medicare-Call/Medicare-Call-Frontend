@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.exception.HttpException
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
-import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +24,6 @@ data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
 @KoinViewModel
 class HomeViewModel(
-    private val eldersInfoRepository: EldersInfoRepository,
     private val homeRepository: HomeRepository,
     private val savedStateHandle: SavedStateHandle,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
@@ -137,7 +135,6 @@ class HomeViewModel(
             } else if (_selectedElderId.value == null && _elderInfoList.value.isNotEmpty()) {
                 _selectedElderId.value = _elderInfoList.value.first().id
             }
-
         }
     }
 

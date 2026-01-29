@@ -85,8 +85,6 @@ fun CallTimeScreen(
 
     val scrollState = rememberScrollState() // 스크롤 상태
     var showBottomSheet by remember { mutableStateOf(false) } // 하단 시트 제어
-    val elderNames = elderMap.values.toList()
-    val elderIds = elderMap.keys.toList()
 
 //    var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
     var selectedId by remember { mutableIntStateOf(elderMap.keys.first()) } // 선택된 어르신 아이디

@@ -3,9 +3,8 @@ package com.konkuk.medicarecall.ui.feature.login.senior.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
-import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import com.konkuk.medicarecall.data.exception.HttpException
 
 @KoinViewModel
 class LoginElderViewModel(
@@ -301,5 +299,4 @@ class LoginElderViewModel(
                 }
             }
     }
-
 }

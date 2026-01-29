@@ -27,14 +27,11 @@ class CallTimeViewModel(
     val isLoading = mutableStateOf(false)
     val error = mutableStateOf<Throwable?>(null)
     private val _elderIdMap = MutableStateFlow(emptyMap<Int, String>())
-    val elderIdMap = _elderIdMap.asStateFlow();
+    val elderIdMap = _elderIdMap.asStateFlow()
 
     private val _showBottomSheet = mutableStateOf(false)
     private val _selectedIndex = mutableIntStateOf(0)
     private val _selectedTabIndex = mutableIntStateOf(0)
-
-
-
 
     init {
         viewModelScope.launch {

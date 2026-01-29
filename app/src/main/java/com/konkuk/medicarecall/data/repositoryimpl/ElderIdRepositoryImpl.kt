@@ -15,7 +15,6 @@ val Context.elderIdsDataStore by dataStore(
     serializer = ElderIdsSerializer,
 )
 
-
 @Single
 class ElderIdRepositoryImpl(
     val context: Context,
@@ -41,5 +40,4 @@ class ElderIdRepositoryImpl(
             ElderIds(elderIds = emptyMap())
         }
     }
-
 }
