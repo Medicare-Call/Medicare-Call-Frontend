@@ -60,6 +60,7 @@ fun SleepDetailScreen(
     )
 }
 
+@Suppress("detekt:UnusedParameter") // TODO: detekt 무시하는 주석, 이후에 삭제할 것
 @Composable
 fun SleepDetailScreen(
     modifier: Modifier = Modifier,
