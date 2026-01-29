@@ -158,7 +158,6 @@ fun NavGraphBuilder.settingNavGraph(
         )
     }
 
-
     composable<Route.NoticeDetail> { navBackStackEntry ->
         val noticeId = navBackStackEntry.toRoute<Route.NoticeDetail>().noticeId
         AnnouncementDetailScreen(
