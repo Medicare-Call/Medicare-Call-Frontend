@@ -38,8 +38,6 @@ import com.konkuk.medicarecall.data.api.member.createMemberRegisterService
 import com.konkuk.medicarecall.data.api.member.createSettingService
 import com.konkuk.medicarecall.data.api.notice.NoticeService
 import com.konkuk.medicarecall.data.api.notice.createNoticeService
-import com.konkuk.medicarecall.data.api.payments.NaverPayService
-import com.konkuk.medicarecall.data.api.payments.createNaverPayService
 import de.jensklingenberg.ktorfit.Ktorfit
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
@@ -82,10 +80,6 @@ class ApiModule {
     @Single
     fun provideSettingService(ktorfit: Ktorfit): SettingService =
         ktorfit.createSettingService()
-
-    @Single
-    fun provideNaverPayService(ktorfit: Ktorfit): NaverPayService =
-        ktorfit.createNaverPayService()
 
     @Single
     fun provideHomeService(ktorfit: Ktorfit): HomeService =

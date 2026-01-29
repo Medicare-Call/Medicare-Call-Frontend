@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
@@ -168,5 +169,15 @@ private fun AnnouncementDetailContent(
                 color = MediCareCallTheme.colors.gray6,
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AnnouncementDetailScreenPreview() {
+    MediCareCallTheme {
+        AnnouncementDetailScreen(
+            noticeId = 1,
+        )
     }
 }

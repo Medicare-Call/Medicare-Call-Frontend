@@ -33,11 +33,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import org.koin.androidx.compose.koinViewModel
@@ -70,9 +72,9 @@ fun CallTimeScreen(
 ) {
     LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
 
-    val isLoading = eldersInfoViewModel.isLoading.value
-    val error = eldersInfoViewModel.error.value
-    val nameIdList = eldersInfoViewModel.elderNameIdMapList
+    val isLoading by eldersInfoViewModel.isLoading.collectAsStateWithLifecycle()
+    val error by eldersInfoViewModel.error.collectAsStateWithLifecycle()
+    val nameIdList by eldersInfoViewModel.elderNameIdMapList.collectAsStateWithLifecycle()
 
     when {
         isLoading -> {
@@ -117,14 +119,17 @@ fun CallTimeScreen(
     }
 
     val scrollState = rememberScrollState() // 스크롤 상태
-    var showBottomSheet by remember { mutableStateOf(false) } // 하단 시트 제어
     val elderNames = nameIdList.map { it.keys.first() } // 어르신 이름 리스트
     val elderIds = nameIdList.map { it.values.first() } // 어르신 아이디 리스트
 
-    var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
+    // ViewModel 상태 구독
+    val showBottomSheet by callTimeViewModel.showBottomSheet.collectAsStateWithLifecycle()
+    val selectedIndex by callTimeViewModel.selectedIndex.collectAsStateWithLifecycle()
+    val selectedTabIndex by callTimeViewModel.selectedTabIndex.collectAsStateWithLifecycle()
+    val timeMap by callTimeViewModel.timeMap.collectAsStateWithLifecycle()
+
     val selectedId = elderIds.getOrNull(selectedIndex) ?: 0 // 선택된 어르신 아이디
-    val saved = callTimeViewModel.timeMap[selectedId] ?: CallTimes()
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val saved = timeMap[selectedId] ?: CallTimes()
 
     val allComplete = callTimeViewModel.isAllComplete(elderIds)
 
@@ -248,7 +253,7 @@ fun CallTimeScreen(
                                 shape = RoundedCornerShape(100.dp),
                             )
                             .clickable {
-                                selectedIndex = idx
+                                callTimeViewModel.setSelectedIndex(idx)
                                 scope.launch {
                                     listState.animateScrollToItem(idx)
                                 }
@@ -270,8 +275,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.FIRST,
                     timeText = null,
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 0
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(0)
                     },
                 )
             } else {
@@ -280,8 +285,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.FIRST,
                     timeText = saved.first.toDisplayString(),
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 0
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(0)
                     },
                 )
                 Spacer(modifier = modifier.height(20.dp))
@@ -290,8 +295,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.SECOND,
                     timeText = saved.second?.toDisplayString(),
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 1
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(1)
                     },
                 )
                 Spacer(modifier = modifier.height(20.dp))
@@ -300,8 +305,8 @@ fun CallTimeScreen(
                     timeType = TimeSettingType.THIRD,
                     timeText = saved.third?.toDisplayString(),
                     modifier = Modifier.clickable {
-                        showBottomSheet = true
-                        selectedTabIndex = 2
+                        callTimeViewModel.setShowBottomSheet(true)
+                        callTimeViewModel.setSelectedTabIndex(2)
                     },
                 )
             }
@@ -371,7 +376,7 @@ fun CallTimeScreen(
                     initialSecondMinute = saved.second?.third ?: 0,
                     initialThirdHour = saved.third?.second ?: 5,
                     initialThirdMinute = saved.third?.third ?: 0,
-                    onDismiss = { showBottomSheet = false },
+                    onDismiss = { callTimeViewModel.setShowBottomSheet(false) },
                     onConfirm = { fH, fM, sH, sM, tH, tM ->
                         callTimeViewModel.setTimes(
                             selectedId,
@@ -381,10 +386,18 @@ fun CallTimeScreen(
                                 third = Triple(1, tH, tM),
                             ),
                         )
-                        showBottomSheet = false
+                        callTimeViewModel.setShowBottomSheet(false)
                     },
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CallTimeScreenPreview() {
+    MediCareCallTheme {
+        CallTimeScreen()
     }
 }

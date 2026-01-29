@@ -16,8 +16,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -47,8 +50,8 @@ fun HealthInfoScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val healthInfo = healthInfoViewModel.eldersInfoList
-    val error = healthInfoViewModel.errorMessage
+    val healthInfo by healthInfoViewModel.eldersInfoList.collectAsStateWithLifecycle()
+    val error by healthInfoViewModel.errorMessage.collectAsStateWithLifecycle()
 
     Log.d("HealthInfoScreen", "어르신 건강정보 수: ${healthInfo.size}")
     Log.d("HealthInfoScreen", "Error Message: $error")
@@ -93,6 +96,42 @@ fun HealthInfoScreen(
 //            PersonalInfoCard("김옥자",  onClick = {navController.navigate(Route.HealthDetail.route)})
 //            PersonalInfoCard("박막례",  onClick = {navController.navigate(Route.HealthDetail.route)})
             Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HealthInfoScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "어르신 건강정보 설정",
+                leftIcon = {
+                    Icon(
+                        painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "setting back",
+                        tint = MediCareCallTheme.colors.black,
+                    )
+                },
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                PersonalInfoCard(name = "김옥자", onClick = {})
+                PersonalInfoCard(name = "박막례", onClick = {})
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }

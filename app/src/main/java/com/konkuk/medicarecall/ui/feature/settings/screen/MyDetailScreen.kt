@@ -2,7 +2,7 @@ package com.konkuk.medicarecall.ui.feature.settings.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,15 +18,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -47,9 +45,35 @@ fun MyDetailScreen(
     onBack: () -> Unit = {},
     detailMyDataViewModel: DetailMyDataViewModel = koinViewModel(),
 ) {
+    // ViewModel 상태 구독
     val myDataInfo by detailMyDataViewModel.myDataInfo.collectAsStateWithLifecycle()
     val isLoading by detailMyDataViewModel.isLoading.collectAsStateWithLifecycle()
-    val errorMessage by detailMyDataViewModel.errorMessage.collectAsStateWithLifecycle()
+    val isMale by detailMyDataViewModel.isMale.collectAsStateWithLifecycle()
+    val name by detailMyDataViewModel.name.collectAsStateWithLifecycle()
+    val birth by detailMyDataViewModel.birth.collectAsStateWithLifecycle()
+    val scrollState = rememberScrollState()
+
+    // 초기 데이터 로드
+    LaunchedEffect(Unit) {
+        detailMyDataViewModel.loadMyInfo()
+    }
+
+    // myDataInfo가 로드되면 폼 데이터 초기화
+    LaunchedEffect(myDataInfo) {
+        myDataInfo?.let { detailMyDataViewModel.initializeFormData(it) }
+    }
+
+    if (isLoading && myDataInfo == null) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
 
     Column(
         modifier = Modifier
@@ -68,131 +92,94 @@ fun MyDetailScreen(
                 )
             },
         )
-
-        when {
-            isLoading && myDataInfo == null -> {
-                // Loading state
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("내 정보를 불러오는 중입니다...")
-                }
-            }
-
-            errorMessage != null -> {
-                // Error state
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = errorMessage ?: "오류가 발생했습니다",
-                        color = MediCareCallTheme.colors.negative,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    CTAButton(
-                        type = CTAButtonType.GREEN,
-                        text = "다시 시도",
-                        onClick = {
-                            detailMyDataViewModel.loadMyData()
-                        },
-                    )
-                }
-            }
-
-            myDataInfo != null -> {
-                // Data loaded state
-                MyDetailContent(
-                    myDataInfo = myDataInfo!!,
-                    detailMyDataViewModel = detailMyDataViewModel,
-                    onBack = onBack,
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+                .verticalScroll(scrollState),
+        ) {
+            DefaultTextField(
+                value = name,
+                onValueChange = { detailMyDataViewModel.updateName(it) },
+                category = "이름",
+                placeHolder = "이름",
+            )
+            Spacer(modifier = modifier.height(20.dp))
+            DefaultTextField(
+                value = birth,
+                onValueChange = { detailMyDataViewModel.updateBirth(it) },
+                category = "생년월일",
+                placeHolder = "YYYY / MM / DD",
+                keyboardType = KeyboardType.Number,
+                visualTransformation = DateOfBirthVisualTransformation(),
+                maxLength = 8,
+            )
+            Spacer(modifier = modifier.height(20.dp))
+            Column {
+                Text(
+                    "성별",
+                    style = MediCareCallTheme.typography.M_17,
+                    color = MediCareCallTheme.colors.gray7,
+                )
+                Spacer(modifier = modifier.height(10.dp))
+                GenderToggleButton(
+                    isMale = isMale,
+                    onGenderChange = { newValue ->
+                        detailMyDataViewModel.updateIsMale(newValue)
+                    },
                 )
             }
+            Spacer(modifier = modifier.height(30.dp))
+            CTAButton(
+                type = if (name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
+                    birth.length == 8 &&
+                    birth.isValidDate() &&
+                    isMale != null &&
+                    myDataInfo != null
+                ) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                text = "확인",
+                onClick = {
+                    myDataInfo?.let { info ->
+                        val gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE
+                        detailMyDataViewModel.updateUserData(
+                            userInfo = MyInfoResponseDto(
+                                name = name,
+                                birthDate = birth.replaceFirst(
+                                    "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
+                                    "$1-$2-$3",
+                                ),
+                                gender = gender,
+                                phone = info.phone,
+                                pushNotification = info.pushNotification,
+                            ),
+                        ) { onBack() }
+                    }
+                },
+            )
         }
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-private fun MyDetailContent(
-    myDataInfo: MyInfoResponseDto,
-    detailMyDataViewModel: DetailMyDataViewModel,
-    onBack: () -> Unit,
-) {
-    var isMale by remember { mutableStateOf<Boolean>(myDataInfo.gender == GenderType.MALE) }
-    var name by remember { mutableStateOf(myDataInfo.name) }
-    var birth by remember { mutableStateOf(myDataInfo.birthDate.replace("-", "")) }
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
-            .verticalScroll(scrollState),
-    ) {
-        DefaultTextField(
-            value = name,
-            onValueChange = { name = it },
-            category = "이름",
-            placeHolder = "이름",
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        DefaultTextField(
-            value = birth,
-            onValueChange = { birth = it },
-            category = "생년월일",
-            placeHolder = "YYYY / MM / DD",
-            keyboardType = KeyboardType.Number,
-            visualTransformation = DateOfBirthVisualTransformation(),
-            maxLength = 8,
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Column {
-            Text(
-                "성별",
-                style = MediCareCallTheme.typography.M_17,
-                color = MediCareCallTheme.colors.gray7,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            GenderToggleButton(
-                isMale = isMale,
-                onGenderChange = { newValue ->
-                    isMale = newValue
+private fun MyDetailScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "내 정보 설정",
+                leftIcon = {
+                    Icon(
+                        painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "setting back",
+                        tint = MediCareCallTheme.colors.black,
+                    )
                 },
             )
         }
-        Spacer(modifier = Modifier.height(30.dp))
-        CTAButton(
-            type = if (name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
-                birth.length == 8 &&
-                birth.isValidDate() &&
-                isMale != null
-            ) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-            text = "확인",
-            onClick = {
-                val gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE
-                detailMyDataViewModel.updateUserData(
-                    userInfo = MyInfoResponseDto(
-                        name = name,
-                        birthDate = birth.replaceFirst(
-                            "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
-                            "$1-$2-$3",
-                        ),
-                        gender = gender,
-                        phone = myDataInfo.phone,
-                        pushNotification = myDataInfo.pushNotification,
-                    ),
-                ) { onBack() }
-            },
-        )
     }
 }

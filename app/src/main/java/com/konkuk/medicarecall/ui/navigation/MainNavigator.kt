@@ -9,18 +9,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.NoticesResponseDto
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
 import com.konkuk.medicarecall.ui.feature.home.navigation.navigateToHome
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginCareCallSetting
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginFinish
-import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginNaverPayView
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginPhone
-import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginPurchase
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterElder
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterElderHealth
 import com.konkuk.medicarecall.ui.feature.login.navigation.navigateToLoginRegisterUserInfo
@@ -116,14 +109,6 @@ class MainNavigator(
         )
     }
 
-    fun navigateToLoginPurchase() {
-        navController.navigateToLoginPurchase()
-    }
-
-    fun navigateToLoginNaverPayView() {
-        navController.navigateToLoginNaverPayView()
-    }
-
     fun navigateToLoginFinish() {
         navController.navigateToLoginFinish()
     }
@@ -162,36 +147,36 @@ class MainNavigator(
         navController.navigateToElderPersonalInfo()
     }
 
-    fun navigateToElderPersonalDetail(info: EldersInfoResponseDto) {
-        navController.navigateToElderPersonalDetail(info)
+    fun navigateToElderPersonalDetail(elderId: Int) {
+        navController.navigateToElderPersonalDetail(elderId)
     }
 
     fun navigateToHealthInfo() {
         navController.navigateToElderHealthInfo()
     }
 
-    fun navigateToHealthDetail(health: EldersHealthResponseDto) { // EldersHealthResponseDto
-        navController.navigateToElderHealthDetail(health)
+    fun navigateToHealthDetail(elderId: Int) {
+        navController.navigateToElderHealthDetail(elderId)
     }
 
-    fun navigateToNotificationSetting(myInfo: MyInfoResponseDto) {
-        navController.navigateToNotificationSetting(myInfo)
+    fun navigateToNotificationSetting() {
+        navController.navigateToNotificationSetting()
     }
 
     fun navigateToSubscribeInfo() {
         navController.navigateToSubscribeInfo()
     }
 
-    fun navigateToSubscribeDetail(subscription: EldersSubscriptionResponseDto) { // EldersSubscriptionResponseDto
-        navController.navigateToSubscribeDetail(subscription)
+    fun navigateToSubscribeDetail(elderId: Int) {
+        navController.navigateToSubscribeDetail(elderId)
     }
 
     fun navigateToNotice() {
         navController.navigateToNotice()
     }
 
-    fun navigateToNoticeDetail(notice: NoticesResponseDto) {
-        navController.navigateToNoticeDetail(notice)
+    fun navigateToNoticeDetail(noticeId: Int) {
+        navController.navigateToNoticeDetail(noticeId)
     }
 
     fun navigateToServiceCenter() {
@@ -202,8 +187,8 @@ class MainNavigator(
         navController.navigateToUserInfo()
     }
 
-    fun navigateToUserInfoSetting(myInfo: MyInfoResponseDto) {
-        navController.navigateToUserInfoSetting(myInfo)
+    fun navigateToUserInfoSetting() {
+        navController.navigateToUserInfoSetting()
     }
 
     fun navigateToLoginAfterLogout() {

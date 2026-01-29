@@ -103,7 +103,7 @@ fun SleepDetailCard(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = sleeps.bedTime.ifBlank { "오후 --:--" },
+                            text = sleeps.bedTime?.ifBlank { "오후 --:--" } ?: "오후 --:--",
                             style = MediCareCallTheme.typography.SB_16,
                             color = MediCareCallTheme.colors.gray8,
                         )
@@ -125,7 +125,7 @@ fun SleepDetailCard(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = sleeps.wakeUpTime.ifBlank { "오전 --:--" },
+                            text = sleeps.wakeUpTime?.ifBlank { "오전 --:--" } ?: "오전 --:--",
                             style = MediCareCallTheme.typography.SB_16,
                             color = MediCareCallTheme.colors.gray8,
                         )
@@ -155,6 +155,6 @@ fun PreviewSleepDetailCard_Recorded() {
 @Composable
 fun PreviewSleepDetailCard_Unrecorded() {
     SleepDetailCard(
-        sleeps = SleepUiState.Companion.EMPTY,
+        sleeps = SleepUiState(),
     )
 }

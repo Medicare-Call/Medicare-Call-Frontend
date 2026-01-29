@@ -25,12 +25,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -55,9 +57,9 @@ fun MyDataSettingScreen(
     navigateToLoginAfterLogout: () -> Unit = {},
     myDataViewModel: MyDataViewModel = koinViewModel(),
 ) {
-    val myDataInfo = myDataViewModel.myDataInfo
+    val myDataInfo by myDataViewModel.myDataInfo.collectAsStateWithLifecycle()
     var showLogoutDialog by remember { mutableStateOf(false) }
-    val gender = when (myDataInfo?.gender) {
+    val gender = when (myDataInfo.gender) {
         GenderType.FEMALE -> "여성"
         else -> "남성"
     }
@@ -135,10 +137,10 @@ fun MyDataSettingScreen(
                     )
                 }
 
-                SettingInfoItem("이름", myDataInfo?.name ?: "이름 없음")
-                SettingInfoItem("생일", formatDateToKorean((myDataInfo?.birthDate ?: "날짜 정보가 없습니다")))
+                SettingInfoItem("이름", myDataInfo.name.ifEmpty { "이름 없음" })
+                SettingInfoItem("생일", formatDateToKorean(myDataInfo.birthDate.ifEmpty { "날짜 정보가 없습니다" }))
                 SettingInfoItem("성별", gender)
-                SettingInfoItem("휴대폰번호", formatPhoneNumber(myDataInfo?.phone ?: "전화번호 정보가 없습니다"))
+                SettingInfoItem("휴대폰번호", formatPhoneNumber(myDataInfo.phone.ifEmpty { "전화번호 정보가 없습니다" }))
             }
 
             Spacer(modifier = modifier.height(12.dp))
@@ -209,4 +211,29 @@ fun formatPhoneNumber(number: String): String {
         "(\\d{3})(\\d{4})(\\d{4})".toRegex(),
         "$1-$2-$3",
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MyDataSettingScreenPreview() {
+    MediCareCallTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg)
+                .statusBarsPadding(),
+        ) {
+            SettingsTopAppBar(
+                title = "내 정보 설정",
+                leftIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings_back),
+                        contentDescription = "go_back",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black,
+                    )
+                },
+            )
+        }
+    }
 }

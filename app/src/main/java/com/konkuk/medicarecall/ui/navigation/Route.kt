@@ -30,12 +30,6 @@ sealed interface Route {
     data object LoginCareCallSetting : Route
 
     @Serializable
-    data object LoginPurchase : Route
-
-    @Serializable
-    data object LoginNaverPayView : Route
-
-    @Serializable
     data object LoginFinish : Route
 
     // 홈 (하루 요약)

@@ -20,11 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
-import com.konkuk.medicarecall.ui.feature.calendar.DateSelector
-import com.konkuk.medicarecall.ui.feature.calendar.WeeklyCalendar
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarUiState
-import com.konkuk.medicarecall.ui.feature.calendar.viewmodel.CalendarViewModel
+import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
@@ -37,35 +35,44 @@ import java.time.LocalDate
 fun SleepDetailScreen(
     elderId: Int,
     onBack: () -> Unit,
-    calendarViewModel: CalendarViewModel = koinViewModel(),
-    sleepViewModel: SleepViewModel = koinViewModel(),
+    viewModel: SleepViewModel = koinViewModel(),
 ) {
     // 재진입 시 오늘로 초기화
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        calendarViewModel.resetToToday()
+        viewModel.resetToToday()
     }
 
-    val selectedDate by calendarViewModel.selectedDate.collectAsStateWithLifecycle()
-    val sleep by sleepViewModel.sleep.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
-    LaunchedEffect(elderId, selectedDate) {
-        elderId?.let { id ->
-            sleepViewModel.loadSleepDataForDate(id, selectedDate)
-        }
+    LaunchedEffect(selectedDate) {
+        viewModel.loadSleepDataForDate(selectedDate)
     }
 
     SleepDetailScreenLayout(
         modifier = Modifier,
         onBack = onBack,
         selectedDate = selectedDate,
-        sleep = sleep,
-        weekDates = calendarViewModel.getCurrentWeekDates(),
-        onDateSelected = { calendarViewModel.selectDate(it) },
+        weekDates = viewModel.getCurrentWeekDates(),
+        onDateSelected = { viewModel.selectDate(it) },
+        sleep = uiState,
         onMonthClick = { /* 모달 열기 */ },
     )
 }
 
+@Composable
+fun SleepDetailScreen(
+    modifier: Modifier = Modifier,
+    sleep: SleepUiState = SleepUiState(),
+    onBack: () -> Unit = {},
+    onDateSelected: (LocalDate) -> Unit = {},
+    onMonthClick: () -> Unit = {},
+) {
+    // TODO: UI ...
+}
+
+// TODO: 나중에 제거
 @Composable
 fun SleepDetailScreenLayout(
     modifier: Modifier = Modifier,
@@ -101,12 +108,8 @@ fun SleepDetailScreenLayout(
             )
             Spacer(Modifier.height(12.dp))
             WeeklyCalendar(
-                calendarUiState = CalendarUiState(
-                    currentYear = selectedDate.year,
-                    currentMonth = selectedDate.monthValue,
-                    weekDates = weekDates,
-                    selectedDate = selectedDate,
-                ),
+                weekDates = weekDates,
+                selectedDate = selectedDate,
                 onDateSelected = onDateSelected,
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -124,7 +127,7 @@ fun PreviewSleepDetailScreen() {
         SleepDetailScreenLayout(
             onBack = {},
             selectedDate = LocalDate.now(),
-            sleep = SleepUiState.Companion.EMPTY,
+            sleep = SleepUiState(),
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
             onMonthClick = {},

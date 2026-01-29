@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
@@ -29,8 +28,8 @@ class GlucoseViewModel(
     val uiState: StateFlow<GlucoseUiState> = _uiState.asStateFlow()
 
     // 내부 캐시
-    private var beforeMealData = mutableStateListOf<GraphDataPoint>()
-    private var afterMealData = mutableStateListOf<GraphDataPoint>()
+    private val _beforeMealData = MutableStateFlow<List<GraphDataPoint>>(emptyList())
+    private val _afterMealData = MutableStateFlow<List<GraphDataPoint>>(emptyList())
 
     fun getGlucoseData(
         elderId: Int,
@@ -53,15 +52,17 @@ class GlucoseViewModel(
 
                     val updatedDataList = when (type) {
                         GlucoseTiming.BEFORE_MEAL -> {
-                            if (isRefresh) beforeMealData.clear()
-                            beforeMealData.addAll(0, newData)
-                            beforeMealData
+                            _beforeMealData.update { current ->
+                                if (isRefresh) newData else newData + current
+                            }
+                            _beforeMealData.value
                         }
 
                         GlucoseTiming.AFTER_MEAL -> {
-                            if (isRefresh) afterMealData.clear()
-                            afterMealData.addAll(0, newData)
-                            afterMealData
+                            _afterMealData.update { current ->
+                                if (isRefresh) newData else newData + current
+                            }
+                            _afterMealData.value
                         }
                     }
 
@@ -95,7 +96,7 @@ class GlucoseViewModel(
     fun updateTiming(newTiming: GlucoseTiming) {
         Log.d(TAG, "updateTiming(newTiming=$newTiming)")
         val dataToShow =
-            if (newTiming == GlucoseTiming.BEFORE_MEAL) beforeMealData else afterMealData
+            if (newTiming == GlucoseTiming.BEFORE_MEAL) _beforeMealData.value else _afterMealData.value
         _uiState.update {
             it.copy(
                 graphDataPoints = dataToShow,

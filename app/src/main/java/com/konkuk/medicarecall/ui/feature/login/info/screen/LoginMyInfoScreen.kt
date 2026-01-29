@@ -32,12 +32,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
@@ -63,7 +65,14 @@ fun LoginMyInfoScreen(
     navigateToRegisterElder: () -> Unit = {},
     loginViewModel: LoginViewModel,
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
+    // ViewModel 상태 구독
+    val showBottomSheet by loginViewModel.showBottomSheet.collectAsStateWithLifecycle()
+    val checkedStates by loginViewModel.checkedStates.collectAsStateWithLifecycle()
+    val allAgreeCheckState by loginViewModel.allAgreeCheckState.collectAsStateWithLifecycle()
+    val name by loginViewModel.name.collectAsStateWithLifecycle()
+    val dateOfBirth by loginViewModel.dateOfBirth.collectAsStateWithLifecycle()
+    val isMale by loginViewModel.isMale.collectAsStateWithLifecycle()
+
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -121,7 +130,7 @@ fun LoginMyInfoScreen(
                         style = MediCareCallTheme.typography.M_17,
                     )
                     DefaultTextField(
-                        loginViewModel.name,
+                        name,
                         {
                             loginViewModel.onNameChanged(it)
                         },
@@ -138,7 +147,7 @@ fun LoginMyInfoScreen(
                     )
                     // 생년월일 입력 텍스트필드
                     DefaultTextField(
-                        loginViewModel.dateOfBirth,
+                        dateOfBirth,
                         { input ->
                             val filtered = input.filter { it.isDigit() }.take(8)
                             loginViewModel.onDOBChanged(filtered)
@@ -157,20 +166,20 @@ fun LoginMyInfoScreen(
                         style = MediCareCallTheme.typography.M_17,
                     )
 
-                    GenderToggleButton(loginViewModel.isMale) { loginViewModel.onGenderChanged(it) }
+                    GenderToggleButton(isMale) { loginViewModel.onGenderChanged(it) }
                 }
                 Spacer(Modifier.height(30.dp))
                 CTAButton(
-                    if (loginViewModel.name.isNotEmpty() &&
-                        loginViewModel.dateOfBirth.length == 8 &&
-                        loginViewModel.isMale != null
+                    if (name.isNotEmpty() &&
+                        dateOfBirth.length == 8 &&
+                        isMale != null
                     ) CTAButtonType.GREEN
                     else
                         CTAButtonType.DISABLED,
                     "다음",
                     {
                         if (
-                            !loginViewModel.name.matches(Regex("^[가-힣a-zA-Z]*$"))
+                            !name.matches(Regex("^[가-힣a-zA-Z]*$"))
                         ) {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
@@ -178,7 +187,7 @@ fun LoginMyInfoScreen(
                                     duration = SnackbarDuration.Short,
                                 )
                             }
-                        } else if (!loginViewModel.dateOfBirth.isValidDate()) {
+                        } else if (!dateOfBirth.isValidDate()) {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "생년월일을 다시 확인해주세요",
@@ -186,7 +195,7 @@ fun LoginMyInfoScreen(
                                 )
                             }
                         } else {
-                            showBottomSheet = true
+                            loginViewModel.setShowBottomSheet(true)
                         }
                     },
                     Modifier.padding(bottom = 20.dp),
@@ -199,7 +208,7 @@ fun LoginMyInfoScreen(
                 if (showBottomSheet) {
                     ModalBottomSheet(
                         onDismissRequest = {
-                            showBottomSheet = false
+                            loginViewModel.setShowBottomSheet(false)
                         },
                         sheetState = sheetState,
                         containerColor = MediCareCallTheme.colors.bg,
@@ -216,7 +225,6 @@ fun LoginMyInfoScreen(
                                 vertical = 8.dp,
                             ),
                         )
-                        var checkedStates by remember { mutableStateOf(List(itemList.size) { false }) }
                         val isCheckedAll = checkedStates.all { it }
 
                         Column {
@@ -226,7 +234,6 @@ fun LoginMyInfoScreen(
                                 style = MediCareCallTheme.typography.B_20,
                                 modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp),
                             )
-                            var allAgreeCheckState by remember { mutableStateOf(false) }
                             Row(
                                 Modifier
                                     .fillMaxWidth()
@@ -235,10 +242,7 @@ fun LoginMyInfoScreen(
                                         interactionSource = null,
                                         indication = null,
                                         onClick = {
-                                            allAgreeCheckState = !allAgreeCheckState
-                                            checkedStates = checkedStates.map {
-                                                allAgreeCheckState
-                                            }
+                                            loginViewModel.setAllAgreeCheckState(!allAgreeCheckState)
                                         },
                                     ),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -267,9 +271,7 @@ fun LoginMyInfoScreen(
                                 title,
                                 isChecked = checkedStates[index],
                                 onCheckedChange = {
-                                    checkedStates = checkedStates.toMutableList().also {
-                                        it[index] = !it[index]
-                                    }
+                                    loginViewModel.setCheckedState(index, !checkedStates[index])
                                 },
                                 modifier = modifier,
                             )
@@ -280,9 +282,9 @@ fun LoginMyInfoScreen(
                             "다음",
                             {
                                 loginViewModel.memberRegister(
-                                    loginViewModel.name,
-                                    loginViewModel.dateOfBirth,
-                                    if (loginViewModel.isMale) GenderType.MALE else GenderType.FEMALE,
+                                    name,
+                                    dateOfBirth,
+                                    if (isMale == true) GenderType.MALE else GenderType.FEMALE,
                                 )
                             },
                             modifier
@@ -298,6 +300,111 @@ fun LoginMyInfoScreen(
             Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 14.dp),
+        )
+    }
+}
+
+@Composable
+private fun LoginMyInfoScreenLayout(
+    modifier: Modifier = Modifier,
+    name: String,
+    dateOfBirth: String,
+    isMale: Boolean?,
+    onNameChanged: (String) -> Unit,
+    onDOBChanged: (String) -> Unit,
+    onGenderChanged: (Boolean) -> Unit,
+    onNextClick: () -> Unit,
+) {
+    val scrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(MediCareCallTheme.colors.bg)
+            .padding(horizontal = 20.dp)
+            .statusBarsPadding()
+            .imePadding(),
+    ) {
+        Column {
+            Column(
+                Modifier.verticalScroll(scrollState),
+            ) {
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    "회원 정보를\n입력해주세요",
+                    style = MediCareCallTheme.typography.B_26,
+                    color = MediCareCallTheme.colors.black,
+                )
+                Spacer(Modifier.height(40.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "이름",
+                        color = MediCareCallTheme.colors.gray7,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    DefaultTextField(
+                        name,
+                        onNameChanged,
+                        placeHolder = "이름",
+                        textFieldModifier = Modifier.focusRequester(focusRequester),
+                    )
+                }
+                Spacer(Modifier.height(20.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "생년월일",
+                        color = MediCareCallTheme.colors.gray7,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    DefaultTextField(
+                        dateOfBirth,
+                        { input ->
+                            val filtered = input.filter { it.isDigit() }.take(8)
+                            onDOBChanged(filtered)
+                        },
+                        placeHolder = "YYYY / MM / DD",
+                        keyboardType = KeyboardType.Number,
+                        visualTransformation = DateOfBirthVisualTransformation(),
+                        maxLength = 8,
+                    )
+                }
+                Spacer(Modifier.height(20.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        "성별",
+                        color = MediCareCallTheme.colors.gray7,
+                        style = MediCareCallTheme.typography.M_17,
+                    )
+                    GenderToggleButton(isMale ?: true, onGenderChanged)
+                }
+                Spacer(Modifier.height(30.dp))
+                CTAButton(
+                    if (name.isNotEmpty() && dateOfBirth.length == 8 && isMale != null)
+                        CTAButtonType.GREEN
+                    else
+                        CTAButtonType.DISABLED,
+                    "다음",
+                    onNextClick,
+                    Modifier.padding(bottom = 20.dp),
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, heightDp = 800)
+@Composable
+private fun LoginMyInfoScreenPreview() {
+    MediCareCallTheme {
+        LoginMyInfoScreenLayout(
+            name = "홍길동",
+            dateOfBirth = "19900101",
+            isMale = true,
+            onNameChanged = {},
+            onDOBChanged = {},
+            onGenderChanged = {},
+            onNextClick = {},
         )
     }
 }
