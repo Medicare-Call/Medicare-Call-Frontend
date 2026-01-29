@@ -32,7 +32,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,10 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
@@ -54,6 +50,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.TimeSettingType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 // helper: Triple을 "오전/오후 hh시 mm분" 형태로 바꿔주는 함수
 fun Triple<Int, Int, Int>.toDisplayString(): String {
@@ -67,10 +64,9 @@ fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToPayment: () -> Unit = {},
-    callTimeViewModel: CallTimeViewModel = hiltViewModel(),
+    callTimeViewModel: CallTimeViewModel = koinViewModel(),
 ) {
     val elderMap = callTimeViewModel.elderIds
-    // Map<Int, String> -> viewmodel에서 직접 가져옴
     val isLoading = callTimeViewModel.isLoading.value
 
     if (isLoading) {
@@ -93,11 +89,11 @@ fun CallTimeScreen(
     val elderIds = elderMap.keys.toList()
 
 //    var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
-    var selectedId by remember { mutableIntStateOf(elderIdMap.keys.first()) } // 선택된 어르신 아이디
+    var selectedId by remember { mutableIntStateOf(elderMap.keys.first()) } // 선택된 어르신 아이디
     val saved = callTimeViewModel.timeMap[selectedId] ?: CallTimes()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    val allComplete = callTimeViewModel.isAllComplete(elderIdMap.keys)
+    val allComplete = callTimeViewModel.isAllComplete(elderMap.keys)
 
     Column(
         modifier = modifier
@@ -204,9 +200,9 @@ fun CallTimeScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(elderIdMap.keys.toList()) { id ->
+                items(elderMap.keys.toList()) { id ->
                     Text(
-                        text = elderIdMap[id] ?: "",
+                        text = elderMap[id] ?: "",
                         modifier = Modifier
                             .clip(CircleShape)
                             .border(
@@ -318,7 +314,7 @@ fun CallTimeScreen(
                 onClick = {
                     if (!allComplete) return@CTAButton
                     callTimeViewModel.submitAllByIds(
-                        elderIds = elderIdMap.keys.toList(),
+                        elderIds = elderMap.keys.toList(),
                         onSuccess = {
                             navigateToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")

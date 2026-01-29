@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.ElderIds
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.util.ElderIdsSerializer
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 
 val Context.elderIdsDataStore by dataStore(
@@ -13,7 +17,9 @@ val Context.elderIdsDataStore by dataStore(
 
 
 @Single
-class ElderIdRepositoryImpl : ElderIdRepository {
+class ElderIdRepositoryImpl(
+    val context: Context,
+) : ElderIdRepository {
 
     override suspend fun updateElderIds(elderIdMap: Map<Int, String>) {
         context.elderIdsDataStore.updateData { it.copy(elderIds = elderIdMap) }

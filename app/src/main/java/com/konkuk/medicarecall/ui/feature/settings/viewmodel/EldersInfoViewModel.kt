@@ -1,6 +1,9 @@
 package com.konkuk.medicarecall.ui.feature.settings.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
@@ -21,7 +24,7 @@ class EldersInfoViewModel(
         private set
 
     val isLoading = mutableStateOf(false)
-    val error = mutableStateOf<Throwable?>(null)
+    private val _error = mutableStateOf<Throwable?>(null)
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
@@ -47,10 +50,10 @@ class EldersInfoViewModel(
                     elderIdRepository.updateElderIds(mapped)
 
                     _error.value = null
-                    _errorMessage.value = null
+                    errorMessage = null
                 }
                 .onFailure {
-                    error.value = it
+                    _error.value = it
                     errorMessage = "노인 개인 정보를 불러오지 못했습니다."
                     Log.e("EldersInfoViewModel", "load 실패", it)
                 }
