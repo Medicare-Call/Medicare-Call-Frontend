@@ -195,6 +195,7 @@ private fun SettingsEditMyDataLayoutPreview() {
         )
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun SettingsEditMyDataLayoutEmptyPreview() {
@@ -232,4 +233,3 @@ private fun SettingsEditMyDataLayoutLoadingPreview() {
         )
     }
 }
-

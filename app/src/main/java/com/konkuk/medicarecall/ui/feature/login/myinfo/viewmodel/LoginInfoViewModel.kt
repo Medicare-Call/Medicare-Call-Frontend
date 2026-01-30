@@ -29,15 +29,11 @@ class LoginInfoViewModel(
     private val fcmRepository: FcmRepository,
 ) : ViewModel() {
 
-
     private val _uiState = MutableStateFlow(LoginInfoUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _events = MutableSharedFlow<LoginEvent>()
     val events = _events.asSharedFlow()
-
-
-
 
     // 상태 변경
     fun onPhoneNumberChanged(new: String) {
@@ -74,7 +70,7 @@ class LoginInfoViewModel(
         _uiState.update {
             it.copy(
                 allAgreeCheckState = value,
-                checkedStates = List(it.checkedStates.size) { value }
+                checkedStates = List(it.checkedStates.size) { value },
             )
         }
     }

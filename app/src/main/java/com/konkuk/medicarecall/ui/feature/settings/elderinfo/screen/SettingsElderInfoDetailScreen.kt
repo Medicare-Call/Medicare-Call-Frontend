@@ -20,9 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -39,8 +36,8 @@ import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
 import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
 import com.konkuk.medicarecall.ui.common.util.isValidDate
-import com.konkuk.medicarecall.ui.feature.settings.elderinfo.component.DeleteConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
+import com.konkuk.medicarecall.ui.feature.settings.elderinfo.component.DeleteConfirmDialog
 import com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel.SettingsElderInfoDetailViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
@@ -48,8 +45,6 @@ import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun SettingsElderInfoDetailScreen(

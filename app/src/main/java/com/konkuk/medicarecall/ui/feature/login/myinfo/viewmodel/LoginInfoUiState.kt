@@ -11,5 +11,5 @@ data class LoginInfoUiState(
     val showBottomSheet: Boolean = false,
     val checkedStates: List<Boolean> = listOf(false, false),
     val allAgreeCheckState: Boolean = false,
-    val navigationDestination: NavigationDestination? = null
+    val navigationDestination: NavigationDestination? = null,
 )

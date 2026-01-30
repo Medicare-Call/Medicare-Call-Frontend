@@ -45,7 +45,6 @@ fun SettingsNoticeDetailScreen(
 ) {
     val uiState by detailViewModel.uiState.collectAsStateWithLifecycle()
 
-
     LaunchedEffect(noticeId) {
         detailViewModel.loadNoticeById(noticeId)
     }

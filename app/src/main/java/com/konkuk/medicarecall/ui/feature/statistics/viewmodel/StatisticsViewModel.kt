@@ -3,6 +3,8 @@ package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.exception.HttpException
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,13 +15,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import com.konkuk.medicarecall.data.exception.HttpException
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
-
 
 @KoinViewModel
 class StatisticsViewModel(
@@ -27,7 +26,6 @@ class StatisticsViewModel(
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
     private val eldersIdRepository: ElderIdRepository,
 ) : ViewModel() {
-
 
     private val _uiState = MutableStateFlow(StatisticsUiState())
     val uiState: StateFlow<StatisticsUiState> = _uiState.asStateFlow()

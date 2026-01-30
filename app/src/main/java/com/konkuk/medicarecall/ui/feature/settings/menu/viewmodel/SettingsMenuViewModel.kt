@@ -3,7 +3,6 @@ package com.konkuk.medicarecall.ui.feature.settings.menu.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,4 +38,3 @@ class SettingsMenuViewModel(
         }
     }
 }
-

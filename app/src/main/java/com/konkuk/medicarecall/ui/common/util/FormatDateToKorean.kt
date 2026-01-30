@@ -3,7 +3,6 @@ package com.konkuk.medicarecall.ui.common.util
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 fun formatDateToKorean(dateStr: String): String {
     return try {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)

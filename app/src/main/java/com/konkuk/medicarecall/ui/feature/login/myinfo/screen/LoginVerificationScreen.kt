@@ -58,7 +58,6 @@ fun LoginVerificationScreen(
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
 
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         loginInfoViewModel.events.collect { event ->

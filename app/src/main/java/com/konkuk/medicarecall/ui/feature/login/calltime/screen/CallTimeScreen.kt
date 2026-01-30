@@ -67,7 +67,6 @@ fun CallTimeScreen(
     navigateToPayment: () -> Unit = {},
     callTimeViewModel: CallTimeViewModel = koinViewModel(),
 ) {
-
     val uiState by callTimeViewModel.uiState.collectAsStateWithLifecycle()
 
     if (uiState.isLoading) {
