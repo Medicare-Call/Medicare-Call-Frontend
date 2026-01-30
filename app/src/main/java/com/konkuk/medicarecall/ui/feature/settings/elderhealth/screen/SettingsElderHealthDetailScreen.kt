@@ -50,14 +50,12 @@ fun SettingsElderHealthDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     elderId: Int,
-    detailViewModel: SettingsElderHealthDetailViewModel = koinViewModel(),
+    viewModel: SettingsElderHealthDetailViewModel = koinViewModel(),
 ) {
-    val healthData by detailViewModel.healthData.collectAsStateWithLifecycle()
-    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
-    val errorMessage by detailViewModel.errorMessage.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(elderId) {
-        detailViewModel.loadHealthInfoById(elderId)
+        viewModel.loadHealthInfoById(elderId)
     }
 
     Column(
@@ -83,8 +81,7 @@ fun SettingsElderHealthDetailScreen(
         )
 
         when {
-            isLoading && healthData == null -> {
-                // Loading state
+            uiState.isLoading && uiState.healthData == null -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -98,8 +95,7 @@ fun SettingsElderHealthDetailScreen(
                 }
             }
 
-            errorMessage != null -> {
-                // Error state
+            uiState.errorMessage != null -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -108,7 +104,7 @@ fun SettingsElderHealthDetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = errorMessage ?: "오류가 발생했습니다",
+                        text = uiState.errorMessage ?: "오류가 발생했습니다",
                         color = MediCareCallTheme.colors.negative,
                         style = MediCareCallTheme.typography.M_17,
                     )
@@ -117,17 +113,16 @@ fun SettingsElderHealthDetailScreen(
                         type = CTAButtonType.GREEN,
                         text = "다시 시도",
                         onClick = {
-                            detailViewModel.loadHealthInfoById(elderId)
+                            viewModel.loadHealthInfoById(elderId)
                         },
                     )
                 }
             }
 
-            healthData != null -> {
-                // Data loaded state
+            uiState.healthData != null -> {
                 HealthDetailContent(
-                    healthInfoResponseDto = healthData!!,
-                    detailViewModel = detailViewModel,
+                    healthInfoResponseDto = uiState.healthData!!,
+                    viewModel = viewModel,
                     onBack = onBack,
                 )
             }
@@ -138,7 +133,7 @@ fun SettingsElderHealthDetailScreen(
 @Composable
 private fun HealthDetailContent(
     healthInfoResponseDto: EldersHealthResponseDto,
-    detailViewModel: SettingsElderHealthDetailViewModel,
+    viewModel: SettingsElderHealthDetailViewModel,
     onBack: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -189,7 +184,7 @@ private fun HealthDetailContent(
                 val noteEnums: List<HealthIssueType> = noteList.mapNotNull { display ->
                     HealthIssueType.entries.firstOrNull { it.displayName == display }
                 }
-                detailViewModel.updateElderHealth(
+                viewModel.updateElderHealth(
                     healthInfo = EldersHealthResponseDto(
                         elderId = healthInfoResponseDto.elderId,
                         name = healthInfoResponseDto.name,

@@ -36,27 +36,26 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsElderHealthScreen(
     onBack: () -> Unit = {},
     navigateToHealthDetail: (Int) -> Unit = {},
-    healthInfoViewModel: SettingsEldersHealthViewModel = koinViewModel(),
+    viewModel: SettingsEldersHealthViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val obs = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                healthInfoViewModel.refresh() // 복귀 시 재조회
+                viewModel.refresh()
             }
         }
         lifecycleOwner.lifecycle.addObserver(obs)
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val healthInfo by healthInfoViewModel.eldersInfoList.collectAsStateWithLifecycle()
-    val error by healthInfoViewModel.errorMessage.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Log.d("HealthInfoScreen", "어르신 건강정보 수: ${healthInfo.size}")
-    Log.d("HealthInfoScreen", "Error Message: $error")
-    Log.d("HealthInfoScreen", "Elders Info: $healthInfo")
-    if (healthInfo.isEmpty() && error != null) {
-        Log.e("HealthInfoScreen", "Error fetching elders info: $error")
+    Log.d("HealthInfoScreen", "어르신 건강정보 수: ${uiState.eldersInfoList.size}")
+    Log.d("HealthInfoScreen", "Error Message: ${uiState.errorMessage}")
+    Log.d("HealthInfoScreen", "Elders Info: ${uiState.eldersInfoList}")
+    if (uiState.eldersInfoList.isEmpty() && uiState.errorMessage != null) {
+        Log.e("HealthInfoScreen", "Error fetching elders info: ${uiState.errorMessage}")
     }
 
     Column(
@@ -84,7 +83,7 @@ fun SettingsElderHealthScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            healthInfo.forEach {
+            uiState.eldersInfoList.forEach {
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
@@ -92,8 +91,6 @@ fun SettingsElderHealthScreen(
                     },
                 )
             }
-//            PersonalInfoCard("김옥자",  onClick = {navController.navigate(Route.HealthDetail.route)})
-//            PersonalInfoCard("박막례",  onClick = {navController.navigate(Route.HealthDetail.route)})
             Spacer(modifier = Modifier.height(20.dp))
         }
     }

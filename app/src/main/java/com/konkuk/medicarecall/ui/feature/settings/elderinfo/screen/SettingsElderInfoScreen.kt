@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.settings.component.PersonalInfoCard
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
@@ -34,27 +36,25 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsElderInfoScreen(
     onBack: () -> Unit = {},
     navigateToElderDetail: (Int) -> Unit = {},
-    personalViewModel: SettingsEldersInfoViewModel = koinViewModel(),
+    viewModel: SettingsEldersInfoViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val obs = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                personalViewModel.refresh() // 복귀 시 재조회
+                viewModel.refresh()
             }
         }
         lifecycleOwner.lifecycle.addObserver(obs)
         onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
     }
 
-    val eldersInfo = personalViewModel.eldersInfoList
-    val error = personalViewModel.errorMessage
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Log.d("PersonalInfoScreen", "Elders Info: $eldersInfo")
-    Log.d("PersonalInfoScreen", "Elders Info Size: ${eldersInfo.size}")
-    Log.d("PersonalInfoScreen", "Error Message: $error")
-    if (eldersInfo.isEmpty() && error != null) {
-        Log.e("PersonalInfoScreen", "Error loading elders info: $error")
+    Log.d("SettingsElderInfoScreen", "Elders Info: ${uiState.eldersInfoList}")
+    Log.d("SettingsElderInfoScreen", "Elders Info Size: ${uiState.eldersInfoList.size}")
+    if (uiState.eldersInfoList.isEmpty() && uiState.errorMessage != null) {
+        Log.e("SettingsElderInfoScreen", "Error loading elders info: ${uiState.errorMessage}")
     }
 
     Column(
@@ -82,7 +82,7 @@ fun SettingsElderInfoScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            eldersInfo.forEach {
+            uiState.eldersInfoList.forEach {
                 PersonalInfoCard(
                     name = it.name,
                     onClick = {
@@ -90,8 +90,6 @@ fun SettingsElderInfoScreen(
                     },
                 )
             }
-//            PersonalInfoCard("김옥자", onClick = {navController.navigate(Route.PersonalDetail.route)})
-//            PersonalInfoCard("박막례", onClick = {navController.navigate(Route.PersonalDetail.route)})
             Spacer(modifier = Modifier.height(20.dp))
         }
     }

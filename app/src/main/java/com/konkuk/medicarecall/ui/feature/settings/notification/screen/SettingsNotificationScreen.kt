@@ -37,45 +37,35 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SettingsNotificationScreen(
     modifier: Modifier = Modifier,
-    myDataViewModel: SettingsEditMyDataViewModel = koinViewModel(),
+    viewModel: SettingsEditMyDataViewModel = koinViewModel(),
     onBack: () -> Unit = {},
 ) {
-    // ViewModel 상태 구독
-    val myDataInfo by myDataViewModel.myDataInfo.collectAsStateWithLifecycle()
-    val isLoading by myDataViewModel.isLoading.collectAsStateWithLifecycle()
-    val masterChecked by myDataViewModel.masterChecked.collectAsStateWithLifecycle()
-    val completeChecked by myDataViewModel.completeChecked.collectAsStateWithLifecycle()
-    val abnormalChecked by myDataViewModel.abnormalChecked.collectAsStateWithLifecycle()
-    val missedChecked by myDataViewModel.missedChecked.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // 초기 데이터 로드
     LaunchedEffect(Unit) {
-        myDataViewModel.loadMyInfo()
+        viewModel.loadMyInfo()
     }
 
-    // myDataInfo가 로드되면 알림 설정 초기화
-    LaunchedEffect(myDataInfo) {
-        myDataInfo?.let { myDataViewModel.initializeNotificationSettings(it) }
+    LaunchedEffect(uiState.myDataInfo) {
+        uiState.myDataInfo?.let { viewModel.initializeNotificationSettings(it) }
     }
 
-    // 상태를 업데이트하고 ViewModel을 호출하는 함수를 만듭니다. (코드 중복 제거)
     val updateSettings = {
-        myDataInfo?.let { info ->
-            myDataViewModel.updateUserData(
+        uiState.myDataInfo?.let { info ->
+            viewModel.updateUserData(
                 userInfo = info.copy(
-                    // 기존 데이터를 복사하여 변경사항만 적용
                     pushNotification = PushNotificationDto(
-                        all = if (masterChecked) "ON" else "OFF",
-                        carecallCompleted = if (completeChecked) "ON" else "OFF",
-                        healthAlert = if (abnormalChecked) "ON" else "OFF",
-                        carecallMissed = if (missedChecked) "ON" else "OFF",
+                        all = if (uiState.masterChecked) "ON" else "OFF",
+                        carecallCompleted = if (uiState.completeChecked) "ON" else "OFF",
+                        healthAlert = if (uiState.abnormalChecked) "ON" else "OFF",
+                        carecallMissed = if (uiState.missedChecked) "ON" else "OFF",
                     ),
                 ),
             )
         }
     }
 
-    if (isLoading && myDataInfo == null) {
+    if (uiState.isLoading && uiState.myDataInfo == null) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -120,9 +110,9 @@ fun SettingsNotificationScreen(
             ) {
                 Text("전체 푸시 알림", style = MediCareCallTheme.typography.SB_16, color = Color.Black)
                 SwitchButton(
-                    checked = masterChecked,
+                    checked = uiState.masterChecked,
                     onCheckedChange = { isChecked ->
-                        myDataViewModel.setMasterChecked(isChecked)
+                        viewModel.setMasterChecked(isChecked)
                         updateSettings()
                     },
                 )
@@ -138,9 +128,9 @@ fun SettingsNotificationScreen(
                     color = MediCareCallTheme.colors.gray8,
                 )
                 SwitchButton(
-                    checked = completeChecked,
+                    checked = uiState.completeChecked,
                     onCheckedChange = { isChecked ->
-                        myDataViewModel.setCompleteChecked(isChecked)
+                        viewModel.setCompleteChecked(isChecked)
                         updateSettings()
                     },
                 )
@@ -156,9 +146,9 @@ fun SettingsNotificationScreen(
                     color = MediCareCallTheme.colors.gray8,
                 )
                 SwitchButton(
-                    checked = abnormalChecked,
+                    checked = uiState.abnormalChecked,
                     onCheckedChange = { isChecked ->
-                        myDataViewModel.setAbnormalChecked(isChecked)
+                        viewModel.setAbnormalChecked(isChecked)
                         updateSettings()
                     },
                 )
@@ -174,9 +164,9 @@ fun SettingsNotificationScreen(
                     color = MediCareCallTheme.colors.gray8,
                 )
                 SwitchButton(
-                    checked = missedChecked,
+                    checked = uiState.missedChecked,
                     onCheckedChange = { isChecked ->
-                        myDataViewModel.setMissedChecked(isChecked)
+                        viewModel.setMissedChecked(isChecked)
                         updateSettings()
                     },
                 )

@@ -37,8 +37,8 @@ fun SettingsSubscriptionScreen(
     navigateToSubscribeDetail: (elderId: Int) -> Unit = {},
     viewModel: SettingsSubscriptionViewModel = koinViewModel(),
 ) {
-    val eldersInfo by viewModel.subscriptions.collectAsStateWithLifecycle()
-    Log.d("SettingSubscribeScreen", "Elders Info: $eldersInfo")
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    Log.d("SettingsSubscriptionScreen", "Elders Info: ${uiState.subscriptions}")
 
     Column(
         modifier = modifier
@@ -68,7 +68,7 @@ fun SettingsSubscriptionScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Spacer(modifier = modifier.height(20.dp))
-            eldersInfo.forEach {
+            uiState.subscriptions.forEach {
                 SubscribeCard(
                     elderInfo = it,
                     onClick = {

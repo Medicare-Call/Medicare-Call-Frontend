@@ -55,62 +55,32 @@ import java.time.format.DateTimeFormatter
 fun SettingsElderInfoDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    elderId: Int, // -1이면 등록, 그 외에는 수정
+    elderId: Int,
     navController: NavHostController,
-    detailViewModel: SettingsElderInfoDetailViewModel = koinViewModel(),
+    viewModel: SettingsElderInfoDetailViewModel = koinViewModel(),
 ) {
-    // ViewModel 상태 구독
-    val elderData by detailViewModel.uiState.collectAsStateWithLifecycle()
-    val isSuccess by detailViewModel.isSuccess.collectAsStateWithLifecycle()
-    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
-
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
 
-    // Local State: 폼 입력값 관리
-    var isMale by remember { mutableStateOf(true) }
-    var name by remember { mutableStateOf("") }
-    var birth by remember { mutableStateOf("") } // yyyyMMdd (8자리)
-    var phoneNum by remember { mutableStateOf("") }
-    var relationship by remember { mutableStateOf(RelationshipType.ACQUAINTANCE) }
-    var residenceType by remember { mutableStateOf(ElderResidenceType.ALONE) }
-    var showDeleteDialog by remember { mutableStateOf(false) }
-
-    // ID 값에 따른 모드 판별
     val isEditMode = elderId != -1
     val screenTitle = if (isEditMode) "어르신 개인정보 설정" else "어르신 등록"
     val confirmButtonText = if (isEditMode) "수정 완료" else "등록 완료"
 
-    // 초기 데이터 로드 (수정 모드일 때)
     LaunchedEffect(elderId) {
         if (isEditMode) {
-            detailViewModel.loadElderDataById(elderId)
+            viewModel.loadElderDataById(elderId)
         }
     }
 
-    // 서버 데이터 -> UI 필드 동기화
-    LaunchedEffect(elderData) {
-        elderData?.let {
-            name = it.name
-            isMale = it.gender == GenderType.MALE
-            phoneNum = it.phone
-            relationship = it.relationship
-            residenceType = it.residenceType
-
-            // 날짜 형식 변환 (yyyy-MM-dd -> yyyyMMdd)
-            try {
-                val parseDate = LocalDate.parse(it.birthDate)
-                birth = parseDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-            } catch (e: Exception) {
-                // 파싱 실패 시 기존 값 유지하거나 빈 값 처리
-            }
+    LaunchedEffect(uiState.elderData) {
+        uiState.elderData?.let {
+            viewModel.initializeForm(it)
         }
     }
 
-    // 작업 성공(등록/수정/삭제) 시 네비게이션 처리
-    LaunchedEffect(isSuccess) {
-        if (isSuccess) {
-            // 변경된 이름을 이전 화면으로 전달 (Toast 메시지 등을 위해)
-            navController.previousBackStackEntry?.savedStateHandle?.set("ELDER_NAME_UPDATED", name)
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
+            navController.previousBackStackEntry?.savedStateHandle?.set("ELDER_NAME_UPDATED", uiState.name)
             onBack()
         }
     }
@@ -135,8 +105,7 @@ fun SettingsElderInfoDetailScreen(
         )
 
         when {
-            // 수정 모드인데 데이터가 로딩 중이거나 아직 없을 때
-            isEditMode && (isLoading || elderData == null) -> {
+            isEditMode && (uiState.isLoading || uiState.elderData == null) -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -147,7 +116,6 @@ fun SettingsElderInfoDetailScreen(
             }
 
             else -> {
-                // 폼 UI
                 Column(
                     modifier = modifier
                         .fillMaxWidth()
@@ -156,7 +124,6 @@ fun SettingsElderInfoDetailScreen(
                 ) {
                     Spacer(Modifier.height(20.dp))
 
-                    // 삭제 버튼 (수정 모드일 때만 표시)
                     if (isEditMode) {
                         Row {
                             Spacer(modifier = modifier.weight(1f))
@@ -165,7 +132,7 @@ fun SettingsElderInfoDetailScreen(
                                 color = MediCareCallTheme.colors.negative,
                                 style = MediCareCallTheme.typography.SB_16,
                                 modifier = Modifier.clickable {
-                                    showDeleteDialog = true
+                                    viewModel.setShowDeleteDialog(true)
                                 },
                             )
                         }
@@ -174,20 +141,18 @@ fun SettingsElderInfoDetailScreen(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(20.dp),
                     ) {
-                        // 이름
                         Column {
                             DefaultTextField(
-                                value = name,
-                                onValueChange = { name = it },
+                                value = uiState.name,
+                                onValueChange = { viewModel.updateName(it) },
                                 category = "이름",
                                 placeHolder = "이름",
                             )
                         }
-                        // 생년월일
                         Column {
                             DefaultTextField(
-                                value = birth,
-                                onValueChange = { birth = it },
+                                value = uiState.birth,
+                                onValueChange = { viewModel.updateBirth(it) },
                                 category = "생년월일",
                                 placeHolder = "YYYY / MM / DD",
                                 keyboardType = KeyboardType.Number,
@@ -195,7 +160,6 @@ fun SettingsElderInfoDetailScreen(
                                 maxLength = 8,
                             )
                         }
-                        // 성별
                         Column {
                             Text(
                                 "성별",
@@ -204,63 +168,59 @@ fun SettingsElderInfoDetailScreen(
                             )
                             Spacer(modifier = modifier.height(10.dp))
                             GenderToggleButton(
-                                isMale = isMale,
-                                onGenderChange = { newValue ->
-                                    isMale = newValue
-                                },
+                                isMale = uiState.isMale,
+                                onGenderChange = { viewModel.updateIsMale(it) },
                             )
                         }
-                        // 전화번호
                         Column {
                             DefaultTextField(
-                                value = phoneNum,
-                                onValueChange = { phoneNum = it },
+                                value = uiState.phoneNum,
+                                onValueChange = { viewModel.updatePhoneNum(it) },
                                 placeHolder = "휴대폰 번호",
                                 keyboardType = KeyboardType.Number,
                                 visualTransformation = PhoneNumberVisualTransformation(),
                                 maxLength = 11,
                             )
                         }
-                        // 관계
                         Column {
                             DefaultDropdown(
                                 enumList = RelationshipType.entries.map { it.displayName }.toList(),
                                 placeHolder = "관계 선택하기",
                                 category = "어르신과의 관계",
                                 scrollState,
-                                value = relationship.displayName,
+                                value = uiState.relationship.displayName,
                                 onOptionSelect = { newValue ->
-                                    relationship = RelationshipType.entries.firstOrNull {
+                                    val rel = RelationshipType.entries.firstOrNull {
                                         it.displayName == newValue
                                     } ?: RelationshipType.ACQUAINTANCE
+                                    viewModel.updateRelationship(rel)
                                 },
                             )
                         }
-                        // 거주 방식
                         Column {
                             DefaultDropdown(
                                 enumList = ElderResidenceType.entries.map { it.displayName }.toList(),
                                 placeHolder = "거주방식을 선택해주세요",
                                 category = "어르신 거주 방식",
                                 scrollState,
-                                value = residenceType.displayName,
+                                value = uiState.residenceType.displayName,
                                 onOptionSelect = { newValue ->
-                                    residenceType = ElderResidenceType.entries.firstOrNull {
+                                    val res = ElderResidenceType.entries.firstOrNull {
                                         it.displayName == newValue
                                     } ?: ElderResidenceType.WITH_FAMILY
+                                    viewModel.updateResidenceType(res)
                                 },
                             )
                         }
 
-                        // 확인/등록 버튼
                         CTAButton(
                             type = if (
-                                name.isNotEmpty() &&
-                                name.matches(Regex("^[가-힣a-zA-Z]+$")) &&
-                                birth.length == 8 &&
-                                birth.isValidDate() &&
-                                phoneNum.length == 11 &&
-                                phoneNum.startsWith("010")
+                                uiState.name.isNotEmpty() &&
+                                uiState.name.matches(Regex("^[가-힣a-zA-Z]+$")) &&
+                                uiState.birth.length == 8 &&
+                                uiState.birth.isValidDate() &&
+                                uiState.phoneNum.length == 11 &&
+                                uiState.phoneNum.startsWith("010")
                             ) {
                                 CTAButtonType.GREEN
                             } else {
@@ -269,15 +229,14 @@ fun SettingsElderInfoDetailScreen(
                             text = confirmButtonText,
                             onClick = {
                                 val requestDto = ElderRegisterRequestDto(
-                                    name = name,
-                                    birthDate = toDashedDate(birth), // yyyy-MM-dd 변환
-                                    gender = if (isMale) GenderType.MALE else GenderType.FEMALE,
-                                    phone = phoneNum,
-                                    relationship = relationship,
-                                    residenceType = residenceType,
+                                    name = uiState.name,
+                                    birthDate = toDashedDate(uiState.birth),
+                                    gender = if (uiState.isMale) GenderType.MALE else GenderType.FEMALE,
+                                    phone = uiState.phoneNum,
+                                    relationship = uiState.relationship,
+                                    residenceType = uiState.residenceType,
                                 )
-                                // ViewModel의 통합 처리 함수 호출
-                                detailViewModel.processElderInfo(elderId, requestDto)
+                                viewModel.processElderInfo(elderId, requestDto)
                             },
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
@@ -286,14 +245,12 @@ fun SettingsElderInfoDetailScreen(
             }
         }
 
-        // 삭제 확인 다이얼로그
-        if (showDeleteDialog) {
+        if (uiState.showDeleteDialog) {
             DeleteConfirmDialog(
-                onDismiss = { showDeleteDialog = false },
+                onDismiss = { viewModel.setShowDeleteDialog(false) },
                 onDelete = {
-                    showDeleteDialog = false
-                    detailViewModel.deleteElderInfo(elderId)
-                    // 삭제 성공 시의 네비게이션은 isSuccess LaunchedEffect에서 처리됨
+                    viewModel.setShowDeleteDialog(false)
+                    viewModel.deleteElderInfo(elderId)
                 },
             )
         }

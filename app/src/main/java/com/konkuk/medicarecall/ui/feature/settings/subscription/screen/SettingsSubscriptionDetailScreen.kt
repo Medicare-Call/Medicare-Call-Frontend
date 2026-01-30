@@ -46,14 +46,12 @@ fun SettingsSubscriptionDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     elderId: Int,
-    detailViewModel: SettingsSubscriptionDetailViewModel = koinViewModel(),
+    viewModel: SettingsSubscriptionDetailViewModel = koinViewModel(),
 ) {
-    val subscriptionData by detailViewModel.subscriptionData.collectAsStateWithLifecycle()
-    val isLoading by detailViewModel.isLoading.collectAsStateWithLifecycle()
-    val errorMessage by detailViewModel.errorMessage.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(elderId) {
-        detailViewModel.loadSubscriptionById(elderId)
+        viewModel.loadSubscriptionById(elderId)
     }
 
     Column(
@@ -78,8 +76,7 @@ fun SettingsSubscriptionDetailScreen(
         )
 
         when {
-            isLoading && subscriptionData == null -> {
-                // Loading state
+            uiState.isLoading && uiState.subscriptionData == null -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -93,8 +90,7 @@ fun SettingsSubscriptionDetailScreen(
                 }
             }
 
-            errorMessage != null -> {
-                // Error state
+            uiState.errorMessage != null -> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -103,7 +99,7 @@ fun SettingsSubscriptionDetailScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = errorMessage ?: "오류가 발생했습니다",
+                        text = uiState.errorMessage ?: "오류가 발생했습니다",
                         color = MediCareCallTheme.colors.negative,
                         style = MediCareCallTheme.typography.M_17,
                     )
@@ -112,16 +108,15 @@ fun SettingsSubscriptionDetailScreen(
                         type = CTAButtonType.GREEN,
                         text = "다시 시도",
                         onClick = {
-                            detailViewModel.loadSubscriptionById(elderId)
+                            viewModel.loadSubscriptionById(elderId)
                         },
                     )
                 }
             }
 
-            subscriptionData != null -> {
-                // Data loaded state
+            uiState.subscriptionData != null -> {
                 SubscribeDetailContent(
-                    subscriptionInfo = subscriptionData!!,
+                    subscriptionInfo = uiState.subscriptionData!!,
                 )
             }
         }

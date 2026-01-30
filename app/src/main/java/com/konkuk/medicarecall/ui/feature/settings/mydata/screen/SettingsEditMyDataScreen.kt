@@ -45,41 +45,37 @@ fun SettingsEditMyDataScreen(
     onBack: () -> Unit = {},
     viewModel: SettingsEditMyDataViewModel = koinViewModel(),
 ) {
-    val myDataInfo by viewModel.myDataInfo.collectAsStateWithLifecycle()
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-    val isMale by viewModel.isMale.collectAsStateWithLifecycle()
-    val name by viewModel.name.collectAsStateWithLifecycle()
-    val birth by viewModel.birth.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadMyInfo()
     }
 
-    LaunchedEffect(myDataInfo) {
-        myDataInfo?.let { viewModel.initializeFormData(it) }
+    LaunchedEffect(uiState.myDataInfo) {
+        uiState.myDataInfo?.let { viewModel.initializeFormData(it) }
     }
 
     SettingsEditMyDataLayout(
         modifier = modifier,
-        isLoading = isLoading && myDataInfo == null,
-        name = name,
-        birth = birth,
-        isMale = isMale,
-        isSubmitEnabled = name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
-            birth.length == 8 &&
-            birth.isValidDate() &&
-            myDataInfo != null,
+        isLoading = uiState.isLoading && uiState.myDataInfo == null,
+        name = uiState.name,
+        birth = uiState.birth,
+        isMale = uiState.isMale,
+        isSubmitEnabled = uiState.name.matches(Regex("^[가-힣a-zA-Z]*$")) &&
+            uiState.birth.length == 8 &&
+            uiState.birth.isValidDate() &&
+            uiState.myDataInfo != null,
         onBackClick = onBack,
         onNameChange = { viewModel.updateName(it) },
         onBirthChange = { viewModel.updateBirth(it) },
         onGenderChange = { viewModel.updateIsMale(it) },
         onSubmitClick = {
-            myDataInfo?.let { info ->
-                val gender = if (isMale == true) GenderType.MALE else GenderType.FEMALE
+            uiState.myDataInfo?.let { info ->
+                val gender = if (uiState.isMale) GenderType.MALE else GenderType.FEMALE
                 viewModel.updateUserData(
                     userInfo = MyInfoResponseDto(
-                        name = name,
-                        birthDate = birth.replaceFirst(
+                        name = uiState.name,
+                        birthDate = uiState.birth.replaceFirst(
                             "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
                             "$1-$2-$3",
                         ),
