@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.carecall.component
+package com.konkuk.medicarecall.ui.feature.login.calltime.component
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -26,14 +26,14 @@ import androidx.core.graphics.drawable.toDrawable
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun SecondTimeWheelPicker(
+fun ThirdTimeWheelPicker(
     modifier: Modifier = Modifier,
-    initialHour: Int = 12,
+    initialHour: Int = 5,
     initialMinute: Int = 0,
     onTimeChange: (hour: Int, minute: Int) -> Unit = { _, _ -> },
 ) {
     var hour by remember { mutableIntStateOf(initialHour) }
-    var minute by remember { mutableIntStateOf(initialMinute) }
+    var minute by remember { androidx.compose.runtime.mutableIntStateOf(initialMinute) }
 
     val mainColor = MediCareCallTheme.colors.main.toArgb()
     val minuteOptions = arrayOf("00", "10", "20", "30", "40", "50")
@@ -56,8 +56,7 @@ fun SecondTimeWheelPicker(
                         displayedValues = arrayOf("오후")
                         wrapSelectorWheel = false
 //                        setOnValueChangedListener { _, _, newVal ->
-//                            amPm = newVal
-//                            onTimeChange(amPm, hour, minute)
+//                            onTimeChange(hour, minute)
 //
 //                            //setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
 //                        }
@@ -136,15 +135,12 @@ fun SecondTimeWheelPicker(
             AndroidView(
                 factory = { ctx ->
                     NumberPicker(ctx).apply {
-                        val values = arrayOf("12", "1", "2", "3", "4") // 보여줄 값들
-                        minValue = 0
-                        maxValue = values.size - 1
-                        displayedValues = values
+                        minValue = 5; maxValue = 11
                         wrapSelectorWheel = false
-                        setOnValueChangedListener { _, _, newIndex ->
-                            val selected = values[newIndex].toInt()
-                            hour = selected
+                        setOnValueChangedListener { _, _, newVal ->
+                            hour = newVal
                             onTimeChange(hour, minute)
+//                            setPickerTextStyle(mainColor, 20f, Typeface.DEFAULT_BOLD)
                         }
                         setPickerTextColor(mainColor) // 텍스트 색상 변경
                         //                        for (i in 0 until childCount) {
@@ -184,11 +180,7 @@ fun SecondTimeWheelPicker(
                     }
                 },
                 update = { picker ->
-                    val values = arrayOf("12", "1", "2", "3", "4")
-                    val index = values.indexOf(hour.toString())
-                    if (index >= 0) picker.value = index
-                    picker.displayedValues = values
-                    picker.wrapSelectorWheel = false
+                    picker.value = hour
                     @SuppressLint("DiscouragedPrivateApi", "SoonBlockedPrivateApi", "UseKtx")
                     fun hideDividers() {
                         try {
@@ -318,7 +310,7 @@ fun SecondTimeWheelPicker(
 @Preview(showBackground = true)
 @Composable
 private fun TimeWheelPreview() {
-    SecondTimeWheelPicker(
+    ThirdTimeWheelPicker(
         modifier = Modifier
             .fillMaxWidth()
             .height(206.dp),

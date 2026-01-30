@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.carecall.component
+package com.konkuk.medicarecall.ui.feature.login.calltime.component
 
 import android.annotation.SuppressLint
 import android.graphics.Color

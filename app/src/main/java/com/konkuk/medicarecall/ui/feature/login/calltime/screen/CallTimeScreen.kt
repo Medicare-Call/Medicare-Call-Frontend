@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.carecall.screen
+package com.konkuk.medicarecall.ui.feature.login.calltime.screen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,11 +39,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
-import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
-import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
-import com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel.CallTimeViewModel
+import com.konkuk.medicarecall.ui.feature.login.calltime.component.CallTimeBenefit
+import com.konkuk.medicarecall.ui.feature.login.calltime.component.TimePickerBottomSheet
+import com.konkuk.medicarecall.ui.feature.login.calltime.component.TimeSettingItem
+import com.konkuk.medicarecall.ui.feature.login.calltime.viewmodel.CallTimeViewModel
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -66,10 +67,10 @@ fun CallTimeScreen(
     navigateToPayment: () -> Unit = {},
     callTimeViewModel: CallTimeViewModel = koinViewModel(),
 ) {
-    val elderMap = callTimeViewModel.elderIds
-    val isLoading = callTimeViewModel.isLoading.value
 
-    if (isLoading) {
+    val uiState by callTimeViewModel.uiState.collectAsStateWithLifecycle()
+
+    if (uiState.isLoading) {
         Box(
             Modifier
                 .fillMaxSize()
@@ -87,11 +88,11 @@ fun CallTimeScreen(
     var showBottomSheet by remember { mutableStateOf(false) } // 하단 시트 제어
 
 //    var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
-    var selectedId by remember { mutableIntStateOf(elderMap.keys.first()) } // 선택된 어르신 아이디
-    val saved = callTimeViewModel.timeMap[selectedId] ?: CallTimes()
+    var selectedId by remember { mutableIntStateOf(uiState.elderMap.keys.first()) } // 선택된 어르신 아이디
+    val saved = uiState.timeMap[selectedId] ?: CallTimes()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    val allComplete = callTimeViewModel.isAllComplete(elderMap.keys)
+    val allComplete = callTimeViewModel.isAllComplete(uiState.elderMap.keys)
 
     Column(
         modifier = modifier
@@ -198,9 +199,9 @@ fun CallTimeScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(elderMap.keys.toList()) { id ->
+                itemsIndexed(uiState.elderMap.keys.toList()) { index, id ->
                     Text(
-                        text = elderMap[id] ?: "",
+                        text = uiState.elderMap[id] ?: "",
                         modifier = Modifier
                             .clip(CircleShape)
                             .border(
@@ -215,7 +216,7 @@ fun CallTimeScreen(
                             .clickable {
                                 selectedId = id
                                 scope.launch {
-                                    listState.animateScrollToItem(id)
+                                    listState.animateScrollToItem(index)
                                 }
                             }
                             .padding(vertical = 8.dp, horizontal = 24.dp),
@@ -312,11 +313,11 @@ fun CallTimeScreen(
                 onClick = {
                     if (!allComplete) return@CTAButton
                     callTimeViewModel.submitAllByIds(
-                        elderIds = elderMap.keys.toList(),
+                        elderIds = uiState.elderMap.keys.toList(),
                         onSuccess = {
                             navigateToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
-                            Log.d("SetCallScreen", "시간 : ${callTimeViewModel.timeMap}")
+                            Log.d("SetCallScreen", "시간 : ${uiState.timeMap}")
                         },
                         onError = { t ->
                             Log.e("SetCallScreen", "콜 시간 설정 실패: $t")

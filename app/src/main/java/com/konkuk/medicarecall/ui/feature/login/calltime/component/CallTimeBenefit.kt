@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.carecall.component
+package com.konkuk.medicarecall.ui.feature.login.calltime.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

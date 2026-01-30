@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
-import com.konkuk.medicarecall.ui.feature.login.carecall.screen.CallTimeScreen
+import com.konkuk.medicarecall.ui.feature.login.calltime.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen

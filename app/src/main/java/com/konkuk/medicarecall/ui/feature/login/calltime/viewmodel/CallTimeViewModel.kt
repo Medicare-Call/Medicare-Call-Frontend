@@ -1,9 +1,6 @@
-package com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel
+package com.konkuk.medicarecall.ui.feature.login.calltime.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
@@ -22,19 +19,9 @@ class CallTimeViewModel(
     private val setCallRepository: SetCallRepository,
     private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
-    val timeMap = mutableStateMapOf<Int, CallTimes>()
-    val isLoading = mutableStateOf(false)
-    val error = mutableStateOf<Throwable?>(null)
-    private val _elderIdMap = MutableStateFlow(emptyMap<Int, String>())
-    val elderIdMap = _elderIdMap.asStateFlow()
 
-    private val _showBottomSheet = mutableStateOf(false)
-    private val _selectedIndex = mutableIntStateOf(0)
-    private val _selectedTabIndex = mutableIntStateOf(0)
-
-    // Flow -> State 로 뱐환해서 보관
-    private val _elderIds = mutableStateOf<Map<Int, String>>(emptyMap())
-    val elderIds get() = _elderIds.value // UI에서 접근할 값
+    private val _uiState = MutableStateFlow(CallTimeUiState())
+    val uiState = _uiState.asStateFlow()
 
     init {
         observeElderIds()
@@ -44,21 +31,20 @@ class CallTimeViewModel(
     private fun observeElderIds() {
         viewModelScope.launch {
             try {
-                _elderIds.value = elderIdRepository.getElderIds()
-                _elderIdMap.update { elderIdRepository.getElderIds() }
+                _uiState.update { it.copy(elderMap = elderIdRepository.getElderIds()) }
             } catch (e: Exception) {
                 Log.e("CallTimeViewModel", "elderIds 수집 실패", e)
-                error.value = e
+                _uiState.update { it.copy(error = e) }
             }
         }
     }
 
     fun setTimes(id: Int, times: CallTimes) {
-        timeMap.put(id, times)
+        _uiState.update { it.copy(timeMap = it.timeMap.plus(id to times)) }
     }
 
     fun isCompleteFor(id: Int): Boolean {
-        val t = timeMap[id] ?: return false
+        val t = uiState.value.timeMap[id] ?: return false
         return t.first != null && t.second != null && t.third != null
     }
 
@@ -71,14 +57,14 @@ class CallTimeViewModel(
         onError: (Throwable) -> Unit,
     ) {
         viewModelScope.launch {
-            isLoading.value = true
-            error.value = null
+            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update { it.copy(error = null) }
             try {
                 require(elderIds.isNotEmpty()) { "어르신 목록이 비어 있습니다." }
 
                 // 병렬 요청 생성
                 val jobs = elderIds.map { id ->
-                    val times = timeMap[id] ?: error("'$id'의 시간이 비어있습니다.")
+                    val times = uiState.value.timeMap[id] ?: error("'$id'의 시간이 비어있습니다.")
                     async {
                         setCallRepository.saveForElder(id, times).getOrThrow()
                         Log.d("CallTimeViewModel", "Saved call times for id:$id")
@@ -90,28 +76,23 @@ class CallTimeViewModel(
                 onSuccess()
             } catch (t: Throwable) {
                 Log.e("CallTimeViewModel", "submitAllByName failed", t)
-                error.value = t
+                _uiState.update { it.copy(error = t) }
                 onError(t)
             } finally {
-                isLoading.value = false
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
 
-    // 에러 상태 초기화
-    fun clearError() {
-        error.value = null
-    }
-
     fun setShowBottomSheet(value: Boolean) {
-        _showBottomSheet.value = value
+        _uiState.update { it.copy(showBottomSheet = value) }
     }
 
     fun setSelectedIndex(index: Int) {
-        _selectedIndex.intValue = index
+        _uiState.update { it.copy(selectedIndex = index) }
     }
 
     fun setSelectedTabIndex(index: Int) {
-        _selectedTabIndex.intValue = index
+        _uiState.update { it.copy(selectedTabIndex = index) }
     }
 }
