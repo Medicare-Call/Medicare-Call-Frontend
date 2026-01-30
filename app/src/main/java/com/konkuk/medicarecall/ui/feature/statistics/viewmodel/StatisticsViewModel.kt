@@ -8,44 +8,29 @@ import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import com.konkuk.medicarecall.data.exception.HttpException
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 
-data class StatisticsUiState(
-    val isLoading: Boolean = false,
-    val summary: WeeklySummaryUiState? = null,
-    val error: String? = null,
-)
 
 @KoinViewModel
 class StatisticsViewModel(
     private val repository: StatisticsRepository,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
+    private val eldersIdRepository: ElderIdRepository,
 ) : ViewModel() {
-    // 네비게이션 결과(복약 변경 등)를 ViewModel 책임으로 처리
-    fun onMedsChanged() {
-        refresh()
-    }
+
+
     private val _uiState = MutableStateFlow(StatisticsUiState())
     val uiState: StateFlow<StatisticsUiState> = _uiState.asStateFlow()
-
-    private val _selectedElderId = MutableStateFlow<Int?>(null)
-
-    private val _currentWeek = MutableStateFlow(getWeekRange(LocalDate.now()))
-    val currentWeek: StateFlow<Pair<LocalDate, LocalDate>> = _currentWeek
-
-    private val _isLatestWeek = MutableStateFlow(true)
-    val isLatestWeek: StateFlow<Boolean> = _isLatestWeek
-
-    private val _isEarliestWeek = MutableStateFlow(false)
-    val isEarliestWeek: StateFlow<Boolean> = _isEarliestWeek
 
     // [수정 1] earliestDate의 초기값을 아주 먼 과거로 설정하여 초기 오류를 방지합니다.
     private var earliestDate: LocalDate = LocalDate.MIN
@@ -53,22 +38,30 @@ class StatisticsViewModel(
 
     init {
         viewModelScope.launch {
-            _selectedElderId
-                .combine(_currentWeek) { id, week -> id to week }
+            _uiState
+                .map { it.selectedElderId to it.currentWeek }
                 .distinctUntilChanged()
                 .collect { (id, week) ->
                     if (id != null) {
                         // [수정 2] 주차가 변경될 때마다 isLatestWeek와 isEarliestWeek를 다시 계산합니다.
                         // 이렇게 하면 API 호출 성공/실패와 관계없이 UI 상태가 정확해집니다.
                         val weekStart = week.first
-                        _isLatestWeek.value = weekStart == weekStartOf(LocalDate.now())
-                        // earliestDate가 아직 초기값(LocalDate.MIN)이 아닐 때만 계산합니다.
-                        _isEarliestWeek.value = earliestDate != LocalDate.MIN && weekStart == weekStartOf(earliestDate)
+                        val isLatest = weekStart == weekStartOf(LocalDate.now())
+                        val isEarliest = earliestDate != LocalDate.MIN && weekStart == weekStartOf(earliestDate)
+
+                        _uiState.update {
+                            it.copy(isLatestWeek = isLatest, isEarliestWeek = isEarliest)
+                        }
 
                         getWeeklyStatistics(elderId = id, startDate = weekStart)
                     }
                 }
+            _uiState.update { it.copy(eldersMap = eldersIdRepository.getElderIds()) }
         }
+    }
+
+    fun onMedsChanged() {
+        refresh()
     }
 
     fun refresh() {
@@ -77,8 +70,8 @@ class StatisticsViewModel(
             return
         }
 
-        val id = _selectedElderId.value ?: return
-        val start = _currentWeek.value.first
+        val id = _uiState.value.selectedElderId ?: return
+        val start = _uiState.value.currentWeek.first
         getWeeklyStatistics(
             elderId = id,
             startDate = start,
@@ -87,11 +80,11 @@ class StatisticsViewModel(
     }
 
     fun setSelectedElderId(id: Int) {
-        if (_selectedElderId.value != id) {
+        if (_uiState.value.selectedElderId != id) {
             // [수정 3] 새로운 사용자를 선택하면 earliestDate를 초기화합니다.
             // 이렇게 해야 이전 사용자의 기록이 다음 사용자에게 영향을 주지 않습니다.
             earliestDate = LocalDate.MIN
-            _selectedElderId.value = id
+            _uiState.update { it.copy(selectedElderId = id) }
         }
     }
 
@@ -100,18 +93,18 @@ class StatisticsViewModel(
     fun showPreviousWeek() {
         // [수정 4] isEarliestWeek 상태를 직접 신뢰하여 UI 이동을 막습니다.
         // 이 상태는 collect 블록에서 안정적으로 관리됩니다.
-        if (_isEarliestWeek.value) return
-        _currentWeek.value = getWeekRange(_currentWeek.value.first.minusWeeks(1))
+        if (_uiState.value.isEarliestWeek) return
+        _uiState.update { it.copy(currentWeek = getWeekRange(it.currentWeek.first.minusWeeks(1))) }
     }
 
     fun showNextWeek() {
-        if (_isLatestWeek.value) return
-        _currentWeek.value = getWeekRange(_currentWeek.value.first.plusWeeks(1))
+        if (_uiState.value.isLatestWeek) return
+        _uiState.update { it.copy(currentWeek = getWeekRange(it.currentWeek.first.plusWeeks(1))) }
     }
 
     fun jumpToTodayWeek() = jumpToWeekOf(LocalDate.now())
     fun jumpToWeekOf(date: LocalDate) {
-        _currentWeek.value = getWeekRange(date)
+        _uiState.update { it.copy(currentWeek = getWeekRange(date)) }
     }
 
     // [삭제 1] updateWeekState 함수는 이제 init 블록의 로직으로 대체되었으므로 삭제합니다.
@@ -138,7 +131,7 @@ class StatisticsViewModel(
         // if (isEarliestWeek.value) return
 
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            _uiState.update { it.copy(isLoading = true, error = null) }
 
             runCatching {
                 val formatted = startDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
@@ -159,18 +152,17 @@ class StatisticsViewModel(
                 if (earliestDate == LocalDate.MIN) {
                     earliestDate = LocalDate.parse(dto.subscriptionStartDate)
                     // earliestDate가 갱신되었으므로, 현재 주차가 가장 이른 주차인지 다시 확인합니다.
-                    _isEarliestWeek.value = _currentWeek.value.first == weekStartOf(earliestDate)
+                    val isEarliest = _uiState.value.currentWeek.first == weekStartOf(earliestDate)
+                    _uiState.update { it.copy(isEarliestWeek = isEarliest) }
                 }
 
                 Log.d("STATISTICS_DEBUG", "onSuccess: DTO 수신 완료\n$dto")
                 val summary = WeeklySummaryUiState.from(dto, order)
                 Log.d("STATISTICS_DEBUG", "onSuccess: UI State 변환 완료\n$summary")
 
-                _uiState.value = StatisticsUiState(
-                    isLoading = false,
-                    summary = summary,
-                    error = null,
-                )
+                _uiState.update {
+                    it.copy(isLoading = false, summary = summary, error = null)
+                }
             }.onFailure { e ->
                 Log.d("STATISTICS_DEBUG", "404 EMPTY 적용됨: ${WeeklySummaryUiState.EMPTY.weeklyHealthNote}")
 
@@ -183,11 +175,13 @@ class StatisticsViewModel(
                     null // 그 외의 오류는 error 메시지로 표시
                 }
 
-                _uiState.value = StatisticsUiState(
-                    isLoading = false,
-                    summary = summaryState,
-                    error = if (summaryState == null) "데이터 로딩 실패: ${e.message}" else null,
-                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        summary = summaryState,
+                        error = if (summaryState == null) "데이터 로딩 실패: ${e.message}" else null,
+                    )
+                }
             }
         }
     }

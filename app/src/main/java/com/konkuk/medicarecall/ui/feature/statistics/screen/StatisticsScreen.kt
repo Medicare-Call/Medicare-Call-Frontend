@@ -60,7 +60,6 @@ fun StatisticsScreen(
     statisticsViewModel: StatisticsViewModel = koinViewModel(),
 ) {
     LaunchedEffect(key1 = true) {
-        homeViewModel.fetchElderList() // 어르신 목록 호출
         statisticsViewModel.refresh()
     }
 
@@ -75,26 +74,26 @@ fun StatisticsScreen(
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
+    val uiState by statisticsViewModel.uiState.collectAsStateWithLifecycle()
 
     // ① HomeVM에서 어르신 전체 목록과 이름 목록을 가져옵니다.
-    val elderInfoList by homeViewModel.elderInfoList.collectAsStateWithLifecycle()
-    val elderNameList = elderInfoList.map { it.name }
+    val eldersMap = uiState.eldersMap
+    val elderNameList = eldersMap.values.toList()
 
     // ② 선택된 어르신의 ID를 가져옵니다.
     val selectedElderId by homeViewModel.selectedElderId.collectAsStateWithLifecycle()
 
     // ③ 통계 VM의 상태를 구독합니다.
-    val uiState by statisticsViewModel.uiState.collectAsStateWithLifecycle()
-    val currentWeek by statisticsViewModel.currentWeek.collectAsStateWithLifecycle()
-    val isLatestWeek by statisticsViewModel.isLatestWeek.collectAsStateWithLifecycle()
-    val isEarliestWeek by statisticsViewModel.isEarliestWeek.collectAsStateWithLifecycle()
+    val currentWeek = uiState.currentWeek
+    val isLatestWeek = uiState.isLatestWeek
+    val isEarliestWeek = uiState.isEarliestWeek
 
     // ④ 표시할 이름을 결정합니다.
     // 우선순위 1: 통계 데이터에 포함된 이름 (가장 정확함)
     // 우선순위 2: ID를 통해 전체 목록에서 찾은 이름 (로딩 중일 때 표시)
     // 우선순위 3: 목록의 첫 번째 이름 (초기 상태)
-    val currentElderName = remember(uiState.summary, elderInfoList, selectedElderId) {
-        elderInfoList.find { it.id == selectedElderId }?.name
+    val currentElderName = remember(uiState.summary, eldersMap, selectedElderId) {
+        eldersMap[selectedElderId]
             ?: uiState.summary?.elderName?.takeIf { it.isNotEmpty() }
             ?: elderNameList.firstOrNull()
             ?: "어르신 통계"
