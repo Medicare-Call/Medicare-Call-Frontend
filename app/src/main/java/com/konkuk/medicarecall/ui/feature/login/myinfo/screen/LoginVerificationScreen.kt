@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.info.screen
+package com.konkuk.medicarecall.ui.feature.login.myinfo.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,9 +31,9 @@ import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
-import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
+import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
+import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginEvent
+import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType

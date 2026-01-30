@@ -45,7 +45,7 @@ import com.konkuk.medicarecall.ui.feature.login.calltime.component.CallTimeBenef
 import com.konkuk.medicarecall.ui.feature.login.calltime.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.calltime.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.calltime.viewmodel.CallTimeViewModel
-import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
+import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
 import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType

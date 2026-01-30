@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.senior.viewmodel
+package com.konkuk.medicarecall.ui.feature.login.elder.viewmodel
 
 import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.MedicationTimeType

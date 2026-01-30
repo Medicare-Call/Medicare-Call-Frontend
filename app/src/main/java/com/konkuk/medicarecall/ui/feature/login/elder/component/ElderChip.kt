@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.senior.component
+package com.konkuk.medicarecall.ui.feature.login.elder.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

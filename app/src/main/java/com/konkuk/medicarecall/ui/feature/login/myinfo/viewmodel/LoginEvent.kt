@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.info.viewmodel
+package com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel
 
 sealed class LoginEvent {
     object VerificationSuccessNew : LoginEvent() // 인증번호 확인 성공(신규 회원)

@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.info.viewmodel
+package com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel
 
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 

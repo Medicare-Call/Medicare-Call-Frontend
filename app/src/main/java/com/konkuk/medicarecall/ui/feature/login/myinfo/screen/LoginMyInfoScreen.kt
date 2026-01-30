@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.info.screen
+package com.konkuk.medicarecall.ui.feature.login.myinfo.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,10 +46,10 @@ import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
 import com.konkuk.medicarecall.ui.common.util.isValidDate
-import com.konkuk.medicarecall.ui.feature.login.info.component.AgreementItem
-import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
+import com.konkuk.medicarecall.ui.feature.login.myinfo.component.AgreementItem
+import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
+import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginEvent
+import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.GenderType

@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.senior.component
+package com.konkuk.medicarecall.ui.feature.login.elder.component
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement

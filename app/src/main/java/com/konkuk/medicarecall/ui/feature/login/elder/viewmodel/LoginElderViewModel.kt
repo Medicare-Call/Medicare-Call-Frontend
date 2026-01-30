@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.feature.login.senior.viewmodel
+package com.konkuk.medicarecall.ui.feature.login.elder.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
