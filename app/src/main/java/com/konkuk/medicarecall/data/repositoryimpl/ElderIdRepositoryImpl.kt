@@ -5,7 +5,6 @@ import androidx.datastore.dataStore
 import com.konkuk.medicarecall.data.model.ElderIds
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.util.ElderIdsSerializer
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single

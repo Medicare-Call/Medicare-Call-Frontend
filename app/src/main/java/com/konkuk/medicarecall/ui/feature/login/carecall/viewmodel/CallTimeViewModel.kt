@@ -13,7 +13,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -47,7 +46,6 @@ class CallTimeViewModel(
             try {
                 _elderIds.value = elderIdRepository.getElderIds()
                 _elderIdMap.update { elderIdRepository.getElderIds() }
-
             } catch (e: Exception) {
                 Log.e("CallTimeViewModel", "elderIds 수집 실패", e)
                 error.value = e
