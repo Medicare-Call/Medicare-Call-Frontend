@@ -49,7 +49,7 @@ import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.login.info.component.AgreementItem
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.GenderType
@@ -61,15 +61,9 @@ fun LoginMyInfoScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToRegisterElder: () -> Unit = {},
-    loginViewModel: LoginViewModel,
+    loginInfoViewModel: LoginInfoViewModel,
 ) {
-    // ViewModel 상태 구독
-    val showBottomSheet by loginViewModel.showBottomSheet.collectAsStateWithLifecycle()
-    val checkedStates by loginViewModel.checkedStates.collectAsStateWithLifecycle()
-    val allAgreeCheckState by loginViewModel.allAgreeCheckState.collectAsStateWithLifecycle()
-    val name by loginViewModel.name.collectAsStateWithLifecycle()
-    val dateOfBirth by loginViewModel.dateOfBirth.collectAsStateWithLifecycle()
-    val isMale by loginViewModel.isMale.collectAsStateWithLifecycle()
+    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
@@ -78,7 +72,7 @@ fun LoginMyInfoScreen(
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        loginViewModel.events.collect { event ->
+        loginInfoViewModel.events.collect { event ->
             when (event) {
                 is LoginEvent.MemberRegisterSuccess -> {
                     // 인증 성공 시 어르신정보 화면으로 이동
@@ -128,9 +122,9 @@ fun LoginMyInfoScreen(
                         style = MediCareCallTheme.typography.M_17,
                     )
                     DefaultTextField(
-                        name,
+                        uiState.name,
                         {
-                            loginViewModel.onNameChanged(it)
+                            loginInfoViewModel.onNameChanged(it)
                         },
                         placeHolder = "이름",
                         textFieldModifier = Modifier.focusRequester(focusRequester),
@@ -145,10 +139,10 @@ fun LoginMyInfoScreen(
                     )
                     // 생년월일 입력 텍스트필드
                     DefaultTextField(
-                        dateOfBirth,
+                        uiState.dateOfBirth,
                         { input ->
                             val filtered = input.filter { it.isDigit() }.take(8)
-                            loginViewModel.onDOBChanged(filtered)
+                            loginInfoViewModel.onDOBChanged(filtered)
                         },
                         placeHolder = "YYYY / MM / DD",
                         keyboardType = KeyboardType.Number,
@@ -164,20 +158,19 @@ fun LoginMyInfoScreen(
                         style = MediCareCallTheme.typography.M_17,
                     )
 
-                    GenderToggleButton(isMale) { loginViewModel.onGenderChanged(it) }
+                    GenderToggleButton(uiState.isMale) { loginInfoViewModel.onGenderChanged(it) }
                 }
                 Spacer(Modifier.height(30.dp))
                 CTAButton(
-                    if (name.isNotEmpty() &&
-                        dateOfBirth.length == 8 &&
-                        isMale != null
+                    if (uiState.name.isNotEmpty() &&
+                        uiState.dateOfBirth.length == 8
                     ) CTAButtonType.GREEN
                     else
                         CTAButtonType.DISABLED,
                     "다음",
                     {
                         if (
-                            !name.matches(Regex("^[가-힣a-zA-Z]*$"))
+                            !uiState.name.matches(Regex("^[가-힣a-zA-Z]*$"))
                         ) {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
@@ -185,7 +178,7 @@ fun LoginMyInfoScreen(
                                     duration = SnackbarDuration.Short,
                                 )
                             }
-                        } else if (!dateOfBirth.isValidDate()) {
+                        } else if (!uiState.dateOfBirth.isValidDate()) {
                             coroutineScope.launch {
                                 snackBarState.showSnackbar(
                                     "생년월일을 다시 확인해주세요",
@@ -193,7 +186,7 @@ fun LoginMyInfoScreen(
                                 )
                             }
                         } else {
-                            loginViewModel.setShowBottomSheet(true)
+                            loginInfoViewModel.setShowBottomSheet(true)
                         }
                     },
                     Modifier.padding(bottom = 20.dp),
@@ -203,10 +196,10 @@ fun LoginMyInfoScreen(
                     skipPartiallyExpanded = true,
                 )
 
-                if (showBottomSheet) {
+                if (uiState.showBottomSheet) {
                     ModalBottomSheet(
                         onDismissRequest = {
-                            loginViewModel.setShowBottomSheet(false)
+                            loginInfoViewModel.setShowBottomSheet(false)
                         },
                         sheetState = sheetState,
                         containerColor = MediCareCallTheme.colors.bg,
@@ -223,7 +216,7 @@ fun LoginMyInfoScreen(
                                 vertical = 8.dp,
                             ),
                         )
-                        val isCheckedAll = checkedStates.all { it }
+                        val isCheckedAll = uiState.checkedStates.all { it }
 
                         Column {
                             Text(
@@ -240,7 +233,7 @@ fun LoginMyInfoScreen(
                                         interactionSource = null,
                                         indication = null,
                                         onClick = {
-                                            loginViewModel.setAllAgreeCheckState(!allAgreeCheckState)
+                                            loginInfoViewModel.setAllAgreeCheckState(!uiState.allAgreeCheckState)
                                         },
                                     ),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -248,7 +241,7 @@ fun LoginMyInfoScreen(
                                 Icon(
                                     painterResource(R.drawable.ic_check_box),
                                     contentDescription = "체크박스",
-                                    tint = if (allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                                    tint = if (uiState.allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
                                 )
                                 Spacer(Modifier.width(8.dp))
                                 Text(
@@ -267,9 +260,9 @@ fun LoginMyInfoScreen(
                         itemList.forEachIndexed { index, (title, modifier) ->
                             AgreementItem(
                                 title,
-                                isChecked = checkedStates[index],
+                                isChecked = uiState.checkedStates[index],
                                 onCheckedChange = {
-                                    loginViewModel.setCheckedState(index, !checkedStates[index])
+                                    loginInfoViewModel.setCheckedState(index, !uiState.checkedStates[index])
                                 },
                                 modifier = modifier,
                             )
@@ -279,10 +272,10 @@ fun LoginMyInfoScreen(
                             if (isCheckedAll) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                             "다음",
                             {
-                                loginViewModel.memberRegister(
-                                    name,
-                                    dateOfBirth,
-                                    if (isMale == true) GenderType.MALE else GenderType.FEMALE,
+                                loginInfoViewModel.memberRegister(
+                                    uiState.name,
+                                    uiState.dateOfBirth,
+                                    if (uiState.isMale) GenderType.MALE else GenderType.FEMALE,
                                 )
                             },
                             modifier

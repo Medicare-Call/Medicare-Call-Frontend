@@ -11,7 +11,7 @@ import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginMyInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginPhoneScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginStartScreen
 import com.konkuk.medicarecall.ui.feature.login.info.screen.LoginVerificationScreen
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.feature.login.payment.screen.LoginFinishScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.senior.screen.LoginElderScreen
@@ -66,7 +66,7 @@ fun NavGraphBuilder.loginNavGraph(
     navigateToFinish: () -> Unit,
 ) {
     composable<Route.LoginStart> { backStackEntry ->
-        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+        val loginInfoViewModel: LoginInfoViewModel = backStackEntry.sharedViewModel<LoginInfoViewModel, Route.LoginStart>(navController)
 
         LoginStartScreen(
             navigateToPhone = navigateToPhone,
@@ -74,20 +74,20 @@ fun NavGraphBuilder.loginNavGraph(
             navigateToCareCallSetting = navigateToCareCallSetting,
             navigateToPurchase = navigateToHome,
             navigateToHome = navigateToHome,
-            loginViewModel = loginViewModel,
+            loginInfoViewModel = loginInfoViewModel,
         )
     }
     composable<Route.LoginPhone> { backStackEntry ->
-        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+        val loginInfoViewModel: LoginInfoViewModel = backStackEntry.sharedViewModel<LoginInfoViewModel, Route.LoginStart>(navController)
 
         LoginPhoneScreen(
             onBack = popBackStack,
             navigateToVerification = navigateToVerification,
-            loginViewModel = loginViewModel,
+            loginInfoViewModel = loginInfoViewModel,
         )
     }
     composable<Route.LoginVerification> { backStackEntry ->
-        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+        val loginInfoViewModel: LoginInfoViewModel = backStackEntry.sharedViewModel<LoginInfoViewModel, Route.LoginStart>(navController)
 
         LoginVerificationScreen(
             onBack = popBackStack,
@@ -97,16 +97,16 @@ fun NavGraphBuilder.loginNavGraph(
             navigateToCareCallSetting = navigateToCareCallSetting,
             navigateToPurchase = navigateToHome,
             navigateToHome = navigateToHome,
-            loginViewModel = loginViewModel,
+            loginInfoViewModel = loginInfoViewModel,
         )
     }
     composable<Route.LoginRegisterUserInfo> { backStackEntry ->
-        val loginViewModel: LoginViewModel = backStackEntry.sharedViewModel<LoginViewModel, Route.LoginStart>(navController)
+        val loginInfoViewModel: LoginInfoViewModel = backStackEntry.sharedViewModel<LoginInfoViewModel, Route.LoginStart>(navController)
 
         LoginMyInfoScreen(
             onBack = popBackStack,
             navigateToRegisterElder = navigateToRegisterElder,
-            loginViewModel = loginViewModel,
+            loginInfoViewModel = loginInfoViewModel,
         )
     }
     composable<Route.LoginRegisterElder> { backStackEntry ->

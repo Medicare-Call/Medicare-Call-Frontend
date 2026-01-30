@@ -10,18 +10,18 @@ import com.konkuk.medicarecall.data.repository.MemberRegisterRepository
 import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.domain.usecase.CheckLoginStatusUseCase
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
-import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.type.GenderType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class LoginViewModel(
+class LoginInfoViewModel(
     private val verificationRepository: VerificationRepository,
     private val memberRegisterRepository: MemberRegisterRepository,
     private val dataStoreRepository: DataStoreRepository,
@@ -29,72 +29,58 @@ class LoginViewModel(
     private val fcmRepository: FcmRepository,
 ) : ViewModel() {
 
-    private val _navigationDestination = MutableStateFlow<NavigationDestination?>(null)
-    val navigationDestination = _navigationDestination.asStateFlow()
+
+    private val _uiState = MutableStateFlow(LoginInfoUiState())
+    val uiState = _uiState.asStateFlow()
 
     private val _events = MutableSharedFlow<LoginEvent>()
     val events = _events.asSharedFlow()
 
-    // 입력 상태값
-    private val _phoneNumber = MutableStateFlow("")
-    val phoneNumber = _phoneNumber.asStateFlow()
-    private val _verificationCode = MutableStateFlow("")
-    val verificationCode = _verificationCode.asStateFlow()
-    private val _name = MutableStateFlow("")
-    val name = _name.asStateFlow()
-    private val _dateOfBirth = MutableStateFlow("")
-    val dateOfBirth = _dateOfBirth.asStateFlow()
 
-    // 상태값
-    private val _isMale = MutableStateFlow(true)
-    val isMale = _isMale.asStateFlow()
 
-    // Agreement state
-    private val _showBottomSheet = MutableStateFlow(false)
-    val showBottomSheet = _showBottomSheet.asStateFlow()
-
-    private val _checkedStates = MutableStateFlow(listOf(false, false))
-    val checkedStates = _checkedStates.asStateFlow()
-
-    private val _allAgreeCheckState = MutableStateFlow(false)
-    val allAgreeCheckState = _allAgreeCheckState.asStateFlow()
 
     // 상태 변경
     fun onPhoneNumberChanged(new: String) {
-        _phoneNumber.value = new
+        _uiState.update { it.copy(phoneNumber = new) }
     }
 
     fun onVerificationCodeChanged(new: String) {
-        _verificationCode.value = new
+        _uiState.update { it.copy(verificationCode = new) }
     }
 
     fun onNameChanged(new: String) {
-        _name.value = new
+        _uiState.update { it.copy(name = new) }
     }
 
     fun onDOBChanged(new: String) {
-        _dateOfBirth.value = new
+        _uiState.update { it.copy(dateOfBirth = new) }
     }
 
     fun onGenderChanged(new: Boolean) {
-        _isMale.value = new
+        _uiState.update { it.copy(isMale = new) }
     }
 
     fun setShowBottomSheet(value: Boolean) {
-        _showBottomSheet.value = value
+        _uiState.update { it.copy(showBottomSheet = value) }
     }
 
     fun setCheckedState(index: Int, value: Boolean) {
-        _checkedStates.value = _checkedStates.value.toMutableList().apply { set(index, value) }
+        _uiState.update {
+            it.copy(checkedStates = it.checkedStates.toMutableList().apply { set(index, value) })
+        }
     }
 
     fun setAllAgreeCheckState(value: Boolean) {
-        _allAgreeCheckState.value = value
-        _checkedStates.value = List(_checkedStates.value.size) { value }
+        _uiState.update {
+            it.copy(
+                allAgreeCheckState = value,
+                checkedStates = List(it.checkedStates.size) { value }
+            )
+        }
     }
 
     fun updateAllCheckedStates(newStates: List<Boolean>) {
-        _checkedStates.value = newStates
+        _uiState.update { it.copy(checkedStates = newStates) }
     }
 
     private val debug = false
@@ -189,11 +175,11 @@ class LoginViewModel(
     fun checkStatus() {
         viewModelScope.launch {
             val destination = checkLoginStatusUseCase()
-            _navigationDestination.value = destination
+            _uiState.update { it.copy(navigationDestination = destination) }
         }
     }
 
     fun onNavigationHandled() {
-        _navigationDestination.value = null
+        _uiState.update { it.copy(navigationDestination = null) }
     }
 }

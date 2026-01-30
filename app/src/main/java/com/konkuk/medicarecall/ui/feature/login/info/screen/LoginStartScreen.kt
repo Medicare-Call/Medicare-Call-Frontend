@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
 import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
@@ -42,12 +42,12 @@ fun LoginStartScreen(
     navigateToCareCallSetting: () -> Unit = {},
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    loginViewModel: LoginViewModel = koinViewModel(),
+    loginInfoViewModel: LoginInfoViewModel = koinViewModel(),
 ) {
-    val navigationDestination by loginViewModel.navigationDestination.collectAsStateWithLifecycle()
+    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(navigationDestination) {
-        navigationDestination?.let { destination ->
+    LaunchedEffect(uiState.navigationDestination) {
+        uiState.navigationDestination?.let { destination ->
             when (destination) {
                 is NavigationDestination.GoToLogin -> navigateToPhone()
                 is NavigationDestination.GoToRegisterElder -> navigateToRegisterElder()
@@ -55,7 +55,7 @@ fun LoginStartScreen(
                 is NavigationDestination.GoToPayment -> navigateToPurchase()
                 is NavigationDestination.GoToHome -> navigateToHome()
             }
-            loginViewModel.onNavigationHandled()
+            loginInfoViewModel.onNavigationHandled()
         }
     }
 
@@ -114,7 +114,7 @@ fun LoginStartScreen(
             type = CTAButtonType.WHITE,
             "시작하기",
             {
-                loginViewModel.checkStatus()
+                loginInfoViewModel.checkStatus()
             },
             modifier
                 .align(Alignment.BottomCenter)

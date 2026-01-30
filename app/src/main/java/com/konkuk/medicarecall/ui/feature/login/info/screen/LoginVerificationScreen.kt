@@ -33,7 +33,7 @@ import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginEvent
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
@@ -49,20 +49,19 @@ fun LoginVerificationScreen(
     navigateToCareCallSetting: () -> Unit = {},
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    loginViewModel: LoginViewModel = koinViewModel(),
+    loginInfoViewModel: LoginInfoViewModel = koinViewModel(),
 ) {
+    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
+
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-
     val focusRequester = remember { FocusRequester() }
-    val navigationDestination by loginViewModel.navigationDestination.collectAsStateWithLifecycle()
-    val verificationCode by loginViewModel.verificationCode.collectAsStateWithLifecycle()
-    val phoneNumber by loginViewModel.phoneNumber.collectAsStateWithLifecycle()
+
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        loginViewModel.events.collect { event ->
+        loginInfoViewModel.events.collect { event ->
             when (event) {
                 is LoginEvent.VerificationSuccessNew -> {
                     // 인증 성공 시 회원정보 화면으로 이동
@@ -71,7 +70,7 @@ fun LoginVerificationScreen(
 
                 is LoginEvent.VerificationSuccessExisting -> {
                     // 인증 성공, 기존 회원일 시 등록된 어르신, 시간, 결제 정보 확인
-                    loginViewModel.checkStatus()
+                    loginInfoViewModel.checkStatus()
                 }
 
                 is LoginEvent.VerificationFailure -> {
@@ -90,8 +89,8 @@ fun LoginVerificationScreen(
         }
     }
 
-    LaunchedEffect(navigationDestination) {
-        navigationDestination?.let { destination ->
+    LaunchedEffect(uiState.navigationDestination) {
+        uiState.navigationDestination?.let { destination ->
             // 기존 사용자는 바로 회원정보 입력 화면으로 이동하지 않고 다른 처리가 필요할 수 있음
             navigateToUserInfo()
             when (destination) {
@@ -101,7 +100,7 @@ fun LoginVerificationScreen(
                 is NavigationDestination.GoToPayment -> navigateToPurchase()
                 is NavigationDestination.GoToHome -> navigateToHome()
             }
-            loginViewModel.onNavigationHandled()
+            loginInfoViewModel.onNavigationHandled()
         }
     }
 
@@ -129,10 +128,10 @@ fun LoginVerificationScreen(
                 )
                 Spacer(Modifier.height(40.dp))
                 DefaultTextField(
-                    verificationCode,
+                    uiState.verificationCode,
                     { input ->
                         val filtered = input.filter { it.isDigit() }.take(6)
-                        loginViewModel.onVerificationCodeChanged(filtered)
+                        loginInfoViewModel.onVerificationCodeChanged(filtered)
                     },
                     placeHolder = "인증번호 입력",
                     keyboardType = KeyboardType.Number,
@@ -143,15 +142,15 @@ fun LoginVerificationScreen(
                 Spacer(Modifier.height(30.dp))
 
                 CTAButton(
-                    type = if (verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                    type = if (uiState.verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                     "확인",
                     onClick = {
                         // TODO: 서버에 인증번호 보내서 확인하기
-                        loginViewModel.confirmPhoneNumber(
-                            phoneNumber,
-                            verificationCode,
+                        loginInfoViewModel.confirmPhoneNumber(
+                            uiState.phoneNumber,
+                            uiState.verificationCode,
                         )
-                        loginViewModel.onVerificationCodeChanged("")
+                        loginInfoViewModel.onVerificationCodeChanged("")
                     },
                 )
             }

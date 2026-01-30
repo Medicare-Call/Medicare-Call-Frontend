@@ -19,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -27,29 +26,31 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
-import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.util.PhoneNumberVisualTransformation
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginViewModel
+import com.konkuk.medicarecall.ui.feature.login.info.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginPhoneScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToVerification: () -> Unit = {},
-    loginViewModel: LoginViewModel = koinViewModel(),
+    loginInfoViewModel: LoginInfoViewModel = koinViewModel(),
 ) {
+    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
+
     val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val phoneNumber by loginViewModel.phoneNumber.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -76,10 +77,10 @@ fun LoginPhoneScreen(
                 )
                 Spacer(Modifier.height(40.dp))
                 DefaultTextField(
-                    phoneNumber,
+                    uiState.phoneNumber,
                     { input ->
                         val filtered = input.filter { it.isDigit() }.take(11)
-                        loginViewModel.onPhoneNumberChanged(filtered)
+                        loginInfoViewModel.onPhoneNumberChanged(filtered)
                     },
                     placeHolder = "휴대폰 번호",
                     keyboardType = KeyboardType.Number,
@@ -91,12 +92,12 @@ fun LoginPhoneScreen(
 
                 Spacer(Modifier.height(30.dp))
                 CTAButton(
-                    type = if (phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                    type = if (uiState.phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                     "인증번호 받기",
                     {
                         // TODO: 서버에 인증번호 요청하기
-                        if (phoneNumber.startsWith("010")) {
-                            loginViewModel.postPhoneNumber(phoneNumber)
+                        if (uiState.phoneNumber.startsWith("010")) {
+                            loginInfoViewModel.postPhoneNumber(uiState.phoneNumber)
                             navigateToVerification()
                         } else {
                             coroutineScope.launch {
