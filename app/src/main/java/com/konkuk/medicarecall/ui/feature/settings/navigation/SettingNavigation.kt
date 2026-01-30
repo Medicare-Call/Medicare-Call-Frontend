@@ -6,19 +6,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.notice.screen.AnnouncementDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.notice.screen.AnnouncementScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderinfo.screen.ElderDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderinfo.screen.ElderInfoScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderhealth.screen.HealthDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderhealth.screen.HealthInfoScreen
+import com.konkuk.medicarecall.ui.feature.settings.mydata.screen.MyDataSettingScreen
+import com.konkuk.medicarecall.ui.feature.settings.mydata.screen.MyDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.support.screen.ServiceCenterScreen
+import com.konkuk.medicarecall.ui.feature.settings.notification.screen.SettingAlarmScreen
+import com.konkuk.medicarecall.ui.feature.settings.subscription.screen.SettingSubscribeScreen
+import com.konkuk.medicarecall.ui.feature.settings.menu.screen.SettingsMenuScreen
+import com.konkuk.medicarecall.ui.feature.settings.subscription.screen.SubscribeDetailScreen
 import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.navigation.Route
 
@@ -91,7 +91,7 @@ fun NavGraphBuilder.settingNavGraph(
     navController: NavHostController,
 ) {
     composable<MainTabRoute.Settings> {
-        SettingsScreen(
+        SettingsMenuScreen(
             navigateToUserInfo = navigateToUserInfo,
             navigateToNotice = navigateToNotice,
             navigateToCenter = navigateToServiceCenter,
