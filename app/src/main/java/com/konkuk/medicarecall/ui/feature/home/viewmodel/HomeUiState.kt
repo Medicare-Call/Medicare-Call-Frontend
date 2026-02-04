@@ -19,7 +19,11 @@ data class HomeUiState(
     val mentalStatus: String? = null,
     val glucoseLevelAverageToday: Int? = null,
     val unreadNotification: Int? = null,
-)
+) {
+    companion object {
+        val EMPTY = HomeUiState()
+    }
+}
 
 data class MedicineUiState(
     val medicineName: String,
