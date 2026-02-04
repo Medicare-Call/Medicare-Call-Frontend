@@ -109,7 +109,6 @@ fun PreviewStateMentalDetailCard() {
                 "날씨가 좋아서 기분이 좋음",
                 "여느 때와 비슷함",
             ),
-            isRecorded = true,
         ),
     )
 }

@@ -1,4 +1,5 @@
 package com.konkuk.medicarecall.domain.model
 
-class Mental {
-}
+data class Mental(
+    val mentalSummary: List<String> = emptyList()
+)
