@@ -3,9 +3,8 @@ package com.konkuk.medicarecall.ui.feature.login.senior.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
-import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderHealthData
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
@@ -15,13 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import com.konkuk.medicarecall.data.exception.HttpException
 
 @KoinViewModel
 class LoginElderViewModel(
     private val elderRegisterRepository: ElderRegisterRepository,
-    private val elderIdRepository: ElderIdRepository,
-    private val eldersInfoRepository: EldersInfoRepository,
 ) : ViewModel() {
     // 어르신 정보 화면
 
@@ -302,41 +298,5 @@ class LoginElderViewModel(
                     }
                 }
             }
-    }
-
-    fun updateAllElders() { // getElderIds.isNotEmpty == true
-        viewModelScope.launch {
-            val elderIds = elderIdRepository.getElderIds()
-            elderIds.filterIndexed { index, data ->
-                data.values.first() == elderUiState.value.eldersList[index].id
-            }.forEachIndexed { index, data ->
-                eldersInfoRepository.updateElder(
-                    data.values.first(),
-                    elderUiState.value.eldersList[index],
-                ).onSuccess {
-                    Log.d("httplog", "어르신 재등록(수정) 성공")
-                }.onFailure { exception ->
-                    Log.e("httplog", "어르신 정보 등록 실패: ${exception.message}")
-                }
-            }
-        }
-    }
-
-    fun updateAllEldersHealthInfo() {
-        viewModelScope.launch {
-            val elderIds = elderIdRepository.getElderIds()
-            elderIds.filterIndexed { index, data ->
-                data.values.first() == elderHealthUiState.value.elderHealthList[index].id
-            }.forEachIndexed { index, data ->
-                runCatching {
-                    elderRegisterRepository.postElderHealthInfo(
-                        data.values.first(),
-                        elderHealthUiState.value.elderHealthList[index],
-                    )
-                }.onSuccess {
-                    Log.d("httplog", "어르신 건강정보 재등록(수정) 성공")
-                }
-            }
-        }
     }
 }

@@ -1,15 +1,17 @@
 package com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.SetCallRepository
 import com.konkuk.medicarecall.ui.model.CallTimes
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,42 +19,50 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class CallTimeViewModel(
-    private val setCallRepo: SetCallRepository,
+    private val setCallRepository: SetCallRepository,
+    private val elderIdRepository: ElderIdRepository,
 ) : ViewModel() {
+    val timeMap = mutableStateMapOf<Int, CallTimes>()
+    val isLoading = mutableStateOf(false)
+    val error = mutableStateOf<Throwable?>(null)
+    private val _elderIdMap = MutableStateFlow(emptyMap<Int, String>())
+    val elderIdMap = _elderIdMap.asStateFlow()
 
-    // Time data
-    private val _timeMap = MutableStateFlow<Map<Int, CallTimes>>(emptyMap())
-    val timeMap: StateFlow<Map<Int, CallTimes>> = _timeMap.asStateFlow()
+    private val _showBottomSheet = mutableStateOf(false)
+    private val _selectedIndex = mutableIntStateOf(0)
+    private val _selectedTabIndex = mutableIntStateOf(0)
 
-    // UI state
-    private val _showBottomSheet = MutableStateFlow(false)
-    val showBottomSheet: StateFlow<Boolean> = _showBottomSheet.asStateFlow()
+    // Flow -> State 로 뱐환해서 보관
+    private val _elderIds = mutableStateOf<Map<Int, String>>(emptyMap())
+    val elderIds get() = _elderIds.value // UI에서 접근할 값
 
-    private val _selectedIndex = MutableStateFlow(0)
-    val selectedIndex: StateFlow<Int> = _selectedIndex.asStateFlow()
+    init {
+        observeElderIds()
+    }
 
-    private val _selectedTabIndex = MutableStateFlow(0)
-    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
-
-    // Async state
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _lastError = MutableStateFlow<Throwable?>(null)
-    val lastError: StateFlow<Throwable?> = _lastError.asStateFlow()
-
-    fun setTimes(id: Int, times: CallTimes) {
-        _timeMap.update { currentMap ->
-            currentMap.toMutableMap().apply { put(id, times) }
+    // suspend + Flow 안전하게 처리하는 함수
+    private fun observeElderIds() {
+        viewModelScope.launch {
+            try {
+                _elderIds.value = elderIdRepository.getElderIds()
+                _elderIdMap.update { elderIdRepository.getElderIds() }
+            } catch (e: Exception) {
+                Log.e("CallTimeViewModel", "elderIds 수집 실패", e)
+                error.value = e
+            }
         }
     }
 
+    fun setTimes(id: Int, times: CallTimes) {
+        timeMap.put(id, times)
+    }
+
     fun isCompleteFor(id: Int): Boolean {
-        val t = _timeMap.value[id] ?: return false
+        val t = timeMap[id] ?: return false
         return t.first != null && t.second != null && t.third != null
     }
 
-    fun isAllComplete(ids: List<Int>): Boolean =
+    fun isAllComplete(ids: Set<Int>): Boolean =
         ids.isNotEmpty() && ids.all { isCompleteFor(it) }
 
     fun submitAllByIds(
@@ -61,16 +71,16 @@ class CallTimeViewModel(
         onError: (Throwable) -> Unit,
     ) {
         viewModelScope.launch {
-            _isLoading.value = true
-            _lastError.value = null
+            isLoading.value = true
+            error.value = null
             try {
                 require(elderIds.isNotEmpty()) { "어르신 목록이 비어 있습니다." }
 
                 // 병렬 요청 생성
                 val jobs = elderIds.map { id ->
-                    val times = _timeMap.value[id] ?: error("'$id'의 시간이 비어있습니다.")
+                    val times = timeMap[id] ?: error("'$id'의 시간이 비어있습니다.")
                     async {
-                        setCallRepo.saveForElder(id, times).getOrThrow()
+                        setCallRepository.saveForElder(id, times).getOrThrow()
                         Log.d("CallTimeViewModel", "Saved call times for id:$id")
                     }
                 }
@@ -79,21 +89,18 @@ class CallTimeViewModel(
                 jobs.awaitAll()
                 onSuccess()
             } catch (t: Throwable) {
-                // 코루틴 취소 예외는 재전파
-                if (t is CancellationException) throw t
-
-                Log.e("CallTimeViewModel", "전체 저장 실패", t)
-                _lastError.value = t
+                Log.e("CallTimeViewModel", "submitAllByName failed", t)
+                error.value = t
                 onError(t)
             } finally {
-                _isLoading.value = false
+                isLoading.value = false
             }
         }
     }
 
     // 에러 상태 초기화
     fun clearError() {
-        _lastError.value = null
+        error.value = null
     }
 
     fun setShowBottomSheet(value: Boolean) {
@@ -101,10 +108,10 @@ class CallTimeViewModel(
     }
 
     fun setSelectedIndex(index: Int) {
-        _selectedIndex.value = index
+        _selectedIndex.intValue = index
     }
 
     fun setSelectedTabIndex(index: Int) {
-        _selectedTabIndex.value = index
+        _selectedTabIndex.intValue = index
     }
 }

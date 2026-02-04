@@ -28,16 +28,17 @@ class CheckLoginStatusUseCase(
             }
 
             // 어르신 정보가 있으면 ID를 로컬에 저장
-            elderIdRepository.clearElderId()
+            val elderIdMap: MutableMap<Int, String> = mutableMapOf()
             elders.forEach { elderInfo ->
-                elderIdRepository.addElderId(elderInfo.name, elderInfo.elderId)
+                elderIdMap.put(elderInfo.elderId, elderInfo.name)
             }
+            elderIdRepository.updateElderIds(elderIdMap)
+
             Log.d("httplog", "어르신 정보 확인 완료, ID 저장됨")
 
-            // 2. 시간 설정 확인 (로직 추가 예정)
-            val elderIds = elderIdRepository.getElderIds()
-            elderIds.forEach {
-                eldersInfoRepository.getCareCallTimes(it.values.first())
+            // 2. 시간 설정 확인
+            elderIdMap.forEach {
+                eldersInfoRepository.getCareCallTimes(it.key)
                     .onSuccess { Log.d("httplog", "시간 설정 정보 확인 완료, $it") }
                     .onFailure { exception ->
                         when (exception) {
@@ -53,6 +54,7 @@ class CheckLoginStatusUseCase(
                                         Log.d("httplog", "시간 설정 정보 없음, 시간 등록 화면으로")
                                         return@runCatching NavigationDestination.GoToTimeSetting
                                     }
+
                                     else -> {
                                         return@runCatching NavigationDestination.GoToLogin
                                     }

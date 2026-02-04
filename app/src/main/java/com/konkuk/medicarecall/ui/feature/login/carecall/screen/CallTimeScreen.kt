@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -26,9 +26,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,14 +39,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.CallTimeBenefit
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimePickerBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.carecall.component.TimeSettingItem
 import com.konkuk.medicarecall.ui.feature.login.carecall.viewmodel.CallTimeViewModel
 import com.konkuk.medicarecall.ui.feature.login.info.component.LoginBackButton
-import com.konkuk.medicarecall.ui.feature.settings.viewmodel.EldersInfoViewModel
 import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
@@ -63,71 +64,34 @@ fun CallTimeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToPayment: () -> Unit = {},
-    eldersInfoViewModel: EldersInfoViewModel = koinViewModel(),
     callTimeViewModel: CallTimeViewModel = koinViewModel(),
 ) {
-    LaunchedEffect(Unit) { eldersInfoViewModel.ensureLoaded() }
+    val elderMap = callTimeViewModel.elderIds
+    val isLoading = callTimeViewModel.isLoading.value
 
-    val isLoading by eldersInfoViewModel.isLoading.collectAsStateWithLifecycle()
-    val error by eldersInfoViewModel.error.collectAsStateWithLifecycle()
-    val nameIdList by eldersInfoViewModel.elderNameIdMapList.collectAsStateWithLifecycle()
-
-    when {
-        isLoading -> {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(MediCareCallTheme.colors.bg)
-                    .systemBarsPadding(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    color = MediCareCallTheme.colors.main,
-                    modifier = Modifier.align(Alignment.Center),
-                )
-            }
-            return
+    if (isLoading) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(MediCareCallTheme.colors.bg),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator(
+                color = MediCareCallTheme.colors.main,
+            )
         }
-
-        error != null -> {
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text("어르신 정보를 불러오지 못했어요.\n잠시 후 다시 시도해 주세요.")
-                Spacer(Modifier.height(12.dp))
-                CTAButton(
-                    type = CTAButtonType.GREEN,
-                    text = "다시 시도",
-                    onClick = { eldersInfoViewModel.refresh() },
-                )
-            }
-            return
-        }
-
-        nameIdList.isEmpty() -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("등록된 어르신이 없습니다.")
-            }
-            return
-        }
+        return
     }
 
     val scrollState = rememberScrollState() // 스크롤 상태
-    val elderNames = nameIdList.map { it.keys.first() } // 어르신 이름 리스트
-    val elderIds = nameIdList.map { it.values.first() } // 어르신 아이디 리스트
+    var showBottomSheet by remember { mutableStateOf(false) } // 하단 시트 제어
 
-    // ViewModel 상태 구독
-    val showBottomSheet by callTimeViewModel.showBottomSheet.collectAsStateWithLifecycle()
-    val selectedIndex by callTimeViewModel.selectedIndex.collectAsStateWithLifecycle()
-    val selectedTabIndex by callTimeViewModel.selectedTabIndex.collectAsStateWithLifecycle()
-    val timeMap by callTimeViewModel.timeMap.collectAsStateWithLifecycle()
+//    var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
+    var selectedId by remember { mutableIntStateOf(elderMap.keys.first()) } // 선택된 어르신 아이디
+    val saved = callTimeViewModel.timeMap[selectedId] ?: CallTimes()
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    val selectedId = elderIds.getOrNull(selectedIndex) ?: 0 // 선택된 어르신 아이디
-    val saved = timeMap[selectedId] ?: CallTimes()
-
-    val allComplete = callTimeViewModel.isAllComplete(elderIds)
+    val allComplete = callTimeViewModel.isAllComplete(elderMap.keys)
 
     Column(
         modifier = modifier
@@ -234,29 +198,29 @@ fun CallTimeScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                itemsIndexed(elderNames) { idx, name ->
+                items(elderMap.keys.toList()) { id ->
                     Text(
-                        text = name,
+                        text = elderMap[id] ?: "",
                         modifier = Modifier
                             .clip(CircleShape)
                             .border(
-                                width = if (idx == selectedIndex) 0.dp else (1.2).dp,
-                                color = if (idx == selectedIndex) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                                width = if (id == selectedId) 0.dp else (1.2).dp,
+                                color = if (id == selectedId) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
                                 shape = RoundedCornerShape(100.dp),
                             )
                             .background(
-                                color = if (idx == selectedIndex) MediCareCallTheme.colors.main else Color.Transparent,
+                                color = if (id == selectedId) MediCareCallTheme.colors.main else Color.Transparent,
                                 shape = RoundedCornerShape(100.dp),
                             )
                             .clickable {
-                                callTimeViewModel.setSelectedIndex(idx)
+                                selectedId = id
                                 scope.launch {
-                                    listState.animateScrollToItem(idx)
+                                    listState.animateScrollToItem(id)
                                 }
                             }
                             .padding(vertical = 8.dp, horizontal = 24.dp),
-                        color = if (idx == selectedIndex) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.gray5,
-                        style = if (idx == selectedIndex) MediCareCallTheme.typography.SB_14 else MediCareCallTheme.typography.R_14,
+                        color = if (id == selectedId) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.gray5,
+                        style = if (id == selectedId) MediCareCallTheme.typography.SB_14 else MediCareCallTheme.typography.R_14,
                     )
                 }
             }
@@ -348,7 +312,7 @@ fun CallTimeScreen(
                 onClick = {
                     if (!allComplete) return@CTAButton
                     callTimeViewModel.submitAllByIds(
-                        elderIds = elderIds,
+                        elderIds = elderMap.keys.toList(),
                         onSuccess = {
                             navigateToPayment()
                             Log.d("SetCallScreen", "콜 시간 설정 완료")
