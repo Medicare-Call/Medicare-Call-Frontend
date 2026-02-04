@@ -1,9 +1,12 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel
 
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
+import com.konkuk.medicarecall.ui.model.ElderInfo
 
 data class SettingsEldersInfoUiState(
-    val eldersInfoList: List<EldersInfoResponseDto> = emptyList(),
+    val eldersInfoList: List<ElderInfo> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-)
+) {
+    val hasElders: Boolean get() = eldersInfoList.isNotEmpty()
+    val hasError: Boolean get() = errorMessage != null
+}

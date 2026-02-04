@@ -1,11 +1,11 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel
 
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
+import com.konkuk.medicarecall.ui.model.ElderInfo
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.RelationshipType
 
 data class SettingsElderInfoDetailUiState(
-    val elderData: EldersInfoResponseDto? = null,
+    val elderData: ElderInfo? = null,
     val isMale: Boolean = false,
     val name: String = "",
     val birth: String = "",
@@ -18,4 +18,7 @@ data class SettingsElderInfoDetailUiState(
     val isUpdateSuccess: Boolean = false,
     val isDeleteSuccess: Boolean = false,
     val errorMessage: String? = null,
-)
+) {
+    val hasData: Boolean get() = elderData != null
+    val hasError: Boolean get() = errorMessage != null
+}

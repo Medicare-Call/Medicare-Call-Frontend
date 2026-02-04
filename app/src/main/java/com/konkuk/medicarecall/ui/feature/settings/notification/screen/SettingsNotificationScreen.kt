@@ -27,8 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.PushNotificationDto
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
+import com.konkuk.medicarecall.ui.model.PushNotification
 import com.konkuk.medicarecall.ui.feature.settings.notification.component.SwitchButton
 import com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel.SettingsEditMyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -54,7 +54,7 @@ fun SettingsNotificationScreen(
         uiState.myDataInfo?.let { info ->
             viewModel.updateUserData(
                 userInfo = info.copy(
-                    pushNotification = PushNotificationDto(
+                    pushNotification = PushNotification(
                         all = if (uiState.masterChecked) "ON" else "OFF",
                         carecallCompleted = if (uiState.completeChecked) "ON" else "OFF",
                         healthAlert = if (uiState.abnormalChecked) "ON" else "OFF",
