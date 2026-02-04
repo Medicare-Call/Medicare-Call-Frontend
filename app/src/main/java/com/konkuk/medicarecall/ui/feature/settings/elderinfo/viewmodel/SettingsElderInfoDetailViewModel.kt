@@ -3,10 +3,9 @@ package com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
+import com.konkuk.medicarecall.ui.model.ElderInfo
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.RelationshipType
@@ -46,21 +45,13 @@ class SettingsElderInfoDetailViewModel(
     }
 
     fun updateElderInfo(
-        elderInfo: EldersInfoResponseDto,
+        elderInfo: ElderInfo,
         onComplete: (() -> Unit)? = null,
     ) {
-        val updateInfo = ElderRegisterRequestDto(
-            name = elderInfo.name,
-            birthDate = elderInfo.birthDate,
-            gender = elderInfo.gender,
-            phone = elderInfo.phone,
-            relationship = elderInfo.relationship,
-            residenceType = elderInfo.residenceType,
-        )
         Log.d("SettingsElderInfoDetailViewModel", "어르신 개인 정보 수정 요청: elderId=${elderInfo.elderId}")
 
         viewModelScope.launch {
-            updateElderInfoRepository.updateElderInfo(id = elderInfo.elderId, request = updateInfo)
+            updateElderInfoRepository.updateElderInfo(elderInfo)
                 .onSuccess {
                     Log.d("SettingsElderInfoDetailViewModel", "어르신 개인 정보 수정 완료: $it")
                     _uiState.update { it.copy(isSuccess = true) }
@@ -74,12 +65,29 @@ class SettingsElderInfoDetailViewModel(
         }
     }
 
-    fun processElderInfo(elderId: Int, request: ElderRegisterRequestDto) {
+    fun processElderInfo(
+        elderId: Int,
+        name: String,
+        birthDate: String,
+        gender: GenderType,
+        phone: String,
+        relationship: RelationshipType,
+        residenceType: ElderResidenceType,
+    ) {
         Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId")
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, isUpdateSuccess = false, errorMessage = null) }
             try {
-                updateElderInfoRepository.updateElderInfo(id = elderId, request = request)
+                val elderInfo = ElderInfo(
+                    elderId = elderId,
+                    name = name,
+                    birthDate = birthDate,
+                    gender = gender,
+                    phone = phone,
+                    relationship = relationship,
+                    residenceType = residenceType,
+                )
+                updateElderInfoRepository.updateElderInfo(elderInfo)
                     .onSuccess {
                         Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 완료: $it")
                         _uiState.update { it.copy(isSuccess = true, isUpdateSuccess = true) }
@@ -125,7 +133,7 @@ class SettingsElderInfoDetailViewModel(
         _uiState.update { it.copy(isUpdateSuccess = false, isDeleteSuccess = false, errorMessage = null) }
     }
 
-    fun initializeForm(elderInfo: EldersInfoResponseDto) {
+    fun initializeForm(elderInfo: ElderInfo) {
         _uiState.update {
             it.copy(
                 isMale = elderInfo.gender == GenderType.MALE,

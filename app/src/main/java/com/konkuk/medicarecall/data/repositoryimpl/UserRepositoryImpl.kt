@@ -2,11 +2,12 @@ package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.auth.AuthService
 import com.konkuk.medicarecall.data.api.member.SettingService
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
+import com.konkuk.medicarecall.data.mapper.UserMapper
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
+import com.konkuk.medicarecall.ui.model.MyInfo
 import org.koin.core.annotation.Single
 
 @Single
@@ -16,11 +17,14 @@ class UserRepositoryImpl(
     private val tokenStore: DataStoreRepository,
 ) : UserRepository {
     override suspend fun getMyInfo() = runCatching {
-        settingService.getMyInfo().handleResponse()
+        val responseDto = settingService.getMyInfo().handleResponse()
+        UserMapper.toDomain(responseDto)
     }
 
-    override suspend fun updateMyInfo(userUpdateRequestDto: MyInfoResponseDto) = runCatching {
-        settingService.updateMyInfo(userUpdateRequestDto).handleResponse()
+    override suspend fun updateMyInfo(myInfo: MyInfo) = runCatching {
+        val requestDto = UserMapper.toRequestDto(myInfo)
+        val responseDto = settingService.updateMyInfo(requestDto).handleResponse()
+        UserMapper.toDomain(responseDto)
     }
 
     override suspend fun logout(): Result<Unit> = runCatching {

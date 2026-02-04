@@ -30,14 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.IllnessInfoItem
 import com.konkuk.medicarecall.ui.common.component.MedInfoItem
 import com.konkuk.medicarecall.ui.common.component.SpecialNoteItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.elderhealth.viewmodel.SettingsElderHealthDetailViewModel
+import com.konkuk.medicarecall.ui.model.ElderHealthInfo
+import com.konkuk.medicarecall.ui.model.MedicationSchedule
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.HealthIssueType
@@ -121,7 +121,7 @@ fun SettingsElderHealthDetailScreen(
 
             uiState.healthData != null -> {
                 HealthDetailContent(
-                    healthInfoResponseDto = uiState.healthData!!,
+                    healthInfo = uiState.healthData!!,
                     viewModel = viewModel,
                     onBack = onBack,
                 )
@@ -132,19 +132,19 @@ fun SettingsElderHealthDetailScreen(
 
 @Composable
 private fun HealthDetailContent(
-    healthInfoResponseDto: EldersHealthResponseDto,
+    healthInfo: ElderHealthInfo,
     viewModel: SettingsElderHealthDetailViewModel,
     onBack: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
-    val diseaseList = remember(healthInfoResponseDto) {
-        healthInfoResponseDto.diseases.toMutableStateList()
+    val diseaseList = remember(healthInfo) {
+        healthInfo.diseases.toMutableStateList()
     }
-    val medications = remember(healthInfoResponseDto) {
-        healthInfoResponseDto.medications.toMedicationSchedules().toMutableStateList()
+    val medications = remember(healthInfo) {
+        healthInfo.medications.toMedicationSchedules().toMutableStateList()
     }
-    val noteList = remember(healthInfoResponseDto) {
-        healthInfoResponseDto.notes.map { it.displayName }.toMutableStateList()
+    val noteList = remember(healthInfo) {
+        healthInfo.notes.map { it.displayName }.toMutableStateList()
     }
 
     Column(
@@ -185,9 +185,9 @@ private fun HealthDetailContent(
                     HealthIssueType.entries.firstOrNull { it.displayName == display }
                 }
                 viewModel.updateElderHealth(
-                    healthInfo = EldersHealthResponseDto(
-                        elderId = healthInfoResponseDto.elderId,
-                        name = healthInfoResponseDto.name,
+                    healthInfo = ElderHealthInfo(
+                        elderId = healthInfo.elderId,
+                        name = healthInfo.name,
                         diseases = diseaseList,
                         medications = medications.toTimeMap(),
                         notes = noteEnums,
