@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.konkuk.medicarecall.data.di.ApiModule
+import com.konkuk.medicarecall.data.di.LocalModule
 import com.konkuk.medicarecall.data.di.NetworkModule
 import com.konkuk.medicarecall.data.repository.FcmRepository
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +41,7 @@ class App : Application() {
                 defaultModule,
                 ApiModule().module,
                 NetworkModule().module,
+                LocalModule().module
             )
         }
         createNotificationChannel()
