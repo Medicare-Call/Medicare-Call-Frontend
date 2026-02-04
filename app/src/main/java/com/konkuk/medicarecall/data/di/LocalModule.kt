@@ -29,7 +29,6 @@ annotation class TokenDataStore
 @Retention(AnnotationRetention.BINARY)
 annotation class ElderIdDataStore
 
-
 @Module
 class LocalModule {
 

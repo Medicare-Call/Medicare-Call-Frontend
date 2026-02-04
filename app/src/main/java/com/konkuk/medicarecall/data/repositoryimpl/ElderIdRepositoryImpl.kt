@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 
-
 @Single
 class ElderIdRepositoryImpl(
     @ElderIdDataStore private val elderIdDataStore: DataStore<ElderIds>,

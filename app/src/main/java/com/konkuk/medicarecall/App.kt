@@ -41,7 +41,7 @@ class App : Application() {
                 defaultModule,
                 ApiModule().module,
                 NetworkModule().module,
-                LocalModule().module
+                LocalModule().module,
             )
         }
         createNotificationChannel()

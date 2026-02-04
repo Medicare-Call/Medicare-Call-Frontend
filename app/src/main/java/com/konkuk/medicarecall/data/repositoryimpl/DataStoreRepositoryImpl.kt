@@ -7,7 +7,6 @@ import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import kotlinx.coroutines.flow.first
 import org.koin.core.annotation.Single
 
-
 @Single
 class DataStoreRepositoryImpl(
     @TokenDataStore private val tokenDataStore: DataStore<Token>,
