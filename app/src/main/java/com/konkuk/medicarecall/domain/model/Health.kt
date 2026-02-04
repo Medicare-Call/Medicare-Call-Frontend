@@ -1,4 +1,6 @@
 package com.konkuk.medicarecall.domain.model
 
-class Health {
-}
+data class Health(
+    val symptoms: List<String> = emptyList(),
+    val symptomAnalysis: String?,
+)
