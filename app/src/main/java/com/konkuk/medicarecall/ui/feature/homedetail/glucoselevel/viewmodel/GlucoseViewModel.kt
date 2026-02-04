@@ -3,6 +3,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.GlucoseRepository
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import java.time.LocalDate
 
 @KoinViewModel
 class GlucoseViewModel(
@@ -38,57 +38,50 @@ class GlucoseViewModel(
         isRefresh: Boolean = false,
     ) {
         _uiState.update { it.copy(isLoading = true) }
+
         viewModelScope.launch {
-            glucoseRepository.getGlucoseGraph(elderId, counter, type.toString())
-                .onSuccess { response ->
-                    val processedData = response.data.reversed()
+            glucoseRepository
+                .getGlucoseGraph(elderId, counter, type.name)
+                .onSuccess { glucose ->
 
-                    val newData = processedData.map { record ->
-                        GraphDataPoint(
-                            date = LocalDate.parse(record.date),
-                            value = record.value.toFloat(),
-                        )
-                    }
+                    val newPoints = glucose.toUiState(
+                        timing = type,
+                    ).graphDataPoints
 
-                    val updatedDataList = when (type) {
-                        GlucoseTiming.BEFORE_MEAL -> {
-                            _beforeMealData.update { current ->
-                                if (isRefresh) newData else newData + current
-                            }
-                            _beforeMealData.value
+                    if (type == GlucoseTiming.BEFORE_MEAL) {
+                        _beforeMealData.update { current ->
+                            if (isRefresh) newPoints else current + newPoints
                         }
-
-                        GlucoseTiming.AFTER_MEAL -> {
-                            _afterMealData.update { current ->
-                                if (isRefresh) newData else newData + current
-                            }
-                            _afterMealData.value
+                    } else {
+                        _afterMealData.update { current ->
+                            if (isRefresh) newPoints else current + newPoints
                         }
                     }
 
-                    // 현재 선택된 타이밍과 일치하는 경우에만 UI를 업데이트
                     if (_uiState.value.selectedTiming == type) {
-                        val newSelectedIndex = if (isRefresh) {
-                            // 새로고침이면 마지막 인덱스
-                            updatedDataList.lastIndex
-                        } else {
-                            // 페이지네이션이면 기존 선택 유지 (새 데이터가 앞에 추가되므로 인덱스 조정)
-                            _uiState.value.selectedIndex + newData.size
-                        }
+                        val cache =
+                            if (type == GlucoseTiming.BEFORE_MEAL)
+                                _beforeMealData.value
+                            else
+                                _afterMealData.value
 
                         _uiState.update {
                             it.copy(
-                                graphDataPoints = updatedDataList,
-                                selectedIndex = newSelectedIndex,
-                                hasNext = response.hasNextPage,
+                                graphDataPoints = cache,
+                                hasNext = glucose.hasNext,
+                                isLoading = false,
+                                selectedIndex =
+                                    if (isRefresh) cache.lastIndex
+                                    else it.selectedIndex,
                             )
                         }
+                    } else {
+                        _uiState.update { it.copy(isLoading = false) }
                     }
                 }
-                .onFailure { error ->
-                    Log.e(TAG, "getGlucoseData failed", error)
+                .onFailure {
+                    _uiState.update { it.copy(isLoading = false) }
                 }
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
