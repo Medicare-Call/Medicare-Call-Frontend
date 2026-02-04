@@ -19,64 +19,7 @@ data class HomeUiState(
     val mentalStatus: String? = null,
     val glucoseLevelAverageToday: Int? = null,
     val unreadNotification: Int? = null,
-) {
-    companion object {
-        val EMPTY = HomeUiState()
-
-        fun from(dto: HomeResponseDto): HomeUiState = HomeUiState(
-            elderName = dto.elderName,
-            balloonMessage = dto.aiSummary.orEmpty(),
-
-            // 기록 존재 여부(세 끼 중 하나라도 null 아니면 true)
-            isRecorded = listOf(
-                dto.mealStatus.breakfast,
-                dto.mealStatus.lunch,
-                dto.mealStatus.dinner,
-            ).any { it != null },
-
-            // 오늘 한 끼라도 먹었는지(선택적)
-            isEaten = listOf(
-                dto.mealStatus.breakfast,
-                dto.mealStatus.lunch,
-                dto.mealStatus.dinner,
-            ).any { it == true },
-
-            breakfastEaten = dto.mealStatus.breakfast,
-            lunchEaten = dto.mealStatus.lunch,
-            dinnerEaten = dto.mealStatus.dinner,
-
-            totalTaken = dto.medicationStatus.totalTaken,
-            totalGoal = dto.medicationStatus.totalGoal,
-
-            medicines = dto.medicationStatus.medicationList
-                .orEmpty()
-                .map {
-                    MedicineUiState(
-                        medicineName = it.type.orEmpty(),
-                        todayTakenCount = it.taken,
-                        todayRequiredCount = it.goal,
-                        nextDoseTime = when (it.nextTime) {
-                            "MORNING" -> "아침"
-                            "LUNCH" -> "점심"
-                            "DINNER" -> "저녁"
-                            else -> it.nextTime
-                        },
-                        doseStatusList = it.doseStatusList?.map { dtoDose ->
-                            DoseStatusUiState(
-                                time = dtoDose.time.orEmpty(),
-                                taken = dtoDose.taken,
-                            )
-                        },
-                    )
-                },
-            sleep = dto.sleep,
-            healthStatus = dto.healthStatus,
-            mentalStatus = dto.mentalStatus,
-            glucoseLevelAverageToday = dto.bloodSugar?.meanValue,
-            unreadNotification = dto.unreadNotification,
-        )
-    }
-}
+)
 
 data class MedicineUiState(
     val medicineName: String,
