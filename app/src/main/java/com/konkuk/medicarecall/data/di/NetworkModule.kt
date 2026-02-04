@@ -1,10 +1,8 @@
 package com.konkuk.medicarecall.data.di
 
-import android.R.attr.level
 import android.util.Log
 import com.konkuk.medicarecall.BuildConfig.BASE_URL
 import com.konkuk.medicarecall.data.api.auth.RefreshService
-import com.konkuk.medicarecall.data.di.json
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
