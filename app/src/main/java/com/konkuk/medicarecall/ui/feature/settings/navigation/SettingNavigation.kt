@@ -6,19 +6,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.AnnouncementScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ElderInfoScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.HealthDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.HealthInfoScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.MyDataSettingScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.MyDetailScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.ServiceCenterScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingAlarmScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingSubscribeScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SettingsScreen
-import com.konkuk.medicarecall.ui.feature.settings.screen.SubscribeDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderhealth.screen.SettingsElderHealthDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderhealth.screen.SettingsElderHealthScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderinfo.screen.SettingsElderInfoDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.elderinfo.screen.SettingsElderInfoScreen
+import com.konkuk.medicarecall.ui.feature.settings.menu.screen.SettingsMenuScreen
+import com.konkuk.medicarecall.ui.feature.settings.mydata.screen.SettingsEditMyDataScreen
+import com.konkuk.medicarecall.ui.feature.settings.mydata.screen.SettingsMyDataScreen
+import com.konkuk.medicarecall.ui.feature.settings.notice.screen.SettingsNoticeDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.notice.screen.SettingsNoticeScreen
+import com.konkuk.medicarecall.ui.feature.settings.notification.screen.SettingsNotificationScreen
+import com.konkuk.medicarecall.ui.feature.settings.subscription.screen.SettingsSubscriptionDetailScreen
+import com.konkuk.medicarecall.ui.feature.settings.subscription.screen.SettingsSubscriptionScreen
+import com.konkuk.medicarecall.ui.feature.settings.support.screen.SettingsSupportScreen
 import com.konkuk.medicarecall.ui.navigation.MainTabRoute
 import com.konkuk.medicarecall.ui.navigation.Route
 
@@ -41,6 +41,7 @@ fun NavController.navigateToElderHealthInfo() {
 fun NavController.navigateToElderHealthDetail(elderId: Int) {
     navigate(Route.ElderHealthDetail(elderId))
 }
+
 fun NavController.navigateToNotificationSetting() {
     navigate(Route.NotificationSetting)
 }
@@ -91,7 +92,7 @@ fun NavGraphBuilder.settingNavGraph(
     navController: NavHostController,
 ) {
     composable<MainTabRoute.Settings> {
-        SettingsScreen(
+        SettingsMenuScreen(
             navigateToUserInfo = navigateToUserInfo,
             navigateToNotice = navigateToNotice,
             navigateToCenter = navigateToServiceCenter,
@@ -103,7 +104,7 @@ fun NavGraphBuilder.settingNavGraph(
     }
 
     composable<Route.ElderPersonalInfo> {
-        ElderInfoScreen(
+        SettingsElderInfoScreen(
             onBack = popBackStack,
             navigateToElderDetail = navigateToElderPersonalDetail,
         )
@@ -111,7 +112,7 @@ fun NavGraphBuilder.settingNavGraph(
 
     composable<Route.ElderPersonalDetail> { navBackstackEntry ->
         val elderId = navBackstackEntry.toRoute<Route.ElderPersonalDetail>().elderId
-        ElderDetailScreen(
+        SettingsElderInfoDetailScreen(
             elderId = elderId, // Screen에 ID만 전달
             onBack = popBackStack,
             navController = navController,
@@ -119,40 +120,41 @@ fun NavGraphBuilder.settingNavGraph(
     }
 
     composable<Route.ElderHealthInfo> {
-        HealthInfoScreen(
+        SettingsElderHealthScreen(
             onBack = popBackStack,
             navigateToHealthDetail = navigateToHealthDetail,
         )
     }
     composable<Route.ElderHealthDetail> { navBackstackEntry ->
         val elderId = navBackstackEntry.toRoute<Route.ElderHealthDetail>().elderId
-        HealthDetailScreen(
+        SettingsElderHealthDetailScreen(
             elderId = elderId,
             onBack = popBackStack,
         )
     }
 
     composable<Route.NotificationSetting> {
-        SettingAlarmScreen(
+        SettingsNotificationScreen(
             onBack = popBackStack,
         )
     }
 
     composable<Route.SubscribeInfo> {
-        SettingSubscribeScreen(
+        SettingsSubscriptionScreen(
             onBack = popBackStack,
             navigateToSubscribeDetail = navigateToSubscribeDetail,
         )
     }
-    composable<Route.SubscribeDetail> { navBackStackEntry -> val elderId = navBackStackEntry.toRoute<Route.SubscribeDetail>().elderId
-        SubscribeDetailScreen(
+    composable<Route.SubscribeDetail> { navBackStackEntry ->
+        val elderId = navBackStackEntry.toRoute<Route.SubscribeDetail>().elderId
+        SettingsSubscriptionDetailScreen(
             elderId = elderId,
             onBack = popBackStack,
         )
     }
 
     composable<Route.Notice> {
-        AnnouncementScreen(
+        SettingsNoticeScreen(
             onBack = popBackStack,
             navigateToNoticeDetail = navigateToNoticeDetail,
         )
@@ -160,25 +162,26 @@ fun NavGraphBuilder.settingNavGraph(
 
     composable<Route.NoticeDetail> { navBackStackEntry ->
         val noticeId = navBackStackEntry.toRoute<Route.NoticeDetail>().noticeId
-        AnnouncementDetailScreen(
+        SettingsNoticeDetailScreen(
             noticeId = noticeId, // Screen에 ID만 전달
             onBack = popBackStack,
         )
     }
 
     composable<Route.ServiceCenter> {
-        ServiceCenterScreen(
+        SettingsSupportScreen(
             onBack = popBackStack,
         )
     }
 
     composable<Route.UserInfo> {
-        MyDataSettingScreen(
+        SettingsMyDataScreen(
             onBack = popBackStack,
             navigateToUserInfoSetting = navigateToUserInfoSetting,
             navigateToLoginAfterLogout = navigateToLoginAfterLogout,
         )
     }
-    composable<Route.UserInfoSetting> { MyDetailScreen(onBack = popBackStack)
+    composable<Route.UserInfoSetting> {
+        SettingsEditMyDataScreen(onBack = popBackStack)
     }
 }
