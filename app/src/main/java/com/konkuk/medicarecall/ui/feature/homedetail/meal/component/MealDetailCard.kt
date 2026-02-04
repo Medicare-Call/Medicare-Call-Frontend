@@ -26,10 +26,8 @@ fun MealDetailCard(
     mealTime: String,
     description: String,
     isRecorded: Boolean,
-    isEaten: Boolean?,
     modifier: Modifier = Modifier,
 ) {
-    isEaten // TODO: 현재 사용되지 않는 변수입니다. 추후 기능 추가 시 활용할 수 있습니다.
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -90,6 +88,5 @@ fun PreviewMealDetailCard() {
         mealTime = "아침",
         description = "간단히 밥과 반찬을 드셨어요.",
         isRecorded = true,
-        isEaten = true,
     )
 }

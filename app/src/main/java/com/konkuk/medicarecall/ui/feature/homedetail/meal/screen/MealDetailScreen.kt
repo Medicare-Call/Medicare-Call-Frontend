@@ -114,7 +114,6 @@ fun MealDetailScreenLayout(
                         mealTime = meal.mealTime, // 아침 점심 저녁
                         description = meal.description, // 식사 내용
                         isRecorded = meal.isRecorded, // 식사 기록 여부
-                        isEaten = meal.isEaten, // 식사 유무
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -133,20 +132,14 @@ fun PreviewMealDetailScreenRecorded() {
         MealUiState(
             mealTime = "아침",
             description = "간단히 밥과 반찬을 드셨어요.",
-            isRecorded = true,
-            isEaten = true,
         ),
         MealUiState(
             mealTime = "점심",
             description = "식사하지 않으셨어요.",
-            isRecorded = true,
-            isEaten = false,
         ),
         MealUiState(
             mealTime = "저녁",
             description = "죽을 드셨어요.",
-            isRecorded = true,
-            isEaten = true,
         ),
     )
 
@@ -173,20 +166,14 @@ fun PreviewMealDetailScreenUnrecorded() {
         MealUiState(
             mealTime = "아침",
             description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
         ),
         MealUiState(
             mealTime = "점심",
             description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
         ),
         MealUiState(
             mealTime = "저녁",
             description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
         ),
     )
 
