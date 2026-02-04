@@ -1,11 +1,16 @@
 package com.konkuk.medicarecall.data.di
 
+import android.R.attr.level
 import android.util.Log
-import com.konkuk.medicarecall.BuildConfig
+import com.konkuk.medicarecall.BuildConfig.BASE_URL
 import com.konkuk.medicarecall.data.api.auth.RefreshService
+import com.konkuk.medicarecall.data.di.json
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -14,6 +19,9 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -34,11 +42,11 @@ val json = Json {
 @Module
 class NetworkModule {
 
-    @Single
-    fun provideHttpClient(
-        refreshService: RefreshService,
-        dataStoreRepository: DataStoreRepository,
-    ) = HttpClient {
+    private val defaultHttpClient: HttpClientConfig<*>.() -> Unit = {
+        install(DefaultRequest) {
+            url(BASE_URL)
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+        }
         install(ContentNegotiation) {
             json(json)
         }
@@ -47,6 +55,14 @@ class NetworkModule {
             logger = Logger.DEFAULT
             level = LogLevel.BODY
         }
+    }
+
+    @Single
+    fun provideHttpClient(
+        refreshService: RefreshService,
+        dataStoreRepository: DataStoreRepository,
+    ) = HttpClient {
+        defaultHttpClient()
 
         install(Auth) {
             bearer {
@@ -105,23 +121,18 @@ class NetworkModule {
     }
 
     @Single
-    fun ktorfit(client: HttpClient) = Ktorfit
-        .Builder().httpClient(client).baseUrl(BuildConfig.BASE_URL).build()
+    fun ktorfit(client: HttpClient) = Ktorfit.Builder()
+        .httpClient(client)
+        .converterFactories(ResponseConverterFactory())
+        .build()
 
     @Single
     @AuthKtorfit
     fun authKtorfit() =
-        Ktorfit.Builder().httpClient(
-            HttpClient {
-                install(Logging) {
-                    logger = Logger.DEFAULT
-                    level = LogLevel.BODY
-                }
-                install(ContentNegotiation) {
-                    json(json)
-                }
-            },
-        ).baseUrl(BuildConfig.BASE_URL).build()
+        Ktorfit.Builder()
+            .httpClient(HttpClient { defaultHttpClient() })
+            .converterFactories(ResponseConverterFactory())
+            .build()
 //    @Single
 //    fun authInterceptor(dataStoreRepository: DataStoreRepository) = AuthInterceptor(dataStoreRepository)
 //
