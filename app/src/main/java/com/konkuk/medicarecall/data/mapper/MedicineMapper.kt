@@ -8,21 +8,22 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.Medicine
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus as UiDoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem as UiDoseStatusItem
 
-// DTO → Model
+
 fun MedicineResponseDto.toMedicines(): List<Medicine> {
     if (medications.isEmpty()) return emptyList()
 
     val order = listOf("MORNING", "LUNCH", "DINNER")
 
     return medications.map { med ->
+        // 서버 응답에서 각 시간대별 복약 상태 추출
         val doseStatusList = order.mapNotNull { slot ->
             med.times.find { it.time == slot }?.let { t ->
                 DoseStatusItem(
                     time = slot,
                     doseStatus = when (t.taken) {
-                        true -> DoseStatus.TAKEN
-                        false -> DoseStatus.SKIPPED
-                        null -> DoseStatus.NOT_RECORDED
+                        true -> DoseStatus.TAKEN          // 먹음
+                        false -> DoseStatus.SKIPPED       // 안먹음
+                        null -> DoseStatus.NOT_RECORDED   // 미기록
                     }
                 )
             }
@@ -32,13 +33,11 @@ fun MedicineResponseDto.toMedicines(): List<Medicine> {
             medicineName = med.type,
             todayTakenCount = med.takenCount,
             todayRequiredCount = med.goalCount,
-            nextDoseTime = med.nextTime,
             doseStatusList = doseStatusList,
         )
     }
 }
 
-// Model → UiState
 fun List<Medicine>.toMedicineUiStates(): List<MedicineUiState> {
     val kor = mapOf("MORNING" to "아침", "LUNCH" to "점심", "DINNER" to "저녁")
 
@@ -54,7 +53,7 @@ fun List<Medicine>.toMedicineUiStates(): List<MedicineUiState> {
             )
         }
 
-        // goalCount만큼 패딩
+        // 목표 횟수만큼 UI 칸 채우기
         val padded = if (uiDoseStatusList.size < (med.todayRequiredCount ?: 0)) {
             uiDoseStatusList + List((med.todayRequiredCount ?: 0) - uiDoseStatusList.size) {
                 UiDoseStatusItem("", UiDoseStatus.NOT_RECORDED)
@@ -65,9 +64,7 @@ fun List<Medicine>.toMedicineUiStates(): List<MedicineUiState> {
 
         MedicineUiState(
             medicineName = med.medicineName,
-            todayTakenCount = med.todayTakenCount,
-            todayRequiredCount = med.todayRequiredCount,
-            nextDoseTime = med.nextDoseTime,
+            todayRequiredCount = med.todayRequiredCount ?: 0,
             doseStatusList = padded,
         )
     }
