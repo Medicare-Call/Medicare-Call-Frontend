@@ -38,8 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.util.isValidDate
@@ -99,7 +98,7 @@ fun LoginElderScreen(
                 }
             },
             onRemoveElder = viewModel::removeElder,
-            onSelectElder = viewModel::selectElder,
+            onSelectElder = viewModel::setSelectedIndex,
             onNextClick = {
                 val eldersList = uiState.eldersList
                 when {
@@ -135,6 +134,7 @@ fun LoginElderScreen(
 
                     else -> {
                         viewModel.postElderBulk()
+                        viewModel.setSelectedIndex(0) // 선택된 어르신 인덱스 초기화
                         navigateToRegisterElderHealth()
                     }
                 }
@@ -158,8 +158,8 @@ private fun LoginElderScreenLayout(
     scrollState: ScrollState,
     onBack: () -> Unit,
     onGenderChanged: (GenderType) -> Unit,
-    onRelationshipChange: (RelationshipType) -> Unit,
-    onLivingTypeChanged: (ElderResidenceType) -> Unit,
+    onRelationshipChange: (Elder.RelationshipType) -> Unit,
+    onLivingTypeChanged: (Elder.ElderResidenceType) -> Unit,
     onAddElder: () -> Unit,
     onRemoveElder: (Int) -> Unit,
     onSelectElder: (Int) -> Unit,
@@ -279,16 +279,16 @@ private fun LoginElderScreenPreview() {
                     birthDateState = TextFieldState("19500101"),
                     gender = GenderType.FEMALE,
                     phoneNumberState = TextFieldState("01012345678"),
-                    relationship = RelationshipType.CHILD,
-                    livingType = ElderResidenceType.WITH_FAMILY,
+                    relationship = Elder.RelationshipType.CHILD,
+                    livingType = Elder.ElderResidenceType.WITH_FAMILY,
                 ),
                 LoginElderData(
                     nameState = TextFieldState("박막례"),
                     birthDateState = TextFieldState("19480315"),
                     gender = GenderType.FEMALE,
                     phoneNumberState = TextFieldState("01087654321"),
-                    relationship = RelationshipType.CHILD,
-                    livingType = ElderResidenceType.ALONE,
+                    relationship = Elder.RelationshipType.CHILD,
+                    livingType = Elder.ElderResidenceType.ALONE,
                 ),
             ),
             selectedIndex = 0,

@@ -4,10 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.konkuk.medicarecall.ui.common.extension.sharedViewModel
 import com.konkuk.medicarecall.ui.feature.login.calltime.screen.CallTimeScreen
 import com.konkuk.medicarecall.ui.feature.login.elder.screen.LoginElderMedInfoScreen
 import com.konkuk.medicarecall.ui.feature.login.elder.screen.LoginElderScreen
