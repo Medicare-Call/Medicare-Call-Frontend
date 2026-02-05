@@ -10,7 +10,6 @@ import de.jensklingenberg.ktorfit.http.POST
 interface MemberRegisterService {
     @POST("members")
     suspend fun postMemberRegister(
-        @Header("Authorization") header: String,
         @Body request: MemberRegisterRequestDto,
     ): Response<MemberTokenResponseDto>
 }

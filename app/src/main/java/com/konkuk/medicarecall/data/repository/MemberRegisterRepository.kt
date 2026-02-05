@@ -5,7 +5,6 @@ import com.konkuk.medicarecall.ui.type.GenderType
 
 interface MemberRegisterRepository {
     suspend fun registerMember(
-        token: String,
         name: String,
         birthDate: String,
         gender: GenderType,
