@@ -105,6 +105,7 @@ fun LoginVerificationScreen(
             .imePadding(),
     ) {
         LoginVerificationScreenLayout(
+            modifier = Modifier.padding(horizontal = 20.dp),
             verificationCode = uiState.verificationCode,
             onVerificationCodeChanged = { input ->
                 val filtered = input.filter { it.isDigit() }.take(6)
