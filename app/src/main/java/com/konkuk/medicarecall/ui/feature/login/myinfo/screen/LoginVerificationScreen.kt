@@ -57,6 +57,7 @@ fun LoginVerificationScreen(
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
+    navigateToUserInfo()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()

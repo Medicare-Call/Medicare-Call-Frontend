@@ -134,6 +134,7 @@ fun LoginMyInfoScreen(
         DefaultSnackBar(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .padding(horizontal = 20.dp)
                 .padding(bottom = 14.dp),
             hostState = snackBarState,
         )
