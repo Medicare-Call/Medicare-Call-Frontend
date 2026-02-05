@@ -56,9 +56,9 @@ class MedicineViewModel(
             _state.update { it.copy(loading = true, emptyDate = null) }
 
             runCatching {
-                medicineRepository.getMedicines(elderId, date)  // Model
+                medicineRepository.getMedicines(elderId, date)
             }.onSuccess { medicines ->
-                val uiList = medicines.toMedicineUiStates()  // Model → UiState
+                val uiList = medicines.toMedicineUiStates()
                 _state.update {
                     it.copy(
                         loading = false,

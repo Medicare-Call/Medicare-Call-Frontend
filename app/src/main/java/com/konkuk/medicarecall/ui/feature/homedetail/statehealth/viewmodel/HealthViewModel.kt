@@ -43,8 +43,8 @@ class HealthViewModel(
 
     fun loadHealthDataForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
-            healthRepository.getHealth(elderId, date)  // Model
-                .onSuccess { _health.value = it.toUiState() }  // Model → UiState
+            healthRepository.getHealth(elderId, date)
+                .onSuccess { _health.value = it.toUiState() }
                 .onFailure { _health.value = HealthUiState.EMPTY }
         }
     }

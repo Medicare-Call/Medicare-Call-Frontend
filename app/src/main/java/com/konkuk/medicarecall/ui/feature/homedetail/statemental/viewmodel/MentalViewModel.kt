@@ -40,9 +40,9 @@ class MentalViewModel(
 
     fun loadMentalDataForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
-            mentalRepository.getMental(elderId, date)  // Model
+            mentalRepository.getMental(elderId, date)
                 .onSuccess {
-                    _mental.value = it.toUiState()  // Model → UiState
+                    _mental.value = it.toUiState()
                 }
                 .onFailure {
                     _mental.value = MentalUiState.EMPTY
