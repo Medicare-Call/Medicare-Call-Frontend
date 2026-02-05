@@ -48,7 +48,6 @@ import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderViewMo
 import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -112,9 +111,9 @@ private fun LoginElderMedInfoScreenLayout(
     onSelectElder: (Int) -> Unit,
     onRemoveDisease: (String) -> Unit,
     onAddDisease: (String) -> Unit,
-    onRemoveMedication: (MedicationTimeType, String) -> Unit,
-    onSelectTime: (MedicationTimeType) -> Unit,
-    onAddMedication: (MedicationTimeType, String) -> Unit,
+    onRemoveMedication: (Elder.Medication) -> Unit,
+    onSelectTime: (Elder.MedicationTime) -> Unit,
+    onAddMedication: (String) -> Unit,
     onRemoveHealthNote: (Elder.ElderNote) -> Unit,
     onAddHealthNote: (Elder.ElderNote) -> Unit,
     onNextClick: () -> Unit,
@@ -157,10 +156,10 @@ private fun LoginElderMedInfoScreenLayout(
             Spacer(Modifier.height(20.dp))
 
             MedicationItem(
-                medicationSchedule = selectedElder.medicationMap,
+                medications = selectedElder.medications,
                 inputTextState = uiState.medicationInputText,
-                selectedList = uiState.selectedMedicationTimes.toList(),
-                onRemoveChip = onRemoveMedication,
+                selectedTimes = uiState.selectedMedicationTimes.toList(),
+                onRemoveMedication = onRemoveMedication,
                 onSelectTime = onSelectTime,
                 onAddMedication = onAddMedication,
             )
@@ -253,9 +252,9 @@ private fun LoginElderMedInfoScreenPreview() {
             onSelectElder = {},
             onRemoveDisease = {},
             onAddDisease = {},
-            onRemoveMedication = { _, _ -> },
+            onRemoveMedication = {},
             onSelectTime = {},
-            onAddMedication = { _, _ -> },
+            onAddMedication = {},
             onRemoveHealthNote = {},
             onAddHealthNote = {},
             onNextClick = {},

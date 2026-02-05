@@ -9,7 +9,6 @@ import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData.Companion.toLoginElderData
 import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -186,20 +185,40 @@ class LoginElderViewModel(
         }
     }
 
-    fun addMedication(time: MedicationTimeType?, medicine: String) {
-        if (time == null) return
+    fun addMedication(medicine: String) {
+        _loginElderUiState.update { state ->
+            val selectedTimes = state.selectedMedicationTimes.toList()
+            if (selectedTimes.isEmpty()) return@update state
 
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) {
+                        val existingMed = elder.medications.find { it.medicine == medicine }
+                        val updatedMedications = if (existingMed != null) {
+                            elder.medications.map {
+                                if (it.medicine == medicine) {
+                                    it.copy(times = (it.times + selectedTimes).distinct())
+                                } else it
+                            }
+                        } else {
+                            elder.medications + Elder.Medication(medicine, selectedTimes)
+                        }
+                        elder.copy(medications = updatedMedications)
+                    } else {
+                        elder
+                    }
+                },
+                selectedMedicationTimes = emptySet(),
+            )
+        }
+    }
+
+    fun removeMedication(medication: Elder.Medication) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) {
-                        val currentList = elder.medicationMap[time] ?: emptyList()
-                        if (medicine !in currentList) {
-                            val updatedMap = elder.medicationMap + (time to (currentList + medicine))
-                            elder.copy(medicationMap = updatedMap)
-                        } else {
-                            elder
-                        }
+                        elder.copy(medications = elder.medications.filter { it != medication })
                     } else {
                         elder
                     }
@@ -208,28 +227,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun removeMedication(time: MedicationTimeType, medicine: String) {
-        _loginElderUiState.update { state ->
-            state.copy(
-                eldersList = state.eldersList.mapIndexed { index, elder ->
-                    if (index == state.selectedIndex) {
-                        val currentList = elder.medicationMap[time] ?: emptyList()
-                        val updatedList = currentList.filter { it != medicine }
-                        val updatedMap = if (updatedList.isEmpty()) {
-                            elder.medicationMap - time
-                        } else {
-                            elder.medicationMap + (time to updatedList)
-                        }
-                        elder.copy(medicationMap = updatedMap)
-                    } else {
-                        elder
-                    }
-                },
-            )
-        }
-    }
-
-    fun selectMedicationTime(time: MedicationTimeType) {
+    fun selectMedicationTime(time: Elder.MedicationTime) {
         _loginElderUiState.update { state ->
             state.copy(
                 selectedMedicationTimes = if (time in state.selectedMedicationTimes) {

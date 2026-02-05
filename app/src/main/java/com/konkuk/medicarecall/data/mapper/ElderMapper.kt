@@ -27,13 +27,14 @@ fun Elder.toElderBulkRequestDto(): ElderBulkRegisterRequestDto.ElderInfo = Elder
     residenceType = this.residenceType.name,
 )
 
-fun Elder.toElderBulkRequestDto(): ElderBulkHealthInfoRequestDto.HealthInfo = ElderBulkHealthInfoRequestDto.HealthInfo(
-//    elderId = TODO(),
-//    diseaseNames = TODO(),
-//    medicationSchedules = TODO(),
-//    notes = TODO()
+fun Elder.toElderHealthBulkRequestDto(): ElderBulkHealthInfoRequestDto.HealthInfo = ElderBulkHealthInfoRequestDto.HealthInfo(
     elderId = this.id,
     diseaseNames = this.diseases,
-    medicationSchedules = this.medicationMap,
+    medicationSchedules = this.medication.map { it.toRequestDto() },
     notes = this.notes.map { it.name },
+)
+
+fun Elder.Medication.toRequestDto() = ElderBulkHealthInfoRequestDto.HealthInfo.MedicationSchedule(
+    medicationName = this.medicine,
+    scheduleTimes = this.times.map { it.name },
 )

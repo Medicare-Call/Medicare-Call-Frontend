@@ -35,6 +35,7 @@ data class Elder(
         ALONE("혼자 계세요"),
         WITH_FAMILY("가족과 함께 살아요"),
         ;
+
         companion object {
             fun fromString(value: String): ElderResidenceType {
                 return ElderResidenceType.entries.find { it.displayName == value || it.name == value } ?: ALONE
@@ -44,7 +45,7 @@ data class Elder(
 
     data class Medication(
         val medicine: String = "",
-        val time: MedicationTime = MedicationTime.BREAKFAST,
+        val times: List<MedicationTime> = emptyList(),
     )
 
     // 아침, 점심, 저녁 enum

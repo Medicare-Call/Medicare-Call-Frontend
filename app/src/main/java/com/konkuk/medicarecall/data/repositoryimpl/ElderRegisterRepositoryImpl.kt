@@ -5,6 +5,7 @@ import com.konkuk.medicarecall.data.dto.request.ElderBulkHealthInfoRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderBulkRegisterRequestDto
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.mapper.toElderBulkRequestDto
+import com.konkuk.medicarecall.data.mapper.toElderHealthBulkRequestDto
 import com.konkuk.medicarecall.data.mapper.toModel
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
@@ -27,24 +28,9 @@ class ElderRegisterRepositoryImpl(
     }
 
     override suspend fun postElderHealthInfoBulk(elderHealthList: List<LoginElderData>): Result<Unit> = runCatching {
-        elderRegisterService.postElderHealthInfoBulk(
-            ElderBulkHealthInfoRequestDto(
-                healthInfos = elderHealthList.map { elderData ->
-                    ElderBulkHealthInfoRequestDto.HealthInfo(
-                        elderId = elderData.id.toInt(),
-                        diseaseNames = elderData.diseases,
-                        medicationSchedules = ElderHealthMapper.toRequestSchedules(elderData.medicationMap).map { schedule ->
-                            ElderBulkHealthInfoRequestDto.HealthInfo.MedicationSchedule(
-                                medicationName = schedule.medicationName,
-                                scheduleTimes = schedule.scheduleTimes.map { it.name },
-                            )
-                        },
-                        notes = elderData.notes.map { note ->
-                            HealthIssueType.entries.find { it.displayName == note.displayName }!!.name
-                        },
-                    )
-                },
-            ),
-        ).handleNullableResponse()
+        val request = ElderBulkHealthInfoRequestDto(
+            healthInfos = elderHealthList.map { it.toModel().toElderHealthBulkRequestDto() },
+        )
+        elderRegisterService.postElderHealthInfoBulk(request).handleNullableResponse()
     }
 }

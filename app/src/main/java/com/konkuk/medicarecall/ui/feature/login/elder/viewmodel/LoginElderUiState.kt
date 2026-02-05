@@ -4,12 +4,10 @@ import androidx.compose.foundation.text.input.TextFieldState
 import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.domain.model.Elder.ElderNote
 import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
-
 data class LoginElderUiState(
     val selectedIndex: Int = 0,
     val eldersList: List<LoginElderData> = listOf(LoginElderData()),
-    val selectedMedicationTimes: Set<MedicationTimeType> = emptySet(),
+    val selectedMedicationTimes: Set<Elder.MedicationTime> = emptySet(),
     val diseaseInputText: TextFieldState = TextFieldState(""),
     val medicationInputText: TextFieldState = TextFieldState(""),
 )
@@ -24,7 +22,6 @@ data class LoginElderData(
     val livingType: Elder.ElderResidenceType? = null,
     val diseases: List<String> = emptyList(),
     val medications: List<Elder.Medication> = emptyList(),
-    val medicationMap: Map<MedicationTimeType, List<String>> = emptyMap(),
     val notes: List<ElderNote> = emptyList(),
 ) {
     fun toModel(): Elder {
