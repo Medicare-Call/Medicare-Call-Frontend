@@ -96,14 +96,14 @@ fun LoginMyInfoScreen(
         modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .padding(horizontal = 20.dp)
             .statusBarsPadding()
             .imePadding(),
     ) {
         LoginMyInfoScreenLayout(
+            modifier = Modifier.padding(horizontal = 20.dp),
             name = uiState.name,
             dateOfBirth = uiState.dateOfBirth,
-            isMale = uiState.isMale,
+            gender = uiState.gender,
             onNameChanged = viewModel::onNameChanged,
             onDOBChanged = { input ->
                 val filtered = input.filter { it.isDigit() }.take(8)
@@ -207,7 +207,7 @@ fun LoginMyInfoScreen(
                     viewModel.memberRegister(
                         uiState.name,
                         uiState.dateOfBirth,
-                        if (uiState.isMale) GenderType.MALE else GenderType.FEMALE,
+                        uiState.gender,
                     )
                 },
                 modifier = Modifier
@@ -223,10 +223,10 @@ private fun LoginMyInfoScreenLayout(
     modifier: Modifier = Modifier,
     name: String,
     dateOfBirth: String,
-    isMale: Boolean,
+    gender: GenderType = GenderType.MALE,
     onNameChanged: (String) -> Unit,
     onDOBChanged: (String) -> Unit,
-    onGenderChanged: (Boolean) -> Unit,
+    onGenderChanged: (GenderType) -> Unit,
     onNextClick: () -> Unit,
     onBack: () -> Unit = {},
     focusRequester: FocusRequester = remember { FocusRequester() },
@@ -281,7 +281,9 @@ private fun LoginMyInfoScreenLayout(
                     color = MediCareCallTheme.colors.gray7,
                     style = MediCareCallTheme.typography.M_17,
                 )
-                GenderToggleButton(isMale, onGenderChanged)
+                GenderToggleButton(gender == GenderType.MALE) { isMale ->
+                    onGenderChanged(if (isMale) GenderType.MALE else GenderType.FEMALE)
+                }
             }
             Spacer(Modifier.height(30.dp))
             CTAButton(
@@ -301,7 +303,7 @@ private fun LoginMyInfoScreenPreview() {
         LoginMyInfoScreenLayout(
             name = "홍길동",
             dateOfBirth = "19900101",
-            isMale = true,
+            gender = GenderType.MALE,
             onNameChanged = {},
             onDOBChanged = {},
             onGenderChanged = {},

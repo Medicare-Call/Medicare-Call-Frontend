@@ -38,7 +38,12 @@ class LoginInfoViewModel(
 
     // 상태 변경
     fun onPhoneNumberChanged(new: String) {
-        _uiState.update { it.copy(phoneNumber = new) }
+        _uiState.update {
+            it.copy(
+                phoneNumber = new,
+                userInfo = it.userInfo.copy(phoneNumber = new),
+            )
+        }
     }
 
     fun onVerificationCodeChanged(new: String) {
@@ -46,15 +51,30 @@ class LoginInfoViewModel(
     }
 
     fun onNameChanged(new: String) {
-        _uiState.update { it.copy(name = new) }
+        _uiState.update {
+            it.copy(
+                name = new,
+                userInfo = it.userInfo.copy(name = new),
+            )
+        }
     }
 
     fun onDOBChanged(new: String) {
-        _uiState.update { it.copy(dateOfBirth = new) }
+        _uiState.update {
+            it.copy(
+                dateOfBirth = new,
+                userInfo = it.userInfo.copy(birthDate = new),
+            )
+        }
     }
 
-    fun onGenderChanged(new: Boolean) {
-        _uiState.update { it.copy(isMale = new) }
+    fun onGenderChanged(new: GenderType) {
+        _uiState.update {
+            it.copy(
+                gender = new,
+                userInfo = it.userInfo.copy(gender = new),
+            )
+        }
     }
 
     fun setShowBottomSheet(value: Boolean) {
