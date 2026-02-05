@@ -3,11 +3,15 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
+import com.konkuk.medicarecall.data.dto.response.ElderResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.data.mapper.toModel
+import com.konkuk.medicarecall.data.mapper.toModels
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
+import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.type.ElderResidenceType
@@ -21,6 +25,10 @@ class EldersInfoRepositoryImpl(
 ) : EldersInfoRepository {
     override suspend fun getElders(): Result<List<EldersInfoResponseDto>> = runCatching {
         eldersInfoService.getElders().handleResponse()
+    }
+
+    override suspend fun getEldersV2(): Result<List<Elder>> = runCatching {
+        eldersInfoService.getEldersV2().handleResponse().toModels()
     }
 
     override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> = runCatching {

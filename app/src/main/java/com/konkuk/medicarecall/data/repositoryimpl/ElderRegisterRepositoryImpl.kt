@@ -3,11 +3,12 @@ package com.konkuk.medicarecall.data.repositoryimpl
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.dto.request.ElderBulkHealthInfoRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderBulkRegisterRequestDto
-import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
+import com.konkuk.medicarecall.data.mapper.toModel
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
+import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData
 import com.konkuk.medicarecall.ui.type.GenderType
@@ -19,7 +20,7 @@ class ElderRegisterRepositoryImpl(
     private val elderRegisterService: ElderRegisterService,
 ) : ElderRegisterRepository {
 
-    override suspend fun postElderBulk(elderList: List<LoginElderData>): Result<ElderBulkRegisterResponseDto> = runCatching {
+    override suspend fun postElderBulk(elderList: List<LoginElderData>): Result<List<Elder>> = runCatching {
         elderRegisterService.postElderBulk(
             ElderBulkRegisterRequestDto(
                 elders = elderList.map { elderData ->
@@ -33,7 +34,7 @@ class ElderRegisterRepositoryImpl(
                     )
                 },
             ),
-        ).handleResponse()
+        ).handleResponse().toModel()
     }
 
     override suspend fun postElderHealthInfoBulk(elderHealthList: List<LoginElderData>): Result<Unit> = runCatching {
