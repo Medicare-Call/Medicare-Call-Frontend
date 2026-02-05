@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -61,8 +62,7 @@ private fun MedicationTimeSection(
 fun MedicationItem(
     medicationSchedule: Map<MedicationTimeType, List<String>>,
     selectedList: List<MedicationTimeType>,
-    inputText: String,
-    onTextChange: (String) -> Unit,
+    inputTextState: TextFieldState,
     onSelectTime: (MedicationTimeType) -> Unit,
     onAddMedication: (MedicationTimeType, String) -> Unit,
     onRemoveChip: (MedicationTimeType, String) -> Unit,
@@ -134,17 +134,15 @@ fun MedicationItem(
         }
         Spacer(Modifier.height(20.dp))
         AddTextField(
-            inputText,
+            textFieldState = inputTextState,
             placeHolder = "예시) 당뇨약",
-            onTextChange = { onTextChange(it) },
             clickPlus = {
-                if (inputText.isNotBlank() && selectedList.isNotEmpty()) { // 입력값이 있을 때만 동작
+                val inputText = inputTextState.text.toString()
+                if (inputText.isNotBlank() && selectedList.isNotEmpty()) {
                     selectedList.forEach { time ->
                         onAddMedication(time, inputText)
                     }
-
-                    // 사용성 개선: 약 추가 후 입력 필드와 선택된 시간 초기화
-                    onTextChange("")
+                    inputTextState.edit { replace(0, length, "") }
                 }
             },
         )
@@ -162,8 +160,7 @@ private fun MedicationItemPreview() {
                     MedicationTimeType.DINNER to listOf("혈압약"),
                 ),
                 selectedList = listOf(),
-                inputText = "",
-                onTextChange = {},
+                inputTextState = TextFieldState(""),
                 onSelectTime = {},
                 onAddMedication = { _, _ -> },
                 onRemoveChip = { _, _ -> },

@@ -15,13 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -41,7 +40,7 @@ fun MedInfoItem(
 ) {
     val context = LocalContext.current
 
-    var inputText by remember { mutableStateOf("") }
+    val inputTextState = remember { TextFieldState("") }
     // 복약 주기 선택 상태
     val selectedPeriods = remember { mutableStateOf(setOf<MedicationTimeType>()) }
     // 주기별 복약 리스트
@@ -169,15 +168,14 @@ fun MedInfoItem(
         }
         // 입력필드 +  추가 버튼
         AddTextField(
-            inputText = inputText,
+            textFieldState = inputTextState,
             placeHolder = "예시) 당뇨약",
-            onTextChange = { inputText = it },
             clickPlus = {
-                val name = inputText.trim()
+                val name = inputTextState.text.toString().trim()
                 val times = selectedPeriods.value
                 if (name.isNotBlank() && times.isNotEmpty()) {
                     medications.addOrMerge(name, times)
-                    inputText = ""
+                    inputTextState.edit { replace(0, length, "") }
                 } else if (name.isNotBlank()) {
                     Toast.makeText(context, "복약 주기를 선택하세요", Toast.LENGTH_SHORT).show()
                 }
