@@ -10,8 +10,11 @@ import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -154,7 +157,7 @@ class HomeViewModel(
                         .find { it.id == elderId }?.name
                         ?: home.elderName
 
-                    // Model → UiState 변환
+
                     val uiState = home.toUiState(
                         healthInfo = healthInfo,
                         elderName = elderName,
@@ -203,9 +206,9 @@ class HomeViewModel(
     }
 
     // 드롭다운 표시용 이름 리스트
-    val elderNameList: List<String>
-        get() = _elderInfoList.value.map { it.name }
-
+    val elderNameList: StateFlow<List<String>> = _elderInfoList
+        .map { list -> list.map { it.name } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // 이름 → ID 매핑
     private val elderIdByName: Map<String, Int>
