@@ -1,27 +1,34 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
+import androidx.datastore.core.DataStore
+import com.konkuk.medicarecall.data.di.ElderIdDataStore
+import com.konkuk.medicarecall.data.model.ElderIds
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 
 @Single
-class ElderIdRepositoryImpl : ElderIdRepository {
+class ElderIdRepositoryImpl(
+    @ElderIdDataStore private val elderIdDataStore: DataStore<ElderIds>,
+) : ElderIdRepository {
 
-    private val elderIds: MutableList<Map<String, Int>> = mutableListOf()
-
-    override fun addElderId(name: String, id: Int) {
-        this.elderIds.add(mapOf(name to id))
+    override suspend fun updateElderIds(elderIdMap: Map<Int, String>) {
+        elderIdDataStore.updateData { it.copy(elderIds = elderIdMap) }
     }
 
-    override fun clearElderId() {
-        elderIds.clear()
+    override suspend fun updateElderId(elderId: Int, name: String) {
+        elderIdDataStore.updateData { it.copy(elderIds = it.elderIds.plus(elderId to name)) }
     }
 
-    override fun getElderIds(): List<Map<String, Int>> {
-        return elderIds
+    override suspend fun getElderIds(): Map<Int, String> {
+        val preferences = elderIdDataStore.data.map { it.elderIds }
+        return preferences.first()
     }
 
-    override fun replaceAll(items: List<Map<String, Int>>) {
-        elderIds.clear()
-        elderIds.addAll(items)
+    override suspend fun clearElderIds() {
+        elderIdDataStore.updateData {
+            ElderIds(elderIds = emptyMap())
+        }
     }
 }
