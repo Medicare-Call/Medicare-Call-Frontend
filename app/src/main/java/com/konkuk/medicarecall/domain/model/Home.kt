@@ -20,7 +20,7 @@ data class Home(
 data class HomeSleep(
     val totalSleepHours: Int?,
     val totalSleepMinutes: Int?,
-    val isRecorded: Boolean,   // 홈 카드 판단용
+    val isRecorded: Boolean, // 홈 카드 판단용
 )
 
 data class Medicines(

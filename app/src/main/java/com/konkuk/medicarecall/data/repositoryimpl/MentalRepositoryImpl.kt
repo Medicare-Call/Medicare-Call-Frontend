@@ -16,7 +16,6 @@ class MentalRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): Result<Mental> = runCatching {
-
         val response = mentalService.getDailyMental(
             elderId = elderId,
             date = date.toString(),

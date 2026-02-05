@@ -71,8 +71,8 @@ class GlucoseViewModel(
                                 hasNext = glucose.hasNext,
                                 isLoading = false,
                                 selectedIndex =
-                                    if (isRefresh) cache.lastIndex
-                                    else it.selectedIndex,
+                                if (isRefresh) cache.lastIndex
+                                else it.selectedIndex,
                             )
                         }
                     } else {

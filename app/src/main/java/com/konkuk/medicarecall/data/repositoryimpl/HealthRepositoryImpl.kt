@@ -17,7 +17,6 @@ class HealthRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): Result<Health> = runCatching {
-
         healthService.getDailyHealth(
             elderId = elderId,
             date = date.toString(),

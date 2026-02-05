@@ -6,6 +6,6 @@ data class Glucose(
 )
 
 data class GlucosePoint(
-    val date: String,  // 측정 시점
-    val value: Int,    // 혈당 수치
+    val date: String, // 측정 시점
+    val value: Int, // 혈당 수치
 )

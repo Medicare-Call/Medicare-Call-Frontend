@@ -4,17 +4,15 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.exception.HttpException
-import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.mapper.HomeMapper
 import com.konkuk.medicarecall.data.mapper.toUiState
+import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -76,7 +74,6 @@ class HomeViewModel(
     // 어르신 전체 목록
     private val _elderInfoList = MutableStateFlow<List<ElderInfo>>(emptyList())
     val elderInfoList: StateFlow<List<ElderInfo>> = _elderInfoList.asStateFlow()
-
 
     // 현재 선택된 어르신 ID
     private val _selectedElderId = MutableStateFlow<Int?>(
@@ -152,7 +149,6 @@ class HomeViewModel(
                     val elderName = _elderInfoList.value
                         .find { it.id == elderId }?.name
                         ?: home.elderName
-
 
                     val uiState = home.toUiState(
                         healthInfo = healthInfo,

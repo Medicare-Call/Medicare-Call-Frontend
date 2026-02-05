@@ -9,4 +9,3 @@ data class HealthUiState(
         val EMPTY = HealthUiState()
     }
 }
-

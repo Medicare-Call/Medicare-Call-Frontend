@@ -8,7 +8,6 @@ import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.Medicine
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus as UiDoseStatus
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem as UiDoseStatusItem
 
-
 fun MedicineResponseDto.toMedicines(): List<Medicine> {
     if (medications.isEmpty()) return emptyList()
 
@@ -21,10 +20,10 @@ fun MedicineResponseDto.toMedicines(): List<Medicine> {
                 DoseStatusItem(
                     time = slot,
                     doseStatus = when (t.taken) {
-                        true -> DoseStatus.TAKEN          // 먹음
-                        false -> DoseStatus.SKIPPED       // 안먹음
-                        null -> DoseStatus.NOT_RECORDED   // 미기록
-                    }
+                        true -> DoseStatus.TAKEN // 먹음
+                        false -> DoseStatus.SKIPPED // 안먹음
+                        null -> DoseStatus.NOT_RECORDED // 미기록
+                    },
                 )
             }
         }
@@ -49,7 +48,7 @@ fun List<Medicine>.toMedicineUiStates(): List<MedicineUiState> {
                     DoseStatus.TAKEN -> UiDoseStatus.TAKEN
                     DoseStatus.SKIPPED -> UiDoseStatus.SKIPPED
                     DoseStatus.NOT_RECORDED -> UiDoseStatus.NOT_RECORDED
-                }
+                },
             )
         }
 

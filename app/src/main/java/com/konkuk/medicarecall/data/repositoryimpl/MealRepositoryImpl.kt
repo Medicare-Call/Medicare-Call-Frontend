@@ -17,7 +17,6 @@ class MealRepositoryImpl(
         elderId: Int,
         date: LocalDate,
     ): List<Meal> {
-
         val response = mealService.getDailyMeal(
             elderId = elderId,
             date = date.toString(),
