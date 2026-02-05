@@ -2,10 +2,9 @@ package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.elders.HealthService
 import com.konkuk.medicarecall.data.mapper.toHealth
-import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.HealthRepository
 import com.konkuk.medicarecall.data.util.handleResponse
-import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
+import com.konkuk.medicarecall.domain.model.Health
 import org.koin.core.annotation.Single
 import java.time.LocalDate
 
@@ -24,6 +23,6 @@ class HealthRepositoryImpl(
             date = date.toString(),
         )
             .handleResponse()
-            .toHealth()  // DTO → Domain
+            .toHealth()
     }
 }

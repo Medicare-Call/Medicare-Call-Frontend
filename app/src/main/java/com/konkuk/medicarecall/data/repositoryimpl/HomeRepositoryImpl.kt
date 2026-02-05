@@ -23,6 +23,6 @@ class HomeRepositoryImpl(
     }
 
     override suspend fun getHomeSummary(elderId: Int): Result<Home> = runCatching {
-        homeService.getHomeSummary(elderId).handleResponse().toHome()  // DTO → Model
+        homeService.getHomeSummary(elderId).handleResponse().toHome()
     }
 }

@@ -16,7 +16,7 @@ class MedicineRepositoryImpl(
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {
 
-    /** 설정 스케줄을 Model로 변환 */
+
     override suspend fun getConfiguredMedicines(elderId: Int): List<Medicine> {
         val schedule = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
