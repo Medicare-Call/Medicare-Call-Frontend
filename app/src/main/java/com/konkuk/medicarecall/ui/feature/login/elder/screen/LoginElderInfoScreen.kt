@@ -83,7 +83,6 @@ fun LoginElderScreen(
             .imePadding(),
     ) {
         LoginElderScreenLayout(
-            modifier = Modifier.padding(horizontal = 20.dp),
             eldersList = uiState.eldersList,
             selectedIndex = uiState.selectedIndex,
             isInputComplete = viewModel.isInputComplete(),
@@ -182,7 +181,11 @@ private fun LoginElderScreenLayout(
     onSelectElder: (Int) -> Unit,
     onNextClick: () -> Unit,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+    ) {
         LoginBackButton(onClick = onBack)
         Column(
             Modifier

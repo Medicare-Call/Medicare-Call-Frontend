@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -63,7 +64,6 @@ fun LoginPhoneScreen(
             .imePadding(),
     ) {
         LoginPhoneScreenLayout(
-            modifier = Modifier.padding(horizontal = 20.dp),
             phoneNumber = uiState.userInfo.phoneNumber,
             onPhoneNumberChanged = { input ->
                 val filtered = input.filter { it.isDigit() }.take(11)
@@ -105,7 +105,11 @@ private fun LoginPhoneScreenLayout(
 ) {
     val scrollState = rememberScrollState()
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+    ) {
         LoginBackButton(onBack)
         Column(
             modifier = Modifier.verticalScroll(scrollState),

@@ -100,7 +100,6 @@ fun LoginMyInfoScreen(
             .imePadding(),
     ) {
         LoginMyInfoScreenLayout(
-            modifier = Modifier.padding(horizontal = 20.dp),
             name = uiState.userInfo.name,
             dateOfBirth = uiState.userInfo.birthDate,
             gender = uiState.userInfo.gender,
@@ -227,7 +226,11 @@ private fun LoginMyInfoScreenLayout(
 ) {
     val scrollState = rememberScrollState()
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+    ) {
         LoginBackButton(onBack)
         Column(
             modifier = Modifier.verticalScroll(scrollState),

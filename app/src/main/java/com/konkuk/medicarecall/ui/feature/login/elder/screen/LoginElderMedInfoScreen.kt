@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -68,7 +69,6 @@ fun LoginElderMedInfoScreen(
             .imePadding(),
     ) {
         LoginElderMedInfoScreenLayout(
-            modifier = Modifier.padding(horizontal = 20.dp),
             elderNames = elderUiState.eldersList.map { it.name },
             selectedIndex = uiState.selectedIndex,
             diseaseInputText = uiState.diseaseInputText,
@@ -130,7 +130,11 @@ private fun LoginElderMedInfoScreenLayout(
     onNextClick: () -> Unit,
     onBack: () -> Unit = {},
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+    ) {
         LoginBackButton(onBack)
         Column(
             Modifier
