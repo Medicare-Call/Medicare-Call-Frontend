@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.dto.response
 
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,11 +29,3 @@ data class MedicineDto(
     val dosage: String,
     val timesPerDay: Int,
 )
-
-fun MedicineDto.toUiState(): MedicineUiState {
-    return MedicineUiState(
-        medicineName = name,
-        todayRequiredCount = timesPerDay,
-        doseStatusList = emptyList(),
-    )
-}
