@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,10 +17,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
@@ -35,22 +33,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.ui.type.ElderResidenceType
+import com.konkuk.medicarecall.ui.type.RelationshipType
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.util.isValidDate
-import com.konkuk.medicarecall.ui.feature.login.elder.component.ElderChip
 import com.konkuk.medicarecall.ui.feature.login.elder.component.ElderInputForm
+import com.konkuk.medicarecall.ui.feature.login.elder.component.ElderRow
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData
 import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
-import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
+import com.konkuk.medicarecall.ui.type.GenderType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -62,15 +62,13 @@ fun LoginElderScreen(
     navigateToRegisterElderHealth: () -> Unit = {},
     viewModel: LoginElderViewModel = koinViewModel(),
 ) {
-    val uiState by viewModel.elderUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.loginElderUiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val nameFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(uiState.selectedIndex) {
-        nameFocusRequester.requestFocus()
         delay(100L)
         scrollState.animateScrollTo(0)
     }
@@ -87,12 +85,8 @@ fun LoginElderScreen(
             selectedIndex = uiState.selectedIndex,
             isInputComplete = viewModel.isInputComplete(),
             scrollState = scrollState,
-            nameFocusRequester = nameFocusRequester,
             onBack = onBack,
-            onNameChanged = viewModel::updateElderName,
-            onBirthDateChanged = viewModel::updateElderBirthDate,
             onGenderChanged = viewModel::updateElderGender,
-            onPhoneNumberChanged = viewModel::updateElderPhoneNumber,
             onRelationshipChange = viewModel::updateElderRelationship,
             onLivingTypeChanged = viewModel::updateElderLivingType,
             onAddElder = {
@@ -104,18 +98,13 @@ fun LoginElderScreen(
                     }
                 }
             },
-            onRemoveElder = { index ->
-                if (uiState.selectedIndex == uiState.eldersList.size - 1) {
-                    viewModel.selectElder(uiState.selectedIndex - 1)
-                }
-                viewModel.removeElder(index)
-            },
+            onRemoveElder = viewModel::removeElder,
             onSelectElder = viewModel::selectElder,
             onNextClick = {
                 val eldersList = uiState.eldersList
                 when {
-                    !eldersList.filter { it.name.isNotEmpty() }
-                        .all { it.name.matches(Regex("^[가-힣a-zA-Z]*$")) } -> {
+                    !eldersList.filter { it.nameState.text.isNotEmpty() }
+                        .all { it.nameState.text.toString().matches(Regex("^[가-힣a-zA-Z]*$")) } -> {
                         coroutineScope.launch {
                             snackBarState.showSnackbar(
                                 "이름을 다시 확인해주세요",
@@ -124,8 +113,8 @@ fun LoginElderScreen(
                         }
                     }
 
-                    !eldersList.filter { it.birthDate.isNotEmpty() }
-                        .all { it.birthDate.isValidDate() } -> {
+                    !eldersList.filter { it.birthDateState.text.isNotEmpty() }
+                        .all { it.birthDateState.text.toString().isValidDate() } -> {
                         coroutineScope.launch {
                             snackBarState.showSnackbar(
                                 "생년월일을 다시 확인해주세요",
@@ -134,8 +123,8 @@ fun LoginElderScreen(
                         }
                     }
 
-                    !eldersList.filter { it.phoneNumber.isNotEmpty() }
-                        .all { it.phoneNumber.startsWith("010") } -> {
+                    !eldersList.filter { it.phoneNumberState.text.isNotEmpty() }
+                        .all { it.phoneNumberState.text.toString().startsWith("010") } -> {
                         coroutineScope.launch {
                             snackBarState.showSnackbar(
                                 "휴대폰 번호를 다시 확인해주세요",
@@ -145,7 +134,6 @@ fun LoginElderScreen(
                     }
 
                     else -> {
-                        viewModel.initElderHealthData()
                         viewModel.postElderBulk()
                         navigateToRegisterElderHealth()
                     }
@@ -164,18 +152,14 @@ fun LoginElderScreen(
 @Composable
 private fun LoginElderScreenLayout(
     modifier: Modifier = Modifier,
-    eldersList: List<ElderData>,
+    eldersList: List<LoginElderData>,
     selectedIndex: Int,
     isInputComplete: Boolean,
     scrollState: ScrollState,
-    nameFocusRequester: FocusRequester,
     onBack: () -> Unit,
-    onNameChanged: (String) -> Unit,
-    onBirthDateChanged: (String) -> Unit,
-    onGenderChanged: (Boolean) -> Unit,
-    onPhoneNumberChanged: (String) -> Unit,
-    onRelationshipChange: (String) -> Unit,
-    onLivingTypeChanged: (String) -> Unit,
+    onGenderChanged: (GenderType) -> Unit,
+    onRelationshipChange: (RelationshipType) -> Unit,
+    onLivingTypeChanged: (ElderResidenceType) -> Unit,
     onAddElder: () -> Unit,
     onRemoveElder: (Int) -> Unit,
     onSelectElder: (Int) -> Unit,
@@ -187,6 +171,7 @@ private fun LoginElderScreenLayout(
             .padding(horizontal = 20.dp),
     ) {
         LoginBackButton(onClick = onBack)
+
         Column(
             Modifier
                 .weight(1f)
@@ -200,28 +185,20 @@ private fun LoginElderScreenLayout(
             )
             if (eldersList.size != 1) {
                 Spacer(Modifier.height(30.dp))
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    itemsIndexed(eldersList) { index, data ->
-                        ElderChip(
-                            name = data.name,
-                            selected = index == selectedIndex,
-                            onRemove = { onRemoveElder(index) },
-                            onClick = { onSelectElder(index) },
-                        )
-                    }
-                }
+                ElderRow(
+                    selectedIndex = selectedIndex,
+                    eldersList = eldersList,
+                    onRemoveElder = onRemoveElder,
+                    onSelectElder = onSelectElder,
+                )
             }
             Spacer(Modifier.height(30.dp))
             ElderInputForm(
                 scrollState = scrollState,
                 elderData = eldersList[selectedIndex],
-                onNameChanged = onNameChanged,
-                onBirthDateChanged = onBirthDateChanged,
                 onGenderChanged = onGenderChanged,
-                onPhoneNumberChanged = onPhoneNumberChanged,
                 onRelationshipChange = onRelationshipChange,
                 onLivingTypeChanged = onLivingTypeChanged,
-                nameFocusRequester = nameFocusRequester,
             )
 
             AddElderButton(
@@ -297,32 +274,28 @@ private fun LoginElderScreenPreview() {
     MediCareCallTheme {
         LoginElderScreenLayout(
             eldersList = listOf(
-                ElderData(
-                    name = "김옥자",
-                    birthDate = "19500101",
-                    gender = false,
-                    phoneNumber = "01012345678",
-                    relationship = "할머니",
-                    livingType = "동거",
+                LoginElderData(
+                    nameState = TextFieldState("김옥자"),
+                    birthDateState = TextFieldState("19500101"),
+                    gender = GenderType.FEMALE,
+                    phoneNumberState = TextFieldState("01012345678"),
+                    relationship = RelationshipType.CHILD,
+                    livingType = ElderResidenceType.WITH_FAMILY,
                 ),
-                ElderData(
-                    name = "박막례",
-                    birthDate = "19480315",
-                    gender = false,
-                    phoneNumber = "01087654321",
-                    relationship = "할머니",
-                    livingType = "독거",
+                LoginElderData(
+                    nameState = TextFieldState("박막례"),
+                    birthDateState = TextFieldState("19480315"),
+                    gender = GenderType.FEMALE,
+                    phoneNumberState = TextFieldState("01087654321"),
+                    relationship = RelationshipType.CHILD,
+                    livingType = ElderResidenceType.ALONE,
                 ),
             ),
             selectedIndex = 0,
             isInputComplete = true,
             scrollState = rememberScrollState(),
-            nameFocusRequester = remember { FocusRequester() },
             onBack = {},
-            onNameChanged = {},
-            onBirthDateChanged = {},
             onGenderChanged = {},
-            onPhoneNumberChanged = {},
             onRelationshipChange = {},
             onLivingTypeChanged = {},
             onAddElder = {},

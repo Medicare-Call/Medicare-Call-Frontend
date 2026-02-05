@@ -54,12 +54,13 @@ fun LoginElderMedInfoScreen(
     navigateToCareCallSetting: () -> Unit = {},
     viewModel: LoginElderViewModel = koinViewModel(),
 ) {
-    val elderUiState by viewModel.elderUiState.collectAsStateWithLifecycle()
-    val uiState by viewModel.elderHealthUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.loginElderUiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
+    val currentElder = uiState.eldersList[uiState.selectedIndex]
 
     Box(
         modifier
@@ -69,16 +70,16 @@ fun LoginElderMedInfoScreen(
             .imePadding(),
     ) {
         LoginElderMedInfoScreenLayout(
-            elderNames = elderUiState.eldersList.map { it.name },
+            elderNames = uiState.eldersList.map { it.nameState.text.toString() },
             selectedIndex = uiState.selectedIndex,
             diseaseInputText = uiState.diseaseInputText,
-            diseaseList = uiState.elderHealthList[uiState.selectedIndex].diseaseNames,
-            medicationSchedule = uiState.elderHealthList[uiState.selectedIndex].medicationMap,
+            diseaseList = currentElder.diseases,
+            medicationSchedule = currentElder.medicationMap,
             medicationInputText = uiState.medicationInputText,
-            selectedMedicationTimes = uiState.selectedMedicationTimes,
-            notes = uiState.elderHealthList[uiState.selectedIndex].notes,
+            selectedMedicationTimes = uiState.selectedMedicationTimes.toList(),
+            notes = currentElder.notes,
             scrollState = scrollState,
-            onSelectElder = viewModel::selectElderInHealth,
+            onSelectElder = viewModel::selectElder,
             onDiseasesTextChanged = viewModel::updateDiseasesText,
             onRemoveDisease = viewModel::removeDisease,
             onAddDisease = viewModel::addDisease,

@@ -19,6 +19,61 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import com.konkuk.medicarecall.ui.type.GenderType
+
+@Composable
+fun GenderToggleButton(
+    modifier: Modifier = Modifier,
+    selectedGenderType: GenderType? = null,
+    onGenderChange: (GenderType) -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Max)
+            .clip(RoundedCornerShape(14.dp))
+            .background(
+                MediCareCallTheme.colors.white,
+            ),
+    ) {
+        GenderType.entries.forEach { gender ->
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(
+                        color = if (gender == selectedGenderType) MediCareCallTheme.colors.g50
+                        else MediCareCallTheme.colors.white,
+                    )
+                    .border(
+                        width = 1.2.dp,
+                        color = if (gender == selectedGenderType) MediCareCallTheme.colors.main
+                        else MediCareCallTheme.colors.gray2,
+                        shape = if (gender == GenderType.MALE) RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp)
+                        else RoundedCornerShape(topEnd = 14.dp, bottomEnd = 14.dp),
+                    )
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = { onGenderChange(gender) },
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            vertical = if (gender == selectedGenderType) 15.5.dp
+                            else 16.dp,
+                        ),
+                    text = gender.displayName,
+                    color = if (gender == selectedGenderType) MediCareCallTheme.colors.main
+                    else MediCareCallTheme.colors.black,
+                    style = if (gender == selectedGenderType) MediCareCallTheme.typography.B_17
+                    else MediCareCallTheme.typography.M_16,
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun GenderToggleButton(
@@ -26,7 +81,7 @@ fun GenderToggleButton(
     onGenderChange: (Boolean) -> Unit,
 ) {
     Row(
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .clip(RoundedCornerShape(14.dp))
@@ -35,7 +90,7 @@ fun GenderToggleButton(
             ),
     ) {
         Box(
-            Modifier
+            modifier = Modifier
                 .weight(1f)
                 .background(color = if (isMale) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white)
                 .border(
@@ -52,7 +107,7 @@ fun GenderToggleButton(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                "남성",
+                text = "남성",
                 color = if (isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
                 style = if (isMale) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
                 modifier = Modifier
@@ -60,7 +115,7 @@ fun GenderToggleButton(
             )
         }
         Box(
-            Modifier
+            modifier = Modifier
                 .weight(1f)
                 .background(color = if (!isMale) MediCareCallTheme.colors.g50 else MediCareCallTheme.colors.white)
                 .border(
@@ -76,7 +131,7 @@ fun GenderToggleButton(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                "여성",
+                text = "여성",
                 color = if (!isMale) MediCareCallTheme.colors.main else MediCareCallTheme.colors.black,
                 style = if (!isMale) MediCareCallTheme.typography.B_17 else MediCareCallTheme.typography.M_16,
                 modifier = Modifier
