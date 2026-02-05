@@ -12,6 +12,8 @@ import com.konkuk.medicarecall.ui.feature.alarm.navigation.alarmNavGraph
 import com.konkuk.medicarecall.ui.feature.home.navigation.homeNavGraph
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.homedetail.navigation.homeDetailNavGraph
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderViewModel
+import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.feature.login.navigation.loginNavGraph
 import com.konkuk.medicarecall.ui.feature.settings.navigation.settingNavGraph
 import com.konkuk.medicarecall.ui.feature.splash.screen.SplashScreen
@@ -114,7 +116,6 @@ fun NavGraph(
 
         // 로그인 네비게이션
         loginNavGraph(
-            navController = navController,
             popBackStack = navigator::popBackStack,
             navigateToMainAfterLogin = { navController.navigateToMainAfterLogin() },
             navigateToHome = { navController.navigateToMainAfterLogin() },
@@ -126,6 +127,12 @@ fun NavGraph(
             navigateToCareCallSetting = { navController.navigate(Route.LoginCareCallSetting) },
             navigateToCareCallSettingWithPopUpTo = navigator::navigateToLoginCareCallSetting,
             navigateToFinish = navigator::navigateToLoginFinish,
+            getSharedLoginInfoViewModel = { backStackEntry ->
+                backStackEntry.sharedViewModel<LoginInfoViewModel, Route.LoginStart>(navController)
+            },
+            getSharedLoginElderViewModel = { backStackEntry ->
+                backStackEntry.sharedViewModel<LoginElderViewModel, Route.LoginRegisterElder>(navController)
+            },
         )
     }
 }
