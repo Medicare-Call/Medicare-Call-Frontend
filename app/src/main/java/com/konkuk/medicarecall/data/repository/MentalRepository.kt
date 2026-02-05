@@ -1,8 +1,8 @@
 package com.konkuk.medicarecall.data.repository
 
-import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
+import com.konkuk.medicarecall.domain.model.Mental
 import java.time.LocalDate
 
 interface MentalRepository {
-    suspend fun getMentalUiState(elderId: Int, date: LocalDate): Result<MentalUiState>
+    suspend fun getMental(elderId: Int, date: LocalDate): Result<Mental>
 }

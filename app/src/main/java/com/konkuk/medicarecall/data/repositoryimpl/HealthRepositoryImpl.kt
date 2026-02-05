@@ -14,17 +14,16 @@ class HealthRepositoryImpl(
     private val healthService: HealthService,
 ) : HealthRepository {
 
-    override suspend fun getHealthUiState(
+    override suspend fun getHealth(
         elderId: Int,
         date: LocalDate,
-    ): Result<HealthUiState> = runCatching {
+    ): Result<Health> = runCatching {
 
         healthService.getDailyHealth(
             elderId = elderId,
             date = date.toString(),
         )
             .handleResponse()
-            .toHealth()
-            .toUiState()
+            .toHealth()  // DTO → Domain
     }
 }

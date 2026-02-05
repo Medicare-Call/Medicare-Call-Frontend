@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.MentalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,9 +40,9 @@ class MentalViewModel(
 
     fun loadMentalDataForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
-            mentalRepository.getMentalUiState(elderId, date)
+            mentalRepository.getMental(elderId, date)  // Model
                 .onSuccess {
-                    _mental.value = it
+                    _mental.value = it.toUiState()  // Model → UiState
                 }
                 .onFailure {
                     _mental.value = MentalUiState.EMPTY

@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
-import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
+import com.konkuk.medicarecall.domain.model.HomeSleep
 
 data class HomeUiState(
     val isLoading: Boolean = true,
@@ -14,7 +14,7 @@ data class HomeUiState(
     val totalTaken: Int? = null,
     val totalGoal: Int? = null,
     val medicines: List<MedicineUiState> = emptyList(),
-    val sleep: HomeResponseDto.SleepDto? = null,
+    val sleep: HomeSleep? = null,
     val healthStatus: String? = null,
     val mentalStatus: String? = null,
     val glucoseLevelAverageToday: Int? = null,

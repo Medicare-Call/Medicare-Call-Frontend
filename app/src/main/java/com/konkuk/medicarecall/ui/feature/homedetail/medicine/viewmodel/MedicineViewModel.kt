@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.mapper.toMedicineUiStates
 import com.konkuk.medicarecall.data.repository.MedicineRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,14 +56,15 @@ class MedicineViewModel(
             _state.update { it.copy(loading = true, emptyDate = null) }
 
             runCatching {
-                medicineRepository.getMedicineUiStateList(elderId, date)
-            }.onSuccess { list ->
+                medicineRepository.getMedicines(elderId, date)  // Model
+            }.onSuccess { medicines ->
+                val uiList = medicines.toMedicineUiStates()  // Model → UiState
                 _state.update {
                     it.copy(
                         loading = false,
-                        items = list,
-                        emptyDate = if (list.isEmpty()) date else null,
-                        hasConfiguredMeds = list.isNotEmpty(),
+                        items = uiList,
+                        emptyDate = if (uiList.isEmpty()) date else null,
+                        hasConfiguredMeds = uiList.isNotEmpty(),
                     )
                 }
             }.onFailure {

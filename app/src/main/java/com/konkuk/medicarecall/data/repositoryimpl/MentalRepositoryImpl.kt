@@ -12,17 +12,17 @@ class MentalRepositoryImpl(
     private val mentalService: MentalService,
 ) : MentalRepository {
 
-    override suspend fun getMentalUiState(
+    override suspend fun getMental(
         elderId: Int,
         date: LocalDate,
-    ): Result<MentalUiState> = runCatching {
+    ): Result<Mental> = runCatching {
 
         val response = mentalService.getDailyMental(
             elderId = elderId,
             date = date.toString(),
         ).handleResponse()
 
-        MentalUiState(
+        Mental(
             mentalSummary = response.commentList.orEmpty(),
         )
     }

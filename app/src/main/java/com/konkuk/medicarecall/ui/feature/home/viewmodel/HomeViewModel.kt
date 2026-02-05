@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.mapper.HomeMapper
+import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
@@ -140,7 +141,7 @@ class HomeViewModel(
             _homeUiState.update { it.copy(isLoading = true) }
 
             homeRepository.getHomeSummary(elderId)
-                .onSuccess { dto ->
+                .onSuccess { home ->
                     // 설정/건강정보 최신화
                     eldersHealthInfoRepository.refresh()
                     val healthInfo = eldersHealthInfoRepository
@@ -151,11 +152,10 @@ class HomeViewModel(
                     // 로컬 캐시의 이름 우선 사용
                     val elderName = _elderInfoList.value
                         .find { it.id == elderId }?.name
-                        ?: dto.elderName
+                        ?: home.elderName
 
-                    // Mapper에게 병합 위임
-                    val uiState = HomeMapper.mergeWithHealthInfo(
-                        dto = dto,
+                    // Model → UiState 변환
+                    val uiState = home.toUiState(
                         healthInfo = healthInfo,
                         elderName = elderName,
                     )

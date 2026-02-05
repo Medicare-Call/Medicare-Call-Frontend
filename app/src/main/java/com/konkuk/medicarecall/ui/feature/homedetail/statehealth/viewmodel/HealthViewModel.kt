@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.HealthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,8 +43,8 @@ class HealthViewModel(
 
     fun loadHealthDataForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
-            healthRepository.getHealthUiState(elderId, date)
-                .onSuccess { _health.value = it }
+            healthRepository.getHealth(elderId, date)  // Model
+                .onSuccess { _health.value = it.toUiState() }  // Model → UiState
                 .onFailure { _health.value = HealthUiState.EMPTY }
         }
     }

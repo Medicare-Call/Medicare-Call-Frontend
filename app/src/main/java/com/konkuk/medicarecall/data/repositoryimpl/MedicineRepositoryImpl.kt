@@ -1,12 +1,12 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.elders.MedicineService
-import com.konkuk.medicarecall.data.mapper.toMedicineUiStates
+import com.konkuk.medicarecall.data.mapper.toMedicines
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.MedicineRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
+import com.konkuk.medicarecall.domain.model.DoseStatus
+import com.konkuk.medicarecall.domain.model.DoseStatusItem
+import com.konkuk.medicarecall.domain.model.Medicine
 import org.koin.core.annotation.Single
 import java.time.LocalDate
 
@@ -16,8 +16,8 @@ class MedicineRepositoryImpl(
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {
 
-    /** 설정 스케줄을 “회색 카드” UI로 변환 */
-    override suspend fun getConfiguredMedicineUiList(elderId: Int): List<MedicineUiState> {
+    /** 설정 스케줄을 Model로 변환 */
+    override suspend fun getConfiguredMedicines(elderId: Int): List<Medicine> {
         val schedule = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
@@ -46,27 +46,34 @@ class MedicineRepositoryImpl(
         if (countByMed.isEmpty()) return emptyList()
 
         return countByMed.map { (name, goal) ->
-            val labels = timesByMed[name].orEmpty().let { lst ->
-                if (lst.size >= goal) lst.take(goal) else lst + List(goal - lst.size) { "" }
+            val times = timesByMed[name].orEmpty()
+            val timeEnums = times.map { label ->
+                when (label) {
+                    "아침" -> "MORNING"
+                    "점심" -> "LUNCH"
+                    "저녁" -> "DINNER"
+                    else -> ""
+                }
             }
-            MedicineUiState(
+
+            Medicine(
                 medicineName = name,
                 todayRequiredCount = goal,
-                doseStatusList = labels.map { lab ->
-                    DoseStatusItem(time = lab, doseStatus = DoseStatus.NOT_RECORDED) // 회색
+                doseStatusList = timeEnums.map { timeEnum ->
+                    DoseStatusItem(time = timeEnum, doseStatus = DoseStatus.NOT_RECORDED)
                 },
             )
         }
     }
 
     /** 날짜별 기록 호출 + 없으면 스케줄 fallback */
-    override suspend fun getMedicineUiStateList(
+    override suspend fun getMedicines(
         elderId: Int,
         date: LocalDate,
-    ): List<MedicineUiState> {
+    ): List<Medicine> {
 
         val fallback =
-            runCatching { getConfiguredMedicineUiList(elderId) }
+            runCatching { getConfiguredMedicines(elderId) }
                 .getOrDefault(emptyList())
 
         return runCatching {
@@ -76,7 +83,8 @@ class MedicineRepositoryImpl(
                 if (!res.isSuccessful) return fallback
                 val dto = res.body() ?: return fallback
 
-                dto.toMedicineUiStates(fallback)
+                val medicines = dto.toMedicines()
+                if (medicines.isEmpty()) fallback else medicines
             },
             onFailure = {
                 fallback

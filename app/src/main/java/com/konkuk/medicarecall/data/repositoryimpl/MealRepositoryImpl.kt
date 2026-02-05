@@ -1,11 +1,10 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.elders.MealService
-import com.konkuk.medicarecall.data.mapper.toMealUiStates
 import com.konkuk.medicarecall.data.mapper.toMeals
 import com.konkuk.medicarecall.data.repository.MealRepository
 import com.konkuk.medicarecall.data.util.handleResponse
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
+import com.konkuk.medicarecall.domain.model.Meal
 import org.koin.core.annotation.Single
 import java.time.LocalDate
 
@@ -17,7 +16,7 @@ class MealRepositoryImpl(
     override suspend fun getMeals(
         elderId: Int,
         date: LocalDate,
-    ): List<MealUiState> {
+    ): List<Meal> {
 
         val response = mealService.getDailyMeal(
             elderId = elderId,
@@ -26,8 +25,6 @@ class MealRepositoryImpl(
 
         val dto = response.handleResponse()
 
-        return dto
-            .toMeals()          // DTO → Domain
-            .toMealUiStates()   // Domain → UiState
+        return dto.toMeals()  // DTO → Domain
     }
 }
