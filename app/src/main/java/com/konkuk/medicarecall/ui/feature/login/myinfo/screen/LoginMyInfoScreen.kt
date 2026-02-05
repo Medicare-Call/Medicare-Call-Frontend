@@ -61,21 +61,20 @@ fun LoginMyInfoScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToRegisterElder: () -> Unit = {},
-    loginInfoViewModel: LoginInfoViewModel,
+    viewModel: LoginInfoViewModel,
 ) {
-    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        loginInfoViewModel.events.collect { event ->
+        viewModel.events.collect { event ->
             when (event) {
                 is LoginEvent.MemberRegisterSuccess -> {
-                    // 인증 성공 시 어르신정보 화면으로 이동
                     navigateToRegisterElder()
                 }
 
@@ -88,8 +87,7 @@ fun LoginMyInfoScreen(
                     }
                 }
 
-                else -> { /* 다른 이벤트 무시 */
-                }
+                else -> {}
             }
         }
     }
@@ -102,196 +100,121 @@ fun LoginMyInfoScreen(
             .statusBarsPadding()
             .imePadding(),
     ) {
-        Column {
-            LoginBackButton(onBack)
-            Column(
-                Modifier
-                    .verticalScroll(scrollState),
-            ) {
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    "회원 정보를\n입력해주세요",
-                    style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black,
-                )
-                Spacer(Modifier.height(40.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        "이름",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-                    DefaultTextField(
-                        uiState.name,
-                        {
-                            loginInfoViewModel.onNameChanged(it)
-                        },
-                        placeHolder = "이름",
-                        textFieldModifier = Modifier.focusRequester(focusRequester),
-                    )
-                }
-                Spacer(Modifier.height(20.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        "생년월일",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-                    // 생년월일 입력 텍스트필드
-                    DefaultTextField(
-                        uiState.dateOfBirth,
-                        { input ->
-                            val filtered = input.filter { it.isDigit() }.take(8)
-                            loginInfoViewModel.onDOBChanged(filtered)
-                        },
-                        placeHolder = "YYYY / MM / DD",
-                        keyboardType = KeyboardType.Number,
-                        visualTransformation = DateOfBirthVisualTransformation(),
-                        maxLength = 8,
-                    )
-                }
-                Spacer(Modifier.height(20.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        "성별",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-
-                    GenderToggleButton(uiState.isMale) { loginInfoViewModel.onGenderChanged(it) }
-                }
-                Spacer(Modifier.height(30.dp))
-                CTAButton(
-                    if (uiState.name.isNotEmpty() &&
-                        uiState.dateOfBirth.length == 8
-                    ) CTAButtonType.GREEN
-                    else
-                        CTAButtonType.DISABLED,
-                    "다음",
-                    {
-                        if (
-                            !uiState.name.matches(Regex("^[가-힣a-zA-Z]*$"))
-                        ) {
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(
-                                    "이름을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short,
-                                )
-                            }
-                        } else if (!uiState.dateOfBirth.isValidDate()) {
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(
-                                    "생년월일을 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short,
-                                )
-                            }
-                        } else {
-                            loginInfoViewModel.setShowBottomSheet(true)
-                        }
-                    },
-                    Modifier.padding(bottom = 20.dp),
-                )
-
-                val sheetState = rememberModalBottomSheetState(
-                    skipPartiallyExpanded = true,
-                )
-
-                if (uiState.showBottomSheet) {
-                    ModalBottomSheet(
-                        onDismissRequest = {
-                            loginInfoViewModel.setShowBottomSheet(false)
-                        },
-                        sheetState = sheetState,
-                        containerColor = MediCareCallTheme.colors.bg,
-                        dragHandle = null,
-                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-                    ) {
-                        // Sheet content
-
-                        // 개별 약관 아이템 및 상태
-                        val itemList = listOf(
-                            "서비스 이용약관" to Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                            "개인정보 수집 및 이용 동의" to Modifier.padding(
-                                horizontal = 20.dp,
-                                vertical = 8.dp,
-                            ),
-                        )
-                        val isCheckedAll = uiState.checkedStates.all { it }
-
-                        Column {
-                            Text(
-                                "회원가입을 위해\n약관 동의가 필요합니다",
-                                color = MediCareCallTheme.colors.black,
-                                style = MediCareCallTheme.typography.B_20,
-                                modifier = modifier.padding(horizontal = 20.dp, vertical = 30.dp),
-                            )
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 16.dp)
-                                    .clickable(
-                                        interactionSource = null,
-                                        indication = null,
-                                        onClick = {
-                                            loginInfoViewModel.setAllAgreeCheckState(!uiState.allAgreeCheckState)
-                                        },
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Icon(
-                                    painterResource(R.drawable.ic_check_box),
-                                    contentDescription = "체크박스",
-                                    tint = if (uiState.allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                Text(
-                                    "전체 동의하기",
-                                    color = MediCareCallTheme.colors.black,
-                                    style = MediCareCallTheme.typography.SB_16,
-                                )
-                            }
-                        }
-                        HorizontalDivider(
-                            thickness = 1.4.dp,
-                            color = MediCareCallTheme.colors.gray2,
-                        )
-                        Spacer(Modifier.height(12.dp))
-
-                        itemList.forEachIndexed { index, (title, modifier) ->
-                            AgreementItem(
-                                title,
-                                isChecked = uiState.checkedStates[index],
-                                onCheckedChange = {
-                                    loginInfoViewModel.setCheckedState(index, !uiState.checkedStates[index])
-                                },
-                                modifier = modifier,
-                            )
-                        }
-                        // 모달 내부 CTA(다음) 버튼
-                        CTAButton(
-                            if (isCheckedAll) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-                            "다음",
-                            {
-                                loginInfoViewModel.memberRegister(
-                                    uiState.name,
-                                    uiState.dateOfBirth,
-                                    if (uiState.isMale) GenderType.MALE else GenderType.FEMALE,
-                                )
-                            },
-                            modifier
-                                .padding(horizontal = 20.dp)
-                                .padding(bottom = 30.dp, top = 20.dp),
+        LoginMyInfoScreenLayout(
+            name = uiState.name,
+            dateOfBirth = uiState.dateOfBirth,
+            isMale = uiState.isMale,
+            onNameChanged = viewModel::onNameChanged,
+            onDOBChanged = { input ->
+                val filtered = input.filter { it.isDigit() }.take(8)
+                viewModel.onDOBChanged(filtered)
+            },
+            onGenderChanged = viewModel::onGenderChanged,
+            onNextClick = {
+                if (!uiState.name.matches(Regex("^[가-힣a-zA-Z]*$"))) {
+                    coroutineScope.launch {
+                        snackBarState.showSnackbar(
+                            "이름을 다시 확인해주세요",
+                            duration = SnackbarDuration.Short,
                         )
                     }
+                } else if (!uiState.dateOfBirth.isValidDate()) {
+                    coroutineScope.launch {
+                        snackBarState.showSnackbar(
+                            "생년월일을 다시 확인해주세요",
+                            duration = SnackbarDuration.Short,
+                        )
+                    }
+                } else {
+                    viewModel.setShowBottomSheet(true)
                 }
-            }
-        }
+            },
+            onBack = onBack,
+            focusRequester = focusRequester,
+        )
         DefaultSnackBar(
-            snackBarState,
-            Modifier
+            modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 14.dp),
+            hostState = snackBarState,
         )
+    }
+
+    if (uiState.showBottomSheet) {
+        val itemList = listOf(
+            "서비스 이용약관",
+            "개인정보 수집 및 이용 동의",
+        )
+        val isCheckedAll = uiState.checkedStates.all { it }
+
+        ModalBottomSheet(
+            onDismissRequest = { viewModel.setShowBottomSheet(false) },
+            sheetState = sheetState,
+            containerColor = MediCareCallTheme.colors.bg,
+            dragHandle = null,
+            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+        ) {
+            Column {
+                Text(
+                    "회원가입을 위해\n약관 동의가 필요합니다",
+                    color = MediCareCallTheme.colors.black,
+                    style = MediCareCallTheme.typography.B_20,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 30.dp),
+                )
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 16.dp)
+                        .clickable(
+                            interactionSource = null,
+                            indication = null,
+                            onClick = { viewModel.setAllAgreeCheckState(!uiState.allAgreeCheckState) },
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_check_box),
+                        contentDescription = "체크박스",
+                        tint = if (uiState.allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        "전체 동의하기",
+                        color = MediCareCallTheme.colors.black,
+                        style = MediCareCallTheme.typography.SB_16,
+                    )
+                }
+            }
+            HorizontalDivider(
+                thickness = 1.4.dp,
+                color = MediCareCallTheme.colors.gray2,
+            )
+            Spacer(Modifier.height(12.dp))
+
+            itemList.forEachIndexed { index, title ->
+                AgreementItem(
+                    title,
+                    isChecked = uiState.checkedStates[index],
+                    onCheckedChange = { viewModel.setCheckedState(index, !uiState.checkedStates[index]) },
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                )
+            }
+
+            CTAButton(
+                type = if (isCheckedAll) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                text = "다음",
+                onClick = {
+                    viewModel.memberRegister(
+                        uiState.name,
+                        uiState.dateOfBirth,
+                        if (uiState.isMale) GenderType.MALE else GenderType.FEMALE,
+                    )
+                },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 30.dp, top = 20.dp),
+            )
+        }
     }
 }
 
@@ -300,86 +223,73 @@ private fun LoginMyInfoScreenLayout(
     modifier: Modifier = Modifier,
     name: String,
     dateOfBirth: String,
-    isMale: Boolean?,
+    isMale: Boolean,
     onNameChanged: (String) -> Unit,
     onDOBChanged: (String) -> Unit,
     onGenderChanged: (Boolean) -> Unit,
     onNextClick: () -> Unit,
+    onBack: () -> Unit = {},
+    focusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val scrollState = rememberScrollState()
-    val focusRequester = remember { FocusRequester() }
 
-    Box(
-        modifier
-            .fillMaxSize()
-            .background(MediCareCallTheme.colors.bg)
-            .padding(horizontal = 20.dp)
-            .statusBarsPadding()
-            .imePadding(),
-    ) {
-        Column {
-            Column(
-                Modifier.verticalScroll(scrollState),
-            ) {
-                Spacer(Modifier.height(20.dp))
+    Column(modifier = modifier) {
+        LoginBackButton(onBack)
+        Column(
+            modifier = Modifier.verticalScroll(scrollState),
+        ) {
+            Spacer(Modifier.height(20.dp))
+            Text(
+                "회원 정보를\n입력해주세요",
+                style = MediCareCallTheme.typography.B_26,
+                color = MediCareCallTheme.colors.black,
+            )
+            Spacer(Modifier.height(40.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
-                    "회원 정보를\n입력해주세요",
-                    style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black,
+                    "이름",
+                    color = MediCareCallTheme.colors.gray7,
+                    style = MediCareCallTheme.typography.M_17,
                 )
-                Spacer(Modifier.height(40.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        "이름",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-                    DefaultTextField(
-                        name,
-                        onNameChanged,
-                        placeHolder = "이름",
-                        textFieldModifier = Modifier.focusRequester(focusRequester),
-                    )
-                }
-                Spacer(Modifier.height(20.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        "생년월일",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-                    DefaultTextField(
-                        dateOfBirth,
-                        { input ->
-                            val filtered = input.filter { it.isDigit() }.take(8)
-                            onDOBChanged(filtered)
-                        },
-                        placeHolder = "YYYY / MM / DD",
-                        keyboardType = KeyboardType.Number,
-                        visualTransformation = DateOfBirthVisualTransformation(),
-                        maxLength = 8,
-                    )
-                }
-                Spacer(Modifier.height(20.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        "성별",
-                        color = MediCareCallTheme.colors.gray7,
-                        style = MediCareCallTheme.typography.M_17,
-                    )
-                    GenderToggleButton(isMale ?: true, onGenderChanged)
-                }
-                Spacer(Modifier.height(30.dp))
-                CTAButton(
-                    if (name.isNotEmpty() && dateOfBirth.length == 8 && isMale != null)
-                        CTAButtonType.GREEN
-                    else
-                        CTAButtonType.DISABLED,
-                    "다음",
-                    onNextClick,
-                    Modifier.padding(bottom = 20.dp),
+                DefaultTextField(
+                    name,
+                    onNameChanged,
+                    placeHolder = "이름",
+                    textFieldModifier = Modifier.focusRequester(focusRequester),
                 )
             }
+            Spacer(Modifier.height(20.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    "생년월일",
+                    color = MediCareCallTheme.colors.gray7,
+                    style = MediCareCallTheme.typography.M_17,
+                )
+                DefaultTextField(
+                    dateOfBirth,
+                    onDOBChanged,
+                    placeHolder = "YYYY / MM / DD",
+                    keyboardType = KeyboardType.Number,
+                    visualTransformation = DateOfBirthVisualTransformation(),
+                    maxLength = 8,
+                )
+            }
+            Spacer(Modifier.height(20.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    "성별",
+                    color = MediCareCallTheme.colors.gray7,
+                    style = MediCareCallTheme.typography.M_17,
+                )
+                GenderToggleButton(isMale, onGenderChanged)
+            }
+            Spacer(Modifier.height(30.dp))
+            CTAButton(
+                type = if (name.isNotEmpty() && dateOfBirth.length == 8) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                text = "다음",
+                onClick = onNextClick,
+                modifier = Modifier.padding(bottom = 20.dp),
+            )
         }
     }
 }
