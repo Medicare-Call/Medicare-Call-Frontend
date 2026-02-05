@@ -113,7 +113,7 @@ fun LoginVerificationScreen(
             },
             onConfirmClick = {
                 viewModel.confirmPhoneNumber(
-                    uiState.phoneNumber,
+                    uiState.userInfo.phoneNumber,
                     uiState.verificationCode,
                 )
                 viewModel.onVerificationCodeChanged("")

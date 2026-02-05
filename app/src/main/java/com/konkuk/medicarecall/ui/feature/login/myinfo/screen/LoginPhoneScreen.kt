@@ -64,14 +64,14 @@ fun LoginPhoneScreen(
     ) {
         LoginPhoneScreenLayout(
             modifier = Modifier.padding(horizontal = 20.dp),
-            phoneNumber = uiState.phoneNumber,
+            phoneNumber = uiState.userInfo.phoneNumber,
             onPhoneNumberChanged = { input ->
                 val filtered = input.filter { it.isDigit() }.take(11)
                 viewModel.onPhoneNumberChanged(filtered)
             },
             onNextClick = {
-                if (uiState.phoneNumber.startsWith("010")) {
-                    viewModel.postPhoneNumber(uiState.phoneNumber)
+                if (uiState.userInfo.phoneNumber.startsWith("010")) {
+                    viewModel.postPhoneNumber(uiState.userInfo.phoneNumber)
                     navigateToVerification()
                 } else {
                     coroutineScope.launch {

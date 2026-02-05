@@ -101,9 +101,9 @@ fun LoginMyInfoScreen(
     ) {
         LoginMyInfoScreenLayout(
             modifier = Modifier.padding(horizontal = 20.dp),
-            name = uiState.name,
-            dateOfBirth = uiState.dateOfBirth,
-            gender = uiState.gender,
+            name = uiState.userInfo.name,
+            dateOfBirth = uiState.userInfo.birthDate,
+            gender = uiState.userInfo.gender,
             onNameChanged = viewModel::onNameChanged,
             onDOBChanged = { input ->
                 val filtered = input.filter { it.isDigit() }.take(8)
@@ -111,14 +111,14 @@ fun LoginMyInfoScreen(
             },
             onGenderChanged = viewModel::onGenderChanged,
             onNextClick = {
-                if (!uiState.name.matches(Regex("^[가-힣a-zA-Z]*$"))) {
+                if (!uiState.userInfo.name.matches(Regex("^[가-힣a-zA-Z]*$"))) {
                     coroutineScope.launch {
                         snackBarState.showSnackbar(
                             "이름을 다시 확인해주세요",
                             duration = SnackbarDuration.Short,
                         )
                     }
-                } else if (!uiState.dateOfBirth.isValidDate()) {
+                } else if (!uiState.userInfo.birthDate.isValidDate()) {
                     coroutineScope.launch {
                         snackBarState.showSnackbar(
                             "생년월일을 다시 확인해주세요",
@@ -203,13 +203,7 @@ fun LoginMyInfoScreen(
             CTAButton(
                 type = if (isCheckedAll) CTAButtonType.GREEN else CTAButtonType.DISABLED,
                 text = "다음",
-                onClick = {
-                    viewModel.memberRegister(
-                        uiState.name,
-                        uiState.dateOfBirth,
-                        uiState.gender,
-                    )
-                },
+                onClick = { viewModel.memberRegister() },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 30.dp, top = 20.dp),

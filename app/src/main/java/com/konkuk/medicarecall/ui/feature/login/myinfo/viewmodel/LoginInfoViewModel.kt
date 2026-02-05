@@ -36,14 +36,8 @@ class LoginInfoViewModel(
     private val _events = MutableSharedFlow<LoginEvent>()
     val events = _events.asSharedFlow()
 
-    // 상태 변경
     fun onPhoneNumberChanged(new: String) {
-        _uiState.update {
-            it.copy(
-                phoneNumber = new,
-                userInfo = it.userInfo.copy(phoneNumber = new),
-            )
-        }
+        _uiState.update { it.copy(userInfo = it.userInfo.copy(phoneNumber = new)) }
     }
 
     fun onVerificationCodeChanged(new: String) {
@@ -51,30 +45,15 @@ class LoginInfoViewModel(
     }
 
     fun onNameChanged(new: String) {
-        _uiState.update {
-            it.copy(
-                name = new,
-                userInfo = it.userInfo.copy(name = new),
-            )
-        }
+        _uiState.update { it.copy(userInfo = it.userInfo.copy(name = new)) }
     }
 
     fun onDOBChanged(new: String) {
-        _uiState.update {
-            it.copy(
-                dateOfBirth = new,
-                userInfo = it.userInfo.copy(birthDate = new),
-            )
-        }
+        _uiState.update { it.copy(userInfo = it.userInfo.copy(birthDate = new)) }
     }
 
     fun onGenderChanged(new: GenderType) {
-        _uiState.update {
-            it.copy(
-                gender = new,
-                userInfo = it.userInfo.copy(gender = new),
-            )
-        }
+        _uiState.update { it.copy(userInfo = it.userInfo.copy(gender = new)) }
     }
 
     fun setShowBottomSheet(value: Boolean) {
@@ -123,20 +102,16 @@ class LoginInfoViewModel(
                             when (data) {
                                 is Verification.NewMember -> {
                                     dataStoreRepository.saveAccessToken(data.newUserToken)
-
                                     _events.emit(LoginEvent.VerificationSuccessNew)
                                 }
 
                                 is Verification.ExistingMember -> {
                                     fcmRepository.validateAndRefreshTokenIfNeeded(data.accessToken)
-
                                     dataStoreRepository.saveAccessToken(data.accessToken)
                                     dataStoreRepository.saveRefreshToken(data.refreshToken)
-
                                     _events.emit(LoginEvent.VerificationSuccessExisting)
                                 }
                             }
-
                         } else {
                             _events.emit(LoginEvent.VerificationFailure)
                         }
@@ -152,7 +127,7 @@ class LoginInfoViewModel(
     }
 
     /** 회원가입 */
-    fun memberRegister(name: String, birthDate: String, gender: GenderType) {
+    fun memberRegister() {
         viewModelScope.launch {
             try {
                 if (debug) {
@@ -160,14 +135,14 @@ class LoginInfoViewModel(
                     return@launch
                 }
 
-                // 🔹 이미 로그인 단계에서 FCM 토큰은 유효성 검증 완료됨
+                val userInfo = _uiState.value.userInfo
                 val fcmToken = FirebaseMessaging.getInstance().token.await()
                 Log.d("httplog", "회원가입 시 FCM 토큰 사용: $fcmToken")
 
                 memberRegisterRepository.registerMember(
-                    name = name,
-                    birthDate = birthDate.formatAsDate(),
-                    gender = gender,
+                    name = userInfo.name,
+                    birthDate = userInfo.birthDate.formatAsDate(),
+                    gender = userInfo.gender,
                     fcmToken = fcmToken,
                 ).onSuccess {
                     Log.d("httplog", "회원가입 성공: ${it.accessToken} ${it.refreshToken}")
