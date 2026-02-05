@@ -27,7 +27,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
@@ -38,6 +37,7 @@ import com.konkuk.medicarecall.ui.model.NavigationDestination
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginVerificationScreen(
@@ -49,31 +49,27 @@ fun LoginVerificationScreen(
     navigateToCareCallSetting: () -> Unit = {},
     navigateToPurchase: () -> Unit = {},
     navigateToHome: () -> Unit = {},
-    loginInfoViewModel: LoginInfoViewModel = koinViewModel(),
+    viewModel: LoginInfoViewModel = koinViewModel(),
 ) {
-    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        loginInfoViewModel.events.collect { event ->
+        viewModel.events.collect { event ->
             when (event) {
                 is LoginEvent.VerificationSuccessNew -> {
-                    // 인증 성공 시 회원정보 화면으로 이동
                     navigateToUserInfo()
                 }
 
                 is LoginEvent.VerificationSuccessExisting -> {
-                    // 인증 성공, 기존 회원일 시 등록된 어르신, 시간, 결제 정보 확인
-                    loginInfoViewModel.checkStatus()
+                    viewModel.checkStatus()
                 }
 
                 is LoginEvent.VerificationFailure -> {
-                    // 인증 실패 시 스낵바 표시
                     coroutineScope.launch {
                         snackBarState.showSnackbar(
                             message = "인증번호가 올바르지 않습니다",
@@ -82,15 +78,13 @@ fun LoginVerificationScreen(
                     }
                 }
 
-                else -> { /* 다른 이벤트 무시 */
-                }
+                else -> {}
             }
         }
     }
 
     LaunchedEffect(uiState.navigationDestination) {
         uiState.navigationDestination?.let { destination ->
-            // 기존 사용자는 바로 회원정보 입력 화면으로 이동하지 않고 다른 처리가 필요할 수 있음
             navigateToUserInfo()
             when (destination) {
                 is NavigationDestination.GoToLogin -> navigateToPhone()
@@ -99,7 +93,7 @@ fun LoginVerificationScreen(
                 is NavigationDestination.GoToPayment -> navigateToPurchase()
                 is NavigationDestination.GoToHome -> navigateToHome()
             }
-            loginInfoViewModel.onNavigationHandled()
+            viewModel.onNavigationHandled()
         }
     }
 
@@ -107,58 +101,31 @@ fun LoginVerificationScreen(
         modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .padding(horizontal = 20.dp)
             .statusBarsPadding()
             .imePadding(),
     ) {
-        Column {
-            LoginBackButton(
-                onBack,
-            )
-            Column(
-                Modifier
-                    .verticalScroll(scrollState),
-            ) {
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    "인증번호를\n입력해주세요",
-                    style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black,
-                )
-                Spacer(Modifier.height(40.dp))
-                DefaultTextField(
+        LoginVerificationScreenLayout(
+            verificationCode = uiState.verificationCode,
+            onVerificationCodeChanged = { input ->
+                val filtered = input.filter { it.isDigit() }.take(6)
+                viewModel.onVerificationCodeChanged(filtered)
+            },
+            onConfirmClick = {
+                viewModel.confirmPhoneNumber(
+                    uiState.phoneNumber,
                     uiState.verificationCode,
-                    { input ->
-                        val filtered = input.filter { it.isDigit() }.take(6)
-                        loginInfoViewModel.onVerificationCodeChanged(filtered)
-                    },
-                    placeHolder = "인증번호 입력",
-                    keyboardType = KeyboardType.Number,
-                    textFieldModifier = Modifier.focusRequester(focusRequester),
-                    maxLength = 6,
                 )
-
-                Spacer(Modifier.height(30.dp))
-
-                CTAButton(
-                    type = if (uiState.verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-                    "확인",
-                    onClick = {
-                        // TODO: 서버에 인증번호 보내서 확인하기
-                        loginInfoViewModel.confirmPhoneNumber(
-                            uiState.phoneNumber,
-                            uiState.verificationCode,
-                        )
-                        loginInfoViewModel.onVerificationCodeChanged("")
-                    },
-                )
-            }
-        }
+                viewModel.onVerificationCodeChanged("")
+            },
+            onBack = onBack,
+            focusRequester = focusRequester,
+        )
         DefaultSnackBar(
-            snackBarState,
-            Modifier
+            modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .padding(horizontal = 20.dp)
                 .padding(bottom = 14.dp),
+            hostState = snackBarState,
         )
     }
 }
@@ -170,48 +137,36 @@ private fun LoginVerificationScreenLayout(
     onVerificationCodeChanged: (String) -> Unit,
     onConfirmClick: () -> Unit,
     onBack: () -> Unit = {},
+    focusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val scrollState = rememberScrollState()
-    val focusRequester = remember { FocusRequester() }
 
-    Box(
-        modifier
-            .fillMaxSize()
-            .background(MediCareCallTheme.colors.bg)
-            .padding(horizontal = 20.dp)
-            .statusBarsPadding()
-            .imePadding(),
-    ) {
-        Column {
-            LoginBackButton(onBack)
-            Column(
-                Modifier.verticalScroll(scrollState),
-            ) {
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    "인증번호를\n입력해주세요",
-                    style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black,
-                )
-                Spacer(Modifier.height(40.dp))
-                DefaultTextField(
-                    verificationCode,
-                    { input ->
-                        val filtered = input.filter { it.isDigit() }.take(6)
-                        onVerificationCodeChanged(filtered)
-                    },
-                    placeHolder = "인증번호 입력",
-                    keyboardType = KeyboardType.Number,
-                    textFieldModifier = Modifier.focusRequester(focusRequester),
-                    maxLength = 6,
-                )
-                Spacer(Modifier.height(30.dp))
-                CTAButton(
-                    type = if (verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-                    "확인",
-                    onClick = onConfirmClick,
-                )
-            }
+    Column(modifier = modifier) {
+        LoginBackButton(onBack)
+        Column(
+            modifier = Modifier.verticalScroll(scrollState),
+        ) {
+            Spacer(Modifier.height(20.dp))
+            Text(
+                "인증번호를\n입력해주세요",
+                style = MediCareCallTheme.typography.B_26,
+                color = MediCareCallTheme.colors.black,
+            )
+            Spacer(Modifier.height(40.dp))
+            DefaultTextField(
+                verificationCode,
+                onVerificationCodeChanged,
+                placeHolder = "인증번호 입력",
+                keyboardType = KeyboardType.Number,
+                textFieldModifier = Modifier.focusRequester(focusRequester),
+                maxLength = 6,
+            )
+            Spacer(Modifier.height(30.dp))
+            CTAButton(
+                type = if (verificationCode.length == 6) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                "확인",
+                onClick = onConfirmClick,
+            )
         }
     }
 }
