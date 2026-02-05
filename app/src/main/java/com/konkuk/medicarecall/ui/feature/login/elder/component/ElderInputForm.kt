@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.Elder.ElderResidenceType
+import com.konkuk.medicarecall.domain.model.Elder.RelationshipType
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
@@ -95,29 +95,25 @@ fun ElderInputForm(
         Spacer(Modifier.height(20.dp))
 
         DefaultDropdown(
-            enumList = RelationshipType.entries.map { it.displayName },
+            value = elderData.relationship,
+            enumList = RelationshipType.entries.toList(),
             placeHolder = "어르신과의 관계를 선택해주세요",
             category = "어르신과의 관계",
             scrollState = scrollState,
-            onOptionSelect = { displayName ->
-                RelationshipType.entries.find { it.displayName == displayName }
-                    ?.let { onRelationshipChange(it) }
-            },
-            value = elderData.relationship?.displayName ?: "",
+            onOptionSelect = onRelationshipChange,
+            displayText = { it.displayName },
         )
 
         Spacer(Modifier.height(20.dp))
 
         DefaultDropdown(
-            enumList = ElderResidenceType.entries.map { it.displayName },
+            value = elderData.livingType,
+            enumList = ElderResidenceType.entries.toList(),
             placeHolder = "어르신의 거주방식을 선택해주세요",
             category = "어르신 거주 방식",
             scrollState = scrollState,
-            onOptionSelect = { displayName ->
-                ElderResidenceType.entries.find { it.displayName == displayName }
-                    ?.let { onLivingTypeChanged(it) }
-            },
-            value = elderData.livingType?.displayName ?: "",
+            onOptionSelect = onLivingTypeChanged,
+            displayText = { it.displayName },
         )
 
         Spacer(Modifier.height(20.dp))

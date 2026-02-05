@@ -5,13 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.data.repository.EldersInfoRepository
+import com.konkuk.medicarecall.domain.model.Elder
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData.Companion.toLoginElderData
 import com.konkuk.medicarecall.ui.type.GenderType
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -19,10 +25,36 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class LoginElderViewModel(
     private val elderRegisterRepository: ElderRegisterRepository,
+    private val elderInfoRepository: EldersInfoRepository,
 ) : ViewModel() {
 
     private val _loginElderUiState = MutableStateFlow(LoginElderUiState())
-    val loginElderUiState: StateFlow<LoginElderUiState> = _loginElderUiState.asStateFlow()
+    val loginElderUiState: StateFlow<LoginElderUiState> =
+        _loginElderUiState.onStart {
+            fetchElderList()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = LoginElderUiState(),
+        )
+
+    private val _uiEvent = Channel<LoginElderEvent>()
+    val uiEvent: Flow<LoginElderEvent> = _uiEvent.receiveAsFlow()
+
+    private fun fetchElderList() {
+        viewModelScope.launch {
+            elderInfoRepository.getEldersV2()
+                .onSuccess { data ->
+                    _loginElderUiState.update { state ->
+                        state.copy(
+                            eldersList = data.map { it.toLoginElderData() },
+                        )
+                    }
+                }.onFailure { error ->
+                    Log.e("LoginElderViewModel", "어르신 목록 불러오기 실패: $error")
+                }
+        }
+    }
 
     // ------------------어르신 기본 정보 관련 함수------------------
 
@@ -36,7 +68,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun updateElderRelationship(relationship: RelationshipType) {
+    fun updateElderRelationship(relationship: Elder.RelationshipType) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -46,7 +78,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun updateElderLivingType(livingType: ElderResidenceType) {
+    fun updateElderLivingType(livingType: Elder.ElderResidenceType) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -56,9 +88,12 @@ class LoginElderViewModel(
         }
     }
 
-    fun selectElder(index: Int) {
+    fun setSelectedIndex(index: Int) {
         _loginElderUiState.update { state ->
-            state.copy(selectedIndex = index)
+            state.copy(
+                selectedIndex = index,
+                selectedMedicationTimes = emptySet(), // 인덱스 변경 시 복약 타임 초기화
+            )
         }
     }
 
@@ -95,20 +130,6 @@ class LoginElderViewModel(
         }
     }
 
-    // ------------------건강정보 관련 함수------------------
-
-    fun updateDiseasesText(text: String) {
-        _loginElderUiState.update { state ->
-            state.copy(diseaseInputText = text)
-        }
-    }
-
-    fun updateMedicationText(text: String) {
-        _loginElderUiState.update { state ->
-            state.copy(medicationInputText = text)
-        }
-    }
-
     fun addDisease(disease: String) {
         _loginElderUiState.update { state ->
             state.copy(
@@ -137,7 +158,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun addHealthNote(note: String) {
+    fun addHealthNote(note: Elder.ElderNote) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -151,7 +172,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun removeHealthNote(note: String) {
+    fun removeHealthNote(note: Elder.ElderNote) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -225,12 +246,10 @@ class LoginElderViewModel(
     fun postElderBulk() {
         viewModelScope.launch {
             elderRegisterRepository.postElderBulk(loginElderUiState.value.eldersList)
-                .onSuccess { response ->
+                .onSuccess { data ->
                     _loginElderUiState.update { state ->
                         state.copy(
-                            eldersList = state.eldersList.mapIndexed { index, elderData ->
-                                elderData.copy(id = response[index].id.toLong())
-                            },
+                            eldersList = data.map { it.toLoginElderData() },
                         )
                     }
                 }
@@ -244,17 +263,20 @@ class LoginElderViewModel(
         }
     }
 
-    suspend fun postElderHealthInfoBulk() {
-        elderRegisterRepository.postElderHealthInfoBulk(loginElderUiState.value.eldersList)
-            .onSuccess {
-                Log.d("elderHealthRegister", "Success")
-            }
-            .onFailure { exception ->
-                when (exception) {
-                    is HttpException -> {
-                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
+    fun postElderHealthInfoBulk() {
+        viewModelScope.launch {
+            elderRegisterRepository.postElderHealthInfoBulk(loginElderUiState.value.eldersList)
+                .onSuccess {
+                    Log.d("elderHealthRegister", "Success")
+                    _uiEvent.send(LoginElderEvent.NavigateToCareCallSetting)
+                }
+                .onFailure { exception ->
+                    when (exception) {
+                        is HttpException -> {
+                            Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
+                        }
                     }
                 }
-            }
+        }
     }
 }

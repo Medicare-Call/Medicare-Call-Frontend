@@ -23,28 +23,32 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.ChipItem
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DiseaseNamesItem
 import com.konkuk.medicarecall.ui.common.component.MedicationItem
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderEvent
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderUiState
 import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderViewModel
 import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -58,43 +62,37 @@ fun LoginElderMedInfoScreen(
 
     val scrollState = rememberScrollState()
     val snackBarState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    val currentElder = uiState.eldersList[uiState.selectedIndex]
+    LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.uiEvent.collect { event ->
+                when (event) {
+                    LoginElderEvent.NavigateToCareCallSetting -> navigateToCareCallSetting()
+                }
+            }
+        }
+    }
 
     Box(
-        modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
             .systemBarsPadding()
             .imePadding(),
     ) {
         LoginElderMedInfoScreenLayout(
-            elderNames = uiState.eldersList.map { it.nameState.text.toString() },
-            selectedIndex = uiState.selectedIndex,
-            diseaseInputText = uiState.diseaseInputText,
-            diseaseList = currentElder.diseases,
-            medicationSchedule = currentElder.medicationMap,
-            medicationInputText = uiState.medicationInputText,
-            selectedMedicationTimes = uiState.selectedMedicationTimes.toList(),
-            notes = currentElder.notes,
+            uiState = uiState,
             scrollState = scrollState,
-            onSelectElder = viewModel::selectElder,
-            onDiseasesTextChanged = viewModel::updateDiseasesText,
+            onSelectElder = viewModel::setSelectedIndex,
             onRemoveDisease = viewModel::removeDisease,
             onAddDisease = viewModel::addDisease,
-            onMedicationTextChange = viewModel::updateMedicationText,
             onRemoveMedication = viewModel::removeMedication,
             onSelectTime = viewModel::selectMedicationTime,
             onAddMedication = viewModel::addMedication,
             onRemoveHealthNote = viewModel::removeHealthNote,
             onAddHealthNote = viewModel::addHealthNote,
-            onNextClick = {
-                coroutineScope.launch {
-                    viewModel.postElderHealthInfoBulk()
-                    navigateToCareCallSetting()
-                }
-            },
+            onNextClick = viewModel::postElderHealthInfoBulk,
             onBack = onBack,
         )
         DefaultSnackBar(
@@ -109,28 +107,21 @@ fun LoginElderMedInfoScreen(
 @Composable
 private fun LoginElderMedInfoScreenLayout(
     modifier: Modifier = Modifier,
-    elderNames: List<String>,
-    selectedIndex: Int,
-    diseaseInputText: String,
-    diseaseList: List<String>,
-    medicationSchedule: Map<MedicationTimeType, List<String>>,
-    medicationInputText: String,
-    selectedMedicationTimes: List<MedicationTimeType>,
-    notes: List<String>,
+    uiState: LoginElderUiState = LoginElderUiState(),
     scrollState: ScrollState,
     onSelectElder: (Int) -> Unit,
-    onDiseasesTextChanged: (String) -> Unit,
     onRemoveDisease: (String) -> Unit,
     onAddDisease: (String) -> Unit,
-    onMedicationTextChange: (String) -> Unit,
     onRemoveMedication: (MedicationTimeType, String) -> Unit,
     onSelectTime: (MedicationTimeType) -> Unit,
     onAddMedication: (MedicationTimeType, String) -> Unit,
-    onRemoveHealthNote: (String) -> Unit,
-    onAddHealthNote: (String) -> Unit,
+    onRemoveHealthNote: (Elder.ElderNote) -> Unit,
+    onAddHealthNote: (Elder.ElderNote) -> Unit,
     onNextClick: () -> Unit,
     onBack: () -> Unit = {},
 ) {
+    val selectedElder = uiState.eldersList[uiState.selectedIndex]
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -151,26 +142,24 @@ private fun LoginElderMedInfoScreenLayout(
             Spacer(Modifier.height(20.dp))
 
             ElderSelector(
-                elderNames = elderNames,
-                selectedIndex = selectedIndex,
+                elderNames = uiState.eldersList.map { it.nameState.text.toString() },
+                selectedIndex = uiState.selectedIndex,
                 onSelectElder = onSelectElder,
             )
 
             Spacer(Modifier.height(20.dp))
             DiseaseNamesItem(
-                inputText = diseaseInputText,
-                diseaseList = diseaseList,
-                onTextChanged = onDiseasesTextChanged,
+                textState = uiState.diseaseInputText,
+                diseaseList = selectedElder.diseases,
                 onRemoveChip = onRemoveDisease,
                 onAddDisease = onAddDisease,
             )
             Spacer(Modifier.height(20.dp))
 
             MedicationItem(
-                medicationSchedule = medicationSchedule,
-                inputText = medicationInputText,
-                selectedList = selectedMedicationTimes,
-                onTextChange = onMedicationTextChange,
+                medicationSchedule = selectedElder.medicationMap,
+                inputTextState = uiState.medicationInputText,
+                selectedList = uiState.selectedMedicationTimes.toList(),
                 onRemoveChip = onRemoveMedication,
                 onSelectTime = onSelectTime,
                 onAddMedication = onAddMedication,
@@ -184,24 +173,25 @@ private fun LoginElderMedInfoScreenLayout(
             )
             Spacer(Modifier.height(10.dp))
 
-            if (notes.isNotEmpty()) {
+            if (selectedElder.notes.isNotEmpty()) {
                 Row(
                     Modifier.horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    notes.forEach { note ->
-                        ChipItem(note) { onRemoveHealthNote(note) }
+                    selectedElder.notes.forEach { note ->
+                        ChipItem(note.displayName) { onRemoveHealthNote(note) }
                     }
                 }
                 Spacer(Modifier.height(10.dp))
             }
 
             DefaultDropdown(
-                HealthIssueType.entries.map { it.displayName }.toList(),
-                "특이사항 선택하기",
-                null,
-                scrollState,
-                onAddHealthNote,
+                value = null,
+                enumList = Elder.ElderNote.entries.toList(),
+                placeHolder = "특이사항 선택하기",
+                scrollState = scrollState,
+                onOptionSelect = onAddHealthNote,
+                displayText = { it.displayName },
             )
         }
         CTAButton(
@@ -258,23 +248,11 @@ private fun ElderSelector(
 private fun LoginElderMedInfoScreenPreview() {
     MediCareCallTheme {
         LoginElderMedInfoScreenLayout(
-            elderNames = listOf("김옥자", "박막례"),
-            selectedIndex = 0,
-            diseaseInputText = "",
-            diseaseList = listOf("고혈압", "당뇨"),
-            medicationSchedule = mapOf(
-                MedicationTimeType.MORNING to listOf("혈압약"),
-                MedicationTimeType.DINNER to listOf("당뇨약", "소화제"),
-            ),
-            medicationInputText = "",
-            selectedMedicationTimes = listOf(),
-            notes = listOf("거동 불편"),
+            uiState = LoginElderUiState(),
             scrollState = rememberScrollState(),
             onSelectElder = {},
-            onDiseasesTextChanged = {},
             onRemoveDisease = {},
             onAddDisease = {},
-            onMedicationTextChange = {},
             onRemoveMedication = { _, _ -> },
             onSelectTime = {},
             onAddMedication = { _, _ -> },
