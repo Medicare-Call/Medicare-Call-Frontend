@@ -1,11 +1,9 @@
 package com.konkuk.medicarecall.ui.feature.login.myinfo.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,14 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -34,19 +27,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultSnackBar
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
 import com.konkuk.medicarecall.ui.common.util.isValidDate
-import com.konkuk.medicarecall.ui.feature.login.myinfo.component.AgreementItem
+import com.konkuk.medicarecall.ui.feature.login.myinfo.component.AgreementBottomSheet
 import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
 import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginEvent
 import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginInfoViewModel
@@ -141,74 +132,15 @@ fun LoginMyInfoScreen(
     }
 
     if (uiState.showBottomSheet) {
-        val itemList = listOf(
-            "서비스 이용약관",
-            "개인정보 수집 및 이용 동의",
-        )
-        val isCheckedAll = uiState.checkedStates.all { it }
-
-        ModalBottomSheet(
-            onDismissRequest = { viewModel.setShowBottomSheet(false) },
+        AgreementBottomSheet(
             sheetState = sheetState,
-            containerColor = MediCareCallTheme.colors.bg,
-            dragHandle = null,
-            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-        ) {
-            Column {
-                Text(
-                    "회원가입을 위해\n약관 동의가 필요합니다",
-                    color = MediCareCallTheme.colors.black,
-                    style = MediCareCallTheme.typography.B_20,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 30.dp),
-                )
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 16.dp)
-                        .clickable(
-                            interactionSource = null,
-                            indication = null,
-                            onClick = { viewModel.setAllAgreeCheckState(!uiState.allAgreeCheckState) },
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        painterResource(R.drawable.ic_check_box),
-                        contentDescription = "체크박스",
-                        tint = if (uiState.allAgreeCheckState) MediCareCallTheme.colors.main else MediCareCallTheme.colors.gray2,
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        "전체 동의하기",
-                        color = MediCareCallTheme.colors.black,
-                        style = MediCareCallTheme.typography.SB_16,
-                    )
-                }
-            }
-            HorizontalDivider(
-                thickness = 1.4.dp,
-                color = MediCareCallTheme.colors.gray2,
-            )
-            Spacer(Modifier.height(12.dp))
-
-            itemList.forEachIndexed { index, title ->
-                AgreementItem(
-                    title,
-                    isChecked = uiState.checkedStates[index],
-                    onCheckedChange = { viewModel.setCheckedState(index, !uiState.checkedStates[index]) },
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                )
-            }
-
-            CTAButton(
-                type = if (isCheckedAll) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-                text = "다음",
-                onClick = { viewModel.memberRegister() },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .padding(bottom = 30.dp, top = 20.dp),
-            )
-        }
+            checkedStates = uiState.checkedStates,
+            allAgreeCheckState = uiState.allAgreeCheckState,
+            onDismissRequest = { viewModel.setShowBottomSheet(false) },
+            onAllAgreeClick = { viewModel.setAllAgreeCheckState(!uiState.allAgreeCheckState) },
+            onCheckedChange = viewModel::setCheckedState,
+            onNextClick = viewModel::memberRegister,
+        )
     }
 }
 
