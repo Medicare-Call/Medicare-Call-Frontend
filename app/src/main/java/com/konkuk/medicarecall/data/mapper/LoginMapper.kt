@@ -33,6 +33,6 @@ fun ElderBulkRegisterResponseDto.toModel(): List<Elder> = this.map {
         gender = GenderType.fromString(it.gender),
         phoneNumber = it.phone,
         relationship = Elder.RelationshipType.fromString(it.relationship),
-        livingType = Elder.ElderResidenceType.fromString(it.residenceType),
+        residenceType = Elder.ElderResidenceType.fromString(it.residenceType),
     )
 }
