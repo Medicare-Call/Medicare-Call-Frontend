@@ -23,7 +23,7 @@ private fun formatTime(timeStr: String?): String {
         val parsedTime = LocalTime.parse(timeStr)
         parsedTime.format(DateTimeFormatter.ofPattern("a hh:mm", Locale.KOREAN))
     } catch (e: DateTimeParseException) {
-        Log.w("SleepRepository", "Failed to parse time: $timeStr", e)
+        Log.w("SleepMapper", "Failed to parse time: $timeStr", e)
         ""
     }
 }
