@@ -26,15 +26,13 @@ fun MealResponseDto.toMeals(): List<Meal> = listOfNotNull(
 )
 
 fun List<Meal>.toMealUiStates(): List<MealUiState> =
-    if (isEmpty()) {
-        defaultUnrecordedMeals()
-    } else {
-        map { meal ->
-            MealUiState(
-                mealTime = meal.mealTime,
-                description = meal.description ?: "식사 기록 전이에요.",
-            )
-        }
+    listOf("아침", "점심", "저녁").map { time ->
+        val meal = find { it.mealTime == time }
+
+        MealUiState(
+            mealTime = time,
+            description = meal?.description ?: "식사 기록 전이에요."
+        )
     }
 
 private fun defaultUnrecordedMeals(): List<MealUiState> =
