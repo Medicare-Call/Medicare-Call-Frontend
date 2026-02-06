@@ -31,14 +31,6 @@ fun List<Meal>.toMealUiStates(): List<MealUiState> =
 
         MealUiState(
             mealTime = time,
-            description = meal?.description ?: "식사 기록 전이에요."
-        )
-    }
-
-private fun defaultUnrecordedMeals(): List<MealUiState> =
-    listOf("아침", "점심", "저녁").map {
-        MealUiState(
-            mealTime = it,
-            description = "식사 기록 전이에요.",
+            description = meal?.description ?: "식사 기록 전이에요.",
         )
     }
