@@ -45,12 +45,13 @@ class MealViewModel(
 
     fun loadMealsForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
-            try {
-                val meals = mealRepository.getMeals(elderId, date)
-                _meals.value = meals.toMealUiStates()
-            } catch (e: Exception) {
-                _meals.value = emptyList()
-            }
+            mealRepository.getMeals(elderId, date)
+                .onSuccess { meals ->
+                    _meals.value = meals.toMealUiStates()
+                }
+                .onFailure {
+                    _meals.value = emptyList()
+                }
         }
     }
 }
