@@ -1,11 +1,9 @@
 package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
-import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.StatisticsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,13 +15,11 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 
 @KoinViewModel
 class StatisticsViewModel(
     private val repository: StatisticsRepository,
-    private val eldersHealthInfoRepository: EldersHealthInfoRepository,
     private val eldersIdRepository: ElderIdRepository,
 ) : ViewModel() {
 
@@ -124,63 +120,36 @@ class StatisticsViewModel(
         ignoreLoadingGate: Boolean = false,
     ) {
         if (_uiState.value.isLoading && !ignoreLoadingGate) return
-
-        // [삭제 2] 이 검사는 더 이상 필요 없으므로 삭제합니다.
-        // if (isEarliestWeek.value) return
-
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            runCatching {
-                val formatted = startDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            repository.getStatistics(elderId, startDate.toString())
+                .onSuccess { data ->
+                    lastFetchTime = System.currentTimeMillis()
+                    if (earliestDate == LocalDate.MIN) {
+                        earliestDate = LocalDate.parse(data.subscriptionStartDate)
+                        val isEarliest = _uiState.value.currentWeek.first == weekStartOf(earliestDate)
+                        _uiState.update { it.copy(isEarliestWeek = isEarliest) }
+                    }
 
-                val correctOrder: List<String> =
-                    eldersHealthInfoRepository.getEldersHealthInfo()
-                        .getOrNull()
-                        ?.firstOrNull { it.elderId == elderId }
-                        ?.medications
-                        ?.flatMap { it.value }
-                        ?.distinct()
-                        ?: emptyList()
+                    val summary = WeeklySummaryUiState.from(data, data.medicationStats?.keys?.toList() ?: emptyList())
 
-                repository.getStatistics(elderId, formatted) to correctOrder
-            }.onSuccess { (dto, order) ->
-                lastFetchTime = System.currentTimeMillis()
-                // [수정 5] API 호출 성공 시 earliestDate를 처음 한 번만 설정합니다.
-                if (earliestDate == LocalDate.MIN) {
-                    earliestDate = LocalDate.parse(dto.subscriptionStartDate)
-                    // earliestDate가 갱신되었으므로, 현재 주차가 가장 이른 주차인지 다시 확인합니다.
-                    val isEarliest = _uiState.value.currentWeek.first == weekStartOf(earliestDate)
-                    _uiState.update { it.copy(isEarliestWeek = isEarliest) }
+                    _uiState.update {
+                        it.copy(isLoading = false, summary = summary, error = null)
+                    }
+                }.onFailure { e ->
+                    val summaryState = if (e is HttpException && e.code() == 404) {
+                        WeeklySummaryUiState()
+                    } else null // 그 외의 오류는 error 메시지로 표시
+
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            summary = summaryState,
+                            error = if (summaryState == null) "데이터 로딩 실패: ${e.message}" else null,
+                        )
+                    }
                 }
-
-                Log.d("STATISTICS_DEBUG", "onSuccess: DTO 수신 완료\n$dto")
-                val summary = WeeklySummaryUiState.from(dto, order)
-                Log.d("STATISTICS_DEBUG", "onSuccess: UI State 변환 완료\n$summary")
-
-                _uiState.update {
-                    it.copy(isLoading = false, summary = summary, error = null)
-                }
-            }.onFailure { e ->
-                Log.d("STATISTICS_DEBUG", "404 EMPTY 적용됨: ${WeeklySummaryUiState.EMPTY.weeklyHealthNote}")
-
-                Log.e("STATISTICS_DEBUG", "onFailure: 데이터 로딩 실패", e)
-
-                val summaryState = if (e is HttpException && e.code() == 404) {
-                    // 데이터가 없는 경우(404)는 오류 메시지 없이 빈 상태를 표시합니다.
-                    WeeklySummaryUiState.Companion.EMPTY
-                } else {
-                    null // 그 외의 오류는 error 메시지로 표시
-                }
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        summary = summaryState,
-                        error = if (summaryState == null) "데이터 로딩 실패: ${e.message}" else null,
-                    )
-                }
-            }
         }
     }
 }
