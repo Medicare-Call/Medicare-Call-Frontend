@@ -30,7 +30,6 @@ data class WeeklySummaryUiState(
     val unreadNotification: Int? = null,
 ) {
     companion object {
-        val EMPTY = WeeklySummaryUiState() // 전부 null/빈값
         fun from(dto: StatisticsData, medicineNames: List<String>): WeeklySummaryUiState {
             val stats = dto.summaryStats
             val meals = dto.mealStats

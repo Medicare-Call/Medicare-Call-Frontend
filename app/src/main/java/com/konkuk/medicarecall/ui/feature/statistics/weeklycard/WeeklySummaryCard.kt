@@ -133,5 +133,5 @@ fun PreviewWeeklySummaryCardRecorded() {
 @Preview(name = "요약 카드 - 미기록")
 @Composable
 fun PreviewWeeklySummaryCardUnrecorded() {
-    WeeklySummaryCard(summary = WeeklySummaryUiState.EMPTY)
+    WeeklySummaryCard(summary = WeeklySummaryUiState())
 }

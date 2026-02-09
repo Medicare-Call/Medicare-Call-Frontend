@@ -139,7 +139,7 @@ class StatisticsViewModel(
                     }
                 }.onFailure { e ->
                     val summaryState = if (e is HttpException && e.code() == 404) {
-                        WeeklySummaryUiState.Companion.EMPTY
+                        WeeklySummaryUiState()
                     } else null // 그 외의 오류는 error 메시지로 표시
 
                     _uiState.update {
