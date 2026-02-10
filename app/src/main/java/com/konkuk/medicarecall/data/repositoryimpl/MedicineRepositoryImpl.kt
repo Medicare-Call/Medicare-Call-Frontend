@@ -15,7 +15,7 @@ class MedicineRepositoryImpl(
     private val medicineService: MedicineService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {
-    override suspend fun getConfiguredMedicines(elderId: Int): List<Medicine> {
+    override suspend fun getConfiguredMedicines(elderId: Int): Result<List<Medicine>> = runCatching {
         val schedule = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
@@ -41,9 +41,9 @@ class MedicineRepositoryImpl(
             }
         }
 
-        if (countByMed.isEmpty()) return emptyList()
+        if (countByMed.isEmpty()) return@runCatching emptyList()
 
-        return countByMed.map { (name, goal) ->
+        countByMed.map { (name, goal) ->
             val times = timesByMed[name].orEmpty()
             val timeEnums = times.map { label ->
                 when (label) {
@@ -68,17 +68,15 @@ class MedicineRepositoryImpl(
     override suspend fun getMedicines(
         elderId: Int,
         date: LocalDate,
-    ): List<Medicine> {
-        val fallback =
-            runCatching { getConfiguredMedicines(elderId) }
-                .getOrDefault(emptyList())
+    ): Result<List<Medicine>> = runCatching {
+        val fallback = getConfiguredMedicines(elderId).getOrDefault(emptyList())
 
-        return runCatching {
+        runCatching {
             medicineService.getDailyMedication(elderId, date.toString())
         }.fold(
             onSuccess = { res ->
-                if (!res.isSuccessful) return fallback
-                val dto = res.body() ?: return fallback
+                if (!res.isSuccessful) return@runCatching fallback
+                val dto = res.body() ?: return@runCatching fallback
 
                 val medicines = dto.toMedicines()
                 if (medicines.isEmpty()) fallback else medicines

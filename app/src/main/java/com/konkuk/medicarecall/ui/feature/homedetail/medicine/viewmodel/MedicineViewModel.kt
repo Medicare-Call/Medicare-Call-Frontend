@@ -2,7 +2,6 @@ package com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.mapper.toMedicineUiStates
 import com.konkuk.medicarecall.data.repository.MedicineRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,7 +42,7 @@ class MedicineViewModel(
 
     data class ScreenState(
         val loading: Boolean = false,
-        val items: List<MedicineUiState> = emptyList(),
+        val medicines: List<MedicineUiState> = emptyList(),
         val emptyDate: LocalDate? = null,
         val hasConfiguredMeds: Boolean = false,
     )
@@ -55,28 +54,27 @@ class MedicineViewModel(
         viewModelScope.launch {
             _state.update { it.copy(loading = true, emptyDate = null) }
 
-            runCatching {
-                medicineRepository.getMedicines(elderId, date)
-            }.onSuccess { medicines ->
-                val uiList = medicines.toMedicineUiStates()
-                _state.update {
-                    it.copy(
-                        loading = false,
-                        items = uiList,
-                        emptyDate = if (uiList.isEmpty()) date else null,
-                        hasConfiguredMeds = uiList.isNotEmpty(),
-                    )
+            medicineRepository.getMedicines(elderId, date)
+                .onSuccess { medicines ->
+                    _state.update {
+                        it.copy(
+                            loading = false,
+                            medicines = medicines.map { model -> MedicineUiState(medicine = model) },
+                            emptyDate = if (medicines.isEmpty()) date else null,
+                            hasConfiguredMeds = medicines.isNotEmpty(),
+                        )
+                    }
                 }
-            }.onFailure {
-                _state.update {
-                    it.copy(
-                        loading = false,
-                        items = emptyList(),
-                        emptyDate = date,
-                        hasConfiguredMeds = false,
-                    )
+                .onFailure {
+                    _state.update {
+                        it.copy(
+                            loading = false,
+                            medicines = emptyList(),
+                            emptyDate = date,
+                            hasConfiguredMeds = false,
+                        )
+                    }
                 }
-            }
         }
     }
 }

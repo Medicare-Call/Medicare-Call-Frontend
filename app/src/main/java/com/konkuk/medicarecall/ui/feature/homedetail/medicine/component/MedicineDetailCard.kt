@@ -23,8 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
+import com.konkuk.medicarecall.domain.model.DoseStatus
+import com.konkuk.medicarecall.domain.model.DoseStatusItem
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
