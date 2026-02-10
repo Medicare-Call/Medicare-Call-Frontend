@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.model.Mental
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -66,7 +67,7 @@ fun StateMentalDetailCard(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    if (!mental.isRecorded) {
+                    if (mental.mental.mentalSummary.isEmpty()) {
                         Text(
                             text = "건강징후 기록 전이에요.",
                             style = MediCareCallTheme.typography.R_16,
@@ -77,7 +78,7 @@ fun StateMentalDetailCard(
                             modifier = Modifier,
                             verticalArrangement = Arrangement.spacedBy(2.dp),
                         ) {
-                            mental.mentalSummary.forEach { mentalSummary ->
+                            mental.mental.mentalSummary.forEach { mentalSummary ->
                                 Row(verticalAlignment = Alignment.Top) {
                                     Text(
                                         text = "•",
@@ -105,9 +106,11 @@ fun StateMentalDetailCard(
 fun PreviewStateMentalDetailCard() {
     StateMentalDetailCard(
         mental = MentalUiState(
-            mentalSummary = listOf(
-                "날씨가 좋아서 기분이 좋음",
-                "여느 때와 비슷함",
+            mental = Mental(
+                mentalSummary = listOf(
+                    "날씨가 좋아서 기분이 좋음",
+                    "여느 때와 비슷함",
+                ),
             ),
         ),
     )

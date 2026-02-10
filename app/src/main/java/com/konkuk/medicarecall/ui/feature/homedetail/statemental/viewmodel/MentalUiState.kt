@@ -1,12 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel
 
-data class MentalUiState(
-    val mentalSummary: List<String> = emptyList(), // 심리 상태 요약 3줄
-) {
-    val isRecorded: Boolean
-        get() = mentalSummary.isNotEmpty()
+import com.konkuk.medicarecall.domain.model.Mental
 
-    companion object {
-        val EMPTY = MentalUiState()
-    }
-}
+data class MentalUiState(
+    val mental: Mental = Mental(),
+)
