@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.model.Sleep
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -59,8 +60,9 @@ fun SleepDetailCard(
                         modifier = Modifier,
                         verticalAlignment = Alignment.Bottom,
                     ) {
+                        val isRecorded = sleeps.sleep.bedTime != null && sleeps.sleep.wakeUpTime != null
                         Text(
-                            text = if (sleeps.isRecorded) "${sleeps.totalSleepHours}" else "--",
+                            text = if (isRecorded) "${sleeps.sleep.totalSleepHours}" else "--",
                             style = MediCareCallTheme.typography.SB_22,
                             color = MediCareCallTheme.colors.gray8,
                         )
@@ -72,7 +74,7 @@ fun SleepDetailCard(
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = if (sleeps.isRecorded) "${sleeps.totalSleepMinutes}" else "--",
+                            text = if (isRecorded) "${sleeps.sleep.totalSleepMinutes}" else "--",
                             style = MediCareCallTheme.typography.SB_22,
                             color = MediCareCallTheme.colors.gray8,
                         )
@@ -103,7 +105,7 @@ fun SleepDetailCard(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = sleeps.bedTime?.ifBlank { "오후 --:--" } ?: "오후 --:--",
+                            text = sleeps.sleep.bedTime?.ifBlank { "오후 --:--" } ?: "오후 --:--",
                             style = MediCareCallTheme.typography.SB_16,
                             color = MediCareCallTheme.colors.gray8,
                         )
@@ -125,7 +127,7 @@ fun SleepDetailCard(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = sleeps.wakeUpTime?.ifBlank { "오전 --:--" } ?: "오전 --:--",
+                            text = sleeps.sleep.wakeUpTime?.ifBlank { "오전 --:--" } ?: "오전 --:--",
                             style = MediCareCallTheme.typography.SB_16,
                             color = MediCareCallTheme.colors.gray8,
                         )
@@ -141,12 +143,13 @@ fun SleepDetailCard(
 fun PreviewSleepDetailCard_Recorded() {
     SleepDetailCard(
         sleeps = SleepUiState(
-            date = "2025-07-07",
-            totalSleepHours = 8,
-            totalSleepMinutes = 12,
-            bedTime = "오후 10:12",
-            wakeUpTime = "오전 06:00",
-            isRecorded = true,
+            sleep = Sleep(
+                date = "2025-07-07",
+                totalSleepHours = 8,
+                totalSleepMinutes = 12,
+                bedTime = "오후 10:12",
+                wakeUpTime = "오전 06:00",
+            ),
         ),
     )
 }
