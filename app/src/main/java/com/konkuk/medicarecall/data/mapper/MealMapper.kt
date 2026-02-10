@@ -2,7 +2,6 @@ package com.konkuk.medicarecall.data.mapper
 
 import com.konkuk.medicarecall.data.dto.response.MealResponseDto
 import com.konkuk.medicarecall.domain.model.Meal
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 
 fun MealResponseDto.toMeals(): List<Meal> = listOfNotNull(
     meals.breakfast?.let {
@@ -24,13 +23,3 @@ fun MealResponseDto.toMeals(): List<Meal> = listOfNotNull(
         )
     },
 )
-
-fun List<Meal>.toMealUiStates(): List<MealUiState> =
-    listOf("아침", "점심", "저녁").map { time ->
-        val meal = find { it.mealTime == time }
-
-        MealUiState(
-            mealTime = time,
-            description = meal?.description ?: "식사 기록 전이에요.",
-        )
-    }

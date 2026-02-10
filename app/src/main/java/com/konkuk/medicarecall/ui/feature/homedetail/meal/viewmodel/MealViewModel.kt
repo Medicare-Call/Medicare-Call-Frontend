@@ -2,7 +2,6 @@ package com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.mapper.toMealUiStates
 import com.konkuk.medicarecall.data.repository.MealRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,17 +39,17 @@ class MealViewModel(
         const val TAG = "MEAL_API"
     }
 
-    private val _meals = MutableStateFlow<List<MealUiState>>(emptyList())
-    val meals: StateFlow<List<MealUiState>> = _meals
+    private val _meals = MutableStateFlow(MealUiState())
+    val meals: StateFlow<MealUiState> = _meals
 
     fun loadMealsForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
             mealRepository.getMeals(elderId, date)
                 .onSuccess { meals ->
-                    _meals.value = meals.toMealUiStates()
+                    _meals.value = MealUiState(meals = meals)
                 }
                 .onFailure {
-                    _meals.value = emptyList()
+                    _meals.value = MealUiState()
                 }
         }
     }
