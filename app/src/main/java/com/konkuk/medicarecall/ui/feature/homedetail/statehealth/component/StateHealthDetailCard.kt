@@ -36,7 +36,7 @@ fun StateHealthDetailCard(
 
     val isRecorded =
         healthData.symptoms.isNotEmpty() ||
-            healthData.symptomAnalysis.isNullOrBlank()
+            healthData.symptomAnalysis.isNotBlank()
 
     if (!isRecorded) {
         StateHealthUnrecordedCard(modifier)
