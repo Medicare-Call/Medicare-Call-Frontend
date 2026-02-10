@@ -6,7 +6,7 @@ import com.konkuk.medicarecall.domain.model.Medicine
 
 data class MedicineUiState(
     val medicine: Medicine,
-){
+) {
     val displayDoseStatusList: List<DoseStatusItem>
         get() {
             val korMap = mapOf("MORNING" to "아침", "LUNCH" to "점심", "DINNER" to "저녁")

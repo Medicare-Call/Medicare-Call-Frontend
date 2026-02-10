@@ -59,7 +59,6 @@ fun MealDetailScreen(
         onDateSelected = viewModel::selectDate,
         onMonthClick = { /* 모달 열기 */ },
     )
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -125,7 +124,6 @@ fun MealDetailScreenLayout(
 
                     Spacer(modifier = Modifier.height(12.dp))
                 }
-
             }
         }
     }
@@ -142,7 +140,6 @@ fun PreviewMealDetailScreenRecorded() {
         Meal(mealTime = "점심", description = null),
         Meal(mealTime = "저녁", description = "죽을 드셨어요."),
     )
-
 
     MediCareCallTheme {
         MealDetailScreenLayout(

@@ -73,7 +73,7 @@ fun StateHealthDetailCard(
                 }
                 Spacer(Modifier.height(12.dp))
 
-                if (healthData.symptoms.isEmpty())  {
+                if (healthData.symptoms.isEmpty()) {
                     Text(
                         text = "건강징후 기록 전이에요.",
                         style = MediCareCallTheme.typography.R_16,
@@ -197,7 +197,7 @@ fun PreviewStateHealthDetailCard() {
                     "몸이 느려짐",
                 ),
                 symptomAnalysis = "주요 증상으로 보아 파킨슨 병이 의심돼요. 어르신과 함께 병원에 방문해 보세요.",
-            )
+            ),
         ),
     )
 }
