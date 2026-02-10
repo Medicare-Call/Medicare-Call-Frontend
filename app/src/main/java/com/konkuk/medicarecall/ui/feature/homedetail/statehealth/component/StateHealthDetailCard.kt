@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.model.Health
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.theme.LocalMediCareCallShadowProvider
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -31,13 +32,17 @@ fun StateHealthDetailCard(
     health: HealthUiState,
     modifier: Modifier = Modifier,
 ) {
-    // 1) 전체 미기록은 전용 카드로 일찍 리턴
-    if (!health.isRecorded) {
+    val healthData = health.health
+
+    val isRecorded =
+        healthData.symptoms.isNotEmpty() ||
+            healthData.symptomAnalysis.isNullOrBlank()
+
+    if (!isRecorded) {
         StateHealthUnrecordedCard(modifier)
         return
     }
 
-    // 2) 일부만 기록된 경우 섹션별로 분기
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -68,7 +73,7 @@ fun StateHealthDetailCard(
                 }
                 Spacer(Modifier.height(12.dp))
 
-                if (health.symptoms.isEmpty()) {
+                if (healthData.symptoms.isEmpty())  {
                     Text(
                         text = "건강징후 기록 전이에요.",
                         style = MediCareCallTheme.typography.R_16,
@@ -76,7 +81,7 @@ fun StateHealthDetailCard(
                     )
                 } else {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        health.symptoms.forEach { symptom ->
+                        healthData.symptoms.forEach { symptom ->
                             Row(verticalAlignment = Alignment.Top) {
                                 Text(
                                     text = "•",
@@ -106,7 +111,7 @@ fun StateHealthDetailCard(
                 }
                 Spacer(Modifier.height(12.dp))
 
-                val analysis = health.symptomAnalysis.trim()
+                val analysis = healthData.symptomAnalysis.orEmpty().trim()
                 if (analysis.isBlank()) {
                     Text(
                         text = "증상분석 전이에요.",
@@ -185,13 +190,14 @@ fun StateHealthUnrecordedCard(
 fun PreviewStateHealthDetailCard() {
     StateHealthDetailCard(
         health = HealthUiState(
-            symptoms = listOf(
-                "손 떨림 증상",
-                "거동 불편",
-                "몸이 느려짐",
-            ),
-            symptomAnalysis = "주요 증상으로 보아 파킨슨 병이 의심돼요. 어르신과 함께 병원에 방문해 보세요.",
-            isRecorded = true,
+            health = Health(
+                symptoms = listOf(
+                    "손 떨림 증상",
+                    "거동 불편",
+                    "몸이 느려짐",
+                ),
+                symptomAnalysis = "주요 증상으로 보아 파킨슨 병이 의심돼요. 어르신과 함께 병원에 방문해 보세요.",
+            )
         ),
     )
 }

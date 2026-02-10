@@ -1,11 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel
 
+import com.konkuk.medicarecall.domain.model.Health
+
 data class HealthUiState(
-    val symptoms: List<String> = emptyList(),
-    val symptomAnalysis: String = "",
-    val isRecorded: Boolean = false,
-) {
-    companion object {
-        val EMPTY = HealthUiState()
-    }
-}
+    val health: Health = Health(),
+)
