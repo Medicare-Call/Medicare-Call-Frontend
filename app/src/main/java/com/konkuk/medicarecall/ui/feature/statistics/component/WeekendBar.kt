@@ -17,8 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun WeekendBar(
@@ -91,7 +92,7 @@ fun PreviewWeekendBar_ThisWeek() {
 fun PreviewWeekendBar_WithDateRange() {
     MediCareCallTheme {
         WeekendBar(
-            currentWeek = Pair(LocalDate.of(2025, 10, 6), LocalDate.of(2025, 10, 12)),
+            currentWeek = Pair(LocalDate(2025, 10, 6), LocalDate(2025, 10, 12)),
             isLatestWeek = false,
             isEarliestWeek = false,
             onPreviousWeek = {},

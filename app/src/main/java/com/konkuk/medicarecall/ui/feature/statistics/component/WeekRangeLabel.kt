@@ -12,8 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format
+import kotlinx.datetime.format.char
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -24,7 +27,14 @@ fun WeekRangeLabel(
     isThisWeek: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val formatter = remember { DateTimeFormatter.ofPattern("M월 d일", Locale.KOREAN) }
+
+    val formatter = remember { LocalDate.Format {
+        monthNumber()
+        char('월')
+        char(' ')
+        day()
+        char('일')
+    } }
     val textStyle = MediCareCallTheme.typography.M_20
     val textColor = MediCareCallTheme.colors.gray8
 
@@ -65,8 +75,8 @@ fun PreviewWeekRangeLabel_ThisWeek() {
 fun PreviewWeekRangeLabel_WithRange() {
     MediCareCallTheme {
         WeekRangeLabel(
-            startDate = LocalDate.of(2025, 10, 6),
-            endDate = LocalDate.of(2025, 10, 12),
+            startDate = LocalDate(2025, 10, 6),
+            endDate = LocalDate(2025, 10, 12),
             isThisWeek = false,
         )
     }
