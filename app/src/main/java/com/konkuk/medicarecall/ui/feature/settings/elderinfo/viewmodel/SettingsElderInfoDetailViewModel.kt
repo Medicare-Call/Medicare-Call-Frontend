@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
-import com.konkuk.medicarecall.ui.model.ElderInfo
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import com.konkuk.medicarecall.domain.model.type.ElderResidence
 import com.konkuk.medicarecall.domain.model.type.GenderType
 import com.konkuk.medicarecall.domain.model.type.Relationship
@@ -26,7 +26,7 @@ class SettingsElderInfoDetailViewModel(
     private val _uiState = MutableStateFlow(SettingsElderInfoDetailUiState())
     val uiState: StateFlow<SettingsElderInfoDetailUiState> = _uiState.asStateFlow()
 
-    fun loadElderDataById(elderId: Int) {
+    fun loadElderDataById(elderId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             eldersInfoRepository.getElders()
@@ -66,7 +66,7 @@ class SettingsElderInfoDetailViewModel(
     }
 
     fun processElderInfo(
-        elderId: Int,
+        elderId: Long,
         name: String,
         birthDate: String,
         gender: GenderType,
@@ -91,7 +91,7 @@ class SettingsElderInfoDetailViewModel(
                     .onSuccess {
                         Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 완료: $it")
                         _uiState.update { it.copy(isSuccess = true, isUpdateSuccess = true) }
-                        if (elderId != -1) {
+                        if (elderId != -1L) {
                             loadElderDataById(elderId)
                         }
                     }
@@ -108,7 +108,7 @@ class SettingsElderInfoDetailViewModel(
         }
     }
 
-    fun deleteElderInfo(elderId: Int, onComplete: (() -> Unit)? = null) {
+    fun deleteElderInfo(elderId: Long, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null, isDeleteSuccess = false) }
             try {

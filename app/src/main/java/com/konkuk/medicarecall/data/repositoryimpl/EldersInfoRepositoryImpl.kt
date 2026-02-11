@@ -8,8 +8,7 @@ import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.domain.model.Elder
-import com.konkuk.medicarecall.ui.model.ElderData
-import com.konkuk.medicarecall.ui.model.ElderInfo
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import com.konkuk.medicarecall.ui.model.ElderSubscription
 import org.koin.core.annotation.Single
 
@@ -30,18 +29,18 @@ class EldersInfoRepositoryImpl(
     }
 
     override suspend fun updateElder(
-        id: Int,
-        request: ElderData,
+        id: Long,
+        request: ElderInfo,
     ): Result<Unit> = runCatching {
         val requestDto = ElderInfoMapper.elderDataToRequestDto(request)
         eldersInfoService.updateElder(elderId = id, request = requestDto).handleResponse()
     }
 
-    override suspend fun deleteElder(id: Int): Result<Unit> = runCatching {
+    override suspend fun deleteElder(id: Long): Result<Unit> = runCatching {
         eldersInfoService.deleteElderSettings(id).handleNullableResponse()
     }
 
-    override suspend fun getCareCallTimes(id: Int): Result<CallTimeResponseDto> = runCatching {
+    override suspend fun getCareCallTimes(id: Long): Result<CallTimeResponseDto> = runCatching {
         eldersInfoService.getCallTimes(id).handleResponse()
     }
 }

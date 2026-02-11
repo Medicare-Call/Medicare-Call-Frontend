@@ -3,6 +3,7 @@ package com.konkuk.medicarecall.data.mapper
 import com.konkuk.medicarecall.data.dto.response.ElderBulkRegisterResponseDto
 import com.konkuk.medicarecall.data.dto.response.VerificationResponseDto
 import com.konkuk.medicarecall.domain.model.Elder
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import com.konkuk.medicarecall.domain.model.MemberStatus
 import com.konkuk.medicarecall.domain.model.Verification
 import com.konkuk.medicarecall.domain.model.type.ElderResidence
@@ -29,12 +30,14 @@ fun VerificationResponseDto.toModel(): Verification =
 
 fun ElderBulkRegisterResponseDto.toModel(): List<Elder> = this.map {
     Elder(
-        id = it.id.toLong(),
-        name = it.name,
-        birthDate = it.birthDate,
-        gender = GenderType.fromString(it.gender),
-        phoneNumber = it.phone,
-        relationship = Relationship.fromString(it.relationship),
-        residenceType = ElderResidence.fromString(it.residenceType),
+        info = ElderInfo(
+            elderId = it.id.toLong(),
+            name = it.name,
+            birthDate = it.birthDate,
+            gender = GenderType.fromString(it.gender),
+            phone = it.phone,
+            relationship = Relationship.fromString(it.relationship),
+            residenceType = ElderResidence.fromString(it.residenceType),
+        ),
     )
 }

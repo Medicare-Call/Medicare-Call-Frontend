@@ -30,7 +30,7 @@ object ElderHealthMapper {
     }
 
     // Map<MedicationTimeType, List<String>> → List<MedicationSchedule>
-    private fun toMedicationSchedules(medications: Map<MedicationTime, List<String>>): List<MedicationSchedule> {
+    fun toMedicationSchedules(medications: Map<MedicationTime, List<String>>): List<MedicationSchedule> {
         val timesByMed = linkedMapOf<String, MutableSet<MedicationTime>>()
         for ((time, meds) in medications) {
             for (med in meds) {

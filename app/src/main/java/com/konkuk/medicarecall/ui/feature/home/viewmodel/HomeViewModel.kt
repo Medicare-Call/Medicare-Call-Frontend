@@ -18,9 +18,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import org.koin.android.annotation.KoinViewModel
-
-data class ElderInfo(val id: Int, val name: String, val phone: String?)
 
 @KoinViewModel
 class HomeViewModel(
@@ -44,7 +43,7 @@ class HomeViewModel(
         val id = selectedElderId.value ?: return
 
         _elderInfoList.value = elderInfoList.value.map {
-            if (it.id == id) it.copy(name = newName) else it
+            if (it.elderId == id) it.copy(name = newName) else it
         }
         _homeUiState.value = _homeUiState.value.copy(elderName = newName)
 
@@ -85,10 +84,10 @@ class HomeViewModel(
 //    }
 
     // 현재 선택된 어르신 ID
-    private val _selectedElderId = MutableStateFlow<Int?>(
-        savedStateHandle.get<Int?>(KEY_SELECTED_ELDER_ID),
+    private val _selectedElderId = MutableStateFlow<Long?>(
+        savedStateHandle.get<Long?>(KEY_SELECTED_ELDER_ID),
     )
-    val selectedElderId: StateFlow<Int?> = _selectedElderId.asStateFlow()
+    val selectedElderId: StateFlow<Long?> = _selectedElderId.asStateFlow()
 
     init {
         fetchElderList()
@@ -127,13 +126,13 @@ class HomeViewModel(
             }
             val elderIdMap = elderIdRepository.getElderIds()
             _elderInfoList.value = elderIdMap.map {
-                ElderInfo(id = it.key, name = it.value, phone = null)
+                ElderInfo(elderId = it.key.toLong(), name = it.value)
             }
-            val restoredId = savedStateHandle.get<Int?>(KEY_SELECTED_ELDER_ID)
-            if (restoredId != null && _elderInfoList.value.any { it.id == restoredId }) {
+            val restoredId = savedStateHandle.get<Long?>(KEY_SELECTED_ELDER_ID)
+            if (restoredId != null && _elderInfoList.value.any { it.elderId == restoredId }) {
                 _selectedElderId.value = restoredId
             } else if (_selectedElderId.value == null && _elderInfoList.value.isNotEmpty()) {
-                _selectedElderId.value = _elderInfoList.value.first().id
+                _selectedElderId.value = _elderInfoList.value.first().elderId
             }
         }
     }
@@ -141,7 +140,7 @@ class HomeViewModel(
     /**
      * 특정 어르신 ID를 받아서 홈 화면 데이터를 서버에 요청합니다.
      */
-    private fun fetchHomeSummaryForToday(elderId: Int) {
+    private fun fetchHomeSummaryForToday(elderId: Long) {
         viewModelScope.launch {
             _homeUiState.update { it.copy(isLoading = false) }
             // val today = LocalDate.now()
@@ -158,7 +157,7 @@ class HomeViewModel(
                     .getOrNull()
                     ?.firstOrNull { it.elderId == elderId }
 
-                val correctName = _elderInfoList.value.find { it.id == elderId }?.name
+                val correctName = _elderInfoList.value.find { it.elderId == elderId }?.name
                     ?: uiFromServer.elderName
 
                 // 정렬 기준(설정에 등록된 전체 약 순서)
@@ -210,12 +209,12 @@ class HomeViewModel(
         }
     }
 
-    private suspend fun createFallbackHomeUiState(elderId: Int): HomeUiState {
+    private suspend fun createFallbackHomeUiState(elderId: Long): HomeUiState {
         val healthInfo = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
         val elderName =
-            healthInfo?.name ?: _elderInfoList.value.find { it.id == elderId }?.name ?: ""
+            healthInfo?.name ?: _elderInfoList.value.find { it.elderId == elderId }?.name ?: ""
         // 설정 정보에서 첫 복용 시간 추출
         val firstTimeCode: String? = healthInfo
             ?.medications
@@ -274,7 +273,7 @@ class HomeViewModel(
     fun selectElder(name: String) {
         if (_homeUiState.value.isLoading) return
 
-        val id: Int = elderIdByName.value[name] ?: return
+        val id: Long = elderIdByName.value[name] ?: return
         if (_selectedElderId.value != id) {
             _selectedElderId.value = id
         }
@@ -286,9 +285,9 @@ class HomeViewModel(
     }
 
     // 이름 → ID 매핑
-    private val elderIdByName: StateFlow<Map<String, Int>> =
+    private val elderIdByName: StateFlow<Map<String, Long>> =
         _elderInfoList.mapState(viewModelScope) { list ->
-            list.associate { it.name to it.id }
+            list.associate { it.name to it.elderId }
         }
 
 //    private fun softRefreshCurrentElder(timeoutMs: Long = 1200L) {
