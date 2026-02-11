@@ -14,14 +14,12 @@ class MemberRegisterRepositoryImpl(
 ) : MemberRegisterRepository {
 
     override suspend fun registerMember(
-        token: String,
         name: String,
         birthDate: String,
         gender: GenderType,
         fcmToken: String,
     ): Result<MemberTokenResponseDto> = runCatching {
         memberRegisterService.postMemberRegister(
-            "Bearer $token",
             MemberRegisterRequestDto(name, birthDate, gender, fcmToken),
         ).handleResponse()
     }

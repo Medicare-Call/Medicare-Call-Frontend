@@ -13,14 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
 
 // 반복되는 UI를 재사용 가능한 함수로 추출
 @Composable
@@ -59,16 +60,14 @@ private fun MedicationTimeSection(
 
 @Composable
 fun MedicationItem(
-    medicationSchedule: Map<MedicationTimeType, List<String>>,
-    selectedList: List<MedicationTimeType>,
-    inputText: String,
-    onTextChange: (String) -> Unit,
-    onSelectTime: (MedicationTimeType) -> Unit,
-    onAddMedication: (MedicationTimeType, String) -> Unit,
-    onRemoveChip: (MedicationTimeType, String) -> Unit,
+    medications: List<Elder.Medication>,
+    selectedTimes: List<Elder.MedicationTime>,
+    inputTextState: TextFieldState,
+    onSelectTime: (Elder.MedicationTime) -> Unit,
+    onAddMedication: (String) -> Unit,
+    onRemoveMedication: (Elder.Medication) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // UI에 표시할 제목을 Map으로 정의하여 관리 용이성을 높임
     Column(
         modifier = modifier,
     ) {
@@ -78,54 +77,53 @@ fun MedicationItem(
             style = MediCareCallTheme.typography.M_17,
         )
         Spacer(Modifier.height(10.dp))
-        MedicationTimeType.entries.forEach { timeType ->
-            // 해당 시간대에 약이 없는 경우를 안전하게 처리
-            val medList = medicationSchedule[timeType]
-            if (!medList.isNullOrEmpty()) {
+
+        Elder.MedicationTime.entries.forEach { timeType ->
+            val medsForTime = medications.filter { timeType in it.times }
+            if (medsForTime.isNotEmpty()) {
                 Spacer(Modifier.height(10.dp))
                 MedicationTimeSection(
-                    title = timeType.time,
-                    medications = medList,
-                    onRemoveChip = { medicationToRemove ->
-                        onRemoveChip(timeType, medicationToRemove)
+                    title = timeType.displayName,
+                    medications = medsForTime.map { it.medicine },
+                    onRemoveChip = { medicineName ->
+                        medications.find { it.medicine == medicineName }?.let { onRemoveMedication(it) }
                     },
                 )
             }
         }
 
-        if (!medicationSchedule.values.all { it.isEmpty() })
+        if (medications.isNotEmpty()) {
             Spacer(Modifier.height(20.dp))
+        }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            MedicationTimeType.entries.forEach {
+            Elder.MedicationTime.entries.forEach { time ->
                 Box(
                     Modifier
                         .clip(CircleShape)
                         .background(
-                            color = if (it in selectedList) MediCareCallTheme.colors.main
+                            color = if (time in selectedTimes) MediCareCallTheme.colors.main
                             else MediCareCallTheme.colors.white,
                         )
                         .border(
                             1.2.dp,
-                            if (it in selectedList) MediCareCallTheme.colors.main
+                            if (time in selectedTimes) MediCareCallTheme.colors.main
                             else MediCareCallTheme.colors.gray2,
                             CircleShape,
                         )
                         .clickable(
                             indication = null,
                             interactionSource = null,
-                            onClick = {
-                                onSelectTime(it)
-                            },
+                            onClick = { onSelectTime(time) },
                         ),
                 ) {
                     Text(
-                        it.time,
-                        color = if (it in selectedList) MediCareCallTheme.colors.g50
+                        time.displayName,
+                        color = if (time in selectedTimes) MediCareCallTheme.colors.g50
                         else MediCareCallTheme.colors.gray5,
-                        style = if (it in selectedList) MediCareCallTheme.typography.SB_14
+                        style = if (time in selectedTimes) MediCareCallTheme.typography.SB_14
                         else MediCareCallTheme.typography.R_14,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp),
                     )
@@ -134,17 +132,13 @@ fun MedicationItem(
         }
         Spacer(Modifier.height(20.dp))
         AddTextField(
-            inputText,
+            textFieldState = inputTextState,
             placeHolder = "예시) 당뇨약",
-            onTextChange = { onTextChange(it) },
             clickPlus = {
-                if (inputText.isNotBlank() && selectedList.isNotEmpty()) { // 입력값이 있을 때만 동작
-                    selectedList.forEach { time ->
-                        onAddMedication(time, inputText)
-                    }
-
-                    // 사용성 개선: 약 추가 후 입력 필드와 선택된 시간 초기화
-                    onTextChange("")
+                val inputText = inputTextState.text.toString()
+                if (inputText.isNotBlank() && selectedTimes.isNotEmpty()) {
+                    onAddMedication(inputText)
+                    inputTextState.edit { replace(0, length, "") }
                 }
             },
         )
@@ -157,16 +151,15 @@ private fun MedicationItemPreview() {
     MediCareCallTheme {
         Column(Modifier.padding(16.dp)) {
             MedicationItem(
-                medicationSchedule = mapOf(
-                    MedicationTimeType.MORNING to listOf("당뇨약"),
-                    MedicationTimeType.DINNER to listOf("혈압약"),
+                medications = listOf(
+                    Elder.Medication("당뇨약", listOf(Elder.MedicationTime.BREAKFAST)),
+                    Elder.Medication("혈압약", listOf(Elder.MedicationTime.DINNER)),
                 ),
-                selectedList = listOf(),
-                inputText = "",
-                onTextChange = {},
+                selectedTimes = listOf(),
+                inputTextState = TextFieldState(""),
                 onSelectTime = {},
-                onAddMedication = { _, _ -> },
-                onRemoveChip = { _, _ -> },
+                onAddMedication = {},
+                onRemoveMedication = {},
             )
         }
     }

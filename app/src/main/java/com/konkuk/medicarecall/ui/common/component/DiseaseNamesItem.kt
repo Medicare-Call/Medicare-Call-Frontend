@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,9 +19,8 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
 fun DiseaseNamesItem(
-    inputText: String,
+    textState: TextFieldState,
     diseaseList: List<String>,
-    onTextChanged: (String) -> Unit,
     onAddDisease: (String) -> Unit,
     onRemoveChip: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -52,17 +52,15 @@ fun DiseaseNamesItem(
             }
         }
         AddTextField(
-            inputText = inputText,
+            textFieldState = textState,
             placeHolder = "질환명",
-            onTextChange = { onTextChanged(it) },
             clickPlus = {
-                if (inputText.trim().isNotBlank()) {
-                    if (diseaseList.contains(inputText)) {
-                        onTextChanged("")
-                    } else {
-                        onAddDisease(inputText)
-                        onTextChanged("")
+                val input = textState.text.toString()
+                if (input.trim().isNotBlank()) {
+                    if (!diseaseList.contains(input)) {
+                        onAddDisease(input)
                     }
+                    textState.edit { replace(0, length, "") }
                 }
             },
         )
@@ -75,9 +73,8 @@ private fun DiseaseNamesItemPreview() {
     MediCareCallTheme {
         Column(Modifier.padding(16.dp)) {
             DiseaseNamesItem(
-                inputText = "",
+                textState = TextFieldState(""),
                 diseaseList = listOf("고혈압", "당뇨"),
-                onTextChanged = {},
                 onAddDisease = {},
                 onRemoveChip = {},
             )

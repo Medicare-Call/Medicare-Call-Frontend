@@ -3,6 +3,14 @@ package com.konkuk.medicarecall.ui.type
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class GenderType {
-    MALE, FEMALE
+enum class GenderType(val displayName: String) {
+    MALE("남자"),
+    FEMALE("여자"),
+    ;
+
+    companion object {
+        fun fromString(value: String): GenderType {
+            return GenderType.entries.find { it.displayName == value || it.name == value } ?: MALE
+        }
+    }
 }
