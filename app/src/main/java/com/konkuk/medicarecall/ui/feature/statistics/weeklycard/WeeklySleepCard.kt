@@ -127,6 +127,6 @@ fun PreviewWeeklySleepCardRecorded() {
 fun PreviewWeeklySleepCardUnrecorded() {
     WeeklySleepCard(
         modifier = Modifier.width(155.dp),
-        summary = WeeklySummaryUiState.EMPTY,
+        summary = WeeklySummaryUiState(),
     )
 }

@@ -21,13 +21,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.ui.model.ElderSubscription
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.theme.figmaShadow
 
 @Composable
 fun SubscribeCard(
-    elderInfo: EldersSubscriptionResponseDto,
+    elderInfo: ElderSubscription,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -87,7 +87,7 @@ private fun SubscribeCardPreview() {
     MediCareCallTheme {
         Column(Modifier.padding(16.dp)) {
             SubscribeCard(
-                elderInfo = EldersSubscriptionResponseDto(
+                elderInfo = ElderSubscription(
                     elderId = 1,
                     name = "김옥자",
                     plan = "메디케어콜 프리미엄 플랜",

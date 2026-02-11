@@ -3,8 +3,8 @@ package com.konkuk.medicarecall.ui.feature.settings.elderhealth.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,7 +44,7 @@ class SettingsElderHealthDetailViewModel(
     }
 
     fun updateElderHealth(
-        healthInfo: EldersHealthResponseDto,
+        healthInfo: ElderHealthInfo,
         onComplete: (() -> Unit)? = null,
     ) {
         viewModelScope.launch {

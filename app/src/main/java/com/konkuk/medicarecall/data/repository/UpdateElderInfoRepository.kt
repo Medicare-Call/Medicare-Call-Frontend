@@ -1,8 +1,8 @@
 package com.konkuk.medicarecall.data.repository
 
-import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
+import com.konkuk.medicarecall.ui.model.ElderInfo
 
 interface UpdateElderInfoRepository {
-    suspend fun updateElderInfo(id: Int, request: ElderRegisterRequestDto): Result<Unit>
+    suspend fun updateElderInfo(elderInfo: ElderInfo): Result<Unit>
     suspend fun deleteElder(id: Int): Result<Unit>
 }
