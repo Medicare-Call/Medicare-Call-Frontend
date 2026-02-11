@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.mapper
 
-import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 import com.konkuk.medicarecall.domain.model.Home
 import com.konkuk.medicarecall.domain.model.HomeDoseStatusList
 import com.konkuk.medicarecall.domain.model.HomeSleep
@@ -51,7 +51,7 @@ private fun HomeResponseDto.DoseStatusDto.toHomeDoseStatus(): HomeDoseStatusList
 }
 
 fun Home.toUiState(
-    healthInfo: EldersHealthResponseDto?,
+    healthInfo: ElderHealthInfo?,
     elderName: String,
 ): HomeUiState {
     val mergedMedicines = mergeMedicinesForHome(medicines, healthInfo)
@@ -78,7 +78,7 @@ fun Home.toUiState(
 // Home의 Medicines
 private fun mergeMedicinesForHome(
     medicines: List<Medicines>,
-    healthInfo: EldersHealthResponseDto?,
+    healthInfo: ElderHealthInfo?,
 ): List<MedicineUiState> {
     if (medicines.isEmpty()) return emptyList()
 
@@ -116,7 +116,7 @@ object HomeMapper {
 
     // 서버 에러 시 설정 정보로 기본 화면 만들기 (복약 기록 0으로 표시)
     fun fromHealthInfo(
-        healthInfo: EldersHealthResponseDto?,
+        healthInfo: ElderHealthInfo?,
         elderName: String,
     ): HomeUiState {
         val medicines = createFallbackMedicines(healthInfo)
@@ -131,7 +131,7 @@ object HomeMapper {
 
     // 기본 약 목록 (설정 기준)
     private fun createFallbackMedicines(
-        healthInfo: EldersHealthResponseDto?,
+        healthInfo: ElderHealthInfo?,
     ): List<MedicineUiState> {
         val medications = healthInfo?.medications
 
@@ -166,7 +166,7 @@ object HomeMapper {
     // 약 순서 정렬 (설정 기준)
     private fun sortMedicinesByHealthInfo(
         medicines: List<MedicineUiState>,
-        healthInfo: EldersHealthResponseDto?,
+        healthInfo: ElderHealthInfo?,
     ): List<MedicineUiState> {
         val correctOrder = healthInfo?.medications
             ?.flatMap { it.value }
