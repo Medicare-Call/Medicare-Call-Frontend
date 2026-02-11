@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.common.util
+package com.konkuk.medicarecall.domain.util
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit

@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.ui.common.util.today
+import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate

@@ -25,8 +25,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
-import com.konkuk.medicarecall.ui.common.util.getCurrentWeekDates
-import com.konkuk.medicarecall.ui.common.util.today
+import com.konkuk.medicarecall.domain.util.getCurrentWeekDates
+import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
