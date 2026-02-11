@@ -21,26 +21,34 @@ fun HomeResponseDto.toHome(): Home = Home(
     dinnerEaten = mealStatus.dinner,
     totalTaken = medicationStatus.totalTaken,
     totalGoal = medicationStatus.totalGoal,
-    medicines = medicationStatus.medicationList?.map { med ->
-        Medicines(
-            medicineName = med.type.orEmpty(),
-            todayTakenCount = med.taken,
-            todayRequiredCount = med.goal,
-            nextDoseTime = med.nextTime,
-            doseStatusList = med.doseStatusList?.map { dose ->
-                HomeDoseStatusList(
-                    time = dose.time.orEmpty(),
-                    taken = dose.taken,
-                )
-            },
-        )
-    } ?: emptyList(),
+    medicines = medicationStatus.medicationList
+        ?.map { it.toMedicines() }
+        ?: emptyList(),
     sleep = sleep?.let { HomeSleep(it.meanHours, it.meanMinutes, it.meanHours != null || it.meanMinutes != null) },
     healthStatus = healthStatus,
     mentalStatus = mentalStatus,
     glucoseLevelAverageToday = bloodSugar?.meanValue,
     unreadNotification = unreadNotification,
 )
+
+// Medication DTO → Domain
+private fun HomeResponseDto.MedicationDto.toMedicines(): Medicines {
+    return Medicines(
+        medicineName = type.orEmpty(),
+        todayTakenCount = taken,
+        todayRequiredCount = goal,
+        nextDoseTime = nextTime,
+        doseStatusList = doseStatusList?.map { it.toHomeDoseStatus() } ?: emptyList(),
+    )
+}
+
+// Dose DTO → Domain
+private fun HomeResponseDto.DoseStatusDto.toHomeDoseStatus(): HomeDoseStatusList {
+    return HomeDoseStatusList(
+        time = time.orEmpty(),
+        taken = taken,
+    )
+}
 
 fun Home.toUiState(
     healthInfo: EldersHealthResponseDto?,
