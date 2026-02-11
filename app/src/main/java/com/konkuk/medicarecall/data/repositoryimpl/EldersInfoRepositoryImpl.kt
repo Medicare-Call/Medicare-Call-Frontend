@@ -2,18 +2,12 @@ package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
+import com.konkuk.medicarecall.data.mapper.ElderInfoMapper
 import com.konkuk.medicarecall.data.mapper.toModels
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.domain.model.Elder
-import com.konkuk.medicarecall.ui.common.util.formatAsDate
-import com.konkuk.medicarecall.data.mapper.ElderInfoMapper
-import com.konkuk.medicarecall.data.repository.EldersInfoRepository
-import com.konkuk.medicarecall.data.util.handleNullableResponse
-import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderInfo
 import com.konkuk.medicarecall.ui.model.ElderSubscription
@@ -31,8 +25,6 @@ class EldersInfoRepositoryImpl(
         eldersInfoService.getEldersV2().handleResponse().toModels()
     }
 
-    override suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>> = runCatching {
-        eldersInfoService.getSubscriptions().handleResponse()
     override suspend fun getSubscriptions(): Result<List<ElderSubscription>> = runCatching {
         eldersInfoService.getSubscriptions().handleResponse().map { ElderInfoMapper.subscriptionToDomain(it) }
     }

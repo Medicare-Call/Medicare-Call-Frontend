@@ -10,7 +10,6 @@ import com.konkuk.medicarecall.ui.model.ElderSubscription
 
 interface EldersInfoRepository {
     suspend fun getEldersV2(): Result<List<Elder>>
-    suspend fun getSubscriptions(): Result<List<EldersSubscriptionResponseDto>>
     suspend fun getElders(): Result<List<ElderInfo>>
     suspend fun getSubscriptions(): Result<List<ElderSubscription>>
     suspend fun updateElder(id: Int, request: ElderData): Result<Unit>
