@@ -1,4 +1,6 @@
+
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component
+import com.konkuk.medicarecall.domain.util.today
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -33,7 +35,13 @@ import com.konkuk.medicarecall.ui.common.util.classifyGlucose
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.max
 
@@ -156,7 +164,7 @@ fun GlucoseGraph(
                     Row(modifier = Modifier.width(totalGraphWidth)) { // 동적 너비 사용
                         data.forEach { pointData ->
                             Text(
-                                text = pointData.date.format(DateTimeFormatter.ofPattern("M.d")),
+                                text = pointData.date.toJavaLocalDate().format(DateTimeFormatter.ofPattern("M.d")),
                                 modifier = Modifier.width(sectionWidth), // 동적 섹션 너비 사용
                                 style = labelStyle,
                                 color = colors.gray4,
@@ -216,9 +224,10 @@ fun GlucoseGraph(
 @Preview(showBackground = true, name = "데이터 2개일 때")
 @Composable
 fun PreviewGlucoseGraph_TwoPoints() {
+    val today = LocalDate.today()
     val sampleData = (0..1).map {
         GraphDataPoint(
-            date = LocalDate.now().minusDays(it.toLong()),
+            date = today.minus(it, DateTimeUnit.DAY),
             value = (70..210).random().toFloat(),
         )
     }.reversed()
@@ -239,10 +248,11 @@ fun PreviewGlucoseGraph_TwoPoints() {
 @Composable
 fun PreviewGlucoseGraph_ManyPoints() {
     val scrollState = rememberScrollState()
+    val today = LocalDate.today()
     // 14일치 가상 데이터
     val sampleData = (0..13).map {
         GraphDataPoint(
-            date = LocalDate.now().minusDays(it.toLong()),
+            date = today.minus(it, DateTimeUnit.DAY),
             value = (70..210).random().toFloat(),
         )
     }.reversed()

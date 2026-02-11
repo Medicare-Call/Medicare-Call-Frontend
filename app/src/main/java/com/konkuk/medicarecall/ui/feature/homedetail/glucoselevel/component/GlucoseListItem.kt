@@ -1,4 +1,6 @@
+
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component
+import com.konkuk.medicarecall.domain.util.today
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -28,7 +34,7 @@ fun GlucoseListItem(
     timing: GlucoseTiming,
 ) {
     val formatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN)
-    val formattedDate = date.format(formatter)
+    val formattedDate = date.toJavaLocalDate().format(formatter)
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
@@ -92,7 +98,7 @@ fun GlucoseListItem(
 private fun PreviewGlucoseListItem() {
     MediCareCallTheme {
         GlucoseListItem(
-            date = LocalDate.now(),
+            date = LocalDate.today(),
             timingLabel = "아침 | 공복",
             value = 180,
             timing = GlucoseTiming.BEFORE_MEAL,

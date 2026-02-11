@@ -18,13 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun DatePickerModal(
     initialDate: LocalDate,
@@ -56,7 +57,7 @@ fun DatePickerModal(
         initialDate.atStartOfDayIn(utc).toEpochMilliseconds()
     }
     val initialMonthMillis = remember(initialDate) {
-        LocalDate(initialDate.year, initialDate.monthNumber, 1).atStartOfDayIn(utc).toEpochMilliseconds()
+        LocalDate(initialDate.year, initialDate.month.number, 1).atStartOfDayIn(utc).toEpochMilliseconds()
     }
 
     // initialDate가 바뀌면 상태 재생성
@@ -67,7 +68,7 @@ fun DatePickerModal(
         )
 
         val confirmDate = datePickerState.selectedDateMillis?.let {
-            Instant.fromEpochMilliseconds(it).toLocalDateTime(utc).date
+            kotlin.time.Instant.fromEpochMilliseconds(it).toLocalDateTime(utc).date
         }
 
         DatePickerDialog(

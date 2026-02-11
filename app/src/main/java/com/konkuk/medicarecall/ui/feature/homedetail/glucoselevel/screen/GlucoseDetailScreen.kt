@@ -1,4 +1,6 @@
+
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen
+import com.konkuk.medicarecall.domain.util.today
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -47,8 +49,13 @@ import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
+
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -284,10 +291,10 @@ fun GlucoseDetailScreenLayout(
 @Composable
 fun PreviewGlucoseDetailScreenDataAvailable() {
     // 더미 데이터 프리뷰
-    val today = LocalDate.now()
+    val today = LocalDate.today()
     val sampleData = (0..6).map { i ->
         GraphDataPoint(
-            date = today.minusDays(i.toLong()),
+            date = today.minus(i, DateTimeUnit.DAY),
             value = (100..200).random().toFloat(),
         )
     }.reversed()

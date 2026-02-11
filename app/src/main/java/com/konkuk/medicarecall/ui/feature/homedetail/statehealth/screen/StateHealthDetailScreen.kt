@@ -132,11 +132,8 @@ fun PreviewStateHealthDetailScreen() {
         val today = LocalDate.today()
         StateHealthDetailScreenLayout(
             onBack = {},
-            selectedDate = LocalDate.now(),
-            health = HealthUiState(),
-            weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             selectedDate = today,
-            health = HealthUiState.Companion.EMPTY,
+            health = HealthUiState(),
             weekDates = today.getCurrentWeekDates(),
             onDateSelected = {},
             onMonthClick = {},

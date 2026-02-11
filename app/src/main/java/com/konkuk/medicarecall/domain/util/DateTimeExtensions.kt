@@ -1,17 +1,15 @@
 package com.konkuk.medicarecall.domain.util
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 
 // 현재 시스템 날짜 반환
 fun LocalDate.Companion.today(): LocalDate {
-    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val javaDate = java.time.LocalDate.now()
+    return LocalDate(javaDate.year, javaDate.monthValue, javaDate.dayOfMonth)
 }
 
 /**
