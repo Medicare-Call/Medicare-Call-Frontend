@@ -1,8 +1,6 @@
 package com.konkuk.medicarecall.data.repository
 
 import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.domain.model.Elder
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderInfo
