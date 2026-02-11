@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
 import com.konkuk.medicarecall.ui.model.ElderInfo
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -71,8 +71,8 @@ class SettingsElderInfoDetailViewModel(
         birthDate: String,
         gender: GenderType,
         phone: String,
-        relationship: RelationshipType,
-        residenceType: ElderResidenceType,
+        relationship: Relationship,
+        residenceType: ElderResidence,
     ) {
         Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId")
         viewModelScope.launch {
@@ -162,11 +162,11 @@ class SettingsElderInfoDetailViewModel(
         _uiState.update { it.copy(phoneNum = value) }
     }
 
-    fun updateRelationship(value: RelationshipType) {
+    fun updateRelationship(value: Relationship) {
         _uiState.update { it.copy(relationship = value) }
     }
 
-    fun updateResidenceType(value: ElderResidenceType) {
+    fun updateResidenceType(value: ElderResidence) {
         _uiState.update { it.copy(residenceType = value) }
     }
 

@@ -49,7 +49,7 @@ import com.konkuk.medicarecall.ui.feature.login.myinfo.component.LoginBackButton
 import com.konkuk.medicarecall.ui.model.CallTimes
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.TimeSettingType
+import com.konkuk.medicarecall.domain.model.type.TimeSettingType
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

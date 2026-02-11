@@ -4,7 +4,10 @@ import com.konkuk.medicarecall.data.dto.request.ElderBulkHealthInfoRequestDto
 import com.konkuk.medicarecall.data.dto.request.ElderBulkRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.ElderResponseDto
 import com.konkuk.medicarecall.domain.model.Elder
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.Medication
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 
 fun List<ElderResponseDto>.toModels(): List<Elder> = this.map { it.toModel() }
 
@@ -14,8 +17,8 @@ fun ElderResponseDto.toModel(): Elder = Elder(
     birthDate = this.birthDate,
     gender = GenderType.fromString(this.gender),
     phoneNumber = this.phone,
-    relationship = Elder.RelationshipType.fromString(this.relationship),
-    residenceType = Elder.ElderResidenceType.fromString(this.residenceType),
+    relationship = Relationship.fromString(this.relationship),
+    residenceType = ElderResidence.fromString(this.residenceType),
 )
 
 fun Elder.toElderBulkRequestDto(): ElderBulkRegisterRequestDto.ElderInfo = ElderBulkRegisterRequestDto.ElderInfo(
@@ -34,7 +37,7 @@ fun Elder.toElderHealthBulkRequestDto(): ElderBulkHealthInfoRequestDto.HealthInf
     notes = this.notes.map { it.name },
 )
 
-fun Elder.Medication.toRequestDto() = ElderBulkHealthInfoRequestDto.HealthInfo.MedicationSchedule(
+fun Medication.toRequestDto() = ElderBulkHealthInfoRequestDto.HealthInfo.MedicationSchedule(
     medicationName = this.medicine,
     scheduleTimes = this.times.map { it.name },
 )

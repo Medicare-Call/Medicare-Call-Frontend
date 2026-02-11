@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.ui.model.MyInfo
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.GenderType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

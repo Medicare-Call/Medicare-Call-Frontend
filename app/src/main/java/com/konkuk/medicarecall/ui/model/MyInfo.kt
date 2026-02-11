@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.model
 
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.GenderType
 
 data class MyInfo(
     val name: String = "",

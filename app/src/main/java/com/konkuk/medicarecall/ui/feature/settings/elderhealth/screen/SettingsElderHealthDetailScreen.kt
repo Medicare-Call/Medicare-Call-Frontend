@@ -40,8 +40,8 @@ import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 import com.konkuk.medicarecall.ui.model.MedicationSchedule
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.HealthIssueType
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import com.konkuk.medicarecall.domain.model.type.HealthIssueType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 import org.koin.androidx.compose.koinViewModel
 import kotlin.collections.iterator
 
@@ -202,8 +202,8 @@ private fun HealthDetailContent(
 }
 
 // Map<시간대, 약리스트> -> List<MedicationSchedule> (UI용)
-fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<MedicationSchedule> {
-    val timesByMed = linkedMapOf<String, MutableSet<MedicationTimeType>>()
+fun Map<MedicationTime, List<String>>.toMedicationSchedules(): List<MedicationSchedule> {
+    val timesByMed = linkedMapOf<String, MutableSet<MedicationTime>>()
     for ((time, meds) in this) {
         for (med in meds) {
             val key = med.trim()
@@ -219,8 +219,8 @@ fun Map<MedicationTimeType, List<String>>.toMedicationSchedules(): List<Medicati
 }
 
 // List<MedicationSchedule> -> Map<시간대, 약리스트> (서버에 Map 형태로 보내야 할 때 쓰기)
-fun List<MedicationSchedule>.toTimeMap(): Map<MedicationTimeType, List<String>> {
-    val map = linkedMapOf<MedicationTimeType, MutableList<String>>()
+fun List<MedicationSchedule>.toTimeMap(): Map<MedicationTime, List<String>> {
+    val map = linkedMapOf<MedicationTime, MutableList<String>>()
     for (sch in this) {
         val name = sch.medicationName.trim()
         if (name.isEmpty()) continue

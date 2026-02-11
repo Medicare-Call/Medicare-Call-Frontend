@@ -7,9 +7,9 @@ import com.konkuk.medicarecall.ui.common.util.formatAsDate
 import com.konkuk.medicarecall.ui.model.ElderData
 import com.konkuk.medicarecall.ui.model.ElderInfo
 import com.konkuk.medicarecall.ui.model.ElderSubscription
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 
 object ElderInfoMapper {
 
@@ -45,10 +45,10 @@ object ElderInfoMapper {
             birthDate = model.birthDate.formatAsDate(),
             gender = if (model.gender) GenderType.MALE else GenderType.FEMALE,
             phone = model.phoneNumber,
-            relationship = RelationshipType.entries.find { it.displayName == model.relationship }
-                ?: RelationshipType.ACQUAINTANCE,
-            residenceType = ElderResidenceType.entries.find { it.displayName == model.livingType }
-                ?: ElderResidenceType.WITH_FAMILY,
+            relationship = Relationship.entries.find { it.displayName == model.relationship }
+                ?: Relationship.ACQUAINTANCE,
+            residenceType = ElderResidence.entries.find { it.displayName == model.livingType }
+                ?: ElderResidence.WITH_FAMILY,
         )
     }
 

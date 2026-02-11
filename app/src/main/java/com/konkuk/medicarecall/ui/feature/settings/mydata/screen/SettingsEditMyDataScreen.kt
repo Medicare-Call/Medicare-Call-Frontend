@@ -36,7 +36,7 @@ import com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel.SettingsEdit
 import com.konkuk.medicarecall.ui.model.MyInfo
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.GenderType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

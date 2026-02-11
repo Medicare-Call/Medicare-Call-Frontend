@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.model.MedicationSchedule
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 
 // 중복, Legacy
 @Composable
@@ -42,7 +42,7 @@ fun MedInfoItem(
 
     val inputTextState = remember { TextFieldState("") }
     // 복약 주기 선택 상태
-    val selectedPeriods = remember { mutableStateOf(setOf<MedicationTimeType>()) }
+    val selectedPeriods = remember { mutableStateOf(setOf<MedicationTime>()) }
     // 주기별 복약 리스트
 //    val medsByPeriod = remember {
 //        mutableStateMapOf<MedicationTimeType, SnapshotStateList<String>>().apply {
@@ -54,7 +54,7 @@ fun MedInfoItem(
 //    }
     val medsByPeriod = remember {
         derivedStateOf {
-            MedicationTimeType.entries.associateWith { period ->
+            MedicationTime.entries.associateWith { period ->
                 medications
                     .filter { period in it.scheduleTimes }
                     .map { it.medicationName }
@@ -72,12 +72,12 @@ fun MedInfoItem(
             style = MediCareCallTheme.typography.M_17,
             color = MediCareCallTheme.colors.gray7,
         )
-        MedicationTimeType.entries.forEach { period ->
+        MedicationTime.entries.forEach { period ->
             val list = medsByPeriod[period]!!
             if (list.isNotEmpty()) {
                 Spacer(modifier = modifier.height(20.dp))
                 Text(
-                    period.time,
+                    period.displayName,
                     style = MediCareCallTheme.typography.R_15,
                     color = MediCareCallTheme.colors.gray5,
                 )
@@ -105,7 +105,7 @@ fun MedInfoItem(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
         ) {
-            MedicationTimeType.entries.forEach { period ->
+            MedicationTime.entries.forEach { period ->
                 val selected = period in selectedPeriods.value
                 Box(
                     Modifier
@@ -131,7 +131,7 @@ fun MedInfoItem(
                         ),
                 ) {
                     Text(
-                        text = period.time,
+                        text = period.displayName,
                         color = if (selected) MediCareCallTheme.colors.g50
                         else MediCareCallTheme.colors.gray5,
                         style = if (selected) {
@@ -186,7 +186,7 @@ fun MedInfoItem(
 
 private fun MutableList<MedicationSchedule>.addOrMerge(
     name: String,
-    times: Set<MedicationTimeType>,
+    times: Set<MedicationTime>,
 ) {
     val idx = indexOfFirst { it.medicationName == name }
     if (idx >= 0) {
@@ -200,7 +200,7 @@ private fun MutableList<MedicationSchedule>.addOrMerge(
 
 private fun MutableList<MedicationSchedule>.removeOnePeriod(
     name: String,
-    period: MedicationTimeType,
+    period: MedicationTime,
 ) {
     val idx = indexOfFirst { it.medicationName == name }
     if (idx >= 0) {
@@ -220,7 +220,7 @@ private fun MedInfoItemPreview() {
                 medications = mutableListOf(
                     MedicationSchedule(
                         medicationName = "당뇨약",
-                        scheduleTimes = listOf(MedicationTimeType.MORNING, MedicationTimeType.DINNER),
+                        scheduleTimes = listOf(MedicationTime.BREAKFAST, MedicationTime.DINNER),
                     ),
                 ),
             )

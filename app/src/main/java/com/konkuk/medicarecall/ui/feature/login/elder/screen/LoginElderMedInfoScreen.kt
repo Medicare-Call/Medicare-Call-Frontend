@@ -36,6 +36,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.konkuk.medicarecall.domain.model.Elder
+import com.konkuk.medicarecall.domain.model.Medication
+import com.konkuk.medicarecall.domain.model.type.HealthIssueType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.ChipItem
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
@@ -111,11 +114,11 @@ private fun LoginElderMedInfoScreenLayout(
     onSelectElder: (Int) -> Unit,
     onRemoveDisease: (String) -> Unit,
     onAddDisease: (String) -> Unit,
-    onRemoveMedication: (Elder.Medication) -> Unit,
-    onSelectTime: (Elder.MedicationTime) -> Unit,
+    onRemoveMedication: (Medication) -> Unit,
+    onSelectTime: (MedicationTime) -> Unit,
     onAddMedication: (String) -> Unit,
-    onRemoveHealthNote: (Elder.ElderNote) -> Unit,
-    onAddHealthNote: (Elder.ElderNote) -> Unit,
+    onRemoveHealthNote: (HealthIssueType) -> Unit,
+    onAddHealthNote: (HealthIssueType) -> Unit,
     onNextClick: () -> Unit,
     onBack: () -> Unit = {},
 ) {
@@ -186,7 +189,7 @@ private fun LoginElderMedInfoScreenLayout(
 
             DefaultDropdown(
                 value = null,
-                enumList = Elder.ElderNote.entries.toList(),
+                enumList = HealthIssueType.entries.toList(),
                 placeHolder = "특이사항 선택하기",
                 scrollState = scrollState,
                 onOptionSelect = onAddHealthNote,

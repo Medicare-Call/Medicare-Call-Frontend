@@ -1,8 +1,8 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel
 
 import com.konkuk.medicarecall.ui.model.ElderInfo
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.Relationship
 
 data class SettingsElderInfoDetailUiState(
     val elderData: ElderInfo? = null,
@@ -10,8 +10,8 @@ data class SettingsElderInfoDetailUiState(
     val name: String = "",
     val birth: String = "",
     val phoneNum: String = "",
-    val relationship: RelationshipType = RelationshipType.ACQUAINTANCE,
-    val residenceType: ElderResidenceType = ElderResidenceType.WITH_FAMILY,
+    val relationship: Relationship = Relationship.ACQUAINTANCE,
+    val residenceType: ElderResidence = ElderResidence.WITH_FAMILY,
     val showDeleteDialog: Boolean = false,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,

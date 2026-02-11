@@ -2,12 +2,17 @@ package com.konkuk.medicarecall.ui.feature.login.elder.viewmodel
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.konkuk.medicarecall.domain.model.Elder
-import com.konkuk.medicarecall.domain.model.Elder.ElderNote
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.Medication
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.HealthIssueType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
+import com.konkuk.medicarecall.domain.model.type.Relationship
+
 data class LoginElderUiState(
     val selectedIndex: Int = 0,
     val eldersList: List<LoginElderData> = listOf(LoginElderData()),
-    val selectedMedicationTimes: Set<Elder.MedicationTime> = emptySet(),
+    val selectedMedicationTimes: Set<MedicationTime> = emptySet(),
     val diseaseInputText: TextFieldState = TextFieldState(""),
     val medicationInputText: TextFieldState = TextFieldState(""),
 )
@@ -18,11 +23,11 @@ data class LoginElderData(
     val birthDateState: TextFieldState = TextFieldState(""),
     val gender: GenderType? = null,
     val phoneNumberState: TextFieldState = TextFieldState(""),
-    val relationship: Elder.RelationshipType? = null,
-    val livingType: Elder.ElderResidenceType? = null,
+    val relationship: Relationship? = null,
+    val livingType: ElderResidence? = null,
     val diseases: List<String> = emptyList(),
-    val medications: List<Elder.Medication> = emptyList(),
-    val notes: List<ElderNote> = emptyList(),
+    val medications: List<Medication> = emptyList(),
+    val notes: List<HealthIssueType> = emptyList(),
 ) {
     fun toModel(): Elder {
         require(this.gender != null && this.relationship != null && this.livingType != null)

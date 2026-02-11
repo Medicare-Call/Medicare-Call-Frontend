@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.type.TimeSettingType
+import com.konkuk.medicarecall.domain.model.type.TimeSettingType
 
 @Composable
 fun TimeSettingItem(

@@ -1,8 +1,8 @@
 package com.konkuk.medicarecall.data.dto.request
 
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,6 +11,6 @@ data class ElderRegisterRequestDto(
     val birthDate: String,
     val gender: GenderType,
     val phone: String,
-    val relationship: RelationshipType,
-    val residenceType: ElderResidenceType,
+    val relationship: Relationship,
+    val residenceType: ElderResidence,
 )
