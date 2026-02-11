@@ -1,6 +1,7 @@
 package com.konkuk.medicarecall.domain.util
 
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -35,4 +36,9 @@ fun LocalDate.getWeekRange(): Pair<LocalDate, LocalDate> {
     val end = start.plus(6, DateTimeUnit.DAY) // 월요일 + 6일 = 일요일
 
     return start to end
+}
+
+fun LocalDate.previousOrSame(targetDayOfWeek: DayOfWeek): LocalDate {
+    val daysDiff = (this.dayOfWeek.isoDayNumber - targetDayOfWeek.isoDayNumber + 7) % 7
+    return this.minus(daysDiff, DateTimeUnit.DAY)
 }

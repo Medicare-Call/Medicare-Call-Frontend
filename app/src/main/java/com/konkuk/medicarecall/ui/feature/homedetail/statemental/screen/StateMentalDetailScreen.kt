@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
@@ -28,8 +29,10 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.State
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.DateTimeUnit
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -120,7 +123,7 @@ fun PreviewStateMentalDetailScreen() {
         onBack = {},
         selectedDate = LocalDate.now(),
         mental = MentalUiState(),
-        weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
+        weekDates = (0..6).map { LocalDate.now().plus(it.toLong(), DateTimeUnit.DAY) },
         onDateSelected = {},
         onMonthClick = {},
     )
