@@ -6,16 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.konkuk.medicarecall.data.repository.SleepRepository
+import com.konkuk.medicarecall.ui.common.util.today
 import com.konkuk.medicarecall.ui.navigation.Route
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import org.koin.android.annotation.KoinViewModel
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.temporal.TemporalAdjusters
 
 @KoinViewModel
 class SleepViewModel(
@@ -23,21 +22,14 @@ class SleepViewModel(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     // 캘린더 상태
-    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    private val _selectedDate = MutableStateFlow(LocalDate.today())
     val selectedDate: StateFlow<LocalDate> = _selectedDate
     fun selectDate(date: LocalDate) {
         _selectedDate.value = date
     }
 
     fun resetToToday() {
-        _selectedDate.value = LocalDate.now()
-    }
-
-    fun getCurrentWeekDates(): List<LocalDate> {
-        val base = _selectedDate.value
-        val startOfWeek =
-            base.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
-        return (0..6).map { startOfWeek.plusDays(it.toLong()) }
+        _selectedDate.value = LocalDate.today()
     }
 
     // 수면 상태

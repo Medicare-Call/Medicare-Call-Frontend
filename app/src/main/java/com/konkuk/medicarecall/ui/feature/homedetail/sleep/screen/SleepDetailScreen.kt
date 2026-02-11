@@ -23,12 +23,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
+import com.konkuk.medicarecall.ui.common.util.getCurrentWeekDates
+import com.konkuk.medicarecall.ui.common.util.today
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.component.SleepDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel.SleepViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.LocalDate
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -53,7 +55,7 @@ fun SleepDetailScreen(
         modifier = Modifier,
         onBack = onBack,
         selectedDate = selectedDate,
-        weekDates = viewModel.getCurrentWeekDates(),
+        weekDates = selectedDate.getCurrentWeekDates(),
         onDateSelected = { viewModel.selectDate(it) },
         sleep = uiState,
         onMonthClick = { /* 모달 열기 */ },
@@ -124,11 +126,12 @@ fun SleepDetailScreenLayout(
 @Composable
 fun PreviewSleepDetailScreen() {
     MediCareCallTheme {
+        val today = LocalDate.today()
         SleepDetailScreenLayout(
             onBack = {},
-            selectedDate = LocalDate.now(),
+            selectedDate = today,
             sleep = SleepUiState(),
-            weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
+            weekDates = today.getCurrentWeekDates(),
             onDateSelected = {},
             onMonthClick = {},
         )

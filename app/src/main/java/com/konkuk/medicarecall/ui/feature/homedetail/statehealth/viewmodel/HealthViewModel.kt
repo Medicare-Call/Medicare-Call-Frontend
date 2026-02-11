@@ -4,35 +4,26 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.HealthRepository
+import com.konkuk.medicarecall.ui.common.util.today
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import org.koin.android.annotation.KoinViewModel
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAdjusters
 
 @KoinViewModel
 class HealthViewModel(
     private val healthRepository: HealthRepository,
 ) : ViewModel() {
     // 캘린더 상태
-    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    private val _selectedDate = MutableStateFlow(LocalDate.today())
     val selectedDate: StateFlow<LocalDate> = _selectedDate
     fun selectDate(date: LocalDate) {
         _selectedDate.value = date
     }
 
     fun resetToToday() {
-        _selectedDate.value = LocalDate.now()
-    }
-
-    fun getCurrentWeekDates(): List<LocalDate> {
-        val base = _selectedDate.value
-        val startOfWeek =
-            base.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
-        return (0..6).map { startOfWeek.plusDays(it.toLong()) }
+        _selectedDate.value = LocalDate.today()
     }
 
     // 건강 상태
@@ -50,7 +41,7 @@ class HealthViewModel(
     fun loadHealthDataForDate(elderId: Int, date: LocalDate) {
         viewModelScope.launch {
             if (!_isLoading.value) _isLoading.value = true
-            val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            val formatted = date.toString()
             Log.d(TAG, "Request elderId=$elderId, date=$formatted")
 
             healthRepository.getHealthUiState(elderId = elderId, date = date)

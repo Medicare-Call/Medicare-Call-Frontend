@@ -19,7 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 
 @Composable
 fun DateSelector(
@@ -31,7 +32,7 @@ fun DateSelector(
     var showDatePicker by remember { mutableStateOf(false) }
 
     val year = selectedDate.year
-    val month = selectedDate.monthValue
+    val month = selectedDate.month.number
 
     Row(
         modifier = Modifier.Companion
@@ -73,7 +74,7 @@ fun DateSelector(
 @Preview(showBackground = true)
 @Composable
 fun PreviewDateSelector() {
-    val fakeDate = LocalDate.of(2025, 7, 22)
+    val fakeDate = LocalDate(2025, 7, 22)
     DateSelector(
         selectedDate = fakeDate,
         onMonthClick = { },

@@ -16,10 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.ui.common.util.today
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneOffset
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toLocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,13 +50,13 @@ fun DatePickerModal(
     )
 
     // 세계 표준시
-    val utc = ZoneOffset.UTC
+    val utc = TimeZone.UTC
 
     val initialMillis = remember(initialDate) {
-        initialDate.atStartOfDay(utc).toInstant().toEpochMilli()
+        initialDate.atStartOfDayIn(utc).toEpochMilliseconds()
     }
     val initialMonthMillis = remember(initialDate) {
-        initialDate.withDayOfMonth(1).atStartOfDay(utc).toInstant().toEpochMilli()
+        LocalDate(initialDate.year, initialDate.monthNumber, 1).atStartOfDayIn(utc).toEpochMilliseconds()
     }
 
     // initialDate가 바뀌면 상태 재생성
@@ -64,7 +67,7 @@ fun DatePickerModal(
         )
 
         val confirmDate = datePickerState.selectedDateMillis?.let {
-            Instant.ofEpochMilli(it).atZone(utc).toLocalDate()
+            Instant.fromEpochMilliseconds(it).toLocalDateTime(utc).date
         }
 
         DatePickerDialog(
@@ -103,7 +106,7 @@ fun DatePickerModal(
 @Composable
 fun PreviewDatePickerModal() {
     DatePickerModal(
-        initialDate = LocalDate.now(),
+        initialDate = LocalDate.today(),
         onDateSelected = {},
         onDismiss = {},
     )
