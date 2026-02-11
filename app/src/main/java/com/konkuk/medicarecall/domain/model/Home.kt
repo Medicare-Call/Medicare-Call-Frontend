@@ -28,10 +28,10 @@ data class Medicines(
     val todayTakenCount: Int?,
     val todayRequiredCount: Int?,
     val nextDoseTime: String?,
-    val doseStatusList: List<DoseStatusList>? = null,
+    val doseStatusList: List<HomeDoseStatusList>? = null,
 )
 
-data class DoseStatusList(
+data class HomeDoseStatusList(
     val time: String, // "아침", "점심", "저녁"
     val taken: Boolean?, // true: 먹음, false: 안 먹음, null: 미기록
 )

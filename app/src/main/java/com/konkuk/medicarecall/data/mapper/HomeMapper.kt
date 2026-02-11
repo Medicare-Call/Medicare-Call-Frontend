@@ -2,8 +2,8 @@ package com.konkuk.medicarecall.data.mapper
 
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
-import com.konkuk.medicarecall.domain.model.DoseStatusList
 import com.konkuk.medicarecall.domain.model.Home
+import com.konkuk.medicarecall.domain.model.HomeDoseStatusList
 import com.konkuk.medicarecall.domain.model.HomeSleep
 import com.konkuk.medicarecall.domain.model.Medicines
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.DoseStatusUiState
@@ -28,7 +28,7 @@ fun HomeResponseDto.toHome(): Home = Home(
             todayRequiredCount = med.goal,
             nextDoseTime = med.nextTime,
             doseStatusList = med.doseStatusList?.map { dose ->
-                DoseStatusList(
+                HomeDoseStatusList(
                     time = dose.time.orEmpty(),
                     taken = dose.taken,
                 )
