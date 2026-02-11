@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
-import com.konkuk.medicarecall.domain.model.Elder
+
 import com.konkuk.medicarecall.domain.model.Medication
 import com.konkuk.medicarecall.domain.model.type.ElderResidence
 import com.konkuk.medicarecall.domain.model.type.GenderType
