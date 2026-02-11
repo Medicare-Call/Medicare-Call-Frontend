@@ -2,6 +2,7 @@ package com.konkuk.medicarecall.data.api.elders
 
 import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.response.CallTimeResponseDto
+import com.konkuk.medicarecall.data.dto.response.ElderResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
@@ -15,6 +16,9 @@ import de.jensklingenberg.ktorfit.http.Path
 interface EldersInfoService {
     @GET("elders")
     suspend fun getElders(): Response<List<EldersInfoResponseDto>>
+
+    @GET("elders")
+    suspend fun getEldersV2(): Response<List<ElderResponseDto>>
 
     @GET("elders/subscriptions")
     suspend fun getSubscriptions(): Response<List<EldersSubscriptionResponseDto>>

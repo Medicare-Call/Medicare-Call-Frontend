@@ -3,10 +3,10 @@ package com.konkuk.medicarecall.data.dto.response
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-typealias ElderBulkRegisterResponseDto = List<ElderInfo>
+typealias ElderBulkRegisterResponseDto = List<ElderInfoDto>
 
 @Serializable
-data class ElderInfo(
+data class ElderInfoDto(
     @SerialName("id")
     val id: Int,
     @SerialName("name")

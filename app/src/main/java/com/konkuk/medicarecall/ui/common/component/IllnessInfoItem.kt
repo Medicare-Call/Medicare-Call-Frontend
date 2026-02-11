@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +29,7 @@ fun IllnessInfoItem(
 ) {
     Log.d("IllnessInfoItem", "diseaseList: $diseaseList")
     val context = LocalContext.current
-    var inputText by remember { mutableStateOf("") }
+    val inputTextState = remember { TextFieldState("") }
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -59,20 +57,19 @@ fun IllnessInfoItem(
             }
         }
         AddTextField(
-            inputText = inputText,
+            textFieldState = inputTextState,
             placeHolder = "질환명",
-            onTextChange = { inputText = it },
             clickPlus = {
+                val inputText = inputTextState.text.toString()
                 if (inputText.trim().isNotBlank()) {
                     if (diseaseList.contains(inputText)) {
                         Toast
                             .makeText(context, "이미 등록된 질환입니다", Toast.LENGTH_SHORT)
                             .show()
-                        inputText = ""
                     } else {
                         onAddDisease(inputText)
-                        inputText = ""
                     }
+                    inputTextState.edit { replace(0, length, "") }
                 }
             },
         )

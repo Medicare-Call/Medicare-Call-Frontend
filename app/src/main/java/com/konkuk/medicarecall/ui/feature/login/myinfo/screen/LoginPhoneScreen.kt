@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -43,11 +44,10 @@ fun LoginPhoneScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
     navigateToVerification: () -> Unit = {},
-    loginInfoViewModel: LoginInfoViewModel = koinViewModel(),
+    viewModel: LoginInfoViewModel = koinViewModel(),
 ) {
-    val uiState by loginInfoViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val scrollState = rememberScrollState()
     val focusRequester = remember { FocusRequester() }
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -60,62 +60,37 @@ fun LoginPhoneScreen(
         modifier
             .fillMaxSize()
             .background(MediCareCallTheme.colors.bg)
-            .padding(horizontal = 20.dp)
             .statusBarsPadding()
             .imePadding(),
     ) {
-        Column {
-            LoginBackButton(onBack)
-            Column(
-                modifier = Modifier.verticalScroll(scrollState),
-            ) {
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    "휴대폰 번호를\n입력해주세요",
-                    style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black,
-                )
-                Spacer(Modifier.height(40.dp))
-                DefaultTextField(
-                    uiState.phoneNumber,
-                    { input ->
-                        val filtered = input.filter { it.isDigit() }.take(11)
-                        loginInfoViewModel.onPhoneNumberChanged(filtered)
-                    },
-                    placeHolder = "휴대폰 번호",
-                    keyboardType = KeyboardType.Number,
-                    visualTransformation = PhoneNumberVisualTransformation(),
-                    textFieldModifier = Modifier
-                        .focusRequester(focusRequester),
-                    maxLength = 11,
-                )
-
-                Spacer(Modifier.height(30.dp))
-                CTAButton(
-                    type = if (uiState.phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-                    "인증번호 받기",
-                    {
-                        // TODO: 서버에 인증번호 요청하기
-                        if (uiState.phoneNumber.startsWith("010")) {
-                            loginInfoViewModel.postPhoneNumber(uiState.phoneNumber)
-                            navigateToVerification()
-                        } else {
-                            coroutineScope.launch {
-                                snackBarState.showSnackbar(
-                                    "휴대폰 번호를 다시 확인해주세요",
-                                    duration = SnackbarDuration.Short,
-                                )
-                            }
-                        }
-                    },
-                )
-            }
-        }
+        LoginPhoneScreenLayout(
+            phoneNumber = uiState.userInfo.phoneNumber,
+            onPhoneNumberChanged = { input ->
+                val filtered = input.filter { it.isDigit() }.take(11)
+                viewModel.onPhoneNumberChanged(filtered)
+            },
+            onNextClick = {
+                if (uiState.userInfo.phoneNumber.startsWith("010")) {
+                    viewModel.postPhoneNumber(uiState.userInfo.phoneNumber)
+                    navigateToVerification()
+                } else {
+                    coroutineScope.launch {
+                        snackBarState.showSnackbar(
+                            "휴대폰 번호를 다시 확인해주세요",
+                            duration = SnackbarDuration.Short,
+                        )
+                    }
+                }
+            },
+            onBack = onBack,
+            focusRequester = focusRequester,
+        )
         DefaultSnackBar(
-            snackBarState,
-            Modifier
+            modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .padding(horizontal = 20.dp)
                 .padding(bottom = 14.dp),
+            hostState = snackBarState,
         )
     }
 }
@@ -127,49 +102,41 @@ private fun LoginPhoneScreenLayout(
     onPhoneNumberChanged: (String) -> Unit,
     onNextClick: () -> Unit,
     onBack: () -> Unit = {},
+    focusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val scrollState = rememberScrollState()
-    val focusRequester = remember { FocusRequester() }
 
-    Box(
-        modifier
-            .fillMaxSize()
-            .background(MediCareCallTheme.colors.bg)
-            .padding(horizontal = 20.dp)
-            .statusBarsPadding()
-            .imePadding(),
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
     ) {
-        Column {
-            LoginBackButton(onBack)
-            Column(
-                modifier = Modifier.verticalScroll(scrollState),
-            ) {
-                Spacer(Modifier.height(20.dp))
-                Text(
-                    "휴대폰 번호를\n입력해주세요",
-                    style = MediCareCallTheme.typography.B_26,
-                    color = MediCareCallTheme.colors.black,
-                )
-                Spacer(Modifier.height(40.dp))
-                DefaultTextField(
-                    phoneNumber,
-                    { input ->
-                        val filtered = input.filter { it.isDigit() }.take(11)
-                        onPhoneNumberChanged(filtered)
-                    },
-                    placeHolder = "휴대폰 번호",
-                    keyboardType = KeyboardType.Number,
-                    visualTransformation = PhoneNumberVisualTransformation(),
-                    textFieldModifier = Modifier.focusRequester(focusRequester),
-                    maxLength = 11,
-                )
-                Spacer(Modifier.height(30.dp))
-                CTAButton(
-                    type = if (phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
-                    "인증번호 받기",
-                    onNextClick,
-                )
-            }
+        LoginBackButton(onBack)
+        Column(
+            modifier = Modifier.verticalScroll(scrollState),
+        ) {
+            Spacer(Modifier.height(20.dp))
+            Text(
+                "휴대폰 번호를\n입력해주세요",
+                style = MediCareCallTheme.typography.B_26,
+                color = MediCareCallTheme.colors.black,
+            )
+            Spacer(Modifier.height(40.dp))
+            DefaultTextField(
+                phoneNumber,
+                onPhoneNumberChanged,
+                placeHolder = "휴대폰 번호",
+                keyboardType = KeyboardType.Number,
+                visualTransformation = PhoneNumberVisualTransformation(),
+                textFieldModifier = Modifier.focusRequester(focusRequester),
+                maxLength = 11,
+            )
+            Spacer(Modifier.height(30.dp))
+            CTAButton(
+                type = if (phoneNumber.length == 11) CTAButtonType.GREEN else CTAButtonType.DISABLED,
+                "인증번호 받기",
+                onNextClick,
+            )
         }
     }
 }
