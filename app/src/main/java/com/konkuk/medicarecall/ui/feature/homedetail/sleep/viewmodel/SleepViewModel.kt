@@ -54,15 +54,9 @@ class SleepViewModel(
             sleepRepository.getSleepData(
                 elderId = elderId,
                 date = date,
-            ).onSuccess { data ->
+            ).onSuccess { sleep ->
                 _uiState.update {
-                    SleepUiState(
-                        date = data.date,
-                        totalSleepHours = data.totalSleepHours,
-                        totalSleepMinutes = data.totalSleepMinutes,
-                        bedTime = data.bedTime,
-                        wakeUpTime = data.wakeUpTime,
-                    )
+                    SleepUiState(sleep = sleep)
                 }
             }.onFailure { error ->
                 Log.e("SleepViewModel", "Error loading sleep data", error)

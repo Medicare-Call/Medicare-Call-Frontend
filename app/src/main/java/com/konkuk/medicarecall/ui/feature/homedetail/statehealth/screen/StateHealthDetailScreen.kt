@@ -130,7 +130,7 @@ fun PreviewStateHealthDetailScreen() {
         StateHealthDetailScreenLayout(
             onBack = {},
             selectedDate = LocalDate.now(),
-            health = HealthUiState.Companion.EMPTY,
+            health = HealthUiState(),
             weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
             onDateSelected = {},
             onMonthClick = {},
