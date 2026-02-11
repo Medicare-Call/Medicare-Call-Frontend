@@ -336,7 +336,7 @@ fun PreviewStatisticsScreenUnrecorded() {
     MediCareCallTheme {
         StatisticsScreenLayout(
             uiState = StatisticsUiState(
-                summary = WeeklySummaryUiState.EMPTY.copy(elderName = "김옥자"),
+                summary = WeeklySummaryUiState(elderName = "김옥자"),
             ),
             elderNameList = listOf("김옥자", "박막례"),
             currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),

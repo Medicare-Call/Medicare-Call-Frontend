@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.EldersSubscriptionResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
+import com.konkuk.medicarecall.ui.model.ElderSubscription
 import com.konkuk.medicarecall.ui.common.util.formatDateToKorean
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingInfoItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
@@ -125,7 +125,7 @@ fun SettingsSubscriptionDetailScreen(
 
 @Composable
 private fun SubscribeDetailContent(
-    subscriptionInfo: EldersSubscriptionResponseDto,
+    subscriptionInfo: ElderSubscription,
 ) {
     val scrollState = rememberScrollState()
     Column(

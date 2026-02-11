@@ -3,8 +3,8 @@ package com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.repository.UserRepository
+import com.konkuk.medicarecall.ui.model.MyInfo
 import com.konkuk.medicarecall.ui.type.GenderType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +51,7 @@ class SettingsEditMyDataViewModel(
     }
 
     fun updateUserData(
-        userInfo: MyInfoResponseDto,
+        userInfo: MyInfo,
         onComplete: (() -> Unit)? = null,
     ) {
         viewModelScope.launch {
@@ -86,14 +86,14 @@ class SettingsEditMyDataViewModel(
         _uiState.update { it.copy(isUpdateSuccess = false, errorMessage = null) }
     }
 
-    fun initializeNotificationSettings(myDataInfo: MyInfoResponseDto) {
-        val masterOn = myDataInfo.pushNotification.all == "ON"
+    fun initializeNotificationSettings(myDataInfo: MyInfo) {
+        val masterOn = myDataInfo.pushNotification.isAllEnabled
         _uiState.update {
             it.copy(
                 masterChecked = masterOn,
-                completeChecked = myDataInfo.pushNotification.carecallCompleted == "ON" || masterOn,
-                abnormalChecked = myDataInfo.pushNotification.healthAlert == "ON" || masterOn,
-                missedChecked = myDataInfo.pushNotification.carecallMissed == "ON" || masterOn,
+                completeChecked = myDataInfo.pushNotification.isCarecallCompletedEnabled || masterOn,
+                abnormalChecked = myDataInfo.pushNotification.isHealthAlertEnabled || masterOn,
+                missedChecked = myDataInfo.pushNotification.isCarecallMissedEnabled || masterOn,
             )
         }
     }
@@ -136,7 +136,7 @@ class SettingsEditMyDataViewModel(
         }
     }
 
-    fun initializeFormData(myDataInfo: MyInfoResponseDto) {
+    fun initializeFormData(myDataInfo: MyInfo) {
         _uiState.update {
             it.copy(
                 isMale = myDataInfo.gender == GenderType.MALE,

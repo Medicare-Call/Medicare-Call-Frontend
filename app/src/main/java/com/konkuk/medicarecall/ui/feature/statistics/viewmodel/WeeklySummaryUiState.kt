@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.statistics.viewmodel
 
-import com.konkuk.medicarecall.data.dto.response.StatisticsResponseDto
+import com.konkuk.medicarecall.domain.model.StatisticsData
 
 /**
  * 주간 요약 통계 화면의 전체 상태를 담는 데이터 클래스
@@ -30,8 +30,7 @@ data class WeeklySummaryUiState(
     val unreadNotification: Int? = null,
 ) {
     companion object {
-        val EMPTY = WeeklySummaryUiState() // 전부 null/빈값
-        fun from(dto: StatisticsResponseDto, medicineNames: List<String>): WeeklySummaryUiState {
+        fun from(dto: StatisticsData, medicineNames: List<String>): WeeklySummaryUiState {
             val stats = dto.summaryStats
             val meals = dto.mealStats
             val meds = dto.medicationStats
