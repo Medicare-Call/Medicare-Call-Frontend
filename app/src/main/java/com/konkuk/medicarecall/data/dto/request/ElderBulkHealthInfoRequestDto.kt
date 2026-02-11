@@ -11,7 +11,7 @@ data class ElderBulkHealthInfoRequestDto(
     @Serializable
     data class HealthInfo(
         @SerialName("elderId")
-        val elderId: Int,
+        val elderId: Long,
         @SerialName("diseaseNames")
         val diseaseNames: List<String>,
         @SerialName("medicationSchedules")

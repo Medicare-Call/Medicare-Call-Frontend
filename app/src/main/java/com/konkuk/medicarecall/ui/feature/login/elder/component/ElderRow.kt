@@ -2,12 +2,15 @@ package com.konkuk.medicarecall.ui.feature.login.elder.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -19,10 +22,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 @Composable
-fun ElderChip(
+internal fun ElderRow(
+    selectedIndex: Int,
+    eldersList: List<LoginElderData>,
+    modifier: Modifier = Modifier,
+    onRemoveElder: (Int) -> Unit,
+    onSelectElder: (Int) -> Unit,
+) {
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        itemsIndexed(eldersList) { index, data ->
+            ElderChip(
+                name = data.nameState.text.toString(),
+                selected = index == selectedIndex,
+                onRemove = { onRemoveElder(index) },
+                onClick = { onSelectElder(index) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ElderChip(
     name: String,
     selected: Boolean,
     onRemove: () -> Unit,

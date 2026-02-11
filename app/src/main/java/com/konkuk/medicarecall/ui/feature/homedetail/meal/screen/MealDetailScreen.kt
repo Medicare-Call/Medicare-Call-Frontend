@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.domain.model.Meal
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
-import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import org.koin.androidx.compose.koinViewModel
@@ -44,7 +44,7 @@ fun MealDetailScreen(
     }
     // 날짜만 Observe
     val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
-    val meals by viewModel.meals.collectAsStateWithLifecycle()
+    val uiState by viewModel.meals.collectAsStateWithLifecycle()
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
@@ -54,7 +54,7 @@ fun MealDetailScreen(
     MealDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
-        meals = meals,
+        meals = uiState.meals,
         weekDates = viewModel.getCurrentWeekDates(),
         onDateSelected = viewModel::selectDate,
         onMonthClick = { /* 모달 열기 */ },
@@ -67,7 +67,7 @@ fun MealDetailScreenLayout(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     selectedDate: LocalDate,
-    meals: List<MealUiState>,
+    meals: List<Meal>,
     weekDates: List<LocalDate>,
     onDateSelected: (LocalDate) -> Unit,
     onMonthClick: () -> Unit,
@@ -109,13 +109,19 @@ fun MealDetailScreenLayout(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                meals.forEach { meal ->
+                val times = listOf("아침", "점심", "저녁")
+
+                times.forEach { time ->
+                    val meal = meals.find { it.mealTime == time }
+
+                    val isRecorded = !meal?.description.isNullOrBlank()
+
                     MealDetailCard(
-                        mealTime = meal.mealTime, // 아침 점심 저녁
-                        description = meal.description, // 식사 내용
-                        isRecorded = meal.isRecorded, // 식사 기록 여부
-                        isEaten = meal.isEaten, // 식사 유무
+                        mealTime = time,
+                        description = meal?.description.orEmpty(),
+                        isRecorded = isRecorded,
                     )
+
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             }
@@ -130,24 +136,9 @@ fun PreviewMealDetailScreenRecorded() {
     val weekDates = (0..6).map { selectedDate.plusDays(it.toLong()) }
 
     val dummyMeals = listOf(
-        MealUiState(
-            mealTime = "아침",
-            description = "간단히 밥과 반찬을 드셨어요.",
-            isRecorded = true,
-            isEaten = true,
-        ),
-        MealUiState(
-            mealTime = "점심",
-            description = "식사하지 않으셨어요.",
-            isRecorded = true,
-            isEaten = false,
-        ),
-        MealUiState(
-            mealTime = "저녁",
-            description = "죽을 드셨어요.",
-            isRecorded = true,
-            isEaten = true,
-        ),
+        Meal(mealTime = "아침", description = "간단히 밥과 반찬을 드셨어요."),
+        Meal(mealTime = "점심", description = null),
+        Meal(mealTime = "저녁", description = "죽을 드셨어요."),
     )
 
     MediCareCallTheme {
@@ -170,23 +161,17 @@ fun PreviewMealDetailScreenUnrecorded() {
         (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
 
     val dummyMeals = listOf(
-        MealUiState(
+        Meal(
             mealTime = "아침",
             description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
         ),
-        MealUiState(
+        Meal(
             mealTime = "점심",
             description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
         ),
-        MealUiState(
+        Meal(
             mealTime = "저녁",
             description = "식사 기록 전이에요.",
-            isRecorded = false,
-            isEaten = null,
         ),
     )
 

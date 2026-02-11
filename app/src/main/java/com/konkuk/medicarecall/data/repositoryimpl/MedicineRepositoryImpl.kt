@@ -1,11 +1,12 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import com.konkuk.medicarecall.data.api.elders.MedicineService
+import com.konkuk.medicarecall.data.mapper.toMedicines
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.MedicineRepository
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
+import com.konkuk.medicarecall.domain.model.DoseStatus
+import com.konkuk.medicarecall.domain.model.DoseStatusItem
+import com.konkuk.medicarecall.domain.model.Medicine
 import org.koin.core.annotation.Single
 import java.time.LocalDate
 
@@ -14,9 +15,7 @@ class MedicineRepositoryImpl(
     private val medicineService: MedicineService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {
-
-    /** 설정 스케줄을 “회색 카드” UI로 변환 */
-    override suspend fun getConfiguredMedicineUiList(elderId: Int): List<MedicineUiState> {
+    override suspend fun getConfiguredMedicines(elderId: Int): Result<List<Medicine>> = runCatching {
         val schedule = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
@@ -42,84 +41,49 @@ class MedicineRepositoryImpl(
             }
         }
 
-        if (countByMed.isEmpty()) return emptyList()
+        if (countByMed.isEmpty()) return@runCatching emptyList()
 
-        return countByMed.map { (name, goal) ->
-            val labels = timesByMed[name].orEmpty().let { lst ->
-                if (lst.size >= goal) lst.take(goal) else lst + List(goal - lst.size) { "" }
+        countByMed.map { (name, goal) ->
+            val times = timesByMed[name].orEmpty()
+            val timeEnums = times.map { label ->
+                when (label) {
+                    "아침" -> "MORNING"
+                    "점심" -> "LUNCH"
+                    "저녁" -> "DINNER"
+                    else -> ""
+                }
             }
-            MedicineUiState(
+
+            Medicine(
                 medicineName = name,
                 todayRequiredCount = goal,
-                doseStatusList = labels.map { lab ->
-                    DoseStatusItem(time = lab, doseStatus = DoseStatus.NOT_RECORDED) // 회색
+                doseStatusList = timeEnums.map { timeEnum ->
+                    DoseStatusItem(time = timeEnum, doseStatus = DoseStatus.NOT_RECORDED)
                 },
             )
         }
     }
 
     /** 날짜별 기록 호출 + 없으면 스케줄 fallback */
-    override suspend fun getMedicineUiStateList(
+    override suspend fun getMedicines(
         elderId: Int,
         date: LocalDate,
-    ): List<MedicineUiState> {
-        val grayTemplate =
-            runCatching { getConfiguredMedicineUiList(elderId) }.getOrDefault(emptyList())
+    ): Result<List<Medicine>> = runCatching {
+        val fallback = getConfiguredMedicines(elderId).getOrDefault(emptyList())
 
-        return runCatching { medicineService.getDailyMedication(elderId, date.toString()) }
-            .fold(
-                onSuccess = { res ->
-                    if (res.isSuccessful) {
-                        val dto = res.body()
-                        if (dto == null || dto.medications.isEmpty()) {
-                            // 성공이지만 자료 없음 → 스케줄로 대체
-                            return@fold if (grayTemplate.isNotEmpty()) grayTemplate else emptyList()
-                        }
+        runCatching {
+            medicineService.getDailyMedication(elderId, date.toString())
+        }.fold(
+            onSuccess = { res ->
+                if (!res.isSuccessful) return@runCatching fallback
+                val dto = res.body() ?: return@runCatching fallback
 
-                        // --- 순서 정렬 로직 시작 ---
-
-                        val correctOrder = grayTemplate.map { it.medicineName }
-
-                        val sortedMedications = dto.medications.sortedBy { medDto ->
-                            correctOrder.indexOf(medDto.type)
-                                .let { if (it == -1) Int.MAX_VALUE else it }
-                        }
-
-                        val order = listOf("MORNING", "LUNCH", "DINNER")
-                        val kor = mapOf("MORNING" to "아침", "LUNCH" to "점심", "DINNER" to "저녁")
-
-                        return@fold sortedMedications.map { m ->
-                            val mapped = order.mapNotNull { slot ->
-                                m.times.find { it.time == slot }?.let { t ->
-                                    DoseStatusItem(
-                                        time = kor[slot] ?: slot,
-                                        doseStatus = when (t.taken) {
-                                            true -> DoseStatus.TAKEN
-                                            false -> DoseStatus.SKIPPED
-                                            null -> DoseStatus.NOT_RECORDED
-                                        },
-                                    )
-                                }
-                            }
-                            val padded = if (mapped.size < m.goalCount) {
-                                mapped + List(m.goalCount - mapped.size) {
-                                    DoseStatusItem(time = "", doseStatus = DoseStatus.NOT_RECORDED)
-                                }
-                            } else mapped.take(m.goalCount)
-
-                            MedicineUiState(
-                                medicineName = m.type,
-                                todayRequiredCount = m.goalCount,
-                                doseStatusList = padded,
-                            )
-                        }
-                    } else {
-                        grayTemplate.ifEmpty { emptyList() }
-                    }
-                },
-                onFailure = {
-                    grayTemplate.ifEmpty { emptyList() }
-                },
-            )
+                val medicines = dto.toMedicines()
+                if (medicines.isEmpty()) fallback else medicines
+            },
+            onFailure = {
+                fallback
+            },
+        )
     }
 }

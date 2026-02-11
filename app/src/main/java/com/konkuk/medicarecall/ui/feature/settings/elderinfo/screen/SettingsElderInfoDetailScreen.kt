@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.request.ElderRegisterRequestDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
@@ -223,7 +222,8 @@ fun SettingsElderInfoDetailScreen(
                             },
                             text = confirmButtonText,
                             onClick = {
-                                val requestDto = ElderRegisterRequestDto(
+                                viewModel.processElderInfo(
+                                    elderId = elderId,
                                     name = uiState.name,
                                     birthDate = toDashedDate(uiState.birth),
                                     gender = if (uiState.isMale) GenderType.MALE else GenderType.FEMALE,
@@ -231,7 +231,6 @@ fun SettingsElderInfoDetailScreen(
                                     relationship = uiState.relationship,
                                     residenceType = uiState.residenceType,
                                 )
-                                viewModel.processElderInfo(elderId, requestDto)
                             },
                             modifier = Modifier.padding(bottom = 20.dp),
                         )

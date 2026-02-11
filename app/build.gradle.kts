@@ -126,6 +126,7 @@ dependencies {
     // Ktorfit
     implementation("de.jensklingenberg.ktorfit:ktorfit-lib:2.7.1")
     implementation("de.jensklingenberg.ktorfit:ktorfit-converters-response:2.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {

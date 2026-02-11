@@ -26,7 +26,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.ui.common.component.CTAButton
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
@@ -34,6 +33,7 @@ import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
 import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel.SettingsEditMyDataViewModel
+import com.konkuk.medicarecall.ui.model.MyInfo
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.ui.type.GenderType
@@ -73,7 +73,7 @@ fun SettingsEditMyDataScreen(
             uiState.myDataInfo?.let { info ->
                 val gender = if (uiState.isMale) GenderType.MALE else GenderType.FEMALE
                 viewModel.updateUserData(
-                    userInfo = MyInfoResponseDto(
+                    userInfo = MyInfo(
                         name = uiState.name,
                         birthDate = uiState.birth.replaceFirst(
                             "(\\d{4})(\\d{2})(\\d{2})".toRegex(),

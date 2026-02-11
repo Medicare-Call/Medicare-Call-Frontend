@@ -5,12 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
-import com.konkuk.medicarecall.ui.model.ElderData
-import com.konkuk.medicarecall.ui.model.ElderHealthData
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import com.konkuk.medicarecall.data.repository.EldersInfoRepository
+import com.konkuk.medicarecall.domain.model.Elder
+import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData.Companion.toLoginElderData
+import com.konkuk.medicarecall.ui.type.GenderType
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -18,37 +24,41 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class LoginElderViewModel(
     private val elderRegisterRepository: ElderRegisterRepository,
+    private val elderInfoRepository: EldersInfoRepository,
 ) : ViewModel() {
-    // 어르신 정보 화면
 
-    private val _elderUiState = MutableStateFlow(LoginElderUiState())
-    val elderUiState: StateFlow<LoginElderUiState> = _elderUiState.asStateFlow()
+    private val _loginElderUiState = MutableStateFlow(LoginElderUiState())
+    val loginElderUiState: StateFlow<LoginElderUiState> =
+        _loginElderUiState.onStart {
+            fetchElderList()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = LoginElderUiState(),
+        )
 
-    private val _elderHealthUiState = MutableStateFlow(LoginElderHealthUiState())
-    val elderHealthUiState: StateFlow<LoginElderHealthUiState> = _elderHealthUiState.asStateFlow()
+    private val _uiEvent = Channel<LoginElderEvent>()
+    val uiEvent: Flow<LoginElderEvent> = _uiEvent.receiveAsFlow()
 
-    fun updateElderName(name: String) {
-        _elderUiState.update { state ->
-            state.copy(
-                eldersList = state.eldersList.mapIndexed { index, elder ->
-                    if (index == state.selectedIndex) elder.copy(name = name) else elder
-                },
-            )
+    private fun fetchElderList() {
+        viewModelScope.launch {
+            elderInfoRepository.getEldersV2()
+                .onSuccess { data ->
+                    _loginElderUiState.update { state ->
+                        state.copy(
+                            eldersList = data.map { it.toLoginElderData() },
+                        )
+                    }
+                }.onFailure { error ->
+                    Log.e("LoginElderViewModel", "어르신 목록 불러오기 실패: $error")
+                }
         }
     }
 
-    fun updateElderBirthDate(birthDate: String) {
-        _elderUiState.update { state ->
-            state.copy(
-                eldersList = state.eldersList.mapIndexed { index, elder ->
-                    if (index == state.selectedIndex) elder.copy(birthDate = birthDate) else elder
-                },
-            )
-        }
-    }
+    // ------------------어르신 기본 정보 관련 함수------------------
 
-    fun updateElderGender(gender: Boolean) {
-        _elderUiState.update { state ->
+    fun updateElderGender(gender: GenderType) {
+        _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) elder.copy(gender = gender) else elder
@@ -57,18 +67,8 @@ class LoginElderViewModel(
         }
     }
 
-    fun updateElderPhoneNumber(phoneNumber: String) {
-        _elderUiState.update { state ->
-            state.copy(
-                eldersList = state.eldersList.mapIndexed { index, elder ->
-                    if (index == state.selectedIndex) elder.copy(phoneNumber = phoneNumber) else elder
-                },
-            )
-        }
-    }
-
-    fun updateElderRelationship(relationship: String) {
-        _elderUiState.update { state ->
+    fun updateElderRelationship(relationship: Elder.RelationshipType) {
+        _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) elder.copy(relationship = relationship) else elder
@@ -77,8 +77,8 @@ class LoginElderViewModel(
         }
     }
 
-    fun updateElderLivingType(livingType: String) {
-        _elderUiState.update { state ->
+    fun updateElderLivingType(livingType: Elder.ElderResidenceType) {
+        _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) elder.copy(livingType = livingType) else elder
@@ -87,71 +87,54 @@ class LoginElderViewModel(
         }
     }
 
-    fun selectElder(index: Int) {
-        _elderUiState.update { state ->
-            state.copy(selectedIndex = index)
+    fun setSelectedIndex(index: Int) {
+        _loginElderUiState.update { state ->
+            state.copy(
+                selectedIndex = index,
+                selectedMedicationTimes = emptySet(), // 인덱스 변경 시 복약 타임 초기화
+            )
         }
     }
 
     fun addElder() {
-        _elderUiState.update { state ->
+        _loginElderUiState.update { state ->
             state.copy(
-                eldersList = state.eldersList + ElderData(),
-                selectedIndex = state.selectedIndex + 1,
+                eldersList = state.eldersList + LoginElderData(),
+                selectedIndex = state.eldersList.size,
             )
         }
     }
 
     fun removeElder(index: Int) {
-        _elderUiState.update { state ->
+        _loginElderUiState.update { state ->
+            val newSelectedIndex = if (state.selectedIndex >= state.eldersList.size - 1) {
+                (state.eldersList.size - 2).coerceAtLeast(0)
+            } else {
+                state.selectedIndex
+            }
             state.copy(
                 eldersList = state.eldersList.filterIndexed { i, _ -> i != index },
+                selectedIndex = newSelectedIndex,
             )
         }
     }
 
     fun isInputComplete(): Boolean {
-        return elderUiState.value.eldersList.all {
-            it.name.isNotBlank() && it.birthDate.length == 8 && it.phoneNumber.length == 11 && it.relationship.isNotBlank() && it.livingType.isNotBlank()
-        }
-    }
-
-    // suggestion: 어르신 등록과 건강정보 등록이 아예 분리된 만큼,
-    // 추후 viewModel 별개로 가지고, 이름과 id값만 내비게이션으로 넘기는 게 나을 것 같습니다.
-
-    // ------------------건강정보 관련 함수------------------
-
-    // 상기한 방법으로 변경할 시 함수 변경 필요
-    fun initElderHealthData() {
-        _elderHealthUiState.update { state ->
-            state.copy(elderHealthList = List(elderUiState.value.eldersList.size) { ElderHealthData() })
-        }
-    }
-
-    fun selectElderInHealth(index: Int) {
-        _elderHealthUiState.update { state ->
-            state.copy(selectedIndex = index)
-        }
-    }
-
-    fun updateDiseasesText(text: String) {
-        _elderHealthUiState.update { state ->
-            state.copy(diseaseInputText = text)
-        }
-    }
-
-    fun updateMedicationText(text: String) {
-        _elderHealthUiState.update { state ->
-            state.copy(medicationInputText = text)
+        return loginElderUiState.value.eldersList.all {
+            it.nameState.text.isNotBlank() &&
+                it.birthDateState.text.length == 8 &&
+                it.phoneNumberState.text.length == 11 &&
+                it.relationship != null &&
+                it.livingType != null
         }
     }
 
     fun addDisease(disease: String) {
-        _elderHealthUiState.update { state ->
+        _loginElderUiState.update { state ->
             state.copy(
-                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
-                    if (index == state.selectedIndex && disease !in elder.diseaseNames) {
-                        elder.copy(diseaseNames = elder.diseaseNames + disease)
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex && disease !in elder.diseases) {
+                        elder.copy(diseases = elder.diseases + disease)
                     } else {
                         elder
                     }
@@ -161,11 +144,11 @@ class LoginElderViewModel(
     }
 
     fun removeDisease(disease: String) {
-        _elderHealthUiState.update { state ->
+        _loginElderUiState.update { state ->
             state.copy(
-                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) {
-                        elder.copy(diseaseNames = elder.diseaseNames.filter { it != disease })
+                        elder.copy(diseases = elder.diseases.filter { it != disease })
                     } else {
                         elder
                     }
@@ -174,10 +157,10 @@ class LoginElderViewModel(
         }
     }
 
-    fun addHealthNote(note: String) {
-        _elderHealthUiState.update { state ->
+    fun addHealthNote(note: Elder.ElderNote) {
+        _loginElderUiState.update { state ->
             state.copy(
-                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex && note !in elder.notes) {
                         elder.copy(notes = elder.notes + note)
                     } else {
@@ -188,10 +171,10 @@ class LoginElderViewModel(
         }
     }
 
-    fun removeHealthNote(note: String) {
-        _elderHealthUiState.update { state ->
+    fun removeHealthNote(note: Elder.ElderNote) {
+        _loginElderUiState.update { state ->
             state.copy(
-                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) {
                         elder.copy(notes = elder.notes.filter { it != note })
                     } else {
@@ -202,40 +185,40 @@ class LoginElderViewModel(
         }
     }
 
-    fun addMedication(time: MedicationTimeType?, medicine: String) {
-        if (time == null) return
+    fun addMedication(medicine: String) {
+        _loginElderUiState.update { state ->
+            val selectedTimes = state.selectedMedicationTimes.toList()
+            if (selectedTimes.isEmpty()) return@update state
 
-        _elderHealthUiState.update { state ->
             state.copy(
-                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
+                eldersList = state.eldersList.mapIndexed { index, elder ->
                     if (index == state.selectedIndex) {
-                        val currentList = elder.medicationMap[time] ?: emptyList()
-
-                        val updatedMap = elder.medicationMap + if (medicine !in (elder.medicationMap[time]
-                                ?: emptyList())
-                        ) (time to (currentList + medicine)) else return
-                        elder.copy(medicationMap = updatedMap)
-                    } else {
-                        elder
-                    }
-                },
-            )
-        }
-    }
-
-    fun removeMedication(time: MedicationTimeType, medicine: String) {
-        _elderHealthUiState.update { state ->
-            state.copy(
-                elderHealthList = state.elderHealthList.mapIndexed { index, elder ->
-                    if (index == state.selectedIndex) {
-                        val currentList = elder.medicationMap[time] ?: emptyList()
-                        val updatedList = currentList.filter { it != medicine }
-                        val updatedMap = if (updatedList.isEmpty()) {
-                            elder.medicationMap - time
+                        val existingMed = elder.medications.find { it.medicine == medicine }
+                        val updatedMedications = if (existingMed != null) {
+                            elder.medications.map {
+                                if (it.medicine == medicine) {
+                                    it.copy(times = (it.times + selectedTimes).distinct())
+                                } else it
+                            }
                         } else {
-                            elder.medicationMap + (time to updatedList)
+                            elder.medications + Elder.Medication(medicine, selectedTimes)
                         }
-                        elder.copy(medicationMap = updatedMap)
+                        elder.copy(medications = updatedMedications)
+                    } else {
+                        elder
+                    }
+                },
+                selectedMedicationTimes = emptySet(),
+            )
+        }
+    }
+
+    fun removeMedication(medication: Elder.Medication) {
+        _loginElderUiState.update { state ->
+            state.copy(
+                eldersList = state.eldersList.mapIndexed { index, elder ->
+                    if (index == state.selectedIndex) {
+                        elder.copy(medications = elder.medications.filter { it != medication })
                     } else {
                         elder
                     }
@@ -244,8 +227,8 @@ class LoginElderViewModel(
         }
     }
 
-    fun selectMedicationTime(time: MedicationTimeType) {
-        _elderHealthUiState.update { state ->
+    fun selectMedicationTime(time: Elder.MedicationTime) {
+        _loginElderUiState.update { state ->
             state.copy(
                 selectedMedicationTimes = if (time in state.selectedMedicationTimes) {
                     state.selectedMedicationTimes - time
@@ -257,22 +240,14 @@ class LoginElderViewModel(
     }
 
     // ------------------API 요청------------------
+
     fun postElderBulk() {
         viewModelScope.launch {
-            elderRegisterRepository.postElderBulk(elderUiState.value.eldersList)
-                .onSuccess { response ->
-                    _elderUiState.update { state ->
+            elderRegisterRepository.postElderBulk(loginElderUiState.value.eldersList)
+                .onSuccess { data ->
+                    _loginElderUiState.update { state ->
                         state.copy(
-                            eldersList = state.eldersList.mapIndexed { index, elderData ->
-                                elderData.copy(id = response[index].id)
-                            },
-                        )
-                    }
-                    _elderHealthUiState.update { state ->
-                        state.copy(
-                            elderHealthList = state.elderHealthList.mapIndexed { index, healthData ->
-                                healthData.copy(id = response[index].id)
-                            },
+                            eldersList = data.map { it.toLoginElderData() },
                         )
                     }
                 }
@@ -286,17 +261,20 @@ class LoginElderViewModel(
         }
     }
 
-    suspend fun postElderHealthInfoBulk() {
-        elderRegisterRepository.postElderHealthInfoBulk(elderHealthUiState.value.elderHealthList)
-            .onSuccess {
-                Log.d("elderHealthRegister", "Success")
-            }
-            .onFailure { exception ->
-                when (exception) {
-                    is HttpException -> {
-                        Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
+    fun postElderHealthInfoBulk() {
+        viewModelScope.launch {
+            elderRegisterRepository.postElderHealthInfoBulk(loginElderUiState.value.eldersList)
+                .onSuccess {
+                    Log.d("elderHealthRegister", "Success")
+                    _uiEvent.send(LoginElderEvent.NavigateToCareCallSetting)
+                }
+                .onFailure { exception ->
+                    when (exception) {
+                        is HttpException -> {
+                            Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
+                        }
                     }
                 }
-            }
+        }
     }
 }
