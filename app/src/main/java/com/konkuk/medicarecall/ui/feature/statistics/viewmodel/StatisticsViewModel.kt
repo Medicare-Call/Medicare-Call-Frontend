@@ -17,12 +17,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import org.koin.android.annotation.KoinViewModel
-import java.time.temporal.TemporalAdjusters
 
 @KoinViewModel
 class StatisticsViewModel(

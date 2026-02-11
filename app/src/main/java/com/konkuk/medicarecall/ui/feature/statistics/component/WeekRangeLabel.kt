@@ -17,8 +17,6 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format
 import kotlinx.datetime.format.char
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @Composable
 fun WeekRangeLabel(
@@ -27,14 +25,15 @@ fun WeekRangeLabel(
     isThisWeek: Boolean,
     modifier: Modifier = Modifier,
 ) {
-
-    val formatter = remember { LocalDate.Format {
-        monthNumber()
-        char('월')
-        char(' ')
-        day()
-        char('일')
-    } }
+    val formatter = remember {
+        LocalDate.Format {
+            monthNumber()
+            char('월')
+            char(' ')
+            day()
+            char('일')
+        }
+    }
     val textStyle = MediCareCallTheme.typography.M_20
     val textColor = MediCareCallTheme.colors.gray8
 
