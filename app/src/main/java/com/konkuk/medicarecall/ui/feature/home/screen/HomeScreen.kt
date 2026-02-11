@@ -48,7 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.data.dto.response.HomeResponseDto
+import com.konkuk.medicarecall.domain.model.HomeSleep
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.home.component.CareCallFloatingButton
@@ -380,9 +380,9 @@ fun HomeScreenLayout(
                                 Spacer(Modifier.height(12.dp))
                                 val sleepData = homeUiState.sleep
                                 HomeSleepContainer(
-                                    totalSleepHours = sleepData?.meanHours ?: 0,
-                                    totalSleepMinutes = sleepData?.meanMinutes ?: 0,
-                                    isRecorded = (sleepData?.meanHours ?: 0) > 0 || (sleepData?.meanMinutes ?: 0) > 0,
+                                    totalSleepHours = sleepData?.totalSleepHours ?: 0,
+                                    totalSleepMinutes = sleepData?.totalSleepMinutes ?: 0,
+                                    isRecorded = (sleepData?.totalSleepHours ?: 0) > 0 || (sleepData?.totalSleepMinutes ?: 0) > 0,
                                     onClick = navigateToSleepDetailScreen,
                                 )
                                 Spacer(Modifier.height(12.dp))
@@ -432,7 +432,7 @@ fun PreviewHomeScreen() {
             MedicineUiState("혈압약", 2, 3, "저녁"),
             MedicineUiState("당뇨약", 1, 2, "저녁"),
         ),
-        sleep = HomeResponseDto.SleepDto(meanHours = 8, meanMinutes = 15),
+        sleep = HomeSleep(totalSleepHours = 8, totalSleepMinutes = 15, isRecorded = true),
         healthStatus = "좋음",
         mentalStatus = "좋음",
         glucoseLevelAverageToday = 120,
@@ -481,7 +481,7 @@ fun PreviewHomeScreenUnrecorded() {
         lunchEaten = null,
         dinnerEaten = null,
         medicines = emptyList(),
-        sleep = HomeResponseDto.SleepDto(0, 0),
+        sleep = HomeSleep(totalSleepHours = 0, totalSleepMinutes = 0, isRecorded = false),
         healthStatus = "",
         mentalStatus = "",
         glucoseLevelAverageToday = 0,

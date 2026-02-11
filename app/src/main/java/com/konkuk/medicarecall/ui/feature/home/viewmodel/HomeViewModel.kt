@@ -4,16 +4,15 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.exception.HttpException
+import com.konkuk.medicarecall.data.mapper.HomeMapper
+import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -48,11 +47,7 @@ class HomeViewModel(
         _homeUiState.value = _homeUiState.value.copy(elderName = newName)
 
         _homeUiState.update { it.copy(isLoading = false) }
-        //  softRefreshCurrentElder()
     }
-
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun callImmediate(
         careCallTimeOption: String,
@@ -77,11 +72,6 @@ class HomeViewModel(
     // 어르신 전체 목록
     private val _elderInfoList = MutableStateFlow<List<ElderInfo>>(emptyList())
     val elderInfoList: StateFlow<List<ElderInfo>> = _elderInfoList.asStateFlow()
-
-//    드롭다운에 표시할 어르신 이름 목록
-//    val elderNameList: StateFlow<List<String>> = _elderInfoList.mapState { list ->
-//        list.map { it.name }
-//    }
 
     // 현재 선택된 어르신 ID
     private val _selectedElderId = MutableStateFlow<Long?>(
@@ -142,212 +132,75 @@ class HomeViewModel(
      */
     private fun fetchHomeSummaryForToday(elderId: Long) {
         viewModelScope.launch {
-            _homeUiState.update { it.copy(isLoading = false) }
-            // val today = LocalDate.now()
-            try {
-                // ① 요약 API 호출 (DTO를 받음)
-                val dto = homeRepository.getHomeSummary(elderId).getOrThrow()
+            _homeUiState.update { it.copy(isLoading = true) }
 
-                // ② DTO를 UiState로 변환 (ViewModel이 직접 함)
-                val uiFromServer = HomeUiState.from(dto)
+            homeRepository.getHomeSummary(elderId)
+                .onSuccess { home ->
+                    // 설정/건강정보 최신화
+                    eldersHealthInfoRepository.refresh()
+                    val healthInfo = eldersHealthInfoRepository
+                        .getEldersHealthInfo()
+                        .getOrNull()
+                        ?.firstOrNull { it.elderId == elderId }
 
-                // ③ 설정/건강정보 최신화(중요)
-                eldersHealthInfoRepository.refresh()
-                val healthInfo = eldersHealthInfoRepository.getEldersHealthInfo()
-                    .getOrNull()
-                    ?.firstOrNull { it.elderId == elderId }
+                    // 로컬 캐시의 이름 우선 사용
+                    val elderName = _elderInfoList.value
+                        .find { it.elderId == elderId }?.name
+                        ?: home.elderName
 
-                val correctName = _elderInfoList.value.find { it.elderId == elderId }?.name
-                    ?: uiFromServer.elderName
+                    val uiState = home.toUiState(
+                        healthInfo = healthInfo,
+                        elderName = elderName,
+                    )
 
-                // 정렬 기준(설정에 등록된 전체 약 순서)
-                val correctMedicationOrder = healthInfo?.medications
-                    ?.flatMap { it.value }
-                    ?.distinct()
-                    ?: emptyList()
-
-                // ③ 요약 API에서 약이 없으면 설정 복약으로 대체
-                val fallbackMedicines = healthInfo?.medications
-                    ?.flatMap { (time, medNames) -> medNames.map { medName -> medName to time } }
-                    ?.groupBy { it.first }
-                    ?.map { (medName, group) ->
-                        MedicineUiState(
-                            medicineName = medName,
-                            todayTakenCount = 0, // 요약이 없으니 기본 0
-                            todayRequiredCount = group.size, // 같은 약이 여러 복용시간이면 개수 = 요구횟수
-                            nextDoseTime = "-", // 시간표시 필요없으면 "-" 유지
-                            doseStatusList = emptyList(),
-                        )
-                    }
-                    ?: emptyList()
-
-                val mergedMedicines = when {
-                    uiFromServer.medicines.isNotEmpty() -> uiFromServer.medicines
-                    else -> fallbackMedicines
-                }.sortedBy { med ->
-                    correctMedicationOrder.indexOf(med.medicineName)
-                        .let { if (it == -1) Int.MAX_VALUE else it }
+                    _homeUiState.value = uiState
                 }
-
-                _homeUiState.value = uiFromServer.copy(
-                    elderName = correctName,
-                    medicines = mergedMedicines,
-                    isLoading = false,
-                )
-            } catch (e: Exception) {
-                // 기존 로직 유지(404면 완전 폴백)
-                if (e is HttpException && e.code() == 404) {
-                    val fallbackUiState = createFallbackHomeUiState(elderId)
-                    _homeUiState.value = fallbackUiState.copy(isLoading = false)
-                } else {
-                    Log.e(TAG, "getHomeSummary failed elderId=$elderId", e)
-                    _homeUiState.value = HomeUiState.EMPTY.copy(isLoading = false)
+                .onFailure { error ->
+                    Log.e(TAG, "getHomeSummary failed", error)
+                    handleHomeSummaryError(elderId)
                 }
-            } finally {
-                _homeUiState.update { it.copy(isLoading = false) }
-            }
         }
     }
 
-    private suspend fun createFallbackHomeUiState(elderId: Long): HomeUiState {
-        val healthInfo = eldersHealthInfoRepository.getEldersHealthInfo()
+    /**
+     * 홈 요약 로딩 실패 시 fallback 상태 생성
+     */
+    private suspend fun handleHomeSummaryError(elderId: Long) {
+        val healthInfo = eldersHealthInfoRepository
+            .getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
-        val elderName =
-            healthInfo?.name ?: _elderInfoList.value.find { it.elderId == elderId }?.name ?: ""
-        // 설정 정보에서 첫 복용 시간 추출
-        val firstTimeCode: String? = healthInfo
-            ?.medications
-            ?.keys
-            ?.firstOrNull()
-            ?.toString()
-            ?.uppercase()
-        // 복용 시간 → 텍스트 변환
-        val defaultNextDose = when (firstTimeCode) {
-            "MORNING" -> "아침약"
-            "LUNCH" -> "점심약"
-            "DINNER" -> "저녁약"
-            else -> "-"
-        }
 
-        val fallbackMedicines = if (healthInfo?.medications.isNullOrEmpty()) {
-            listOf(
-                MedicineUiState(
-                    medicineName = "복약 정보 없음",
-                    todayTakenCount = 0,
-                    todayRequiredCount = 0,
-                    nextDoseTime = defaultNextDose, // "다음복약: -",
-                    doseStatusList = emptyList(),
-                ),
-            )
-        } else {
-            healthInfo.medications
-                .flatMap { (time, medNames) -> medNames.map { medName -> medName to time } }
-                .groupBy { it.first }
-                .map { (medName, group) ->
-                    MedicineUiState(
-                        medicineName = medName,
-                        todayTakenCount = 0,
-                        todayRequiredCount = group.size,
-                        nextDoseTime = defaultNextDose,
-                        doseStatusList = emptyList(),
-                    )
-                }
-        }
-        val correctMedicationOrder = healthInfo?.medications
-            ?.flatMap { it.value }
-            ?.distinct()
-            ?: emptyList()
+        val elderName = healthInfo?.name
+            ?: _elderInfoList.value.find { it.elderId == elderId }?.name
+            ?: ""
 
-        val sortedFallbackMedicines = fallbackMedicines.sortedBy { medUiState ->
-            correctMedicationOrder.indexOf(medUiState.medicineName)
-                .let { if (it == -1) Int.MAX_VALUE else it }
-        }
-        return HomeUiState.EMPTY.copy(
+        // Mapper에게 fallback 생성 위임
+        val fallbackState = HomeMapper.fromHealthInfo(
+            healthInfo = healthInfo,
             elderName = elderName,
-            medicines = sortedFallbackMedicines,
         )
+
+        _homeUiState.value = fallbackState
     }
 
     // 드롭다운에서 어르신을 선택했을 때 호출
     fun selectElder(name: String) {
         if (_homeUiState.value.isLoading) return
 
-        val id: Long = elderIdByName.value[name] ?: return
+        val id = elderIdByName[name] ?: return
+
         if (_selectedElderId.value != id) {
             _selectedElderId.value = id
         }
     }
 
     // 드롭다운 표시용 이름 리스트
-    val elderNameList: StateFlow<List<String>> = _elderInfoList.mapState(viewModelScope) { list ->
-        list.map { it.name }
-    }
+    val elderNameList: StateFlow<List<String>> = _elderInfoList
+        .map { list -> list.map { it.name } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // 이름 → ID 매핑
-    private val elderIdByName: StateFlow<Map<String, Long>> =
-        _elderInfoList.mapState(viewModelScope) { list ->
-            list.associate { it.name to it.elderId }
-        }
-
-//    private fun softRefreshCurrentElder(timeoutMs: Long = 1200L) {
-//        val id = selectedElderId.value ?: return
-//        viewModelScope.launch {
-//            val keepName = _homeUiState.value.elderName
-//
-//            runCatching {
-//                withTimeout(timeoutMs) {
-//                    val today = LocalDate.now()
-//                    val dto = homeRepository.getHomeSummary(id, today)
-//                    val uiFromServer = HomeUiState.from(dto)
-//
-//                    val healthInfo = runCatching {
-//                        eldersHealthInfoRepository.refresh()
-//                        eldersHealthInfoRepository.getEldersHealthInfo().getOrNull()
-//                            ?.firstOrNull { it.elderId == id }
-//                    }.getOrNull()
-//
-//                    val correctMedicationOrder = healthInfo?.medications
-//                        ?.flatMap { it.value }
-//                        ?.distinct().orEmpty()
-//
-//                    val mergedMedicines = if (uiFromServer.medicines.isNotEmpty()) {
-//                        uiFromServer.medicines
-//                    } else {
-//                        healthInfo?.medications
-//                            ?.flatMap { (time, meds) -> meds.map { it to time } }
-//                            ?.groupBy { it.first }
-//                            ?.map { (name, group) ->
-//                                MedicineUiState(
-//                                    medicineName = name,
-//                                    todayTakenCount = 0,
-//                                    todayRequiredCount = group.size,
-//                                    nextDoseTime = "-",
-//                                    doseStatusList = emptyList(),
-//                                )
-//                            }.orEmpty()
-//                    }.sortedBy { med ->
-//                        correctMedicationOrder.indexOf(med.medicineName)
-//                            .let { if (it == -1) Int.MAX_VALUE else it }
-//                    }
-//
-//                    _homeUiState.value = uiFromServer.copy(
-//                        elderName = keepName,
-//                        medicines = mergedMedicines,
-//                        isLoading = false,
-//                    )
-//                }
-//            }.onFailure {
-//                _homeUiState.update { it.copy(isLoading = false) }
-//            }
-//        }
-//    }
-
-    // StateFlow 변환용 확장 함수
-    fun <T, R> StateFlow<T>.mapState(
-        scope: CoroutineScope,
-        transform: (T) -> R,
-    ): StateFlow<R> {
-        return map(transform).stateIn(scope, SharingStarted.Eagerly, transform(value))
-    }
+    private val elderIdByName: Map<String, Long>
+        get() = _elderInfoList.value.associate { it.name to it.elderId }
 }

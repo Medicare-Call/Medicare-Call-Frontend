@@ -1,11 +1,11 @@
 package com.konkuk.medicarecall.data.repository
 
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
+import com.konkuk.medicarecall.domain.model.Medicine
 import java.time.LocalDate
 
 interface MedicineRepository {
 
-    suspend fun getMedicineUiStateList(elderId: Long, date: LocalDate): List<MedicineUiState>
+    suspend fun getMedicines(elderId: Long, date: LocalDate): Result<List<Medicine>>
 
-    suspend fun getConfiguredMedicineUiList(elderId: Long): List<MedicineUiState>
+    suspend fun getConfiguredMedicines(elderId: Long): Result<List<Medicine>>
 }

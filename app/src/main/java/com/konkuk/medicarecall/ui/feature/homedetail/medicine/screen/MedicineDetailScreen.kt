@@ -22,12 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.domain.model.DoseStatus
+import com.konkuk.medicarecall.domain.model.DoseStatusItem
+import com.konkuk.medicarecall.domain.model.Medicine
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.component.MedicineDetailCard
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatus
-import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.DoseStatusItem
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
@@ -51,16 +52,15 @@ fun MedicineDetailScreen(
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
         Log.d("MED_UI", "LaunchedEffect: elderId=$elderId, date=$selectedDate")
-        elderId?.let { viewModel.loadMedicinesForDate(it, selectedDate) }
+        elderId.let { viewModel.loadMedicinesForDate(it, selectedDate) }
     }
-
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
-    Log.d("MED_UI", "render medicines=${uiState.items.size}")
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    Log.d("MED_UI", "render medicines=${state.medicines.size}")
 
     MedicineDetailScreenLayout(
         onBack = onBack,
         selectedDate = selectedDate,
-        medicines = uiState.items,
+        medicines = state.medicines,
         weekDates = viewModel.getCurrentWeekDates(),
         onDateSelected = { viewModel.selectDate(it) },
         onMonthClick = { /* 모달 열기 */ },
@@ -111,11 +111,12 @@ fun MedicineDetailScreenLayout(
                     onDateSelected = onDateSelected,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                medicines.forEach { medicine ->
+                medicines.forEach { uiState ->
+                    val medicine = uiState.medicine
                     MedicineDetailCard(
-                        medicineName = medicine.medicineName,
-                        todayRequiredCount = medicine.todayRequiredCount,
-                        doseStatusList = medicine.doseStatusList,
+                        medicineName = uiState.medicine.medicineName,
+                        todayRequiredCount = uiState.medicine.todayRequiredCount ?: 0,
+                        doseStatusList = uiState.displayDoseStatusList,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -129,18 +130,22 @@ fun MedicineDetailScreenLayout(
 fun PreviewMedicineDetailScreen() {
     val dummyMedicines = listOf(
         MedicineUiState(
-            medicineName = "당뇨약",
-            todayRequiredCount = 3,
-            doseStatusList = listOf(
-                DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
-                DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED),
+            medicine = Medicine(
+                medicineName = "당뇨약",
+                todayRequiredCount = 3,
+                doseStatusList = listOf(
+                    DoseStatusItem(time = "MORNING", doseStatus = DoseStatus.TAKEN),
+                    DoseStatusItem(time = "LUNCH", doseStatus = DoseStatus.SKIPPED),
+                ),
             ),
         ),
         MedicineUiState(
-            medicineName = "혈압약",
-            todayRequiredCount = 2,
-            doseStatusList = listOf(
-                DoseStatusItem(time = "아침", doseStatus = DoseStatus.TAKEN),
+            medicine = Medicine(
+                medicineName = "혈압약",
+                todayRequiredCount = 2,
+                doseStatusList = listOf(
+                    DoseStatusItem(time = "아침", doseStatus = DoseStatus.TAKEN),
+                ),
             ),
         ),
     )

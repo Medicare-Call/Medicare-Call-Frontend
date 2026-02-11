@@ -1,9 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.MedicineRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +10,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 
 @KoinViewModel
@@ -45,7 +42,7 @@ class MedicineViewModel(
 
     data class ScreenState(
         val loading: Boolean = false,
-        val items: List<MedicineUiState> = emptyList(),
+        val medicines: List<MedicineUiState> = emptyList(),
         val emptyDate: LocalDate? = null,
         val hasConfiguredMeds: Boolean = false,
     )
@@ -55,95 +52,29 @@ class MedicineViewModel(
 
     fun loadMedicinesForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
-            val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            Log.d(TAG, "Request elderId=$elderId, date=$formatted")
-
             _state.update { it.copy(loading = true, emptyDate = null) }
-            try {
-                val daily = medicineRepository.getMedicineUiStateList(elderId, date)
 
-                if (daily.isNotEmpty()) {
+            medicineRepository.getMedicines(elderId, date)
+                .onSuccess { medicines ->
                     _state.update {
                         it.copy(
                             loading = false,
-                            items = daily,
-                            emptyDate = null,
-                            hasConfiguredMeds = true,
+                            medicines = medicines.map { model -> MedicineUiState(medicine = model) },
+                            emptyDate = if (medicines.isEmpty()) date else null,
+                            hasConfiguredMeds = medicines.isNotEmpty(),
                         )
                     }
-                    return@launch
                 }
-
-                val configured = medicineRepository.getConfiguredMedicineUiList(elderId)
-                if (configured.isNotEmpty()) {
+                .onFailure {
                     _state.update {
                         it.copy(
                             loading = false,
-                            items = configured,
-                            emptyDate = null,
-                            hasConfiguredMeds = true,
-                        )
-                    }
-                } else {
-                    _state.update {
-                        it.copy(
-                            loading = false,
-                            items = emptyList(),
+                            medicines = emptyList(),
                             emptyDate = date,
                             hasConfiguredMeds = false,
                         )
                     }
                 }
-            } catch (e: Exception) {
-                when (e) {
-                    is HttpException -> {
-                        when (e.code()) {
-                            404, 400, 401, 403 -> {
-                                val tag = when (e.code()) {
-                                    404 -> "No data (404)"
-                                    400 -> "Bad request (400): ${e.message}"
-                                    401, 403 -> "Unauthorized (${e.code()})"
-                                    else -> ""
-                                }
-                                Log.w(TAG, "$tag elderId=$elderId, date=$formatted")
-                                _state.update {
-                                    it.copy(
-                                        loading = false,
-                                        items = emptyList(),
-                                        emptyDate = date,
-                                    )
-                                }
-                            }
-
-                            else -> {
-                                Log.e(
-                                    TAG,
-                                    "API error code=${e.code()} elderId=$elderId, date=$formatted",
-                                    e,
-                                )
-                                _state.update {
-                                    it.copy(
-                                        loading = false,
-                                        items = emptyList(),
-                                        emptyDate = date,
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    else -> {
-                        Log.e(TAG, "Unexpected error elderId=$elderId, date=$formatted", e)
-                        _state.update {
-                            it.copy(
-                                loading = false,
-                                items = emptyList(),
-                                emptyDate = date,
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
 }

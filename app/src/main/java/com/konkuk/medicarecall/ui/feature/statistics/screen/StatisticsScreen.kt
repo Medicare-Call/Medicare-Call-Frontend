@@ -31,6 +31,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
 import com.konkuk.medicarecall.ui.feature.alarm.navigation.navigateToAlarm
@@ -48,8 +49,10 @@ import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklyMentalCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySleepCard
 import com.konkuk.medicarecall.ui.feature.statistics.weeklycard.WeeklySummaryCard
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.DateTimeUnit
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 
 @Composable
 fun StatisticsScreen(
@@ -318,7 +321,7 @@ fun PreviewStatisticsScreenRecorded() {
             elderNameList = listOf("김옥자", "박막례"),
             currentWeek = Pair(
                 LocalDate.now(),
-                LocalDate.now().plusDays(6),
+                LocalDate.now().plus(6, DateTimeUnit.DAY),
             ),
             isLatestWeek = false,
             isEarliestWeek = false,
@@ -339,7 +342,7 @@ fun PreviewStatisticsScreenUnrecorded() {
                 summary = WeeklySummaryUiState(elderName = "김옥자"),
             ),
             elderNameList = listOf("김옥자", "박막례"),
-            currentWeek = Pair(LocalDate.now(), LocalDate.now().plusDays(6)),
+            currentWeek = Pair(LocalDate.now(), LocalDate.now().plus(6, DateTimeUnit.DAY)),
             isLatestWeek = true,
             isEarliestWeek = true,
             onPreviousWeek = {},

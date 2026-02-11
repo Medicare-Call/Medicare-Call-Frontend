@@ -119,7 +119,7 @@ fun PreviewStateMentalDetailScreen() {
     StateMentalDetailScreenLayout(
         onBack = {},
         selectedDate = LocalDate.now(),
-        mental = MentalUiState.Companion.EMPTY,
+        mental = MentalUiState(),
         weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
         onDateSelected = {},
         onMonthClick = {},
