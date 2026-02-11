@@ -85,7 +85,7 @@ class LoginInfoViewModel(
     fun postPhoneNumber(phone: String) {
         if (!debug) {
             viewModelScope.launch {
-                verificationRepository.requestCertificationCode(phone)
+                verificationRepository. requestCertificationCode(phone)
                     .onSuccess { Log.d("httplog", "인증번호 요청 성공, ${it.message}") }
                     .onFailure { Log.e("httplog", "인증번호 요청 실패: ${it.message}") }
             }

@@ -36,7 +36,7 @@ import com.konkuk.medicarecall.ui.common.component.MedInfoItem
 import com.konkuk.medicarecall.ui.common.component.SpecialNoteItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.elderhealth.viewmodel.SettingsElderHealthDetailViewModel
-import com.konkuk.medicarecall.ui.model.ElderHealthInfo
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 import com.konkuk.medicarecall.ui.model.MedicationSchedule
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType

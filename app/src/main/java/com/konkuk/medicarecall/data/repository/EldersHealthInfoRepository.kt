@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.repository
 
-import com.konkuk.medicarecall.ui.model.ElderHealthInfo
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 
 interface EldersHealthInfoRepository {
     fun refresh()

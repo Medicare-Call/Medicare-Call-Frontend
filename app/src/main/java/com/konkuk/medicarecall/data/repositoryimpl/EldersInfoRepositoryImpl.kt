@@ -16,13 +16,11 @@ class EldersInfoRepositoryImpl(
     private val eldersInfoService: EldersInfoService,
 ) : EldersInfoRepository {
     override suspend fun getElders(): Result<List<ElderInfo>> = runCatching {
-        val responseDto = eldersInfoService.getElders().handleResponse()
-        responseDto.map { ElderInfoMapper.toDomain(it) }
+        eldersInfoService.getElders().handleResponse().map { ElderInfoMapper.toDomain(it) }
     }
 
     override suspend fun getSubscriptions(): Result<List<ElderSubscription>> = runCatching {
-        val responseDto = eldersInfoService.getSubscriptions().handleResponse()
-        responseDto.map { ElderInfoMapper.subscriptionToDomain(it) }
+        eldersInfoService.getSubscriptions().handleResponse().map { ElderInfoMapper.subscriptionToDomain(it) }
     }
 
     override suspend fun updateElder(

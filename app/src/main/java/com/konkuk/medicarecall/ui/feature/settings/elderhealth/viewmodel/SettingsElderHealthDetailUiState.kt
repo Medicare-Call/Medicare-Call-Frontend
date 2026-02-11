@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderhealth.viewmodel
 
-import com.konkuk.medicarecall.ui.model.ElderHealthInfo
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 
 data class SettingsElderHealthDetailUiState(
     val healthData: ElderHealthInfo? = null,

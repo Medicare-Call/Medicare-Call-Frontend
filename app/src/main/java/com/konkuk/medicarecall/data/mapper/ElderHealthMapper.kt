@@ -3,7 +3,7 @@ package com.konkuk.medicarecall.data.mapper
 import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
-import com.konkuk.medicarecall.ui.model.ElderHealthInfo
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
 
 object ElderHealthMapper {

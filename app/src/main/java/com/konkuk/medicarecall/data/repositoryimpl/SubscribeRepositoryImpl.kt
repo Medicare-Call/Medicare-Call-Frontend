@@ -12,7 +12,8 @@ class SubscribeRepositoryImpl(
     private val subscribeService: SubscribeService,
 ) : SubscribeRepository {
     override suspend fun getSubscriptions(): Result<List<ElderSubscription>> = runCatching {
-        val responseDto = subscribeService.getElderSubscriptions().handleResponse()
-        responseDto.map { ElderInfoMapper.subscriptionToDomain(it) }
+        subscribeService.getElderSubscriptions().handleResponse().map {
+            ElderInfoMapper.subscriptionToDomain(it)
+        }
     }
 }

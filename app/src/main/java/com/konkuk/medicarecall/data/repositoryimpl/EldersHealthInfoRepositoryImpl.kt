@@ -7,7 +7,7 @@ import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
-import com.konkuk.medicarecall.ui.model.ElderHealthInfo
+import com.konkuk.medicarecall.domain.model.ElderHealthInfo
 import org.koin.core.annotation.Single
 
 @Single
@@ -31,8 +31,7 @@ class EldersHealthInfoRepositoryImpl(
 
         return runCatching {
             Log.d("Cache", "Fetching new health info from server")
-            val responseDto = elderInfoService.getElderHealthInfo().handleResponse()
-            val domainModels = responseDto.map { ElderHealthMapper.toDomain(it) }
+            val domainModels = elderInfoService.getElderHealthInfo().handleResponse().map { ElderHealthMapper.toDomain(it) }
             cachedHealthInfo = domainModels // 캐시에 저장
             domainModels
         }

@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.model
+package com.konkuk.medicarecall.domain.model
 
 import com.konkuk.medicarecall.ui.type.HealthIssueType
 import com.konkuk.medicarecall.ui.type.MedicationTimeType
