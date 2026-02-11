@@ -69,7 +69,8 @@ class StatisticsViewModel(
             return
         }
 
-        val id = _uiState.value.selectedElderId ?: return
+        val id = _uiState.value.selectedElderId
+        if (id == -1) return
         val start = _uiState.value.currentWeek.first
         getWeeklyStatistics(
             elderId = id,

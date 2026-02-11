@@ -104,7 +104,9 @@ fun StatisticsScreen(
 
     // elderId가 바뀌면 통계 VM에 알려줍니다.
     LaunchedEffect(selectedElderId) {
-        selectedElderId?.let { statisticsViewModel.setSelectedElderId(it) }
+        if (selectedElderId != -1) {
+            statisticsViewModel.setSelectedElderId(selectedElderId)
+        }
     }
 
     // 복약 변경 이벤트 수신

@@ -114,12 +114,12 @@ fun HomeScreen(
             viewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetailScreen = { selectedElderId?.let(navigateToMealDetailScreen) },
-        navigateToMedicineDetailScreen = { selectedElderId?.let(navigateToMedicineDetailScreen) },
-        navigateToSleepDetailScreen = { selectedElderId?.let(navigateToSleepDetailScreen) },
-        navigateToStateHealthDetailScreen = { selectedElderId?.let(navigateToStateHealthDetailScreen) },
-        navigateToStateMentalDetailScreen = { selectedElderId?.let(navigateToStateMentalDetailScreen) },
-        navigateToGlucoseDetailScreen = { selectedElderId?.let(navigateToGlucoseDetailScreen) },
+        navigateToMealDetailScreen = { if (selectedElderId != -1) navigateToMealDetailScreen(selectedElderId) },
+        navigateToMedicineDetailScreen = { if (selectedElderId != -1) navigateToMedicineDetailScreen(selectedElderId) },
+        navigateToSleepDetailScreen = { if (selectedElderId != -1) navigateToSleepDetailScreen(selectedElderId) },
+        navigateToStateHealthDetailScreen = { if (selectedElderId != -1) navigateToStateHealthDetailScreen(selectedElderId) },
+        navigateToStateMentalDetailScreen = { if (selectedElderId != -1) navigateToStateMentalDetailScreen(selectedElderId) },
+        navigateToGlucoseDetailScreen = { if (selectedElderId != -1) navigateToGlucoseDetailScreen(selectedElderId) },
 
         navigateToAlarm = {},
 
@@ -147,7 +147,7 @@ fun HomeScreenLayout(
     modifier: Modifier = Modifier,
     homeUiState: HomeUiState,
     elderInfoList: List<ElderInfo>,
-    selectedElderId: Int?,
+    selectedElderId: Int,
     isRefreshing: Boolean,
     dropdownOpened: Boolean,
     onDropdownClick: () -> Unit,
