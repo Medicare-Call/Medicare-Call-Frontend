@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel
 
-import com.konkuk.medicarecall.ui.model.MyInfo
+import com.konkuk.medicarecall.domain.model.UserInfo
 
 data class SettingsEditMyDataUiState(
     val masterChecked: Boolean = false,
@@ -10,7 +10,7 @@ data class SettingsEditMyDataUiState(
     val isMale: Boolean = false,
     val name: String = "",
     val birth: String = "",
-    val myDataInfo: MyInfo? = null,
+    val myDataInfo: UserInfo? = null,
     val isLoading: Boolean = false,
     val isUpdateSuccess: Boolean = false,
     val errorMessage: String? = null,

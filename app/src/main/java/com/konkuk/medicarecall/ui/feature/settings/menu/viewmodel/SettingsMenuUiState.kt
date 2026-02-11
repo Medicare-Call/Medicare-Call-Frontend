@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.ui.feature.settings.menu.viewmodel
 
-import com.konkuk.medicarecall.ui.model.MyInfo
+import com.konkuk.medicarecall.domain.model.UserInfo
 
 data class SettingsMenuUiState(
-    val myInfo: MyInfo = MyInfo(),
+    val userInfo: UserInfo = UserInfo(),
 )

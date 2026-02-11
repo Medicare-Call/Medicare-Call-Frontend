@@ -77,7 +77,7 @@ fun SettingsMyDataScreen(
         name = myDataInfo.name,
         birthDate = myDataInfo.birthDate,
         gender = myDataInfo.gender,
-        phone = myDataInfo.phone,
+        phone = myDataInfo.phoneNumber,
         showLogoutDialog = showLogoutDialog,
         onBackClick = onBack,
         onEditClick = navigateToUserInfoSetting,

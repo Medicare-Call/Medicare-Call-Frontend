@@ -2,29 +2,29 @@ package com.konkuk.medicarecall.data.mapper
 
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.PushNotificationDto
-import com.konkuk.medicarecall.ui.model.MyInfo
+import com.konkuk.medicarecall.domain.model.UserInfo
 import com.konkuk.medicarecall.ui.model.PushNotification
 
 object UserMapper {
 
     // ResponseDto → Domain Model
-    fun toDomain(dto: MyInfoResponseDto): MyInfo {
-        return MyInfo(
+    fun toDomain(dto: MyInfoResponseDto): UserInfo {
+        return UserInfo(
             name = dto.name,
             birthDate = dto.birthDate,
             gender = dto.gender,
-            phone = dto.phone,
+            phoneNumber = dto.phone,
             pushNotification = pushNotificationToDomain(dto.pushNotification),
         )
     }
 
     // Domain Model → RequestDto (MyInfoResponseDto is used as both request and response)
-    fun toRequestDto(model: MyInfo): MyInfoResponseDto {
+    fun toRequestDto(model: UserInfo): MyInfoResponseDto {
         return MyInfoResponseDto(
             name = model.name,
             birthDate = model.birthDate,
             gender = model.gender,
-            phone = model.phone,
+            phone = model.phoneNumber,
             pushNotification = pushNotificationToDto(model.pushNotification),
         )
     }

@@ -33,7 +33,7 @@ import com.konkuk.medicarecall.ui.common.util.DateOfBirthVisualTransformation
 import com.konkuk.medicarecall.ui.common.util.isValidDate
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel.SettingsEditMyDataViewModel
-import com.konkuk.medicarecall.ui.model.MyInfo
+import com.konkuk.medicarecall.domain.model.UserInfo
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
 import com.konkuk.medicarecall.domain.model.type.GenderType
@@ -73,14 +73,14 @@ fun SettingsEditMyDataScreen(
             uiState.myDataInfo?.let { info ->
                 val gender = if (uiState.isMale) GenderType.MALE else GenderType.FEMALE
                 viewModel.updateUserData(
-                    userInfo = MyInfo(
+                    userInfo = UserInfo(
                         name = uiState.name,
                         birthDate = uiState.birth.replaceFirst(
                             "(\\d{4})(\\d{2})(\\d{2})".toRegex(),
                             "$1-$2-$3",
                         ),
                         gender = gender,
-                        phone = info.phone,
+                        phoneNumber = info.phoneNumber,
                         pushNotification = info.pushNotification,
                     ),
                 ) { onBack() }

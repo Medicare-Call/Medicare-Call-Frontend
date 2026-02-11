@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.UserRepository
-import com.konkuk.medicarecall.ui.model.MyInfo
+import com.konkuk.medicarecall.domain.model.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,10 +18,10 @@ class SettingsMyDataViewModel(
     fun refresh() = getUserData()
 
     // 내부 수정용
-    private val _myDataInfo = MutableStateFlow(MyInfo())
+    private val _myDataInfo = MutableStateFlow(UserInfo())
 
     // 외부 노출용 (읽기 전용)
-    val myDataInfo: StateFlow<MyInfo> = _myDataInfo.asStateFlow()
+    val myDataInfo: StateFlow<UserInfo> = _myDataInfo.asStateFlow()
 
     init {
         getUserData()

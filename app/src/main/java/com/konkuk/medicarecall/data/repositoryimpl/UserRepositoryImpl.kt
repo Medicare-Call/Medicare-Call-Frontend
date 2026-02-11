@@ -7,7 +7,7 @@ import com.konkuk.medicarecall.data.repository.DataStoreRepository
 import com.konkuk.medicarecall.data.repository.UserRepository
 import com.konkuk.medicarecall.data.util.handleNullableResponse
 import com.konkuk.medicarecall.data.util.handleResponse
-import com.konkuk.medicarecall.ui.model.MyInfo
+import com.konkuk.medicarecall.domain.model.UserInfo
 import org.koin.core.annotation.Single
 
 @Single
@@ -21,8 +21,8 @@ class UserRepositoryImpl(
         UserMapper.toDomain(responseDto)
     }
 
-    override suspend fun updateMyInfo(myInfo: MyInfo) = runCatching {
-        val requestDto = UserMapper.toRequestDto(myInfo)
+    override suspend fun updateMyInfo(userInfo: UserInfo) = runCatching {
+        val requestDto = UserMapper.toRequestDto(userInfo)
         val responseDto = settingService.updateMyInfo(requestDto).handleResponse()
         UserMapper.toDomain(responseDto)
     }
