@@ -8,7 +8,7 @@ import com.konkuk.medicarecall.domain.model.DoseStatus
 import com.konkuk.medicarecall.domain.model.DoseStatusItem
 import com.konkuk.medicarecall.domain.model.Medicine
 import org.koin.core.annotation.Single
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 @Single
 class MedicineRepositoryImpl(

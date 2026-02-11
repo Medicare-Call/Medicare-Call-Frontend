@@ -27,9 +27,12 @@ import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
+import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -116,11 +119,12 @@ fun StateMentalDetailScreenLayout(
 @Preview(showBackground = true)
 @Composable
 fun PreviewStateMentalDetailScreen() {
+    val today = LocalDate.today()
     StateMentalDetailScreenLayout(
         onBack = {},
-        selectedDate = LocalDate.now(),
+        selectedDate = today,
         mental = MentalUiState(),
-        weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
+        weekDates = (0..6).map { today.plus(it, DateTimeUnit.DAY) },
         onDateSelected = {},
         onMonthClick = {},
     )

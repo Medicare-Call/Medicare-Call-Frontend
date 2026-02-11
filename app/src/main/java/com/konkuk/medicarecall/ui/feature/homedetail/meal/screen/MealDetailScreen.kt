@@ -28,8 +28,10 @@ import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.component.MealDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.meal.viewmodel.MealViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -132,8 +134,8 @@ fun MealDetailScreenLayout(
 @Preview(name = "식사 - 기록 있음", showBackground = true)
 @Composable
 fun PreviewMealDetailScreenRecorded() {
-    val selectedDate = LocalDate.of(2025, 5, 7)
-    val weekDates = (0..6).map { selectedDate.plusDays(it.toLong()) }
+    val selectedDate = LocalDate(2025, 5, 7)
+    val weekDates = (0..6).map { selectedDate.plus(it, DateTimeUnit.DAY) }
 
     val dummyMeals = listOf(
         Meal(mealTime = "아침", description = "간단히 밥과 반찬을 드셨어요."),
@@ -156,9 +158,9 @@ fun PreviewMealDetailScreenRecorded() {
 @Preview(name = "식사 - 미기록 화면", showBackground = true)
 @Composable
 fun PreviewMealDetailScreenUnrecorded() {
-    val selectedDate = LocalDate.of(2025, 5, 7)
-    val weekDates =
-        (0..6).map { selectedDate.plusDays(it.toLong() - selectedDate.dayOfWeek.value % 7) }
+    val selectedDate = LocalDate(2025, 5, 7)
+    val startOfWeek = selectedDate.plus(-(selectedDate.dayOfWeek.ordinal % 7), DateTimeUnit.DAY)
+    val weekDates = (0..6).map { startOfWeek.plus(it, DateTimeUnit.DAY) }
 
     val dummyMeals = listOf(
         Meal(

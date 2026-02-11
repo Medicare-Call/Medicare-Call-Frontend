@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.konkuk.medicarecall.data.repository.SleepRepository
-import com.konkuk.medicarecall.ui.common.util.today
+import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.navigation.Route
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

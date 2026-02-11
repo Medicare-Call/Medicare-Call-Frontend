@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.repository
 
 import com.konkuk.medicarecall.domain.model.Medicine
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 interface MedicineRepository {
 

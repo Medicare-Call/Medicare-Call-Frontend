@@ -97,9 +97,6 @@ dependencies {
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
 
-    // kotlinx-datetime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
-
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
 
