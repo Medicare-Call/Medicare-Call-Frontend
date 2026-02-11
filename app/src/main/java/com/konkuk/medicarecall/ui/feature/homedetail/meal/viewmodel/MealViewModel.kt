@@ -45,7 +45,7 @@ class MealViewModel(
     private val _meals = MutableStateFlow<List<MealUiState>>(emptyList())
     val meals: StateFlow<List<MealUiState>> = _meals
 
-    fun loadMealsForDate(elderId: Int, date: LocalDate) {
+    fun loadMealsForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
             Log.d(TAG, "Request elderId=$elderId, date=$formatted")

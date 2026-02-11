@@ -11,7 +11,7 @@ import java.time.LocalDate
 class HealthRepositoryImpl(
     private val healthService: HealthService,
 ) : HealthRepository {
-    override suspend fun getHealthUiState(elderId: Int, date: LocalDate): Result<HealthUiState> =
+    override suspend fun getHealthUiState(elderId: Long, date: LocalDate): Result<HealthUiState> =
         runCatching {
             val response = healthService.getDailyHealth(elderId, date.toString()).handleResponse()
             HealthUiState(

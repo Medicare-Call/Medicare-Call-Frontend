@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EldersInfoResponseDto(
-    val elderId: Int,
+    val elderId: Long,
     val name: String,
     val birthDate: String,
     val gender: GenderType,

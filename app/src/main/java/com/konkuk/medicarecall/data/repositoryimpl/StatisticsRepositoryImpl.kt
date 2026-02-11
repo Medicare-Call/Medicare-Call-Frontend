@@ -12,7 +12,7 @@ class StatisticsRepositoryImpl(
     private val statisticsService: StatisticsService,
 ) : StatisticsRepository {
 
-    override suspend fun getStatistics(elderId: Int, startDate: String): Result<StatisticsData> = runCatching {
+    override suspend fun getStatistics(elderId: Long, startDate: String): Result<StatisticsData> = runCatching {
         statisticsService.getStatistics(elderId = elderId, startDate = startDate).handleResponse().toModel()
     }
 }

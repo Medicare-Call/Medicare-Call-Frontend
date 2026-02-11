@@ -10,7 +10,7 @@ interface StatisticsService {
 
     @GET("elders/{elderId}/weekly-stats")
     suspend fun getStatistics(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Query("startDate") startDate: String,
     ): Response<StatisticsResponseDto>
 }

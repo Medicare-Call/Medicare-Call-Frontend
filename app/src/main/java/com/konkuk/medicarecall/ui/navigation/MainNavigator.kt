@@ -118,27 +118,27 @@ class MainNavigator(
         this.navigateToMainTab(MainTab.HOME)
     }
 
-    fun navigateToMealDetailScreen(elderId: Int) {
+    fun navigateToMealDetailScreen(elderId: Long) {
         navController.navigate(Route.MealDetail(elderId))
     }
 
-    fun navigateToMedicineDetailScreen(elderId: Int) {
+    fun navigateToMedicineDetailScreen(elderId: Long) {
         navController.navigate(Route.MedicineDetail(elderId))
     }
 
-    fun navigateToSleepDetailScreen(elderId: Int) {
+    fun navigateToSleepDetailScreen(elderId: Long) {
         navController.navigate(Route.SleepDetail(elderId))
     }
 
-    fun navigateToStateHealthDetailScreen(elderId: Int) {
+    fun navigateToStateHealthDetailScreen(elderId: Long) {
         navController.navigate(Route.StateHealthDetail(elderId))
     }
 
-    fun navigateToStateMentalDetailScreen(elderId: Int) {
+    fun navigateToStateMentalDetailScreen(elderId: Long) {
         navController.navigate(Route.StateMentalDetail(elderId))
     }
 
-    fun navigateToGlucoseDetailScreen(elderId: Int) {
+    fun navigateToGlucoseDetailScreen(elderId: Long) {
         navController.navigate(Route.GlucoseDetail(elderId))
     }
 
@@ -147,7 +147,7 @@ class MainNavigator(
         navController.navigateToElderPersonalInfo()
     }
 
-    fun navigateToElderPersonalDetail(elderId: Int) {
+    fun navigateToElderPersonalDetail(elderId: Long) {
         navController.navigateToElderPersonalDetail(elderId)
     }
 
@@ -155,7 +155,7 @@ class MainNavigator(
         navController.navigateToElderHealthInfo()
     }
 
-    fun navigateToHealthDetail(elderId: Int) {
+    fun navigateToHealthDetail(elderId: Long) {
         navController.navigateToElderHealthDetail(elderId)
     }
 
@@ -167,7 +167,7 @@ class MainNavigator(
         navController.navigateToSubscribeInfo()
     }
 
-    fun navigateToSubscribeDetail(elderId: Int) {
+    fun navigateToSubscribeDetail(elderId: Long) {
         navController.navigateToSubscribeDetail(elderId)
     }
 
@@ -175,7 +175,7 @@ class MainNavigator(
         navController.navigateToNotice()
     }
 
-    fun navigateToNoticeDetail(noticeId: Int) {
+    fun navigateToNoticeDetail(noticeId: Long) {
         navController.navigateToNoticeDetail(noticeId)
     }
 

@@ -10,7 +10,7 @@ import java.time.LocalDate
 class MealRepositoryImpl(
     private val mealService: MealService,
 ) : MealRepository {
-    override suspend fun getMealUiStateList(elderId: Int, date: LocalDate): List<MealUiState> {
+    override suspend fun getMealUiStateList(elderId: Long, date: LocalDate): List<MealUiState> {
         val response = mealService.getDailyMeal(elderId, date.toString())
 
         return if (response.isSuccessful) {

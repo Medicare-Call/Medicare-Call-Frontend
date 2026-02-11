@@ -13,7 +13,7 @@ class SleepRepositoryImpl(
     private val sleepService: SleepService,
 ) : SleepRepository {
     override suspend fun getSleepData(
-        elderId: Int,
+        elderId: Long,
         date: LocalDate,
     ): Result<Sleep> = runCatching {
         sleepService.getDailySleep(

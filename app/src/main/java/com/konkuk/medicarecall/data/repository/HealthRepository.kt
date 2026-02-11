@@ -4,5 +4,5 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.Healt
 import java.time.LocalDate
 
 interface HealthRepository {
-    suspend fun getHealthUiState(elderId: Int, date: LocalDate): Result<HealthUiState>
+    suspend fun getHealthUiState(elderId: Long, date: LocalDate): Result<HealthUiState>
 }

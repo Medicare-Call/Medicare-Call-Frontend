@@ -12,27 +12,27 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.screen.StateHea
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.screen.StateMentalDetailScreen
 import com.konkuk.medicarecall.ui.navigation.Route
 
-fun NavController.navigateToMealDetailScreen(elderId: Int) {
+fun NavController.navigateToMealDetailScreen(elderId: Long) {
     navigate(Route.MealDetail(elderId))
 }
 
-fun NavController.navigateToMedicineDetailScreen(elderId: Int) {
+fun NavController.navigateToMedicineDetailScreen(elderId: Long) {
     navigate(Route.MedicineDetail(elderId))
 }
 
-fun NavController.navigateToSleepDetailScreen(elderId: Int) {
+fun NavController.navigateToSleepDetailScreen(elderId: Long) {
     navigate(Route.SleepDetail(elderId))
 }
 
-fun NavController.navigateToStateHealthDetailScreen(elderId: Int) {
+fun NavController.navigateToStateHealthDetailScreen(elderId: Long) {
     navigate(Route.StateHealthDetail(elderId))
 }
 
-fun NavController.navigateToStateMentalDetailScreen(elderId: Int) {
+fun NavController.navigateToStateMentalDetailScreen(elderId: Long) {
     navigate(Route.StateMentalDetail(elderId))
 }
 
-fun NavController.navigateToGlucoseDetailScreen(elderId: Int) {
+fun NavController.navigateToGlucoseDetailScreen(elderId: Long) {
     navigate(Route.GlucoseDetail(elderId))
 }
 

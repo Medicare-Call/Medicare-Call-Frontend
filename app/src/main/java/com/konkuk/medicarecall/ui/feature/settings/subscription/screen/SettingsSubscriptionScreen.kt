@@ -34,7 +34,7 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsSubscriptionScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateToSubscribeDetail: (elderId: Int) -> Unit = {},
+    navigateToSubscribeDetail: (elderId: Long) -> Unit = {},
     viewModel: SettingsSubscriptionViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

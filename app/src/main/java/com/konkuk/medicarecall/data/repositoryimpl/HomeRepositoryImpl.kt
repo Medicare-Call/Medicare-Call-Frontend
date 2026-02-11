@@ -13,7 +13,7 @@ class HomeRepositoryImpl(
     private val homeService: HomeService,
 ) : HomeRepository {
     override suspend fun requestImmediateCareCall(
-        elderId: Int,
+        elderId: Long,
         careCallOption: String,
     ): Result<Unit> = runCatching {
         homeService.requestImmediateCareCall(
@@ -21,7 +21,7 @@ class HomeRepositoryImpl(
         ).handleNullableResponse()
     }
 
-    override suspend fun getHomeSummary(elderId: Int): Result<HomeResponseDto> = runCatching {
+    override suspend fun getHomeSummary(elderId: Long): Result<HomeResponseDto> = runCatching {
         homeService.getHomeSummary(elderId).handleResponse()
     }
 }

@@ -10,7 +10,7 @@ interface GlucoseService {
 
     @GET("elders/{elderId}/blood-sugar/weekly")
     suspend fun getGlucoseGraph(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Query("counter") counter: Int,
         @Query("type") type: String, // BEFORE_MEAL or AFTER_MEAL
     ): Response<GlucoseResponseDto>

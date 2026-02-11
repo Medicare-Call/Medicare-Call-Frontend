@@ -12,12 +12,12 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    navigateToMealDetailScreen: (Int) -> Unit,
-    navigateToMedicineDetailScreen: (Int) -> Unit,
-    navigateToSleepDetailScreen: (Int) -> Unit,
-    navigateToStateHealthDetailScreen: (Int) -> Unit,
-    navigateToStateMentalDetailScreen: (Int) -> Unit,
-    navigateToGlucoseDetailScreen: (Int) -> Unit,
+    navigateToMealDetailScreen: (Long) -> Unit,
+    navigateToMedicineDetailScreen: (Long) -> Unit,
+    navigateToSleepDetailScreen: (Long) -> Unit,
+    navigateToStateHealthDetailScreen: (Long) -> Unit,
+    navigateToStateMentalDetailScreen: (Long) -> Unit,
+    navigateToGlucoseDetailScreen: (Long) -> Unit,
 ) {
     composable<MainTabRoute.Home> { backStackEntry ->
         HomeScreen(

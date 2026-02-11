@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -87,7 +88,7 @@ fun CallTimeScreen(
     var showBottomSheet by remember { mutableStateOf(false) } // 하단 시트 제어
 
 //    var selectedIndex by remember { mutableIntStateOf(0) } // 선택된 어르신 인덱스
-    var selectedId by remember { mutableIntStateOf(uiState.elderMap.keys.first()) } // 선택된 어르신 아이디
+    var selectedId by remember { mutableLongStateOf(uiState.elderMap.keys.first()) } // 선택된 어르신 아이디
     val saved = uiState.timeMap[selectedId] ?: CallTimes()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 

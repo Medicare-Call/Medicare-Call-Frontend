@@ -54,7 +54,7 @@ import java.time.LocalDate
 @Composable
 fun GlucoseDetailScreen(
     modifier: Modifier = Modifier,
-    elderId: Int,
+    elderId: Long,
     onBack: () -> Unit,
     viewModel: GlucoseViewModel = koinViewModel(),
 ) {

@@ -49,14 +49,14 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsElderInfoDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    elderId: Int,
+    elderId: Long,
     navController: NavHostController,
     viewModel: SettingsElderInfoDetailViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
 
-    val isEditMode = elderId != -1
+    val isEditMode = elderId != -1L
     val screenTitle = if (isEditMode) "어르신 개인정보 설정" else "어르신 등록"
     val confirmButtonText = if (isEditMode) "수정 완료" else "등록 완료"
 

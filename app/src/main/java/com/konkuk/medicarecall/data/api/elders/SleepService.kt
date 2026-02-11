@@ -9,7 +9,7 @@ import de.jensklingenberg.ktorfit.http.Query
 interface SleepService {
     @GET("elders/{elderId}/sleep")
     suspend fun getDailySleep(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Query("date") date: String,
     ): Response<SleepResponseDto>
 }

@@ -35,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SettingsElderHealthScreen(
     onBack: () -> Unit = {},
-    navigateToHealthDetail: (Int) -> Unit = {},
+    navigateToHealthDetail: (Long) -> Unit = {},
     viewModel: SettingsEldersHealthViewModel = koinViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current

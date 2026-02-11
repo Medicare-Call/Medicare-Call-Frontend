@@ -44,7 +44,7 @@ class MentalViewModel(
     private val _mental = MutableStateFlow(MentalUiState.Companion.EMPTY)
     val mental: StateFlow<MentalUiState> = _mental
 
-    fun loadMental(elderId: Int, date: LocalDate) {
+    fun loadMental(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             val ui = mentalRepository.getMentalUiState(elderId, date)
             Log.d("MENTAL_VM", "ui=$ui")
@@ -52,7 +52,7 @@ class MentalViewModel(
         }
     }
 
-    fun loadMentalDataForDate(elderId: Int, date: LocalDate) {
+    fun loadMentalDataForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
             Log.d(TAG, "Request elderId=$elderId, date=$formatted")

@@ -53,7 +53,7 @@ class MedicineViewModel(
     private val _state = MutableStateFlow(ScreenState())
     val state: StateFlow<ScreenState> = _state
 
-    fun loadMedicinesForDate(elderId: Int, date: LocalDate) {
+    fun loadMedicinesForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
             Log.d(TAG, "Request elderId=$elderId, date=$formatted")

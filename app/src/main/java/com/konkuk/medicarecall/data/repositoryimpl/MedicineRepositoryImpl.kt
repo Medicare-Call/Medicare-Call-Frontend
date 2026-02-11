@@ -16,7 +16,7 @@ class MedicineRepositoryImpl(
 ) : MedicineRepository {
 
     /** 설정 스케줄을 “회색 카드” UI로 변환 */
-    override suspend fun getConfiguredMedicineUiList(elderId: Int): List<MedicineUiState> {
+    override suspend fun getConfiguredMedicineUiList(elderId: Long): List<MedicineUiState> {
         val schedule = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
@@ -60,7 +60,7 @@ class MedicineRepositoryImpl(
 
     /** 날짜별 기록 호출 + 없으면 스케줄 fallback */
     override suspend fun getMedicineUiStateList(
-        elderId: Int,
+        elderId: Long,
         date: LocalDate,
     ): List<MedicineUiState> {
         val grayTemplate =

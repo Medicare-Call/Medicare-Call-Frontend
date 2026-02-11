@@ -39,7 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SettingsNoticeDetailScreen(
     modifier: Modifier = Modifier,
-    noticeId: Int,
+    noticeId: Long,
     onBack: () -> Unit = {},
     detailViewModel: SettingsNoticeDetailViewModel = koinViewModel(),
 ) {

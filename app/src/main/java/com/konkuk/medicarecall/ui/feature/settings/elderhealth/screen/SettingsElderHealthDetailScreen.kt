@@ -49,7 +49,7 @@ import kotlin.collections.iterator
 fun SettingsElderHealthDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    elderId: Int,
+    elderId: Long,
     viewModel: SettingsElderHealthDetailViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

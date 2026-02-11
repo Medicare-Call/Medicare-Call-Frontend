@@ -37,7 +37,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedicineDetailScreen(
-    elderId: Int,
+    elderId: Long,
     onBack: () -> Unit,
     viewModel: MedicineViewModel = koinViewModel(),
 ) {

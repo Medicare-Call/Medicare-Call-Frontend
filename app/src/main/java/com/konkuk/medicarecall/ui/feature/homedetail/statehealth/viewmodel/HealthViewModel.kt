@@ -47,7 +47,7 @@ class HealthViewModel(
     private val _health = MutableStateFlow(HealthUiState.Companion.EMPTY)
     val health: StateFlow<HealthUiState> = _health
 
-    fun loadHealthDataForDate(elderId: Int, date: LocalDate) {
+    fun loadHealthDataForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             if (!_isLoading.value) _isLoading.value = true
             val formatted = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
