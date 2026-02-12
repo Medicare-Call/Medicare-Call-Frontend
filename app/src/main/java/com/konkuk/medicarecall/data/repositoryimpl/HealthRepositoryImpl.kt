@@ -14,7 +14,7 @@ class HealthRepositoryImpl(
 ) : HealthRepository {
 
     override suspend fun getHealth(
-        elderId: Int,
+        elderId: Long,
         date: LocalDate,
     ): Result<Health> = runCatching {
         healthService.getDailyHealth(

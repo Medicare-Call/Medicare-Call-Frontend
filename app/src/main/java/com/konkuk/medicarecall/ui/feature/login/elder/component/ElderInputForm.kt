@@ -17,22 +17,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.domain.model.Elder.ElderResidenceType
-import com.konkuk.medicarecall.domain.model.Elder.RelationshipType
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 import com.konkuk.medicarecall.ui.common.component.DefaultDropdown
 import com.konkuk.medicarecall.ui.common.component.DefaultTextField
 import com.konkuk.medicarecall.ui.common.component.GenderToggleButton
 import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.type.GenderType
 
 @Composable
 fun ElderInputForm(
     scrollState: ScrollState,
     elderData: LoginElderData,
     onGenderChanged: (GenderType) -> Unit,
-    onRelationshipChange: (RelationshipType) -> Unit,
-    onLivingTypeChanged: (ElderResidenceType) -> Unit,
+    onRelationshipChange: (Relationship) -> Unit,
+    onLivingTypeChanged: (ElderResidence) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -96,7 +96,7 @@ fun ElderInputForm(
 
         DefaultDropdown(
             value = elderData.relationship,
-            enumList = RelationshipType.entries.toList(),
+            enumList = Relationship.entries.toList(),
             placeHolder = "어르신과의 관계를 선택해주세요",
             category = "어르신과의 관계",
             scrollState = scrollState,
@@ -108,7 +108,7 @@ fun ElderInputForm(
 
         DefaultDropdown(
             value = elderData.livingType,
-            enumList = ElderResidenceType.entries.toList(),
+            enumList = ElderResidence.entries.toList(),
             placeHolder = "어르신의 거주방식을 선택해주세요",
             category = "어르신 거주 방식",
             scrollState = scrollState,
@@ -131,8 +131,8 @@ private fun ElderInputFormPreview() {
                 birthDateState = TextFieldState("19450101"),
                 gender = GenderType.FEMALE,
                 phoneNumberState = TextFieldState("01012345678"),
-                relationship = RelationshipType.CHILD,
-                livingType = ElderResidenceType.ALONE,
+                relationship = Relationship.CHILD,
+                livingType = ElderResidence.ALONE,
             ),
             onGenderChanged = {},
             onRelationshipChange = {},

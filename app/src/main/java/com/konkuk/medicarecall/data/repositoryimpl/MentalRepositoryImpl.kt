@@ -13,7 +13,7 @@ class MentalRepositoryImpl(
 ) : MentalRepository {
 
     override suspend fun getMental(
-        elderId: Int,
+        elderId: Long,
         date: LocalDate,
     ): Result<Mental> = runCatching {
         val response = mentalService.getDailyMental(

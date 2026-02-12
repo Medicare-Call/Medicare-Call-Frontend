@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.type
+package com.konkuk.medicarecall.domain.model.type
 
 import kotlinx.serialization.Serializable
 
@@ -10,7 +10,7 @@ enum class GenderType(val displayName: String) {
 
     companion object {
         fun fromString(value: String): GenderType {
-            return GenderType.entries.find { it.displayName == value || it.name == value } ?: MALE
+            return entries.find { it.displayName == value || it.name == value } ?: MALE
         }
     }
 }

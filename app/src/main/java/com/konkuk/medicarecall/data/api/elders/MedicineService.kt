@@ -9,7 +9,7 @@ import de.jensklingenberg.ktorfit.http.Query
 interface MedicineService {
     @GET("elders/{elderId}/medication")
     suspend fun getDailyMedication(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Query("date") date: String,
     ): Response<MedicineResponseDto>
 }

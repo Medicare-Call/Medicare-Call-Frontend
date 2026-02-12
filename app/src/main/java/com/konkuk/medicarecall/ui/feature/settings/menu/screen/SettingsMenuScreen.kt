@@ -64,7 +64,7 @@ fun SettingsMenuScreen(
     val uiState by settingsMenuViewModel.uiState.collectAsStateWithLifecycle()
 
     SettingsMenuLayout(
-        userName = uiState.myInfo.name,
+        userName = uiState.userInfo.name,
         onProfileClick = navigateToUserInfo,
         onNoticeClick = navigateToNotice,
         onCenterClick = navigateToCenter,

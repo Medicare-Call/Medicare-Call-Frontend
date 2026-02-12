@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.data.dto.response
 
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.GenderType
 import kotlinx.serialization.Serializable
 
 @Serializable

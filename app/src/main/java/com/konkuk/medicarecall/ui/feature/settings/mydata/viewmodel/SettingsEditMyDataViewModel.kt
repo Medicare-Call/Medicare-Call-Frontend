@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.UserRepository
-import com.konkuk.medicarecall.ui.model.MyInfo
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.UserInfo
+import com.konkuk.medicarecall.domain.model.type.GenderType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,7 +51,7 @@ class SettingsEditMyDataViewModel(
     }
 
     fun updateUserData(
-        userInfo: MyInfo,
+        userInfo: UserInfo,
         onComplete: (() -> Unit)? = null,
     ) {
         viewModelScope.launch {
@@ -86,7 +86,7 @@ class SettingsEditMyDataViewModel(
         _uiState.update { it.copy(isUpdateSuccess = false, errorMessage = null) }
     }
 
-    fun initializeNotificationSettings(myDataInfo: MyInfo) {
+    fun initializeNotificationSettings(myDataInfo: UserInfo) {
         val masterOn = myDataInfo.pushNotification.isAllEnabled
         _uiState.update {
             it.copy(
@@ -136,7 +136,7 @@ class SettingsEditMyDataViewModel(
         }
     }
 
-    fun initializeFormData(myDataInfo: MyInfo) {
+    fun initializeFormData(myDataInfo: UserInfo) {
         _uiState.update {
             it.copy(
                 isMale = myDataInfo.gender == GenderType.MALE,

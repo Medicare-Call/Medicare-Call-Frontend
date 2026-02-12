@@ -39,20 +39,20 @@ class CallTimeViewModel(
         }
     }
 
-    fun setTimes(id: Int, times: CallTimes) {
+    fun setTimes(id: Long, times: CallTimes) {
         _uiState.update { it.copy(timeMap = it.timeMap.plus(id to times)) }
     }
 
-    fun isCompleteFor(id: Int): Boolean {
+    fun isCompleteFor(id: Long): Boolean {
         val t = uiState.value.timeMap[id] ?: return false
         return t.first != null && t.second != null && t.third != null
     }
 
-    fun isAllComplete(ids: Set<Int>): Boolean =
+    fun isAllComplete(ids: Set<Long>): Boolean =
         ids.isNotEmpty() && ids.all { isCompleteFor(it) }
 
     fun submitAllByIds(
-        elderIds: List<Int>,
+        elderIds: List<Long>,
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit,
     ) {

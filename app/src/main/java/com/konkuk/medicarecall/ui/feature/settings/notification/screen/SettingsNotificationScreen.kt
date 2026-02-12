@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
-import com.konkuk.medicarecall.ui.model.PushNotification
+import com.konkuk.medicarecall.domain.model.PushNotification
 import com.konkuk.medicarecall.ui.feature.settings.notification.component.SwitchButton
 import com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel.SettingsEditMyDataViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme

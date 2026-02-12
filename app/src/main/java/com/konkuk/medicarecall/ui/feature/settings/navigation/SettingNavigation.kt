@@ -30,7 +30,7 @@ fun NavController.navigateToElderPersonalInfo() {
     navigate(Route.ElderPersonalInfo)
 }
 
-fun NavController.navigateToElderPersonalDetail(elderId: Int = -1) {
+fun NavController.navigateToElderPersonalDetail(elderId: Long = -1L) {
     navigate(Route.ElderPersonalDetail(elderId))
 }
 
@@ -38,7 +38,7 @@ fun NavController.navigateToElderHealthInfo() {
     navigate(Route.ElderHealthInfo)
 }
 
-fun NavController.navigateToElderHealthDetail(elderId: Int) {
+fun NavController.navigateToElderHealthDetail(elderId: Long) {
     navigate(Route.ElderHealthDetail(elderId))
 }
 
@@ -50,7 +50,7 @@ fun NavController.navigateToSubscribeInfo() {
     navigate(Route.SubscribeInfo)
 }
 
-fun NavController.navigateToSubscribeDetail(elderId: Int) {
+fun NavController.navigateToSubscribeDetail(elderId: Long) {
     navigate(Route.SubscribeDetail(elderId))
 }
 
@@ -58,7 +58,7 @@ fun NavController.navigateToNotice() {
     navigate(Route.Notice)
 }
 
-fun NavController.navigateToNoticeDetail(noticeId: Int) {
+fun NavController.navigateToNoticeDetail(noticeId: Long) {
     navigate(Route.NoticeDetail(noticeId))
 }
 
@@ -77,14 +77,14 @@ fun NavController.navigateToUserInfoSetting() {
 fun NavGraphBuilder.settingNavGraph(
     popBackStack: () -> Unit,
     navigateToElderPersonalInfo: () -> Unit,
-    navigateToElderPersonalDetail: (Int) -> Unit,
+    navigateToElderPersonalDetail: (Long) -> Unit,
     navigateToElderHealthInfo: () -> Unit,
-    navigateToHealthDetail: (Int) -> Unit,
+    navigateToHealthDetail: (Long) -> Unit,
     navigateToNotificationSetting: () -> Unit,
     navigateToSubscribeInfo: () -> Unit,
-    navigateToSubscribeDetail: (Int) -> Unit,
+    navigateToSubscribeDetail: (Long) -> Unit,
     navigateToNotice: () -> Unit,
-    navigateToNoticeDetail: (Int) -> Unit,
+    navigateToNoticeDetail: (Long) -> Unit,
     navigateToServiceCenter: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToUserInfoSetting: () -> Unit,

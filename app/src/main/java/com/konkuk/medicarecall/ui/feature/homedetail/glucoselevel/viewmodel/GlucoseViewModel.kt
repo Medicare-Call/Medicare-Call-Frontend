@@ -32,7 +32,7 @@ class GlucoseViewModel(
     private val _afterMealData = MutableStateFlow<List<GraphDataPoint>>(emptyList())
 
     fun getGlucoseData(
-        elderId: Int,
+        elderId: Long,
         counter: Int,
         type: GlucoseTiming,
         isRefresh: Boolean = false,

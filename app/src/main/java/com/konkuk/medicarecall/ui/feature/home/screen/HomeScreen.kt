@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import com.konkuk.medicarecall.domain.model.HomeSleep
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
@@ -59,7 +60,6 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
-import com.konkuk.medicarecall.ui.feature.home.viewmodel.ElderInfo
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
@@ -72,12 +72,12 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    navigateToMealDetailScreen: (Int) -> Unit,
-    navigateToMedicineDetailScreen: (Int) -> Unit,
-    navigateToSleepDetailScreen: (Int) -> Unit,
-    navigateToStateHealthDetailScreen: (Int) -> Unit,
-    navigateToStateMentalDetailScreen: (Int) -> Unit,
-    navigateToGlucoseDetailScreen: (Int) -> Unit,
+    navigateToMealDetailScreen: (Long) -> Unit,
+    navigateToMedicineDetailScreen: (Long) -> Unit,
+    navigateToSleepDetailScreen: (Long) -> Unit,
+    navigateToStateHealthDetailScreen: (Long) -> Unit,
+    navigateToStateMentalDetailScreen: (Long) -> Unit,
+    navigateToGlucoseDetailScreen: (Long) -> Unit,
 ) {
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle()
     val elderInfoList by viewModel.elderInfoList.collectAsStateWithLifecycle()
@@ -114,12 +114,12 @@ fun HomeScreen(
             viewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetailScreen = { if (selectedElderId != -1) navigateToMealDetailScreen(selectedElderId) },
-        navigateToMedicineDetailScreen = { if (selectedElderId != -1) navigateToMedicineDetailScreen(selectedElderId) },
-        navigateToSleepDetailScreen = { if (selectedElderId != -1) navigateToSleepDetailScreen(selectedElderId) },
-        navigateToStateHealthDetailScreen = { if (selectedElderId != -1) navigateToStateHealthDetailScreen(selectedElderId) },
-        navigateToStateMentalDetailScreen = { if (selectedElderId != -1) navigateToStateMentalDetailScreen(selectedElderId) },
-        navigateToGlucoseDetailScreen = { if (selectedElderId != -1) navigateToGlucoseDetailScreen(selectedElderId) },
+        navigateToMealDetailScreen = { if (selectedElderId != -1L) navigateToMealDetailScreen(selectedElderId) },
+        navigateToMedicineDetailScreen = { if (selectedElderId != -1L) navigateToMedicineDetailScreen(selectedElderId) },
+        navigateToSleepDetailScreen = { if (selectedElderId != -1L) navigateToSleepDetailScreen(selectedElderId) },
+        navigateToStateHealthDetailScreen = { if (selectedElderId != -1L) navigateToStateHealthDetailScreen(selectedElderId) },
+        navigateToStateMentalDetailScreen = { if (selectedElderId != -1L) navigateToStateMentalDetailScreen(selectedElderId) },
+        navigateToGlucoseDetailScreen = { if (selectedElderId != -1L) navigateToGlucoseDetailScreen(selectedElderId) },
 
         navigateToAlarm = {},
 
@@ -147,7 +147,7 @@ fun HomeScreenLayout(
     modifier: Modifier = Modifier,
     homeUiState: HomeUiState,
     elderInfoList: List<ElderInfo>,
-    selectedElderId: Int,
+    selectedElderId: Long,
     isRefreshing: Boolean,
     dropdownOpened: Boolean,
     onDropdownClick: () -> Unit,
@@ -171,7 +171,7 @@ fun HomeScreenLayout(
     }
     val refreshState = rememberPullToRefreshState()
     val selectedElderName =
-        elderInfoList.find { it.id == selectedElderId }?.name
+        elderInfoList.find { it.elderId == selectedElderId }?.name
             ?.takeIf { it.isNotBlank() }
             ?: homeUiState.elderName
                 .takeIf { it.isNotBlank() }
@@ -439,11 +439,11 @@ fun PreviewHomeScreen() {
     )
 
     val previewElderInfoList = listOf(
-        ElderInfo(1, "김옥자", "010-1111-1111"),
-        ElderInfo(2, "박막례", "010-2222-2222"),
-        ElderInfo(3, "최이순", "010-3333-3333"),
+        ElderInfo(elderId = 1L, name = "김옥자", phone = "010-1111-1111"),
+        ElderInfo(elderId = 2L, name = "박막례", phone = "010-2222-2222"),
+        ElderInfo(elderId = 3L, name = "최이순", phone = "010-3333-3333"),
     )
-    val previewSelectedId = 1
+    val previewSelectedId = 1L
 
     MediCareCallTheme {
         HomeScreenLayout(
@@ -488,10 +488,10 @@ fun PreviewHomeScreenUnrecorded() {
     )
 
     val previewElderInfoList = listOf(
-        ElderInfo(1, "김옥자", "010-1111-1111"),
-        ElderInfo(2, "박막례", "010-2222-2222"),
+        ElderInfo(elderId = 1L, name = "김옥자", phone = "010-1111-1111"),
+        ElderInfo(elderId = 2L, name = "박막례", phone = "010-2222-2222"),
     )
-    val previewSelectedId = 1
+    val previewSelectedId = 1L
 
     MediCareCallTheme {
         HomeScreenLayout(

@@ -9,7 +9,7 @@ import de.jensklingenberg.ktorfit.http.Query
 interface MentalService {
     @GET("elders/{elderId}/mental-analysis")
     suspend fun getDailyMental(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Query("date") date: String,
     ): Response<MentalResponseDto>
 }

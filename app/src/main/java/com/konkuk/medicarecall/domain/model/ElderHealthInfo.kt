@@ -1,12 +1,12 @@
 package com.konkuk.medicarecall.domain.model
 
-import com.konkuk.medicarecall.ui.type.HealthIssueType
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import com.konkuk.medicarecall.domain.model.type.HealthIssueType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 
 data class ElderHealthInfo(
-    val elderId: Int,
+    val elderId: Long,
     val name: String,
     val diseases: List<String> = emptyList(),
-    val medications: Map<MedicationTimeType, List<String>> = emptyMap(),
+    val medications: Map<MedicationTime, List<String>> = emptyMap(),
     val notes: List<HealthIssueType> = emptyList(),
 )

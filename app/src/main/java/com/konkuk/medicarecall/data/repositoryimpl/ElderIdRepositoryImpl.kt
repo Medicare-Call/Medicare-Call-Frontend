@@ -13,15 +13,15 @@ class ElderIdRepositoryImpl(
     @ElderIdDataStore private val elderIdDataStore: DataStore<ElderIds>,
 ) : ElderIdRepository {
 
-    override suspend fun updateElderIds(elderIdMap: Map<Int, String>) {
+    override suspend fun updateElderIds(elderIdMap: Map<Long, String>) {
         elderIdDataStore.updateData { it.copy(elderIds = elderIdMap) }
     }
 
-    override suspend fun updateElderId(elderId: Int, name: String) {
+    override suspend fun updateElderId(elderId: Long, name: String) {
         elderIdDataStore.updateData { it.copy(elderIds = it.elderIds.plus(elderId to name)) }
     }
 
-    override suspend fun getElderIds(): Map<Int, String> {
+    override suspend fun getElderIds(): Map<Long, String> {
         val preferences = elderIdDataStore.data.map { it.elderIds }
         return preferences.first()
     }

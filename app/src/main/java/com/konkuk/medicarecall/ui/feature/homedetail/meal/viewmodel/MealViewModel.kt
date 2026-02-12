@@ -42,7 +42,7 @@ class MealViewModel(
     private val _meals = MutableStateFlow(MealUiState())
     val meals: StateFlow<MealUiState> = _meals
 
-    fun loadMealsForDate(elderId: Int, date: LocalDate) {
+    fun loadMealsForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             mealRepository.getMeals(elderId, date)
                 .onSuccess { meals ->

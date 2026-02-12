@@ -1,4 +1,4 @@
-package com.konkuk.medicarecall.ui.model
+package com.konkuk.medicarecall.domain.model
 
 data class PushNotification(
     val all: String = "",

@@ -13,7 +13,7 @@ class SetCallRepositoryImpl(
     private val service: SetCallService,
 ) : SetCallRepository {
     override suspend fun saveForElder(
-        elderId: Int,
+        elderId: Long,
         body: SetCallTimeRequestDto,
     ): Result<Unit> = runCatching {
         service.saveCareCallTimes(elderId, body).handleNullableResponse()
@@ -21,7 +21,7 @@ class SetCallRepositoryImpl(
 
     // 오버로드: UI에서 CallTimes만 넘기면 레포가 변환까지 처리
     override suspend fun saveForElder(
-        elderId: Int,
+        elderId: Long,
         times: CallTimes,
     ): Result<Unit> = saveForElder(elderId, times.toRequestDto())
 

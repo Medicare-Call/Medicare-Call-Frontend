@@ -4,7 +4,7 @@ import com.konkuk.medicarecall.data.dto.request.ElderHealthRegisterRequestDto
 import com.konkuk.medicarecall.data.dto.request.MedicationSchedule
 import com.konkuk.medicarecall.data.dto.response.EldersHealthResponseDto
 import com.konkuk.medicarecall.domain.model.ElderHealthInfo
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 
 object ElderHealthMapper {
 
@@ -29,9 +29,8 @@ object ElderHealthMapper {
         )
     }
 
-    // Map<MedicationTimeType, List<String>> → List<MedicationSchedule>
-    private fun toMedicationSchedules(medications: Map<MedicationTimeType, List<String>>): List<MedicationSchedule> {
-        val timesByMed = linkedMapOf<String, MutableSet<MedicationTimeType>>()
+    fun toMedicationSchedules(medications: Map<MedicationTime, List<String>>): List<MedicationSchedule> {
+        val timesByMed = linkedMapOf<String, MutableSet<MedicationTime>>()
         for ((time, meds) in medications) {
             for (med in meds) {
                 timesByMed.getOrPut(med.trim()) { linkedSetOf() }.add(time)
@@ -43,11 +42,5 @@ object ElderHealthMapper {
                 scheduleTimes = times.sortedBy { it.ordinal },
             )
         }
-    }
-
-    // Deprecated: Use toRequestDto instead
-    @Deprecated("Use toRequestDto instead", ReplaceWith("toMedicationSchedules(uiData)"))
-    fun toRequestSchedules(uiData: Map<MedicationTimeType, List<String>>): List<MedicationSchedule> {
-        return toMedicationSchedules(uiData)
     }
 }

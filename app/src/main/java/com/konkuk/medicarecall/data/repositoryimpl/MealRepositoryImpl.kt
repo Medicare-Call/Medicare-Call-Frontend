@@ -14,7 +14,7 @@ class MealRepositoryImpl(
 ) : MealRepository {
 
     override suspend fun getMeals(
-        elderId: Int,
+        elderId: Long,
         date: LocalDate,
     ): Result<List<Meal>> = runCatching {
         val response = mealService.getDailyMeal(

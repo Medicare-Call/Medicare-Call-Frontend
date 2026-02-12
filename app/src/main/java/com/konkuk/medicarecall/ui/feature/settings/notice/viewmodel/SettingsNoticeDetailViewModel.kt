@@ -17,7 +17,7 @@ class SettingsNoticeDetailViewModel(
     private val _uiState = MutableStateFlow(SettingsNoticeDetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun loadNoticeById(noticeId: Int) {
+    fun loadNoticeById(noticeId: Long) {
         _uiState.update { it.copy(isLoading = true) }
         _uiState.update { it.copy(errorMessage = null) }
         viewModelScope.launch {

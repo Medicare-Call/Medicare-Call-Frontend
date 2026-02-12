@@ -19,7 +19,7 @@ class SettingsSubscriptionDetailViewModel(
     private val _uiState = MutableStateFlow(SettingsSubscriptionDetailUiState())
     val uiState: StateFlow<SettingsSubscriptionDetailUiState> = _uiState.asStateFlow()
 
-    fun loadSubscriptionById(elderId: Int) {
+    fun loadSubscriptionById(elderId: Long) {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
         viewModelScope.launch {
             subscribeRepository.getSubscriptions()

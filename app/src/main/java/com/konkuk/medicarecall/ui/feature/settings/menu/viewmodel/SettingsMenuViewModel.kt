@@ -28,7 +28,7 @@ class SettingsMenuViewModel(
         viewModelScope.launch {
             userRepository.getMyInfo()
                 .onSuccess { data ->
-                    _uiState.update { it.copy(myInfo = data) }
+                    _uiState.update { it.copy(userInfo = data) }
                 }
                 .onFailure {
                     Log.e("MyDataViewModel", "사용자 정보 불러오기 실패: ${it.message}", it)

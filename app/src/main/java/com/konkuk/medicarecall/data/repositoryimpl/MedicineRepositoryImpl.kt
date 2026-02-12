@@ -15,7 +15,7 @@ class MedicineRepositoryImpl(
     private val medicineService: MedicineService,
     private val eldersHealthInfoRepository: EldersHealthInfoRepository,
 ) : MedicineRepository {
-    override suspend fun getConfiguredMedicines(elderId: Int): Result<List<Medicine>> = runCatching {
+    override suspend fun getConfiguredMedicines(elderId: Long): Result<List<Medicine>> = runCatching {
         val schedule = eldersHealthInfoRepository.getEldersHealthInfo()
             .getOrNull()
             ?.firstOrNull { it.elderId == elderId }
@@ -66,7 +66,7 @@ class MedicineRepositoryImpl(
 
     /** 날짜별 기록 호출 + 없으면 스케줄 fallback */
     override suspend fun getMedicines(
-        elderId: Int,
+        elderId: Long,
         date: LocalDate,
     ): Result<List<Medicine>> = runCatching {
         val fallback = getConfiguredMedicines(elderId).getOrDefault(emptyList())

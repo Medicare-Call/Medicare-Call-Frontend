@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.data.repository.UpdateElderInfoRepository
-import com.konkuk.medicarecall.ui.model.ElderInfo
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.ElderInfo
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +26,7 @@ class SettingsElderInfoDetailViewModel(
     private val _uiState = MutableStateFlow(SettingsElderInfoDetailUiState())
     val uiState: StateFlow<SettingsElderInfoDetailUiState> = _uiState.asStateFlow()
 
-    fun loadElderDataById(elderId: Int) {
+    fun loadElderDataById(elderId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             eldersInfoRepository.getElders()
@@ -66,13 +66,13 @@ class SettingsElderInfoDetailViewModel(
     }
 
     fun processElderInfo(
-        elderId: Int,
+        elderId: Long,
         name: String,
         birthDate: String,
         gender: GenderType,
         phone: String,
-        relationship: RelationshipType,
-        residenceType: ElderResidenceType,
+        relationship: Relationship,
+        residenceType: ElderResidence,
     ) {
         Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId")
         viewModelScope.launch {
@@ -91,7 +91,7 @@ class SettingsElderInfoDetailViewModel(
                     .onSuccess {
                         Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 완료: $it")
                         _uiState.update { it.copy(isSuccess = true, isUpdateSuccess = true) }
-                        if (elderId != -1) {
+                        if (elderId != -1L) {
                             loadElderDataById(elderId)
                         }
                     }
@@ -108,7 +108,7 @@ class SettingsElderInfoDetailViewModel(
         }
     }
 
-    fun deleteElderInfo(elderId: Int, onComplete: (() -> Unit)? = null) {
+    fun deleteElderInfo(elderId: Long, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null, isDeleteSuccess = false) }
             try {
@@ -162,11 +162,11 @@ class SettingsElderInfoDetailViewModel(
         _uiState.update { it.copy(phoneNum = value) }
     }
 
-    fun updateRelationship(value: RelationshipType) {
+    fun updateRelationship(value: Relationship) {
         _uiState.update { it.copy(relationship = value) }
     }
 
-    fun updateResidenceType(value: ElderResidenceType) {
+    fun updateResidenceType(value: ElderResidence) {
         _uiState.update { it.copy(residenceType = value) }
     }
 

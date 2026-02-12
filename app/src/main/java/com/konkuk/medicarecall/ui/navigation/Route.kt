@@ -34,36 +34,36 @@ sealed interface Route {
 
     // 홈 (하루 요약)
     @Serializable
-    data class MealDetail(val elderId: Int) : Route
+    data class MealDetail(val elderId: Long) : Route
 
     @Serializable
-    data class MedicineDetail(val elderId: Int) : Route
+    data class MedicineDetail(val elderId: Long) : Route
 
     @Serializable
-    data class SleepDetail(val elderId: Int) : Route
+    data class SleepDetail(val elderId: Long) : Route
 
     @Serializable
-    data class StateHealthDetail(val elderId: Int) : Route
+    data class StateHealthDetail(val elderId: Long) : Route
 
     @Serializable
-    data class StateMentalDetail(val elderId: Int) : Route
+    data class StateMentalDetail(val elderId: Long) : Route
 
     @Serializable
-    data class GlucoseDetail(val elderId: Int) : Route
+    data class GlucoseDetail(val elderId: Long) : Route
 
     // 설정
     @Serializable
     data object ElderPersonalInfo : Route
 
     @Serializable
-    data class ElderPersonalDetail(val elderId: Int = -1) : Route
+    data class ElderPersonalDetail(val elderId: Long = -1L) : Route
     // 등록(-1)과 수정(id)을 통합하기 위해 기본값 추가
 
     @Serializable
     data object ElderHealthInfo : Route
 
     @Serializable
-    data class ElderHealthDetail(val elderId: Int) : Route
+    data class ElderHealthDetail(val elderId: Long) : Route
 
     @Serializable
     data object NotificationSetting : Route
@@ -72,13 +72,13 @@ sealed interface Route {
     data object SubscribeInfo : Route
 
     @Serializable
-    data class SubscribeDetail(val elderId: Int) : Route
+    data class SubscribeDetail(val elderId: Long) : Route
 
     @Serializable
     data object Notice : Route
 
     @Serializable
-    data class NoticeDetail(val noticeId: Int) : Route
+    data class NoticeDetail(val noticeId: Long) : Route
 
     @Serializable
     data object ServiceCenter : Route

@@ -20,7 +20,7 @@ class SettingsElderHealthDetailViewModel(
     private val _uiState = MutableStateFlow(SettingsElderHealthDetailUiState())
     val uiState: StateFlow<SettingsElderHealthDetailUiState> = _uiState.asStateFlow()
 
-    fun loadHealthInfoById(elderId: Int) {
+    fun loadHealthInfoById(elderId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             eldersHealthInfoRepository.getEldersHealthInfo()
