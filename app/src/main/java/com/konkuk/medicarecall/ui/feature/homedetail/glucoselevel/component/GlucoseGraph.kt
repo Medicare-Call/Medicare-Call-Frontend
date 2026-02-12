@@ -1,6 +1,4 @@
-
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component
-import com.konkuk.medicarecall.domain.util.today
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -30,18 +28,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.common.util.GlucoseLevel
 import com.konkuk.medicarecall.ui.common.util.classifyGlucose
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toJavaLocalDate
-import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.max
 
