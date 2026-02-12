@@ -3,7 +3,7 @@ package com.konkuk.medicarecall.data.mapper
 import com.konkuk.medicarecall.data.dto.response.MyInfoResponseDto
 import com.konkuk.medicarecall.data.dto.response.PushNotificationDto
 import com.konkuk.medicarecall.domain.model.UserInfo
-import com.konkuk.medicarecall.ui.model.PushNotification
+import com.konkuk.medicarecall.domain.model.PushNotification
 
 object UserMapper {
 
