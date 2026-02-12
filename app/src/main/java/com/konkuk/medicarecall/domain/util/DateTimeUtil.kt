@@ -27,7 +27,7 @@ fun LocalDateTime.Companion.now(): LocalDateTime {
         javaDateTime.hour,
         javaDateTime.minute,
         javaDateTime.second,
-        javaDateTime.nano
+        javaDateTime.nano,
     )
 }
 

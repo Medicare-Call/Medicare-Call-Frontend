@@ -1,6 +1,4 @@
-
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen
-import com.konkuk.medicarecall.domain.util.today
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,6 +36,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
@@ -49,12 +48,9 @@ import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.coroutines.launch
-
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
-import kotlinx.datetime.toLocalDateTime
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
