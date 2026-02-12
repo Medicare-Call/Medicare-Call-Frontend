@@ -50,7 +50,7 @@ class MedicineViewModel(
     private val _state = MutableStateFlow(ScreenState())
     val state: StateFlow<ScreenState> = _state
 
-    fun loadMedicinesForDate(elderId: Int, date: LocalDate) {
+    fun loadMedicinesForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             _state.update { it.copy(loading = true, emptyDate = null) }
 

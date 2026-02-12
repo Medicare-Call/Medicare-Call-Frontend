@@ -28,7 +28,7 @@ class CheckLoginStatusUseCase(
             }
 
             // 어르신 정보가 있으면 ID를 로컬에 저장
-            val elderIdMap: MutableMap<Int, String> = mutableMapOf()
+            val elderIdMap: MutableMap<Long, String> = mutableMapOf()
             elders.forEach { elderInfo ->
                 elderIdMap.put(elderInfo.elderId, elderInfo.name)
             }

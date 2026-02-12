@@ -11,7 +11,7 @@ import de.jensklingenberg.ktorfit.http.Path
 interface HomeService {
     @GET("elders/{elderId}/home")
     suspend fun getHomeSummary(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
     ): Response<HomeResponseDto>
 
     @POST("care-call/immediate")

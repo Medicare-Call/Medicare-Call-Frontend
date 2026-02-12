@@ -12,7 +12,7 @@ class GlucoseRepositoryImpl(
     private val glucoseService: GlucoseService,
 ) : GlucoseRepository {
     override suspend fun getGlucoseGraph(
-        elderId: Int,
+        elderId: Long,
         counter: Int,
         type: String,
     ): Result<Glucose> = runCatching {

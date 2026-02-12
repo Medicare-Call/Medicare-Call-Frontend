@@ -43,7 +43,7 @@ import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginEvent
 import com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel.LoginInfoViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.GenderType
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

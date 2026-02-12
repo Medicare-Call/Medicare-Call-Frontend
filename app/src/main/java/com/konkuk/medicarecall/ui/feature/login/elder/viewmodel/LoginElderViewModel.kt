@@ -6,9 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.exception.HttpException
 import com.konkuk.medicarecall.data.repository.ElderRegisterRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
-import com.konkuk.medicarecall.domain.model.Elder
+
+import com.konkuk.medicarecall.domain.model.Medication
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.HealthIssueType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
+import com.konkuk.medicarecall.domain.model.type.Relationship
 import com.konkuk.medicarecall.ui.feature.login.elder.viewmodel.LoginElderData.Companion.toLoginElderData
-import com.konkuk.medicarecall.ui.type.GenderType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,7 +72,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun updateElderRelationship(relationship: Elder.RelationshipType) {
+    fun updateElderRelationship(relationship: Relationship) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -77,7 +82,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun updateElderLivingType(livingType: Elder.ElderResidenceType) {
+    fun updateElderLivingType(livingType: ElderResidence) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -157,7 +162,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun addHealthNote(note: Elder.ElderNote) {
+    fun addHealthNote(note: HealthIssueType) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -171,7 +176,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun removeHealthNote(note: Elder.ElderNote) {
+    fun removeHealthNote(note: HealthIssueType) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -201,7 +206,7 @@ class LoginElderViewModel(
                                 } else it
                             }
                         } else {
-                            elder.medications + Elder.Medication(medicine, selectedTimes)
+                            elder.medications + Medication(medicine, selectedTimes)
                         }
                         elder.copy(medications = updatedMedications)
                     } else {
@@ -213,7 +218,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun removeMedication(medication: Elder.Medication) {
+    fun removeMedication(medication: Medication) {
         _loginElderUiState.update { state ->
             state.copy(
                 eldersList = state.eldersList.mapIndexed { index, elder ->
@@ -227,7 +232,7 @@ class LoginElderViewModel(
         }
     }
 
-    fun selectMedicationTime(time: Elder.MedicationTime) {
+    fun selectMedicationTime(time: MedicationTime) {
         _loginElderUiState.update { state ->
             state.copy(
                 selectedMedicationTimes = if (time in state.selectedMedicationTimes) {

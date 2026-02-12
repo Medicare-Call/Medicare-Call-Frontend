@@ -34,7 +34,7 @@ import java.time.LocalDate
 
 @Composable
 fun StateHealthDetailScreen(
-    elderId: Int,
+    elderId: Long,
     onBack: () -> Unit,
     viewModel: HealthViewModel = koinViewModel(),
 ) {

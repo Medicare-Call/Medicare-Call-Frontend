@@ -40,23 +40,23 @@ import com.konkuk.medicarecall.ui.feature.settings.elderinfo.component.DeleteCon
 import com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel.SettingsElderInfoDetailViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import com.konkuk.medicarecall.ui.type.CTAButtonType
-import com.konkuk.medicarecall.ui.type.ElderResidenceType
-import com.konkuk.medicarecall.ui.type.GenderType
-import com.konkuk.medicarecall.ui.type.RelationshipType
+import com.konkuk.medicarecall.domain.model.type.ElderResidence
+import com.konkuk.medicarecall.domain.model.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.Relationship
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsElderInfoDetailScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    elderId: Int,
+    elderId: Long,
     navController: NavHostController,
     viewModel: SettingsElderInfoDetailViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
 
-    val isEditMode = elderId != -1
+    val isEditMode = elderId != -1L
     val screenTitle = if (isEditMode) "어르신 개인정보 설정" else "어르신 등록"
     val confirmButtonText = if (isEditMode) "수정 완료" else "등록 완료"
 
@@ -178,30 +178,30 @@ fun SettingsElderInfoDetailScreen(
                         }
                         Column {
                             DefaultDropdown(
-                                enumList = RelationshipType.entries.map { it.displayName }.toList(),
+                                enumList = Relationship.entries.map { it.displayName }.toList(),
                                 placeHolder = "관계 선택하기",
                                 category = "어르신과의 관계",
                                 scrollState,
                                 value = uiState.relationship.displayName,
                                 onOptionSelect = { newValue ->
-                                    val rel = RelationshipType.entries.firstOrNull {
+                                    val rel = Relationship.entries.firstOrNull {
                                         it.displayName == newValue
-                                    } ?: RelationshipType.ACQUAINTANCE
+                                    } ?: Relationship.ACQUAINTANCE
                                     viewModel.updateRelationship(rel)
                                 },
                             )
                         }
                         Column {
                             DefaultDropdown(
-                                enumList = ElderResidenceType.entries.map { it.displayName }.toList(),
+                                enumList = ElderResidence.entries.map { it.displayName }.toList(),
                                 placeHolder = "거주방식을 선택해주세요",
                                 category = "어르신 거주 방식",
                                 scrollState,
                                 value = uiState.residenceType.displayName,
                                 onOptionSelect = { newValue ->
-                                    val res = ElderResidenceType.entries.firstOrNull {
+                                    val res = ElderResidence.entries.firstOrNull {
                                         it.displayName == newValue
-                                    } ?: ElderResidenceType.WITH_FAMILY
+                                    } ?: ElderResidence.WITH_FAMILY
                                     viewModel.updateResidenceType(res)
                                 },
                             )

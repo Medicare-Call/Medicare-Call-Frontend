@@ -8,9 +8,9 @@ data class StatisticsUiState(
     val isLoading: Boolean = false,
     val summary: WeeklySummaryUiState? = null,
     val error: String? = null,
-    val selectedElderId: Int? = null,
+    val selectedElderId: Long? = null,
     val currentWeek: Pair<LocalDate, LocalDate> = LocalDate.now().getWeekRange(),
     val isLatestWeek: Boolean = true,
     val isEarliestWeek: Boolean = false,
-    val eldersMap: Map<Int, String> = emptyMap(),
+    val eldersMap: Map<Long, String> = emptyMap(),
 )

@@ -20,7 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.domain.model.Elder
+import com.konkuk.medicarecall.domain.model.Medication
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 
 // 반복되는 UI를 재사용 가능한 함수로 추출
@@ -60,12 +61,12 @@ private fun MedicationTimeSection(
 
 @Composable
 fun MedicationItem(
-    medications: List<Elder.Medication>,
-    selectedTimes: List<Elder.MedicationTime>,
+    medications: List<Medication>,
+    selectedTimes: List<MedicationTime>,
     inputTextState: TextFieldState,
-    onSelectTime: (Elder.MedicationTime) -> Unit,
+    onSelectTime: (MedicationTime) -> Unit,
     onAddMedication: (String) -> Unit,
-    onRemoveMedication: (Elder.Medication) -> Unit,
+    onRemoveMedication: (Medication) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -78,7 +79,7 @@ fun MedicationItem(
         )
         Spacer(Modifier.height(10.dp))
 
-        Elder.MedicationTime.entries.forEach { timeType ->
+        MedicationTime.entries.forEach { timeType ->
             val medsForTime = medications.filter { timeType in it.times }
             if (medsForTime.isNotEmpty()) {
                 Spacer(Modifier.height(10.dp))
@@ -99,7 +100,7 @@ fun MedicationItem(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Elder.MedicationTime.entries.forEach { time ->
+            MedicationTime.entries.forEach { time ->
                 Box(
                     Modifier
                         .clip(CircleShape)
@@ -152,8 +153,8 @@ private fun MedicationItemPreview() {
         Column(Modifier.padding(16.dp)) {
             MedicationItem(
                 medications = listOf(
-                    Elder.Medication("당뇨약", listOf(Elder.MedicationTime.BREAKFAST)),
-                    Elder.Medication("혈압약", listOf(Elder.MedicationTime.DINNER)),
+                    Medication("당뇨약", listOf(MedicationTime.BREAKFAST)),
+                    Medication("혈압약", listOf(MedicationTime.DINNER)),
                 ),
                 selectedTimes = listOf(),
                 inputTextState = TextFieldState(""),

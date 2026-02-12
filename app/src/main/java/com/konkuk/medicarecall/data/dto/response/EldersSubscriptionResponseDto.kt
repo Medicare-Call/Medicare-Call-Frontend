@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EldersSubscriptionResponseDto(
-    val elderId: Int,
+    val elderId: Long,
     val name: String,
     val plan: String,
     val price: Int,

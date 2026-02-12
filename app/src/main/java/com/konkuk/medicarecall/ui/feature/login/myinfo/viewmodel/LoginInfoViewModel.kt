@@ -11,7 +11,7 @@ import com.konkuk.medicarecall.data.repository.VerificationRepository
 import com.konkuk.medicarecall.domain.model.Verification
 import com.konkuk.medicarecall.domain.usecase.CheckLoginStatusUseCase
 import com.konkuk.medicarecall.ui.common.util.formatAsDate
-import com.konkuk.medicarecall.ui.type.GenderType
+import com.konkuk.medicarecall.domain.model.type.GenderType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

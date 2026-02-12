@@ -25,14 +25,14 @@ interface EldersInfoService {
 
     @POST("elders/{elderId}")
     suspend fun updateElder(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Body request: ElderRegisterRequestDto,
     ): Response<EldersInfoResponseDto>
 
     // 노인 개인정보 삭제
     @DELETE("elders/{elderId}")
     suspend fun deleteElderSettings(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
     ): Response<Unit>
 
     // 노인 건강정보 조회
@@ -41,6 +41,6 @@ interface EldersInfoService {
 
     @GET("elders/{elderId}/care-call-setting")
     suspend fun getCallTimes(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
     ): Response<CallTimeResponseDto>
 }

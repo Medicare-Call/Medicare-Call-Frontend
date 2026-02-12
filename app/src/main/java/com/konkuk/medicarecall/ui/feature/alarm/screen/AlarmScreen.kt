@@ -16,7 +16,7 @@ import com.konkuk.medicarecall.R
 import com.konkuk.medicarecall.ui.feature.alarm.component.AlarmItem
 import com.konkuk.medicarecall.ui.feature.settings.component.SettingsTopAppBar
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import com.konkuk.medicarecall.ui.type.AlarmType
+import com.konkuk.medicarecall.domain.model.type.AlarmType
 
 @Composable
 fun AlarmScreen(

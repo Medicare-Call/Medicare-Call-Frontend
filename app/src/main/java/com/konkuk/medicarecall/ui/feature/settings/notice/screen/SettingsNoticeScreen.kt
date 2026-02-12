@@ -29,7 +29,7 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsNoticeScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
-    navigateToNoticeDetail: (noticeId: Int) -> Unit = {},
+    navigateToNoticeDetail: (noticeId: Long) -> Unit = {},
     viewModel: SettingsNoticeViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

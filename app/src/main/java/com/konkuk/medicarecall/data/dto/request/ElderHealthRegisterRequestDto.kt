@@ -1,7 +1,7 @@
 package com.konkuk.medicarecall.data.dto.request
 
-import com.konkuk.medicarecall.ui.type.HealthIssueType
-import com.konkuk.medicarecall.ui.type.MedicationTimeType
+import com.konkuk.medicarecall.domain.model.type.HealthIssueType
+import com.konkuk.medicarecall.domain.model.type.MedicationTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,5 +14,5 @@ data class ElderHealthRegisterRequestDto(
 @Serializable
 data class MedicationSchedule(
     val medicationName: String,
-    val scheduleTimes: List<MedicationTimeType>,
+    val scheduleTimes: List<MedicationTime>,
 )

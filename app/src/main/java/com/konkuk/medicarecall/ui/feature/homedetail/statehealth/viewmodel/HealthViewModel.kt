@@ -40,7 +40,7 @@ class HealthViewModel(
     private val _health = MutableStateFlow(HealthUiState())
     val health: StateFlow<HealthUiState> = _health
 
-    fun loadHealthDataForDate(elderId: Int, date: LocalDate) {
+    fun loadHealthDataForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             healthRepository.getHealth(elderId, date)
                 .onSuccess { health ->

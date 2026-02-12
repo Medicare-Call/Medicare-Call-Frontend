@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 interface MedicineRepository {
 
-    suspend fun getMedicines(elderId: Int, date: LocalDate): Result<List<Medicine>>
+    suspend fun getMedicines(elderId: Long, date: LocalDate): Result<List<Medicine>>
 
-    suspend fun getConfiguredMedicines(elderId: Int): Result<List<Medicine>>
+    suspend fun getConfiguredMedicines(elderId: Long): Result<List<Medicine>>
 }

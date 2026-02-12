@@ -9,7 +9,7 @@ import de.jensklingenberg.ktorfit.http.Path
 interface SetCallService {
     @POST("elders/{elderId}/care-call-setting")
     suspend fun saveCareCallTimes(
-        @Path("elderId") elderId: Int,
+        @Path("elderId") elderId: Long,
         @Body body: SetCallTimeRequestDto,
     ): Response<Unit>
 }

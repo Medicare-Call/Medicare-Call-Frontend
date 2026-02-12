@@ -78,7 +78,7 @@ class StatisticsViewModel(
         )
     }
 
-    fun setSelectedElderId(id: Int) {
+    fun setSelectedElderId(id: Long) {
         if (_uiState.value.selectedElderId != id) {
             // [수정 3] 새로운 사용자를 선택하면 earliestDate를 초기화합니다.
             // 이렇게 해야 이전 사용자의 기록이 다음 사용자에게 영향을 주지 않습니다.
@@ -107,7 +107,7 @@ class StatisticsViewModel(
     }
 
     private fun getWeeklyStatistics(
-        elderId: Int,
+        elderId: Long,
         startDate: LocalDate,
         ignoreLoadingGate: Boolean = false,
     ) {

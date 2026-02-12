@@ -37,7 +37,7 @@ class MentalViewModel(
     private val _mental = MutableStateFlow(MentalUiState())
     val mental: StateFlow<MentalUiState> = _mental
 
-    fun loadMentalDataForDate(elderId: Int, date: LocalDate) {
+    fun loadMentalDataForDate(elderId: Long, date: LocalDate) {
         viewModelScope.launch {
             mentalRepository.getMental(elderId, date)
                 .onSuccess { mental ->
