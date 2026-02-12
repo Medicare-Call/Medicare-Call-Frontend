@@ -29,7 +29,6 @@ object ElderHealthMapper {
         )
     }
 
-    // Map<MedicationTimeType, List<String>> → List<MedicationSchedule>
     fun toMedicationSchedules(medications: Map<MedicationTime, List<String>>): List<MedicationSchedule> {
         val timesByMed = linkedMapOf<String, MutableSet<MedicationTime>>()
         for ((time, meds) in medications) {
@@ -43,9 +42,5 @@ object ElderHealthMapper {
                 scheduleTimes = times.sortedBy { it.ordinal },
             )
         }
-    }
-
-    fun toRequestSchedules(uiData: Map<MedicationTime, List<String>>): List<MedicationSchedule> {
-        return toMedicationSchedules(uiData)
     }
 }
