@@ -116,7 +116,7 @@ class HomeViewModel(
             }
             val elderIdMap = elderIdRepository.getElderIds()
             _elderInfoList.value = elderIdMap.map {
-                ElderInfo(elderId = it.key.toLong(), name = it.value)
+                ElderInfo(elderId = it.key, name = it.value)
             }
             val restoredId = savedStateHandle.get<Long?>(KEY_SELECTED_ELDER_ID)
             if (restoredId != null && _elderInfoList.value.any { it.elderId == restoredId }) {
