@@ -45,8 +45,6 @@ object ElderHealthMapper {
         }
     }
 
-    // Deprecated: Use toRequestDto instead
-    @Deprecated("Use toRequestDto instead", ReplaceWith("toMedicationSchedules(uiData)"))
     fun toRequestSchedules(uiData: Map<MedicationTime, List<String>>): List<MedicationSchedule> {
         return toMedicationSchedules(uiData)
     }
