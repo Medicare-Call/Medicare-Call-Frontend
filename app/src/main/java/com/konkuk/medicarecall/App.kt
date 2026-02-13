@@ -87,14 +87,14 @@ class App : Application() {
                 appScope.launch {
                     try {
                         fcmRepository.saveFcmToken(token)
-                    } catch (e: Exception) {
+                    } catch (ignored: Exception) {
+                        // FCM 토큰 저장 실패 무시
                     }
                 }
             }
     }
 
     companion object {
-        private const val TAG = "FCM"
         const val FCM_CHANNEL_ID = "fcm_alert"
     }
 }

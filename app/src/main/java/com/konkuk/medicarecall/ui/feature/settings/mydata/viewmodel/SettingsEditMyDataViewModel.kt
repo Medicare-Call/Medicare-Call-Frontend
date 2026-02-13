@@ -66,8 +66,6 @@ class SettingsEditMyDataViewModel(
                             _uiState.update { it.copy(errorMessage = "정보 업데이트에 실패했습니다.") }
                         }
                     }
-            } catch (ce: CancellationException) {
-                throw ce
             } finally {
                 _uiState.update { it.copy(isLoading = false) }
             }

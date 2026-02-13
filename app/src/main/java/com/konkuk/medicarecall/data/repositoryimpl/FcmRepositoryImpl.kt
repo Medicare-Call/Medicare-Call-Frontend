@@ -40,8 +40,6 @@ class FcmRepositoryImpl(
 
     override suspend fun validateAndRefreshTokenIfNeeded(jwtToken: String) {
         try {
-            val currentToken = getFcmToken()
-
             // 서버에 토큰 유효성 검사 요청
             val isValid = runCatching {
                 fcmValidationService.validateToken().isSuccessful
@@ -63,7 +61,8 @@ class FcmRepositoryImpl(
             response.onSuccess {
             }.onFailure {
             }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
+            // 토큰 검증 실패 무시
         }
     }
 }

@@ -379,6 +379,7 @@ fun NumberPicker.setPickerTextStyle(color: Int, textSizeSp: Float, typeface: Typ
 
             invalidate()
         } catch (e: Exception) {
+            // 리플렉션 실패 시 무시
         }
     }
 }

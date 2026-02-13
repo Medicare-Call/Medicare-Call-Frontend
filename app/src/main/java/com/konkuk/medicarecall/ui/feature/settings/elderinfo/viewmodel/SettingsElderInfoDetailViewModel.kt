@@ -43,7 +43,6 @@ class SettingsElderInfoDetailViewModel(
         elderInfo: ElderInfo,
         onComplete: (() -> Unit)? = null,
     ) {
-
         viewModelScope.launch {
             updateElderInfoRepository.updateElderInfo(elderInfo)
                 .onSuccess {

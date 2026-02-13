@@ -55,7 +55,8 @@ class FcmService : FirebaseMessagingService() {
                 // 서버 갱신 (jwtToken은 DataStore에서 가져오거나, 로그인 시 저장된 값을 사용)
                 val jwtToken = dataStoreRepository.getAccessToken() ?: return@launch
                 (fcmRepository as? FcmRepositoryImpl)?.validateAndRefreshTokenIfNeeded(jwtToken)
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
+                // 토큰 저장 실패 무시
             }
         }
     }
@@ -126,11 +127,7 @@ class FcmService : FirebaseMessagingService() {
         ) {
             val notificationId = (0..Int.MAX_VALUE).random()
             NotificationManagerCompat.from(this).notify(notificationId, builder.build())
-        } else {
         }
     }
 
-    companion object {
-        private const val TAG = "FcmService"
-    }
 }
