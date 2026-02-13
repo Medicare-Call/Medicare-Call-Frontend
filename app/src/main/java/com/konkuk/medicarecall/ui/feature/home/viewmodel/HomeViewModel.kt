@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,7 @@ import com.konkuk.medicarecall.data.mapper.toUiState
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
 import com.konkuk.medicarecall.data.repository.HomeRepository
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.konkuk.medicarecall.domain.model.ElderInfo
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -156,7 +155,6 @@ class HomeViewModel(
                     _homeUiState.value = uiState
                 }
                 .onFailure { error ->
-                    Log.e(TAG, "getHomeSummary failed", error)
                     handleHomeSummaryError(elderId)
                 }
         }

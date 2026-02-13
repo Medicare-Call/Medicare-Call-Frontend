@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.subscription.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.SubscribeRepository
@@ -34,7 +33,6 @@ class SettingsSubscriptionDetailViewModel(
                 }
                 .onFailure { exception ->
                     _uiState.update { it.copy(errorMessage = "구독 정보를 불러오지 못했습니다: ${exception.message}") }
-                    Log.e("SettingsSubscriptionDetailViewModel", "구독 정보 로딩 실패", exception)
                 }
             _uiState.update { it.copy(isLoading = false) }
         }

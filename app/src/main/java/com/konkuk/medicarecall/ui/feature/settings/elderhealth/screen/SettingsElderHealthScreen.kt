@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderhealth.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,13 +49,6 @@ fun SettingsElderHealthScreen(
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    Log.d("HealthInfoScreen", "어르신 건강정보 수: ${uiState.eldersInfoList.size}")
-    Log.d("HealthInfoScreen", "Error Message: ${uiState.errorMessage}")
-    Log.d("HealthInfoScreen", "Elders Info: ${uiState.eldersInfoList}")
-    if (uiState.eldersInfoList.isEmpty() && uiState.errorMessage != null) {
-        Log.e("HealthInfoScreen", "Error fetching elders info: ${uiState.errorMessage}")
-    }
 
     Column(
         modifier = Modifier

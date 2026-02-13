@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.util
 
-import android.util.Log
 import androidx.datastore.core.Serializer
 import com.konkuk.medicarecall.data.model.ElderIds
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +31,6 @@ object ElderIdsSerializer : Serializer<ElderIds> {
             val decodedJsonString = decodedBytesBase64.decodeToString()
             Json.decodeFromString(decodedJsonString)
         } catch (e: Exception) {
-            Log.d("ElderIdsSerializer", "Failed to read ElderIds: ${e.message}")
             defaultValue
         }
     }

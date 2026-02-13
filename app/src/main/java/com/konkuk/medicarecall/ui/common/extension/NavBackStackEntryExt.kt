@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.common.extension
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
@@ -20,7 +19,6 @@ inline fun <reified T : ViewModel, reified R : Route> NavBackStackEntry.sharedVi
         try {
             navController.getBackStackEntry<R>()
         } catch (e: IllegalArgumentException) {
-            Log.e("NavBackStackEntryExt", "No back stack entry found for route: ${R::class}", e)
             null
         }
     }

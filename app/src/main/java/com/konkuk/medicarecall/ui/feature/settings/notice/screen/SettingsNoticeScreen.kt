@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.notice.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -67,7 +66,6 @@ fun SettingsNoticeScreen(
                         title = notice.title,
                         date = notice.publishedAt.replace("-", "."),
                         onClick = {
-                            Log.d("AnnouncementScreen", "공지사항 클릭: ${notice.title}")
                             navigateToNoticeDetail(notice.id)
                         },
                     )

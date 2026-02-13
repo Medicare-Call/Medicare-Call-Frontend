@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.screen
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
@@ -106,7 +105,6 @@ fun GlucoseDetailScreen(
 
     // 무한 스크롤 (더 빠른 트리거와 중복 요청 방지)
     LaunchedEffect(scrollState.value, scrollState.maxValue) {
-        Log.d("scroll", "value: ${scrollState.value}, max: ${scrollState.maxValue}, isLoading: ${uiState.isLoading}, hasNext: ${uiState.hasNext}")
         // 스크롤이 거의 끝까지 왔을 때만 다음 페이지 불러오기
         val shouldLoad = scrollState.value > scrollState.maxValue - 500 || scrollState.maxValue <= 100
 

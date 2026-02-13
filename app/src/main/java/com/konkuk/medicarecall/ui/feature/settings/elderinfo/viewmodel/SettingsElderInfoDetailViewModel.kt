@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
@@ -33,12 +32,8 @@ class SettingsElderInfoDetailViewModel(
                 .onSuccess { list ->
                     val elderData = list.firstOrNull { it.elderId == elderId }
                     _uiState.update { it.copy(elderData = elderData) }
-                    if (elderData == null) {
-                        Log.w("SettingsElderInfoDetailViewModel", "어르신 정보를 찾을 수 없습니다. elderId: $elderId")
-                    }
                 }
                 .onFailure { exception ->
-                    Log.e("SettingsElderInfoDetailViewModel", "어르신 정보 로딩 실패", exception)
                 }
             _uiState.update { it.copy(isLoading = false) }
         }
@@ -48,18 +43,15 @@ class SettingsElderInfoDetailViewModel(
         elderInfo: ElderInfo,
         onComplete: (() -> Unit)? = null,
     ) {
-        Log.d("SettingsElderInfoDetailViewModel", "어르신 개인 정보 수정 요청: elderId=${elderInfo.elderId}")
 
         viewModelScope.launch {
             updateElderInfoRepository.updateElderInfo(elderInfo)
                 .onSuccess {
-                    Log.d("SettingsElderInfoDetailViewModel", "어르신 개인 정보 수정 완료: $it")
                     _uiState.update { it.copy(isSuccess = true) }
                     loadElderDataById(elderInfo.elderId)
                     onComplete?.invoke()
                 }
                 .onFailure { exception ->
-                    Log.e("SettingsElderInfoDetailViewModel", "어르신 개인 정보 수정 실패: $exception")
                     _uiState.update { it.copy(isSuccess = false) }
                 }
         }
@@ -74,7 +66,6 @@ class SettingsElderInfoDetailViewModel(
         relationship: Relationship,
         residenceType: ElderResidence,
     ) {
-        Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 요청 (등록/수정): elderId=$elderId")
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, isUpdateSuccess = false, errorMessage = null) }
             try {
@@ -89,7 +80,6 @@ class SettingsElderInfoDetailViewModel(
                 )
                 updateElderInfoRepository.updateElderInfo(elderInfo)
                     .onSuccess {
-                        Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 처리 완료: $it")
                         _uiState.update { it.copy(isSuccess = true, isUpdateSuccess = true) }
                         if (elderId != -1L) {
                             loadElderDataById(elderId)
@@ -97,7 +87,6 @@ class SettingsElderInfoDetailViewModel(
                     }
                     .onFailure { exception ->
                         if (exception is CancellationException) throw exception
-                        Log.e("SettingsElderInfoDetailViewModel", "어르신 정보 처리 실패: $exception")
                         _uiState.update {
                             it.copy(isSuccess = false, errorMessage = "정보 수정을 실패했습니다. 다시 시도해주세요.")
                         }
@@ -114,13 +103,11 @@ class SettingsElderInfoDetailViewModel(
             try {
                 eldersInfoRepository.deleteElder(elderId)
                     .onSuccess {
-                        Log.d("SettingsElderInfoDetailViewModel", "어르신 정보 삭제 완료: $it")
                         _uiState.update { it.copy(isDeleteSuccess = true) }
                         onComplete?.invoke()
                     }
                     .onFailure { exception ->
                         if (exception is CancellationException) throw exception
-                        Log.e("SettingsElderInfoDetailViewModel", "어르신 정보 삭제 실패: $exception")
                         _uiState.update { it.copy(errorMessage = "정보 삭제를 실패했습니다.") }
                     }
             } finally {

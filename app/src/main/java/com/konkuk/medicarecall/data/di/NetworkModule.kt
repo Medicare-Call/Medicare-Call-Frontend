@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.di
 
-import android.util.Log
 import com.konkuk.medicarecall.BuildConfig.BASE_URL
 import com.konkuk.medicarecall.data.api.auth.RefreshService
 import com.konkuk.medicarecall.data.repository.DataStoreRepository
@@ -104,10 +103,6 @@ class NetworkModule {
                             //          .build() 대체
                         } else {
                             // 9. 토큰 갱신 실패 시 (RefreshToken 만료 등), 저장된 토큰 삭제 후 null 반환
-                            Log.e(
-                                "AuthAuthenticator",
-                                "Failed to refresh token. Error code: ${refreshResponse.code}",
-                            )
                             runBlocking { dataStoreRepository.saveRefreshToken("") }
                             // 여기서도 로그인 화면으로 보내는 로직 추가 가능
                             null

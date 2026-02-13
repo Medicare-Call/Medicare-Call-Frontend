@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.common.component
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -54,7 +53,6 @@ fun <T> SpecialNoteItem(
     category: String? = null,
     scrollState: ScrollState,
 ) {
-    Log.d("SpecialNoteItem", "noteList: $noteList")
     var showDropdown by remember { mutableStateOf(false) }
 
     LaunchedEffect(showDropdown) {

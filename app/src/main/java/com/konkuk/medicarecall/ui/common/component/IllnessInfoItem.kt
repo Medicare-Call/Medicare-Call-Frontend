@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.common.component
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ fun IllnessInfoItem(
     diseaseList: MutableList<String>, modifier: Modifier = Modifier,
     onAddDisease: (String) -> Unit = {}, onRemoveDisease: (String) -> Unit = {},
 ) {
-    Log.d("IllnessInfoItem", "diseaseList: $diseaseList")
     val context = LocalContext.current
     val inputTextState = remember { TextFieldState("") }
     Column(

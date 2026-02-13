@@ -7,7 +7,6 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -45,7 +44,6 @@ class FcmService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d(TAG, "onNewToken 호출됨, 새 FCM 토큰 : $token")
 
         // 1. 로컬에 저장
         serviceScope.launch {
@@ -53,20 +51,17 @@ class FcmService : FirebaseMessagingService() {
                 // FcmRepositoryImpl이 DataStore + 암호화 Serializer 사용
                 // 평문 token만 넘겨줌
                 fcmRepository.saveFcmToken(token)
-                Log.d(TAG, "새 FCM 토큰 DataStore에 저장 완료")
 
                 // 서버 갱신 (jwtToken은 DataStore에서 가져오거나, 로그인 시 저장된 값을 사용)
                 val jwtToken = dataStoreRepository.getAccessToken() ?: return@launch
                 (fcmRepository as? FcmRepositoryImpl)?.validateAndRefreshTokenIfNeeded(jwtToken)
             } catch (e: Exception) {
-                Log.e(TAG, "새 FCM 토큰 저장 중 오류 발생", e)
             }
         }
     }
 
     // 실제로 푸시가 도착했을 때 호출되는 콜백
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d(TAG, "푸시 메시지 수신: data=${remoteMessage.data}, notification=${remoteMessage.notification}")
         showNotification(remoteMessage)
     }
 
@@ -132,7 +127,6 @@ class FcmService : FirebaseMessagingService() {
             val notificationId = (0..Int.MAX_VALUE).random()
             NotificationManagerCompat.from(this).notify(notificationId, builder.build())
         } else {
-            Log.w(TAG, "POST_NOTIFICATIONS 권한이 없어 알림을 표시하지 못했습니다.")
         }
     }
 

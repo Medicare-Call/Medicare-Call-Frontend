@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.menu.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.UserRepository
@@ -31,9 +30,7 @@ class SettingsMenuViewModel(
                     _uiState.update { it.copy(userInfo = data) }
                 }
                 .onFailure {
-                    Log.e("MyDataViewModel", "사용자 정보 불러오기 실패: ${it.message}", it)
                     it.printStackTrace()
-                    Log.e("MyDataViewModel", "사용자 정보 로딩 실패: ${it.message}", it)
                 }
         }
     }

@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
-import android.util.Log
 import com.konkuk.medicarecall.data.api.elders.ElderRegisterService
 import com.konkuk.medicarecall.data.api.elders.EldersInfoService
 import com.konkuk.medicarecall.data.mapper.ElderHealthMapper
@@ -19,18 +18,15 @@ class EldersHealthInfoRepositoryImpl(
     private var cachedHealthInfo: List<ElderHealthInfo>? = null
 
     override fun refresh() {
-        Log.d("Cache", "EldersHealthInfoRepository cache invalidated")
         cachedHealthInfo = null
     }
 
     override suspend fun getEldersHealthInfo(): Result<List<ElderHealthInfo>> {
         cachedHealthInfo?.let {
-            Log.d("Cache", "Returning cached health info")
             return Result.success(it)
         }
 
         return runCatching {
-            Log.d("Cache", "Fetching new health info from server")
             val domainModels = elderInfoService.getElderHealthInfo().handleResponse().map { ElderHealthMapper.toDomain(it) }
             cachedHealthInfo = domainModels // 캐시에 저장
             domainModels

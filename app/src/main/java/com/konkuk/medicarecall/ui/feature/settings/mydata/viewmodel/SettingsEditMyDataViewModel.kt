@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.UserRepository
@@ -35,7 +34,6 @@ class SettingsEditMyDataViewModel(
                         _uiState.update {
                             it.copy(errorMessage = "내 정보를 불러오지 못했습니다: ${exception.message}")
                         }
-                        Log.e("SettingsEditMyDataViewModel", "내 정보 로딩 실패", exception)
                     }
             } catch (ce: CancellationException) {
                 throw ce
@@ -43,7 +41,6 @@ class SettingsEditMyDataViewModel(
                 _uiState.update {
                     it.copy(errorMessage = "내 정보를 불러오지 못했습니다: ${e.message}")
                 }
-                Log.e("SettingsEditMyDataViewModel", "내 정보 로딩 실패", e)
             } finally {
                 _uiState.update { it.copy(isLoading = false) }
             }
@@ -59,21 +56,17 @@ class SettingsEditMyDataViewModel(
             try {
                 userRepository.updateMyInfo(userInfo)
                     .onSuccess {
-                        Log.d("SettingsEditMyDataViewModel", "사용자 정보 업데이트 성공: $it")
                         _uiState.update { it.copy(isUpdateSuccess = true) }
                         onComplete?.invoke()
                     }
                     .onFailure { e ->
                         if (e is CancellationException) {
-                            Log.d("SettingsEditMyDataViewModel", "업데이트 취소됨: ${e.message}")
                             throw e
                         } else {
-                            Log.e("SettingsEditMyDataViewModel", "사용자 정보 업데이트 실패: ${e.message}", e)
                             _uiState.update { it.copy(errorMessage = "정보 업데이트에 실패했습니다.") }
                         }
                     }
             } catch (ce: CancellationException) {
-                Log.d("SettingsEditMyDataViewModel", "job cancelled(normal): ${ce.message}")
                 throw ce
             } finally {
                 _uiState.update { it.copy(isLoading = false) }

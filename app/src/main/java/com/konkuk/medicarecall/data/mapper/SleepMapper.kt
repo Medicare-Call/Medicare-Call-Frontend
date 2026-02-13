@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.mapper
 
-import android.util.Log
 import com.konkuk.medicarecall.data.dto.response.SleepResponseDto
 import com.konkuk.medicarecall.domain.model.Sleep
 import java.time.LocalTime
@@ -23,7 +22,6 @@ private fun formatTime(timeStr: String?): String {
         val parsedTime = LocalTime.parse(timeStr)
         parsedTime.format(DateTimeFormatter.ofPattern("a hh:mm", Locale.KOREAN))
     } catch (e: DateTimeParseException) {
-        Log.w("SleepMapper", "Failed to parse time: $timeStr", e)
         ""
     }
 }

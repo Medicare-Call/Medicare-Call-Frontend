@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.login.calltime.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -316,11 +315,8 @@ fun CallTimeScreen(
                         elderIds = uiState.elderMap.keys.toList(),
                         onSuccess = {
                             navigateToPayment()
-                            Log.d("SetCallScreen", "콜 시간 설정 완료")
-                            Log.d("SetCallScreen", "시간 : ${uiState.timeMap}")
                         },
                         onError = { t ->
-                            Log.e("SetCallScreen", "콜 시간 설정 실패: $t")
                         },
                     )
                 },
