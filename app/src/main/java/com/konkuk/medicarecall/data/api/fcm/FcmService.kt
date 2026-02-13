@@ -129,5 +129,4 @@ class FcmService : FirebaseMessagingService() {
             NotificationManagerCompat.from(this).notify(notificationId, builder.build())
         }
     }
-
 }
