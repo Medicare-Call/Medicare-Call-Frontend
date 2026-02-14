@@ -8,7 +8,7 @@ data class StatisticsUiState(
     val isLoading: Boolean = false,
     val summary: WeeklySummaryUiState? = null,
     val error: String? = null,
-    val selectedElderId: Long? = null,
+    val selectedElderId: Long = -1L,
     val currentWeek: Pair<LocalDate, LocalDate> = LocalDate.now().getWeekRange(),
     val isLatestWeek: Boolean = true,
     val isEarliestWeek: Boolean = false,
