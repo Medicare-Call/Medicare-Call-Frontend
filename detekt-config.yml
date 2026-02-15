@@ -70,6 +70,10 @@ style:
     MaxLineLength:
         active: false
 
+empty-blocks:
+    EmptyCatchBlock:
+        active: false
+
 exceptions:
     TooGenericExceptionCaught:
         active: false

@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.sleep.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -51,7 +50,6 @@ class SleepViewModel(
                     SleepUiState(sleep = sleep)
                 }
             }.onFailure { error ->
-                Log.e("SleepViewModel", "Error loading sleep data", error)
             }
         }
     }

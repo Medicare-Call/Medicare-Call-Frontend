@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.login.calltime.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
@@ -33,7 +32,6 @@ class CallTimeViewModel(
             try {
                 _uiState.update { it.copy(elderMap = elderIdRepository.getElderIds()) }
             } catch (e: Exception) {
-                Log.e("CallTimeViewModel", "elderIds 수집 실패", e)
                 _uiState.update { it.copy(error = e) }
             }
         }
@@ -67,7 +65,6 @@ class CallTimeViewModel(
                     val times = uiState.value.timeMap[id] ?: error("'$id'의 시간이 비어있습니다.")
                     async {
                         setCallRepository.saveForElder(id, times).getOrThrow()
-                        Log.d("CallTimeViewModel", "Saved call times for id:$id")
                     }
                 }
 
@@ -75,7 +72,6 @@ class CallTimeViewModel(
                 jobs.awaitAll()
                 onSuccess()
             } catch (t: Throwable) {
-                Log.e("CallTimeViewModel", "submitAllByName failed", t)
                 _uiState.update { it.copy(error = t) }
                 onError(t)
             } finally {

@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.subscription.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +37,6 @@ fun SettingsSubscriptionScreen(
     viewModel: SettingsSubscriptionViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    Log.d("SettingsSubscriptionScreen", "Elders Info: ${uiState.subscriptions}")
 
     Column(
         modifier = modifier

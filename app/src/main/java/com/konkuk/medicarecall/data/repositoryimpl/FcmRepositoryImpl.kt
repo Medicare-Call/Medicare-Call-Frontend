@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.data.repositoryimpl
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.dataStore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.konkuk.medicarecall.data.api.fcm.FcmUpdateService
@@ -41,21 +40,16 @@ class FcmRepositoryImpl(
 
     override suspend fun validateAndRefreshTokenIfNeeded(jwtToken: String) {
         try {
-            val currentToken = getFcmToken()
-            Log.d("FcmRepositoryImpl", "현재 저장된 FCM 토큰: $currentToken")
-
             // 서버에 토큰 유효성 검사 요청
             val isValid = runCatching {
                 fcmValidationService.validateToken().isSuccessful
             }.getOrDefault(false)
             if (isValid) {
-                Log.d("FcmRepositoryImpl", "FCM 토큰 유효함, 갱신 불필요")
                 return
             }
             // 유효하지 않으면 Firebase로 새 토큰 발급
             val newToken = FirebaseMessaging.getInstance().token.await()
             saveFcmToken(newToken)
-            Log.d("FcmRepositoryImpl", "새 FCM 토큰 발급 및 저장 완료: $newToken")
 
             // 서버에 갱신 요청
             val response: Result<Unit> = runCatching {
@@ -65,12 +59,10 @@ class FcmRepositoryImpl(
                 )
             }
             response.onSuccess {
-                Log.d("FcmRepositoryImpl", "서버에 FCM 토큰 갱신 성공")
             }.onFailure {
-                Log.e("FcmRepositoryImpl", "서버에 토큰 갱신 실패: ${it.message}")
             }
         } catch (e: Exception) {
-            Log.e("FcmRepositoryImpl", "validateAndRefreshTokenIfNeeded 실패: ${e.message}")
+            // 토큰 검증 실패 무시
         }
     }
 }

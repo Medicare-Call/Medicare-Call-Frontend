@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.medicine.screen
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -54,11 +53,9 @@ fun MedicineDetailScreen(
 
     // 날짜/어르신 변경 시마다 로드
     LaunchedEffect(elderId, selectedDate) {
-        Log.d("MED_UI", "LaunchedEffect: elderId=$elderId, date=$selectedDate")
         elderId.let { viewModel.loadMedicinesForDate(it, selectedDate) }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
-    Log.d("MED_UI", "render medicines=${state.medicines.size}")
 
     MedicineDetailScreenLayout(
         onBack = onBack,

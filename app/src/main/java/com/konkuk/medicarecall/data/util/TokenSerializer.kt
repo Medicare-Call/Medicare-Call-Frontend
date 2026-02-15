@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.util
 
-import android.util.Log
 import androidx.datastore.core.Serializer
 import com.konkuk.medicarecall.data.model.Token
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +32,6 @@ object TokenSerializer : Serializer<Token> {
             val decodedJsonString = decryptedBytes.decodeToString()
             Json.decodeFromString(decodedJsonString)
         } catch (e: Exception) {
-            Log.d("TokenSerializer", "Failed to read Token: ${e.message}")
             defaultValue
         }
     }

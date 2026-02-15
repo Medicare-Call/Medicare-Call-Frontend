@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.login.elder.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.exception.HttpException
@@ -55,7 +54,6 @@ class LoginElderViewModel(
                         )
                     }
                 }.onFailure { error ->
-                    Log.e("LoginElderViewModel", "어르신 목록 불러오기 실패: $error")
                 }
         }
     }
@@ -259,7 +257,6 @@ class LoginElderViewModel(
                 .onFailure { exception ->
                     when (exception) {
                         is HttpException -> {
-                            Log.e("httplog", "어르신 일괄등록 실패: ${exception.code()}, ${exception.message}")
                         }
                     }
                 }
@@ -270,13 +267,11 @@ class LoginElderViewModel(
         viewModelScope.launch {
             elderRegisterRepository.postElderHealthInfoBulk(loginElderUiState.value.eldersList)
                 .onSuccess {
-                    Log.d("elderHealthRegister", "Success")
                     _uiEvent.send(LoginElderEvent.NavigateToCareCallSetting)
                 }
                 .onFailure { exception ->
                     when (exception) {
                         is HttpException -> {
-                            Log.e("elderHealthRegister", "어르신 건강정보 일괄등록 실패: ${exception.code()}, ${exception.message}")
                         }
                     }
                 }

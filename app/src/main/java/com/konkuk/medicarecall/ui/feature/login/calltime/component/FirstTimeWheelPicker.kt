@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
-import android.util.Log
 import android.util.TypedValue
 import android.widget.EditText
 import android.widget.NumberPicker
@@ -92,7 +91,7 @@ fun FirstTimeWheelPicker(
                                     .getDeclaredField("mSelectionDividerHeight")
                                     .apply { isAccessible = true }
                                 heightField.setInt(this, 0)
-                            } catch (ignored: Exception) {
+                            } catch (e: Exception) {
                             }
                         }
 
@@ -123,7 +122,7 @@ fun FirstTimeWheelPicker(
                                 .getDeclaredField("mSelectionDividerHeight")
                                 .apply { isAccessible = true }
                             heightField.setInt(this, 0)
-                        } catch (ignored: Exception) {
+                        } catch (e: Exception) {
                         }
                     }
                     hideDividers()
@@ -174,7 +173,7 @@ fun FirstTimeWheelPicker(
                                     .getDeclaredField("mSelectionDividerHeight")
                                     .apply { isAccessible = true }
                                 heightField.setInt(this, 0)
-                            } catch (ignored: Exception) {
+                            } catch (e: Exception) {
                             }
                         }
                         hideDividers()
@@ -205,7 +204,7 @@ fun FirstTimeWheelPicker(
                                 .getDeclaredField("mSelectionDividerHeight")
                                 .apply { isAccessible = true }
                             heightField.setInt(this, 0)
-                        } catch (ignored: Exception) {
+                        } catch (e: Exception) {
                         }
                     }
                     hideDividers()
@@ -265,7 +264,7 @@ fun FirstTimeWheelPicker(
                                     .getDeclaredField("mSelectionDividerHeight")
                                     .apply { isAccessible = true }
                                 heightField.setInt(this, 0)
-                            } catch (ignored: Exception) {
+                            } catch (e: Exception) {
                             }
                         }
                         hideDividers()
@@ -296,7 +295,7 @@ fun FirstTimeWheelPicker(
                                 .getDeclaredField("mSelectionDividerHeight")
                                 .apply { isAccessible = true }
                             heightField.setInt(this, 0)
-                        } catch (ignored: Exception) {
+                        } catch (e: Exception) {
                         }
                     }
                     hideDividers()
@@ -348,7 +347,7 @@ fun NumberPicker.setPickerTextColor(color: Int) {
             // 다시 그리기
             invalidate()
         } catch (e: Exception) {
-            Log.e("NumberPicker", "Failed to set text style: ${e.message}")
+            // 리플렉션 실패 시 무시
         }
     }
 }
@@ -380,7 +379,7 @@ fun NumberPicker.setPickerTextStyle(color: Int, textSizeSp: Float, typeface: Typ
 
             invalidate()
         } catch (e: Exception) {
-            Log.e("NumberPicker", "Failed to set text style: ${e.message}")
+            // 리플렉션 실패 시 무시
         }
     }
 }

@@ -5,7 +5,6 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.konkuk.medicarecall.data.di.ApiModule
 import com.konkuk.medicarecall.data.di.LocalModule
@@ -22,7 +21,6 @@ import org.koin.core.annotation.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.defaultModule
 import org.koin.ksp.generated.module
-import kotlin.getValue
 
 @KoinApplication
 class App : Application() {
@@ -76,39 +74,26 @@ class App : Application() {
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    if (BuildConfig.DEBUG) {
-                        Log.w(TAG, "토큰 가져오기 실패", task.exception)
-                    }
                     return@addOnCompleteListener
                 }
 
                 val token = task.result
                 if (token.isNullOrBlank()) {
-                    if (BuildConfig.DEBUG) {
-                        Log.w(TAG, "FCM Token is empty")
-                    }
                     return@addOnCompleteListener
-                }
-                if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "FCM token(full)=$token")
                 }
 
                 // FCM 토큰을 DataStore(AppPreferences)에 저장
                 appScope.launch {
                     try {
                         fcmRepository.saveFcmToken(token)
-                        if (BuildConfig.DEBUG) {
-                            Log.d(TAG, "FCM token saved to DataStore")
-                        }
                     } catch (e: Exception) {
-                        Log.e(TAG, "Failed to save FCM token", e)
+                        // FCM 토큰 저장 실패 무시
                     }
                 }
             }
     }
 
     companion object {
-        private const val TAG = "FCM"
         const val FCM_CHANNEL_ID = "fcm_alert"
     }
 }

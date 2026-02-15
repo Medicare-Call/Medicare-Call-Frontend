@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.statistics.weeklycard
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,8 +24,6 @@ fun WeeklyHealthCard(
     modifier: Modifier = Modifier,
     healthNote: String,
 ) {
-    Log.d("WeeklyHealthCard", "note=[$healthNote], isBlank=${healthNote.isBlank()}, length=${healthNote.length}")
-
     val isUnrecorded = healthNote.isBlank()
 
     Card(

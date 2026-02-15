@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderinfo.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
@@ -42,7 +41,6 @@ class SettingsEldersInfoViewModel(
                 }
                 .onFailure { e ->
                     _uiState.update { it.copy(errorMessage = "노인 개인 정보를 불러오지 못했습니다.") }
-                    Log.e("SettingsEldersInfoViewModel", "load 실패", e)
                 }
             _uiState.update { it.copy(isLoading = false) }
         }

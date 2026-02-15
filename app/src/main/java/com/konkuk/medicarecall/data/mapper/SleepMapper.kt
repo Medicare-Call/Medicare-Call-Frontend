@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.data.mapper
 
-import android.util.Log
 import com.konkuk.medicarecall.data.dto.response.SleepResponseDto
 import com.konkuk.medicarecall.domain.model.Sleep
 import kotlinx.datetime.LocalTime
@@ -27,7 +26,6 @@ private fun String?.toKoreanAmPmFormat(): String {
         val minute = parsedTime.minute.toString().padStart(2, '0')
         "$amPm $hour:$minute"
     } catch (e: IllegalArgumentException) {
-        Log.w("SleepMapper", "Failed to parse time: $this", e)
         ""
     }
 }

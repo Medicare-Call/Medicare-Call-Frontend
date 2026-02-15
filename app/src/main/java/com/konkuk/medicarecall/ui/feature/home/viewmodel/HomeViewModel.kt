@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -159,7 +158,6 @@ class HomeViewModel(
                     _homeUiState.value = uiState
                 }
                 .onFailure { error ->
-                    Log.e(TAG, "getHomeSummary failed", error)
                     handleHomeSummaryError(elderId)
                 }
         }

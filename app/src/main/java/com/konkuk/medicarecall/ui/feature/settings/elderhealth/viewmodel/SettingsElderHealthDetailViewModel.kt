@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.elderhealth.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.EldersHealthInfoRepository
@@ -37,7 +36,6 @@ class SettingsElderHealthDetailViewModel(
                     _uiState.update {
                         it.copy(errorMessage = "건강 정보를 불러오지 못했습니다: ${exception.message}")
                     }
-                    Log.e("SettingsElderHealthDetailViewModel", "건강 정보 로딩 실패", exception)
                 }
             _uiState.update { it.copy(isLoading = false) }
         }
@@ -52,13 +50,11 @@ class SettingsElderHealthDetailViewModel(
             try {
                 eldersHealthInfoRepository.updateHealthInfo(healthInfo)
                     .onSuccess {
-                        Log.d("SettingsElderHealthDetailViewModel", "건강 정보 수정 성공: $it")
                         _uiState.update { it.copy(isUpdateSuccess = true) }
                         loadHealthInfoById(healthInfo.elderId)
                         onComplete?.invoke()
                     }
                     .onFailure { exception ->
-                        Log.e("SettingsElderHealthDetailViewModel", "건강 정보 수정 실패: ${exception.message}", exception)
                         _uiState.update { it.copy(errorMessage = "건강 정보 수정에 실패했습니다. 다시 시도해주세요.") }
                     }
             } finally {

@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.settings.mydata.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.UserRepository
@@ -39,13 +38,10 @@ class SettingsMyDataViewModel(
         viewModelScope.launch {
             userRepository.getMyInfo()
                 .onSuccess {
-                    Log.d("MyDataViewModel", "사용자 정보 불러오기 성공: $it")
                     _myDataInfo.value = it
                 }
                 .onFailure {
-                    Log.e("MyDataViewModel", "사용자 정보 불러오기 실패: ${it.message}", it)
                     it.printStackTrace()
-                    Log.e("MyDataViewModel", "사용자 정보 로딩 실패: ${it.message}", it)
                 }
         }
     }

@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.mapper.toUiState
@@ -87,7 +86,6 @@ class GlucoseViewModel(
 
     /** 타이밍 전환*/
     fun updateTiming(newTiming: GlucoseTiming) {
-        Log.d(TAG, "updateTiming(newTiming=$newTiming)")
         val dataToShow =
             if (newTiming == GlucoseTiming.BEFORE_MEAL) _beforeMealData.value else _afterMealData.value
         _uiState.update {

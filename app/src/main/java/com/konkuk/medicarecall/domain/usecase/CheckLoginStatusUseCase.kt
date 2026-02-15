@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.domain.usecase
 
-import android.util.Log
 import com.konkuk.medicarecall.data.repository.ElderIdRepository
 import com.konkuk.medicarecall.data.repository.EldersInfoRepository
 import com.konkuk.medicarecall.ui.model.NavigationDestination
@@ -23,7 +22,6 @@ class CheckLoginStatusUseCase(
 
             if (elders.isEmpty()) {
                 // 어르신 정보가 없으면 등록 화면으로
-                Log.d("httplog", "어르신 없음, 어르신 등록 화면으로")
                 return@runCatching NavigationDestination.GoToRegisterElder
             }
 
@@ -34,24 +32,19 @@ class CheckLoginStatusUseCase(
             }
             elderIdRepository.updateElderIds(elderIdMap)
 
-            Log.d("httplog", "어르신 정보 확인 완료, ID 저장됨")
-
             // 2. 시간 설정 확인
             elderIdMap.forEach {
                 eldersInfoRepository.getCareCallTimes(it.key)
-                    .onSuccess { Log.d("httplog", "시간 설정 정보 확인 완료, $it") }
+                    .onSuccess { }
                     .onFailure { exception ->
                         when (exception) {
                             is HttpException -> {
                                 val code = exception.code()
                                 val errorBody = exception.response()?.errorBody()?.toString()
 
-                                Log.e("httplog", "HTTP 에러 발생 - 코드: $code, 메시지: $errorBody")
-
                                 when (code) {
                                     404 -> {
                                         // 404 Not Found 에러 처리
-                                        Log.d("httplog", "시간 설정 정보 없음, 시간 등록 화면으로")
                                         return@runCatching NavigationDestination.GoToTimeSetting
                                     }
 
@@ -69,17 +62,13 @@ class CheckLoginStatusUseCase(
 
             if (subscriptions.isEmpty()) {
                 // 구독 정보가 없으면 결제 화면으로
-                Log.d("httplog", "구독 정보 없음, 결제 화면으로")
                 return@runCatching NavigationDestination.GoToPayment
             }
 
             // 모든 정보가 있으면 홈 화면으로
-            Log.d("httplog", "모든 정보 있음, 홈 화면으로")
             NavigationDestination.GoToHome
         }.getOrElse { exception ->
             // runCatching 블록 내에서 Exception이 발생하면 이 부분이 실행됩니다.
-            Log.d("httplog", "상태 확인 중 Exception 발생. 로그인 화면으로 이동.", exception)
-            Log.d("httplog", "Exception 메시지: ${exception.message}")
             NavigationDestination.GoToLogin
         }
     }

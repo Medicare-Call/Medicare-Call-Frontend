@@ -1,6 +1,5 @@
 package com.konkuk.medicarecall.ui.feature.login.myinfo.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
@@ -86,8 +85,8 @@ class LoginInfoViewModel(
         if (!debug) {
             viewModelScope.launch {
                 verificationRepository.requestCertificationCode(phone)
-                    .onSuccess { Log.d("httplog", "인증번호 요청 성공, ${it.message}") }
-                    .onFailure { Log.e("httplog", "인증번호 요청 실패: ${it.message}") }
+                    .onSuccess { }
+                    .onFailure { }
             }
         }
     }
@@ -117,7 +116,6 @@ class LoginInfoViewModel(
                         }
                     }
                     .onFailure { error ->
-                        Log.e("httplog", "로그인 실패: ${error.message}")
                         _events.emit(LoginEvent.VerificationFailure)
                     }
             } else {
@@ -137,7 +135,6 @@ class LoginInfoViewModel(
 
                 val userInfo = _uiState.value.userInfo
                 val fcmToken = FirebaseMessaging.getInstance().token.await()
-                Log.d("httplog", "회원가입 시 FCM 토큰 사용: $fcmToken")
 
                 memberRegisterRepository.registerMember(
                     name = userInfo.name,
@@ -145,16 +142,13 @@ class LoginInfoViewModel(
                     gender = userInfo.gender,
                     fcmToken = fcmToken,
                 ).onSuccess {
-                    Log.d("httplog", "회원가입 성공: ${it.accessToken} ${it.refreshToken}")
                     dataStoreRepository.saveAccessToken(it.accessToken)
                     dataStoreRepository.saveRefreshToken(it.refreshToken)
                     _events.emit(LoginEvent.MemberRegisterSuccess)
                 }.onFailure { e ->
-                    Log.e("httplog", "회원가입 실패: ${e.message}")
                     _events.emit(LoginEvent.MemberRegisterFailure)
                 }
             } catch (e: Exception) {
-                Log.e("httplog", "회원가입 중 예외 발생: ${e.message}")
                 _events.emit(LoginEvent.MemberRegisterFailure)
             }
         }

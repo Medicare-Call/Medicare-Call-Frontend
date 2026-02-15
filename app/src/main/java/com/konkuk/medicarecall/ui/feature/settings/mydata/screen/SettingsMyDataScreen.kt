@@ -1,7 +1,6 @@
 package com.konkuk.medicarecall.ui.feature.settings.mydata.screen
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -87,7 +86,6 @@ fun SettingsMyDataScreen(
         onLogoutConfirm = {
             viewModel.logout(
                 onSuccess = {
-                    Log.d("MyDataSettingScreen", "Logout successful")
                     showLogoutDialog = false
                     val intent = Intent(context, MainActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -96,7 +94,6 @@ fun SettingsMyDataScreen(
                     navigateToLoginAfterLogout()
                 },
                 onError = { error ->
-                    Log.e("MyDataSettingScreen", "Logout failed: $error")
                 },
             )
         },
