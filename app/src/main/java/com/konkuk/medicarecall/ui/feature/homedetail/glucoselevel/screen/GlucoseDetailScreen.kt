@@ -36,7 +36,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
-import com.konkuk.medicarecall.domain.util.today
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseGraph
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component.GlucoseListItem
@@ -287,7 +287,7 @@ fun GlucoseDetailScreenLayout(
 @Composable
 fun PreviewGlucoseDetailScreenDataAvailable() {
     // 더미 데이터 프리뷰
-    val today = LocalDate.today()
+    val today = LocalDate.now()
     val sampleData = (0..6).map { i ->
         GraphDataPoint(
             date = today.minus(i, DateTimeUnit.DAY),

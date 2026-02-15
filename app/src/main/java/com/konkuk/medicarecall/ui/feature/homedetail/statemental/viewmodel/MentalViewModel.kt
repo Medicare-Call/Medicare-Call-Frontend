@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.domain.util.getCurrentWeekDates
-import com.konkuk.medicarecall.domain.util.today
+import com.konkuk.medicarecall.domain.util.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,14 +16,14 @@ class MentalViewModel(
     private val mentalRepository: MentalRepository,
 ) : ViewModel() {
     // 캘린더 상태
-    private val _selectedDate = MutableStateFlow(LocalDate.today())
+    private val _selectedDate = MutableStateFlow(LocalDate.now())
     val selectedDate: StateFlow<LocalDate> = _selectedDate
     fun selectDate(date: LocalDate) {
         _selectedDate.value = date
     }
 
     fun resetToToday() {
-        _selectedDate.value = LocalDate.today()
+        _selectedDate.value = LocalDate.now()
     }
 
     fun getCurrentWeekDates(): List<LocalDate> {

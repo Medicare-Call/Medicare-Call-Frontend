@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.component.StateMentalDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel.MentalViewModel
-import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -119,7 +119,7 @@ fun StateMentalDetailScreenLayout(
 @Preview(showBackground = true)
 @Composable
 fun PreviewStateMentalDetailScreen() {
-    val today = LocalDate.today()
+    val today = LocalDate.now()
     StateMentalDetailScreenLayout(
         onBack = {},
         selectedDate = today,

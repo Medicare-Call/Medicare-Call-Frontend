@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.domain.util.today
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -107,7 +107,7 @@ fun DatePickerModal(
 @Composable
 fun PreviewDatePickerModal() {
     DatePickerModal(
-        initialDate = LocalDate.today(),
+        initialDate = LocalDate.now(),
         onDateSelected = {},
         onDismiss = {},
     )

@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.domain.util.getCurrentWeekDates
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
-import com.konkuk.medicarecall.domain.util.getCurrentWeekDates
-import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.StateHealthDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
@@ -129,7 +129,7 @@ fun StateHealthDetailScreenLayout(
 @Composable
 fun PreviewStateHealthDetailScreen() {
     MediCareCallTheme {
-        val today = LocalDate.today()
+        val today = LocalDate.now()
         StateHealthDetailScreenLayout(
             onBack = {},
             selectedDate = today,

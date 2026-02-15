@@ -4,26 +4,31 @@ import android.util.Log
 import com.konkuk.medicarecall.data.dto.response.SleepResponseDto
 import com.konkuk.medicarecall.domain.model.Sleep
 import kotlinx.datetime.LocalTime
-import kotlinx.datetime.toJavaLocalTime
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 fun SleepResponseDto.toModel() = Sleep(
     date = this.date,
     totalSleepHours = this.totalSleep?.hours,
     totalSleepMinutes = this.totalSleep?.minutes,
-    bedTime = formatTime(this.sleepTime),
-    wakeUpTime = formatTime(this.wakeTime),
+    // 확장 함수 호출
+    bedTime = this.sleepTime.toKoreanAmPmFormat(),
+    wakeUpTime = this.wakeTime.toKoreanAmPmFormat(),
 )
 
-private fun formatTime(timeStr: String?): String {
-    // 서버에서 받은 시간이 "HH:mm" 형식이 아닐 경우를 대비한 방어 코드
-    if (timeStr.isNullOrBlank() || !timeStr.contains(":")) return ""
+private fun String?.toKoreanAmPmFormat(): String {
+    // 1. 유효성 검사
+    if (this.isNullOrBlank() || !this.contains(":")) return ""
+
     return try {
-        val parsedTime = LocalTime.parse(timeStr)
-        parsedTime.toJavaLocalTime().format(DateTimeFormatter.ofPattern("a hh:mm", Locale.KOREAN))
+        val parsedTime = LocalTime.parse(this)
+        val isAm = parsedTime.hour < 12
+        val amPm = if (isAm) "오전" else "오후"
+        val hour = if (parsedTime.hour % 12 == 0) 12 else parsedTime.hour % 12
+
+        val minute = parsedTime.minute.toString().padStart(2, '0')
+        "$amPm $hour:$minute"
+
     } catch (e: IllegalArgumentException) {
-        Log.w("SleepMapper", "Failed to parse time: $timeStr", e)
+        Log.w("SleepMapper", "Failed to parse time: $this", e)
         ""
     }
 }

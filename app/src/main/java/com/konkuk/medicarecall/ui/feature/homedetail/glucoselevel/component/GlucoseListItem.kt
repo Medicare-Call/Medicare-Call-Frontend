@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.domain.util.today
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.LocalDate
@@ -94,7 +94,7 @@ fun GlucoseListItem(
 private fun PreviewGlucoseListItem() {
     MediCareCallTheme {
         GlucoseListItem(
-            date = LocalDate.today(),
+            date = LocalDate.now(),
             timingLabel = "아침 | 공복",
             value = 180,
             timing = GlucoseTiming.BEFORE_MEAL,

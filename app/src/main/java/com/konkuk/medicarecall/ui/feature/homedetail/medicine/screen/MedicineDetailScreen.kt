@@ -25,13 +25,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.domain.model.DoseStatus
 import com.konkuk.medicarecall.domain.model.DoseStatusItem
 import com.konkuk.medicarecall.domain.model.Medicine
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.component.MedicineDetailCard
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.medicine.viewmodel.MedicineViewModel
-import com.konkuk.medicarecall.domain.util.today
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -153,7 +153,7 @@ fun PreviewMedicineDetailScreen() {
         ),
     )
 
-    val today = LocalDate.today()
+    val today = LocalDate.now()
     MediCareCallTheme {
         MedicineDetailScreenLayout(
             onBack = {},

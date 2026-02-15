@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.konkuk.medicarecall.domain.util.today
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.util.GlucoseLevel
 import com.konkuk.medicarecall.ui.common.util.classifyGlucose
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
@@ -220,7 +220,7 @@ fun GlucoseGraph(
 @Preview(showBackground = true, name = "데이터 2개일 때")
 @Composable
 fun PreviewGlucoseGraph_TwoPoints() {
-    val today = LocalDate.today()
+    val today = LocalDate.now()
     val sampleData = (0..1).map {
         GraphDataPoint(
             date = today.minus(it, DateTimeUnit.DAY),
@@ -244,7 +244,7 @@ fun PreviewGlucoseGraph_TwoPoints() {
 @Composable
 fun PreviewGlucoseGraph_ManyPoints() {
     val scrollState = rememberScrollState()
-    val today = LocalDate.today()
+    val today = LocalDate.now()
     // 14일치 가상 데이터
     val sampleData = (0..13).map {
         GraphDataPoint(
