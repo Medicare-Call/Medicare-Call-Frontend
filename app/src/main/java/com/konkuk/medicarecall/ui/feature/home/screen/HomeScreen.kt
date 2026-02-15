@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.konkuk.medicarecall.R
+import com.konkuk.medicarecall.domain.model.ElderInfo
 import com.konkuk.medicarecall.domain.model.HomeSleep
 import com.konkuk.medicarecall.ui.common.component.NameBar
 import com.konkuk.medicarecall.ui.common.component.NameDropdown
@@ -59,7 +60,6 @@ import com.konkuk.medicarecall.ui.feature.home.component.HomeMedicineContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeSleepContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateHealthContainer
 import com.konkuk.medicarecall.ui.feature.home.component.HomeStateMentalContainer
-import com.konkuk.medicarecall.domain.model.ElderInfo
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeUiState
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.HomeViewModel
 import com.konkuk.medicarecall.ui.feature.home.viewmodel.MedicineUiState
@@ -114,12 +114,12 @@ fun HomeScreen(
             viewModel.selectElder(selectedName)
             dropdownOpened = false
         },
-        navigateToMealDetailScreen = { selectedElderId?.let(navigateToMealDetailScreen) },
-        navigateToMedicineDetailScreen = { selectedElderId?.let(navigateToMedicineDetailScreen) },
-        navigateToSleepDetailScreen = { selectedElderId?.let(navigateToSleepDetailScreen) },
-        navigateToStateHealthDetailScreen = { selectedElderId?.let(navigateToStateHealthDetailScreen) },
-        navigateToStateMentalDetailScreen = { selectedElderId?.let(navigateToStateMentalDetailScreen) },
-        navigateToGlucoseDetailScreen = { selectedElderId?.let(navigateToGlucoseDetailScreen) },
+        navigateToMealDetailScreen = { if (selectedElderId != -1L) navigateToMealDetailScreen(selectedElderId) },
+        navigateToMedicineDetailScreen = { if (selectedElderId != -1L) navigateToMedicineDetailScreen(selectedElderId) },
+        navigateToSleepDetailScreen = { if (selectedElderId != -1L) navigateToSleepDetailScreen(selectedElderId) },
+        navigateToStateHealthDetailScreen = { if (selectedElderId != -1L) navigateToStateHealthDetailScreen(selectedElderId) },
+        navigateToStateMentalDetailScreen = { if (selectedElderId != -1L) navigateToStateMentalDetailScreen(selectedElderId) },
+        navigateToGlucoseDetailScreen = { if (selectedElderId != -1L) navigateToGlucoseDetailScreen(selectedElderId) },
 
         navigateToAlarm = {},
 
@@ -147,7 +147,7 @@ fun HomeScreenLayout(
     modifier: Modifier = Modifier,
     homeUiState: HomeUiState,
     elderInfoList: List<ElderInfo>,
-    selectedElderId: Long?,
+    selectedElderId: Long,
     isRefreshing: Boolean,
     dropdownOpened: Boolean,
     onDropdownClick: () -> Unit,

@@ -38,7 +38,8 @@ class HomeViewModel(
     }
 
     fun overrideName(newName: String) {
-        val id = selectedElderId.value ?: return
+        val id = selectedElderId.value
+        if (id == -1L) return
 
         _elderInfoList.value = elderInfoList.value.map {
             if (it.elderId == id) it.copy(name = newName) else it
@@ -53,7 +54,7 @@ class HomeViewModel(
     ) {
         viewModelScope.launch {
             homeRepository.requestImmediateCareCall(
-                elderId = selectedElderId.value!!,
+                elderId = selectedElderId.value,
                 careCallOption = careCallTimeOption,
             )
         }
@@ -73,10 +74,10 @@ class HomeViewModel(
     val elderInfoList: StateFlow<List<ElderInfo>> = _elderInfoList.asStateFlow()
 
     // 현재 선택된 어르신 ID
-    private val _selectedElderId = MutableStateFlow<Long?>(
-        savedStateHandle.get<Long?>(KEY_SELECTED_ELDER_ID),
+    private val _selectedElderId = MutableStateFlow(
+        savedStateHandle.get<Long>(KEY_SELECTED_ELDER_ID) ?: -1L,
     )
-    val selectedElderId: StateFlow<Long?> = _selectedElderId.asStateFlow()
+    val selectedElderId: StateFlow<Long> = _selectedElderId.asStateFlow()
 
     init {
         fetchElderList()
@@ -84,7 +85,7 @@ class HomeViewModel(
         // 선택된 ID가 바뀌면 해당 어르신의 홈 데이터를 불러옴 + 저장소에 저장
         viewModelScope.launch {
             _selectedElderId.collect { elderId ->
-                if (elderId != null) {
+                if (elderId != -1L) {
                     savedStateHandle[KEY_SELECTED_ELDER_ID] = elderId
                     fetchHomeSummaryForToday(elderId)
                 } else {
@@ -100,7 +101,9 @@ class HomeViewModel(
             try {
                 eldersHealthInfoRepository.refresh()
                 fetchElderList() // 이름/리스트 서버와 동기화
-                _selectedElderId.value?.let { fetchHomeSummaryForToday(it) }
+                if (_selectedElderId.value != -1L) {
+                    fetchHomeSummaryForToday(_selectedElderId.value)
+                }
             } finally {
                 onComplete?.invoke()
             }
@@ -117,10 +120,10 @@ class HomeViewModel(
             _elderInfoList.value = elderIdMap.map {
                 ElderInfo(elderId = it.key, name = it.value)
             }
-            val restoredId = savedStateHandle.get<Long?>(KEY_SELECTED_ELDER_ID)
-            if (restoredId != null && _elderInfoList.value.any { it.elderId == restoredId }) {
+            val restoredId = savedStateHandle.get<Long>(KEY_SELECTED_ELDER_ID) ?: -1L
+            if (restoredId != -1L && _elderInfoList.value.any { it.elderId == restoredId }) {
                 _selectedElderId.value = restoredId
-            } else if (_selectedElderId.value == null && _elderInfoList.value.isNotEmpty()) {
+            } else if (_selectedElderId.value == -1L && _elderInfoList.value.isNotEmpty()) {
                 _selectedElderId.value = _elderInfoList.value.first().elderId
             }
         }
