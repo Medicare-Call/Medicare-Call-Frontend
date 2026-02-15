@@ -176,7 +176,7 @@ fun GlucoseGraph(
         Box(
             modifier = Modifier
                 .width(40.dp)
-                .height(graphDrawingHeightDp)
+                .height(graphDrawingHeightDp),
         ) {
             val density = LocalDensity.current
             val heightPx = with(density) { graphDrawingHeightDp.toPx() }
@@ -196,7 +196,7 @@ fun GlucoseGraph(
                     color = Color.Gray,
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .offset(x = 8.dp, y = yPosDp - 7.dp)
+                        .offset(x = 8.dp, y = yPosDp - 7.dp),
                 )
             }
         }
