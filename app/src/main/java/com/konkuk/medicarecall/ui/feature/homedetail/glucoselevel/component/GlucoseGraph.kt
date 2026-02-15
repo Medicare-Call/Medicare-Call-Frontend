@@ -1,18 +1,18 @@
 package com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.component
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
@@ -20,14 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.util.GlucoseLevel
 import com.konkuk.medicarecall.ui.common.util.classifyGlucose
@@ -37,8 +38,7 @@ import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
-import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.number
 import kotlin.math.max
 
 @Composable
@@ -160,8 +160,9 @@ fun GlucoseGraph(
                     Row(modifier = Modifier.width(totalGraphWidth)) { // 동적 너비 사용
                         data.forEach { pointData ->
                             Text(
-                                text = pointData.date.toJavaLocalDate().format(DateTimeFormatter.ofPattern("M.d")),
-                                modifier = Modifier.width(sectionWidth), // 동적 섹션 너비 사용
+                                // [수정] monthNumber와 dayOfMonth 사용
+                                text = "${pointData.date.month.number}.${pointData.date.day}",
+                                modifier = Modifier.width(sectionWidth),
                                 style = labelStyle,
                                 color = colors.gray4,
                                 textAlign = TextAlign.Center,
@@ -171,48 +172,33 @@ fun GlucoseGraph(
                 }
             }
         }
-        // Y축 라벨 (오른쪽에 고정)
-        Canvas(
+
+        Box(
             modifier = Modifier
                 .width(40.dp)
-                .height(graphDrawingHeightDp),
+                .height(graphDrawingHeightDp)
         ) {
-            // 그래프와 동일한 Y좌표 계산 방식을 사용
+            val density = LocalDensity.current
+            val heightPx = with(density) { graphDrawingHeightDp.toPx() }
+
             fun valueToY(v: Float): Float {
                 val ratio = ((v - minGlucose) / (maxGlucose - minGlucose)).coerceIn(0f, 1f)
-                return size.height * (1f - ratio)
+                return heightPx * (1f - ratio)
             }
-            // Paint를 사용하여 Canvas에 직접 글씨를 씀
-            val paint = Paint().apply {
-                color = Color.GRAY
-                textSize = labelStyle.fontSize.toPx()
-                textAlign = Paint.Align.LEFT
+
+            listOf(200, 130, 90, 60).forEach { value ->
+                val yPosPx = valueToY(value.toFloat())
+                val yPosDp = with(density) { yPosPx.toDp() }
+
+                Text(
+                    text = value.toString(),
+                    style = labelStyle.copy(fontSize = 12.sp),
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .offset(x = 8.dp, y = yPosDp - 7.dp)
+                )
             }
-            val labelX = 8.dp.toPx()
-            drawContext.canvas.nativeCanvas.drawText(
-                "200",
-                labelX,
-                valueToY(200f) + 5.dp.toPx(),
-                paint,
-            )
-            drawContext.canvas.nativeCanvas.drawText(
-                "130",
-                labelX,
-                valueToY(130f) + 5.dp.toPx(),
-                paint,
-            )
-            drawContext.canvas.nativeCanvas.drawText(
-                "90",
-                labelX,
-                valueToY(90f) + 5.dp.toPx(),
-                paint,
-            )
-            drawContext.canvas.nativeCanvas.drawText(
-                "60",
-                labelX,
-                valueToY(60f) + 5.dp.toPx(),
-                paint,
-            )
         }
     }
 }
