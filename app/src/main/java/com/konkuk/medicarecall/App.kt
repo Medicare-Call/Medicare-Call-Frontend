@@ -21,7 +21,6 @@ import org.koin.core.annotation.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.defaultModule
 import org.koin.ksp.generated.module
-import kotlin.getValue
 
 @KoinApplication
 class App : Application() {
@@ -87,7 +86,7 @@ class App : Application() {
                 appScope.launch {
                     try {
                         fcmRepository.saveFcmToken(token)
-                    } catch (ignored: Exception) {
+                    } catch (e: Exception) {
                         // FCM 토큰 저장 실패 무시
                     }
                 }

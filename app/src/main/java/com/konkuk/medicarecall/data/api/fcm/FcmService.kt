@@ -55,7 +55,7 @@ class FcmService : FirebaseMessagingService() {
                 // 서버 갱신 (jwtToken은 DataStore에서 가져오거나, 로그인 시 저장된 값을 사용)
                 val jwtToken = dataStoreRepository.getAccessToken() ?: return@launch
                 (fcmRepository as? FcmRepositoryImpl)?.validateAndRefreshTokenIfNeeded(jwtToken)
-            } catch (ignored: Exception) {
+            } catch (e: Exception) {
                 // 토큰 저장 실패 무시
             }
         }

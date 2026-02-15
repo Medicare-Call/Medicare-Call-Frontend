@@ -61,7 +61,7 @@ class FcmRepositoryImpl(
             response.onSuccess {
             }.onFailure {
             }
-        } catch (ignored: Exception) {
+        } catch (e: Exception) {
             // 토큰 검증 실패 무시
         }
     }

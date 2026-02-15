@@ -91,7 +91,7 @@ fun FirstTimeWheelPicker(
                                     .getDeclaredField("mSelectionDividerHeight")
                                     .apply { isAccessible = true }
                                 heightField.setInt(this, 0)
-                            } catch (ignored: Exception) {
+                            } catch (e: Exception) {
                             }
                         }
 
@@ -122,7 +122,7 @@ fun FirstTimeWheelPicker(
                                 .getDeclaredField("mSelectionDividerHeight")
                                 .apply { isAccessible = true }
                             heightField.setInt(this, 0)
-                        } catch (ignored: Exception) {
+                        } catch (e: Exception) {
                         }
                     }
                     hideDividers()
@@ -173,7 +173,7 @@ fun FirstTimeWheelPicker(
                                     .getDeclaredField("mSelectionDividerHeight")
                                     .apply { isAccessible = true }
                                 heightField.setInt(this, 0)
-                            } catch (ignored: Exception) {
+                            } catch (e: Exception) {
                             }
                         }
                         hideDividers()
@@ -204,7 +204,7 @@ fun FirstTimeWheelPicker(
                                 .getDeclaredField("mSelectionDividerHeight")
                                 .apply { isAccessible = true }
                             heightField.setInt(this, 0)
-                        } catch (ignored: Exception) {
+                        } catch (e: Exception) {
                         }
                     }
                     hideDividers()
@@ -264,7 +264,7 @@ fun FirstTimeWheelPicker(
                                     .getDeclaredField("mSelectionDividerHeight")
                                     .apply { isAccessible = true }
                                 heightField.setInt(this, 0)
-                            } catch (ignored: Exception) {
+                            } catch (e: Exception) {
                             }
                         }
                         hideDividers()
@@ -295,7 +295,7 @@ fun FirstTimeWheelPicker(
                                 .getDeclaredField("mSelectionDividerHeight")
                                 .apply { isAccessible = true }
                             heightField.setInt(this, 0)
-                        } catch (ignored: Exception) {
+                        } catch (e: Exception) {
                         }
                     }
                     hideDividers()
