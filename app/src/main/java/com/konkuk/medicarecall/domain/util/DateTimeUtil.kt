@@ -4,9 +4,14 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 val LocalDate.Companion.MIN: LocalDate
     get() = LocalDate(-999_999_999, 1, 1)
@@ -14,23 +19,12 @@ val LocalDate.Companion.MIN: LocalDate
 val LocalDate.Companion.MAX: LocalDate
     get() = LocalDate(999_999_999, 12, 31)
 
-fun LocalDate.Companion.now(): LocalDate {
-    val javaDate = java.time.LocalDate.now()
-    return LocalDate(javaDate.year, javaDate.monthValue, javaDate.dayOfMonth)
-}
+@OptIn(ExperimentalTime::class)
+fun LocalDate.Companion.now(): LocalDate =
+    Clock.System.todayIn(TimeZone.currentSystemDefault())
 
-fun LocalDateTime.Companion.now(): LocalDateTime {
-    val javaDateTime = java.time.LocalDateTime.now()
-    return LocalDateTime(
-        javaDateTime.year,
-        javaDateTime.monthValue,
-        javaDateTime.dayOfMonth,
-        javaDateTime.hour,
-        javaDateTime.minute,
-        javaDateTime.second,
-        javaDateTime.nano,
-    )
-}
+@OptIn(ExperimentalTime::class)
+fun LocalDateTime.Companion.now(): LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun LocalDate.weekStart(): LocalDate {
     val daysFromMonday = this.dayOfWeek.isoDayNumber - 1
