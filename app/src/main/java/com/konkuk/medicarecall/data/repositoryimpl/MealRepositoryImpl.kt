@@ -6,7 +6,7 @@ import com.konkuk.medicarecall.data.repository.MealRepository
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.domain.model.Meal
 import org.koin.core.annotation.Single
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 @Single
 class MealRepositoryImpl(

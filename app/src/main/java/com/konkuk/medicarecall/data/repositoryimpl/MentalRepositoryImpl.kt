@@ -5,7 +5,7 @@ import com.konkuk.medicarecall.data.repository.MentalRepository
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.domain.model.Mental
 import org.koin.core.annotation.Single
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 @Single
 class MentalRepositoryImpl(

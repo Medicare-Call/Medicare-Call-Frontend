@@ -6,7 +6,7 @@ import com.konkuk.medicarecall.domain.model.GlucosePoint
 import com.konkuk.medicarecall.ui.feature.homedetail.glucoselevel.viewmodel.GlucoseUiState
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.model.GraphDataPoint
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 fun GlucoseResponseDto.toDomain(): Glucose =
     Glucose(

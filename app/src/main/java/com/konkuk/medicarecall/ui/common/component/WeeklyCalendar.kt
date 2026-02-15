@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 
 @Composable
 fun WeeklyCalendar(
@@ -85,12 +87,12 @@ fun WeeklyCalendar(
 @Preview(showBackground = true)
 @Composable
 fun PreviewWeeklyCalendar() {
-    val baseDate = LocalDate.of(2025, 5, 5)
-    val week = (0..6).map { baseDate.plusDays(it.toLong()) }
+    val baseDate = LocalDate(2025, 5, 5)
+    val week = (0..6).map { baseDate.plus(it, DateTimeUnit.DAY) }
 
     WeeklyCalendar(
         weekDates = week,
-        selectedDate = baseDate.plusDays(2),
+        selectedDate = baseDate.plus(2, DateTimeUnit.DAY),
         onDateSelected = {},
     )
 }

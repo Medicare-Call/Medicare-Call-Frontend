@@ -13,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -28,7 +30,7 @@ fun GlucoseListItem(
     timing: GlucoseTiming,
 ) {
     val formatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN)
-    val formattedDate = date.format(formatter)
+    val formattedDate = date.toJavaLocalDate().format(formatter)
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
