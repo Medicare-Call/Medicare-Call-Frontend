@@ -1,6 +1,6 @@
 package com.konkuk.medicarecall.ui.model
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 data class GraphDataPoint(
     val date: LocalDate, // x축에 표시될 날짜 라벨 (예: "8.3")

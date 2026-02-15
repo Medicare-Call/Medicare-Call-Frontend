@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.konkuk.medicarecall.domain.util.getCurrentWeekDates
+import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.common.component.DateSelector
 import com.konkuk.medicarecall.ui.common.component.TopAppBar
 import com.konkuk.medicarecall.ui.common.component.WeeklyCalendar
@@ -29,8 +31,8 @@ import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.component.State
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthUiState
 import com.konkuk.medicarecall.ui.feature.homedetail.statehealth.viewmodel.HealthViewModel
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.LocalDate
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDate
 
 @Composable
 fun StateHealthDetailScreen(
@@ -59,7 +61,7 @@ fun StateHealthDetailScreen(
             onBack = onBack,
             selectedDate = selectedDate,
             health = health,
-            weekDates = viewModel.getCurrentWeekDates(),
+            weekDates = selectedDate.getCurrentWeekDates(),
             onDateSelected = { viewModel.selectDate(it) },
             onMonthClick = { /* 모달 열기 */ },
         )
@@ -127,11 +129,12 @@ fun StateHealthDetailScreenLayout(
 @Composable
 fun PreviewStateHealthDetailScreen() {
     MediCareCallTheme {
+        val today = LocalDate.now()
         StateHealthDetailScreenLayout(
             onBack = {},
-            selectedDate = LocalDate.now(),
+            selectedDate = today,
             health = HealthUiState(),
-            weekDates = (0..6).map { LocalDate.now().plusDays(it.toLong()) },
+            weekDates = today.getCurrentWeekDates(),
             onDateSelected = {},
             onMonthClick = {},
         )

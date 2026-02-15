@@ -5,8 +5,8 @@ import com.konkuk.medicarecall.data.mapper.toHealth
 import com.konkuk.medicarecall.data.repository.HealthRepository
 import com.konkuk.medicarecall.data.util.handleResponse
 import com.konkuk.medicarecall.domain.model.Health
+import kotlinx.datetime.LocalDate
 import org.koin.core.annotation.Single
-import java.time.LocalDate
 
 @Single
 class HealthRepositoryImpl(

@@ -3,13 +3,13 @@ package com.konkuk.medicarecall.ui.feature.homedetail.statemental.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.konkuk.medicarecall.data.repository.MentalRepository
+import com.konkuk.medicarecall.domain.util.getCurrentWeekDates
+import com.konkuk.medicarecall.domain.util.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import org.koin.android.annotation.KoinViewModel
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.temporal.TemporalAdjusters
 
 @KoinViewModel
 class MentalViewModel(
@@ -27,10 +27,7 @@ class MentalViewModel(
     }
 
     fun getCurrentWeekDates(): List<LocalDate> {
-        val base = _selectedDate.value
-        val startOfWeek =
-            base.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
-        return (0..6).map { startOfWeek.plusDays(it.toLong()) }
+        return _selectedDate.value.getCurrentWeekDates()
     }
 
     // 심리 상태
