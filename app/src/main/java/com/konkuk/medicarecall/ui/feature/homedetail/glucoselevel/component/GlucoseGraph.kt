@@ -160,7 +160,6 @@ fun GlucoseGraph(
                     Row(modifier = Modifier.width(totalGraphWidth)) { // 동적 너비 사용
                         data.forEach { pointData ->
                             Text(
-                                // [수정] monthNumber와 dayOfMonth 사용
                                 text = "${pointData.date.month.number}.${pointData.date.day}",
                                 modifier = Modifier.width(sectionWidth),
                                 style = labelStyle,
@@ -176,7 +175,7 @@ fun GlucoseGraph(
         Box(
             modifier = Modifier
                 .width(40.dp)
-                .height(graphDrawingHeightDp)
+                .height(graphDrawingHeightDp),
         ) {
             val density = LocalDensity.current
             val heightPx = with(density) { graphDrawingHeightDp.toPx() }
@@ -196,7 +195,7 @@ fun GlucoseGraph(
                     color = Color.Gray,
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .offset(x = 8.dp, y = yPosDp - 7.dp)
+                        .offset(x = 8.dp, y = yPosDp - 7.dp),
                 )
             }
         }
