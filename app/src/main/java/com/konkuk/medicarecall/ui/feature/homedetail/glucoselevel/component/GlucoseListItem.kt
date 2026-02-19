@@ -16,10 +16,9 @@ import androidx.compose.ui.unit.dp
 import com.konkuk.medicarecall.domain.util.now
 import com.konkuk.medicarecall.ui.model.GlucoseTiming
 import com.konkuk.medicarecall.ui.theme.MediCareCallTheme
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import kotlinx.datetime.number
 
 @Composable
 fun GlucoseListItem(
@@ -29,8 +28,19 @@ fun GlucoseListItem(
     value: Int,
     timing: GlucoseTiming,
 ) {
-    val formatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN)
-    val formattedDate = date.toJavaLocalDate().format(formatter)
+    val dayOfWeekString = when (date.dayOfWeek) {
+        DayOfWeek.MONDAY -> "월"
+        DayOfWeek.TUESDAY -> "화"
+        DayOfWeek.WEDNESDAY -> "수"
+        DayOfWeek.THURSDAY -> "목"
+        DayOfWeek.FRIDAY -> "금"
+        DayOfWeek.SATURDAY -> "토"
+        DayOfWeek.SUNDAY -> "일"
+    }
+
+    // 예: "5월 20일 (월)"
+    val formattedDate = "${date.month.number}월 ${date.day}일 ($dayOfWeekString)"
+
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.Start,
